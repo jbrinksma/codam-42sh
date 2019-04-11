@@ -3,10 +3,10 @@
 #                                                         ::::::::             #
 #    Makefile                                           :+:    :+:             #
 #                                                      +:+                     #
-#    By: omulder <omulder@student.codam.nl>           +#+                      #
+#    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/02/05 07:59:03 by omulder        #+#    #+#                 #
-#    Updated: 2019/03/24 12:22:06 by omulder       ########   odam.nl          #
+#    Updated: 2019/04/11 20:18:23 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,25 +36,25 @@ OBJECTS = $(SRCS:.c=.o) $(LIBFT:.c=.o)
 all: $(OBJECTS) $(NAME)
 
 $(TEST): $(NAME)
-	$(CC) -o $(TEST) $(INCLUDES) -L./ -lftprintf main.c
-	make clean
+	@$(CC) -o $(TEST) $(INCLUDES) -L./ -lftprintf main.c
+	@make clean
 
 $(NAME): $(OBJECTS)
-	ar rc $(NAME) $(OBJECTS)
-	ranlib $(NAME)
+	@ar rc $(NAME) $(OBJECTS)
+	@ranlib $(NAME)
 
 $(OBJECTS): $(SRCS) $(LIBFT)
-	$(CC) $(FLAGS) $(INCLUDES) -c $^
+	@$(CC) $(FLAGS) $(INCLUDES) -c $^
 
 clean:
-	rm -f $(OBJECTS)
+	@rm -f $(OBJECTS)
 	
 fclean: clean
-	rm -f $(NAME)
-	rm -f $(TEST)
+	@rm -f $(NAME)
+	@rm -f $(TEST)
 
 re: fclean all
 
 reprintf: fclean
-	rm -f $(printf) 
-	make $(TEST)
+	@rm -f $(printf) 
+	@make $(TEST)

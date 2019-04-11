@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 10:10:56 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/11 19:55:32 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/11 20:08:49 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,15 @@ int		init_term_setattr(t_term *term_p)
 {
 	int	ret;
 
-	/* Insert: check if it is a valid terminal filed */	
+	/* Insert: check if it is a valid terminal file_d */
 	ret = tcgetattr(STDIN_FILENO, term_p->termios_p);
-	if (ret == 0)
+	if (ret == FUNCT_ERROR)
 	{
-		ft_eprintf("start Couldn't get terminal attributes.\n");
+		ft_eprintf("Couldn't get terminal attributes.\n");
 		return (FUNCT_FAILURE);
 	}
 	ret = tcgetattr(STDIN_FILENO, term_p->old_termios_p);
-	if (ret == 0)
+	if (ret == FUNCT_ERROR)
 	{
 		ft_eprintf("Couldn't get terminal attributes.\n");
 		return (FUNCT_FAILURE);
@@ -58,7 +58,7 @@ int		init_term_setattr(t_term *term_p)
 	term_p->termios_p->c_cc[VTIME] = 0;
 	/* Is TCSANOW flag correct? */
 	ret = tcsetattr(STDIN_FILENO, TCSANOW, term_p->termios_p);
-	if (ret == 0)
+	if (ret == FUNCT_ERROR)
 	{
 		ft_eprintf("Couldn't set terminal attributes.\n");
 		return (FUNCT_FAILURE);

@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/11 14:06:40 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/11 20:17:32 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # define FUNCT_FAILURE 0
 # define FUNCT_SUCCESS 1
+# define FUNCT_ERROR -1
 # define E_ALLOC 420
 
 /*
@@ -89,6 +90,7 @@ typedef struct	s_term
 
 int		reset_term(t_term *term_p);
 void	free_term_p(t_term *term_p);
+int		start_shell(t_term *term_p);
 
 /*
 **	init_term.c
@@ -103,5 +105,13 @@ t_term	*return_init_term(t_term *term_p, int return_value);
 /*
 **	prompt.c
 */
+
+void	display_prompt(void);
+
+/*
+**	vsh_exit.c
+*/
+
+void	vsh_exit(t_term *term_p);
 
 #endif

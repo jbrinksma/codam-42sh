@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/01/09 11:10:43 by omulder        #+#    #+#                 #
-#    Updated: 2019/04/11 19:54:39 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/04/11 20:10:39 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,19 +24,19 @@ OBJECTS = $(FILES:.c=.o)
 all: $(OBJECTS) $(NAME)
 
 $(NAME): $(OBJECTS)
-	$(MAKE) -C ft_printf re
-	ar rc $(NAME) $(OBJECTS)
-	ranlib $(NAME)
+	@$(MAKE) -C ft_printf re
+	@ar rc $(NAME) $(OBJECTS)
+	@ranlib $(NAME)
 
 $(OBJECTS): $(FILES)
-	$(CC) $(FLAGS) $(INCLUDES) -c $^
+	@$(CC) $(FLAGS) $(INCLUDES) -c $^
 
 clean:
-	rm -f $(OBJECTS)
-	$(MAKE) -C ft_printf clean
+	@rm -f $(OBJECTS)
+	@$(MAKE) -C ft_printf clean
 	
 fclean: clean
-	rm -f $(NAME)
-	$(MAKE) -C ft_printf fclean
+	@rm -f $(NAME)
+	@$(MAKE) -C ft_printf fclean
 
 re: fclean all
