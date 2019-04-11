@@ -5,39 +5,38 @@
 #                                                      +:+                     #
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
-#    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/04/11 14:45:11 by omulder       ########   odam.nl          #
+#    Created: 2019/01/09 11:10:43 by omulder        #+#    #+#                 #
+#    Updated: 2019/04/11 14:55:30 by omulder       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = 21sh
+NAME = libft.a
 CC = gcc
 FLAGS = -Wall -Werror -Wextra
-INCLUDES = -I./ -I./libft/ -I./includes
-LIBFT= ./libft/libft.a
-LIB = -L./libft/ -lft -ltermcap
-VPATH = ./srcs
-SRCS = main init_term
-SRCS := $(SRCS:%=%.c)
-OBJECTS = $(SRCS:.c=.o)
+INCLUDES = -I./includes
+FILES = ft_atoi.c ft_itoa.c ft_memalloc.c ft_memdel.c ft_memmove.c \
+	ft_putstrarr.c ft_putstrarri.c ft_strdel.c ft_strdup.c ft_strjoin.c \
+	ft_strlen.c ft_strnew.c ft_strsub.c ft_strreplace.c ft_isdigit.c \
+	ft_isspace.c ft_intlen.c ft_memcpy.c ft_putendl.c ft_putstr.c ft_putnbr.c \
+	ft_strcpy.c ft_strcat.c ft_strstr.c ft_putchar.c
+OBJECTS = $(FILES:.c=.o)
 
-all: $(OBJECTS) $(LIBFT) $(NAME)
+all: $(OBJECTS) $(NAME)
 
 $(NAME): $(OBJECTS)
-	$(CC) $(FLAGS) $(INCLUDES) $(LIB) -o $(NAME) $^
+	$(MAKE) -C ft_printf re
+	ar rc $(NAME) $(OBJECTS)
+	ranlib $(NAME)
 
-$(OBJECTS): $(SRCS)
+$(OBJECTS): $(FILES)
 	$(CC) $(FLAGS) $(INCLUDES) -c $^
-
-$(LIBFT):
-	$(MAKE) -C libft
 
 clean:
 	rm -f $(OBJECTS)
-	$(MAKE) -C libft clean
+	$(MAKE) -C ft_printf clean
 	
 fclean: clean
 	rm -f $(NAME)
-	$(MAKE) -C libft fclean
+	$(MAKE) -C ft_printf fclean
 
 re: fclean all
