@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 10:10:56 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/11 14:22:30 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/11 19:55:32 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		init_term_setattr(t_term *term_p)
 	ret = tcgetattr(STDIN_FILENO, term_p->termios_p);
 	if (ret == 0)
 	{
-		ft_eprintf("Couldn't get terminal attributes.\n");
+		ft_eprintf("start Couldn't get terminal attributes.\n");
 		return (FUNCT_FAILURE);
 	}
 	ret = tcgetattr(STDIN_FILENO, term_p->old_termios_p);

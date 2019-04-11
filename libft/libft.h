@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   libft.h                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: omulder <omulder@student.codam.nl>           +#+                     */
+/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 11:10:09 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/11 14:51:04 by omulder       ########   odam.nl         */
+/*   Updated: 2019/04/11 19:54:27 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,6 @@ char			*ft_strcat(char *s1, const char *s2);
 char			*ft_strcpy(char *dst, const char *src);
 char			*ft_strstr(const char *haystack, const char *needle);
 void			ft_putchar(unsigned int c);
+void			ft_bzero(void *s, size_t n);
 
 #endif

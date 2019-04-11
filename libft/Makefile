@@ -3,10 +3,10 @@
 #                                                         ::::::::             #
 #    Makefile                                           :+:    :+:             #
 #                                                      +:+                     #
-#    By: omulder <omulder@student.codam.nl>           +#+                      #
+#    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/01/09 11:10:43 by omulder        #+#    #+#                 #
-#    Updated: 2019/04/11 14:55:30 by omulder       ########   odam.nl          #
+#    Updated: 2019/04/11 19:54:39 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ FILES = ft_atoi.c ft_itoa.c ft_memalloc.c ft_memdel.c ft_memmove.c \
 	ft_putstrarr.c ft_putstrarri.c ft_strdel.c ft_strdup.c ft_strjoin.c \
 	ft_strlen.c ft_strnew.c ft_strsub.c ft_strreplace.c ft_isdigit.c \
 	ft_isspace.c ft_intlen.c ft_memcpy.c ft_putendl.c ft_putstr.c ft_putnbr.c \
-	ft_strcpy.c ft_strcat.c ft_strstr.c ft_putchar.c
+	ft_strcpy.c ft_strcat.c ft_strstr.c ft_putchar.c ft_bzero.c
 OBJECTS = $(FILES:.c=.o)
 
 all: $(OBJECTS) $(NAME)
