@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 11:10:09 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/16 20:19:22 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/16 20:26:27 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,6 @@ void			ft_putchar(unsigned int c);
 void			ft_bzero(void *s, size_t n);
 int				ft_isblank(char c);
 char			*ft_strjoinfree(char *s1, char *s2, int i);
+int				ft_strcmp(const char *s1, const char *s2);
 
 #endif

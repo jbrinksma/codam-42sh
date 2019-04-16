@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/16 20:23:02 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/16 20:28:50 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,13 @@ int		read_input(t_term *term_p)
 	{
 		ft_bzero(buf, 3);
 		read(STDIN_FILENO, buf, 3);
-		ft_printf("%s\n", buf);
-		line = ft_strjoinfree(line, buf, 1);
-		cr = 1;
+		if (ft_strcmp(buf, "\n"))
+		{
+			ft_printf("%s", buf);
+			line = ft_strjoinfree(line, buf, 1);
+		}
+		else
+			cr = 1;
 	}
 	return (FUNCT_SUCCESS);
 }
