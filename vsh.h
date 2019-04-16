@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/11 20:17:32 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/16 21:42:21 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,30 +88,32 @@ typedef struct	s_term
 **	main.c
 */
 
-int		reset_term(t_term *term_p);
-void	free_term_p(t_term *term_p);
-int		start_shell(t_term *term_p);
+int		term_reset(t_term *term_p);
+void	term_free_termp(t_term *term_p);
+int		shell_start(t_term *term_p);
+int		input_read(t_term *term_p);
+void	input_echo(char *buf);
 
 /*
-**	init_term.c
+**	term_init.c
 */
 
-t_term	*init_term(void);
-t_term	*init_term_struct(void);
-int		init_term_getent(void);
-int		init_term_setattr(t_term *term_p);
-t_term	*return_init_term(t_term *term_p, int return_value);
+t_term	*term_init(void);
+t_term	*term_init_termstruct(void);
+int		term_getent(void);
+int		term_setattr(t_term *term_p);
+t_term	*term_return(t_term *term_p, int return_value);
 
 /*
-**	prompt.c
+**	shell_prompt.c
 */
 
-void	display_prompt(void);
+void	shell_display_prompt(void);
 
 /*
-**	vsh_exit.c
+**	builtin_exit.c
 */
 
-void	vsh_exit(t_term *term_p);
+void	builtin_exit(t_term *term_p);
 
 #endif

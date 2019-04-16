@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   init_term.c                                        :+:    :+:            */
+/*   term_init.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 10:10:56 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/11 20:24:03 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/16 21:33:05 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-t_term	*init_term_struct(void)
+t_term	*term_init_termstruct(void)
 {
 	t_term	*term_p;
 
@@ -35,7 +35,7 @@ t_term	*init_term_struct(void)
 	return (term_p);
 }
 
-int		init_term_setattr(t_term *term_p)
+int		term_setattr(t_term *term_p)
 {
 	int	ret;
 
@@ -66,7 +66,7 @@ int		init_term_setattr(t_term *term_p)
 	return (FUNCT_SUCCESS);
 }
 
-int		init_term_getent(void)
+int		term_getent(void)
 {
 	char	*term_type;
 	int		ret;
@@ -87,27 +87,27 @@ int		init_term_getent(void)
 	return (FUNCT_SUCCESS);
 }
 
-t_term	*return_init_term(t_term *term_p, int return_value)
+t_term	*term_return(t_term *term_p, int return_value)
 {
 	if (return_value == FUNCT_FAILURE)
 	{
-		free_term_p(term_p);
+		term_free_termp(term_p);
 		return (NULL);
 	}
 	return (term_p);
 }
 
-t_term	*init_term(void)
+t_term	*term_init(void)
 {
 	t_term	*term_p;
 
-	term_p = init_term_struct();
+	term_p = term_init_termstruct();
 	/* Add specific alloc error here */
 	if (!term_p)
-		return (return_init_term(NULL, FUNCT_FAILURE));
-	if (!init_term_getent())
-		return (return_init_term(term_p, FUNCT_FAILURE));
-	if (!init_term_setattr(term_p))
-		return (return_init_term(term_p, FUNCT_FAILURE));
-	return (return_init_term(term_p, FUNCT_SUCCESS));
+		return (term_return(NULL, FUNCT_FAILURE));
+	if (!term_getent())
+		return (term_return(term_p, FUNCT_FAILURE));
+	if (!term_setattr(term_p))
+		return (term_return(term_p, FUNCT_FAILURE));
+	return (term_return(term_p, FUNCT_SUCCESS));
 }
