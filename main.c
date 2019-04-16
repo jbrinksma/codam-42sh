@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/11 20:17:08 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/16 20:23:02 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,36 @@ void	free_term_p(t_term *term_p)
 	}
 }
 
+int		read_input(t_term *term_p)
+{
+	char	*buf;
+	char	*line;
+	int		cr;
+
+	(void)term_p;
+	cr = 0;
+	buf = ft_strnew(3);
+	line = ft_strnew(0);
+	while (!cr)
+	{
+		ft_bzero(buf, 3);
+		read(STDIN_FILENO, buf, 3);
+		ft_printf("%s\n", buf);
+		line = ft_strjoinfree(line, buf, 1);
+		cr = 1;
+	}
+	return (FUNCT_SUCCESS);
+}
+
 int		start_shell(t_term *term_p)
 {
 	int		status;
-	char	*buff;
 
-	(void)term_p;
 	status = 1;
-	buff = ft_strnew(3);
 	while (status != -1)
 	{
-		ft_bzero(buff, 3);
 		display_prompt();
-		read(STDIN_FILENO, buff, 3);
-		ft_printf("%s\n", buff);
+		read_input(term_p);
 		status = -1;
 	}
 	return (FUNCT_SUCCESS);
