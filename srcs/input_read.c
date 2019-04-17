@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/17 14:03:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/17 14:31:21 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/17 15:12:59 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,37 +80,31 @@ int		input_echo(char *buf)
 	return (FUNCT_SUCCESS);
 }
 
-static int	return_input_read(char *line, char *buf, int returnvalue)
+static int	return_input_read(char *buf, int returnvalue)
 {
-	ft_strdel(&line);
 	ft_strdel(&buf);
 	return (returnvalue);
 }
 
-int		input_read(void)
+int		input_read(char **line)
 {
 	char	*buf;
-	char	*line;
-	int		cr;
 	int		status;
 
-	cr = 0;
 	buf = ft_strnew(11);
-	line = ft_strnew(0);
-	status = 1;
-	while (!cr)
+	*line = ft_strnew(0);
+	status = FUNCT_SUCCESS;
+	while (status == FUNCT_SUCCESS)
 	{
 		ft_bzero(buf, 11);
 		read(STDIN_FILENO, buf, 10);
 		if (ft_strcmp(buf, "\n"))
 		{
 			status = input_echo(buf);
-			line = ft_strjoinfree(line, buf, 1);
+			*line = ft_strjoinfree(*line, buf, 1);
 		}
 		else
-			cr = 1;
-		if (status == CTRLD)
-			return (return_input_read(line, buf, CTRLD));
+			status = CR;
 	}
-	return (return_input_read(line, buf, FUNCT_SUCCESS));
+	return (return_input_read(buf, status));
 }

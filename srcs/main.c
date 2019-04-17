@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/17 14:29:23 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/17 15:18:54 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,19 @@ void	term_free_termp(t_term *term_p)
 int		shell_start(void)
 {
 	int		status;
+	char	*line;
+	char	***cmd_tab;
 
 	status = 1;
+	line = NULL;
+	cmd_tab = NULL;
 	while (status != CTRLD)
 	{
 		shell_display_prompt();
-		status = input_read();
+		status = input_read(&line);
+		if (status != CTRLD)
+			status = parser_lexer(&cmd_tab, line);
+		ft_strdel(&line);
 		ft_putendl("");
 	}
 	return (FUNCT_SUCCESS);

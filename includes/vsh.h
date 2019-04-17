@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/17 14:29:30 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/17 15:12:08 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # define FUNCT_ERROR -1
 # define E_ALLOC 420
 # define CTRLD -1
+# define CR 0
 
 /*
 **===============================personal headers===============================
@@ -115,7 +116,7 @@ t_term	*term_return(t_term *term_p, int return_value);
 **	input_read.c
 */
 
-int		input_read(void);
+int		input_read(char **line);
 int		input_echo(char *buf);
 
 /*
@@ -127,6 +128,16 @@ int		input_echo(char *buf);
 */
 
 void	shell_display_prompt(void);
+
+/*
+**----------------------------------parser--------------------------------------
+*/
+
+/*
+**	parser_lexer.c
+*/
+
+int		parser_lexer(char ****cmd_tab, char *line);
 
 /*
 **----------------------------------bultins-------------------------------------

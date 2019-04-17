@@ -6,30 +6,29 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/04/17 14:06:03 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/04/17 15:42:07 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = 21sh
+NAME = vsh
 CC = gcc
 FLAGS = -Wall -Werror -Wextra
-INCLUDES = -I./ -I./libft/ -I./includes
+INCLUDES = -I./ -I./libft/ -I./includes -I../includes
 LIBFT= ./libft/libft.a
 LIB = -L./libft/ -lft -ltermcap
 VPATH = ./srcs
-SRCS = main term_init shell_prompt builtin_exit input_read
+SRCS = main term_init shell_prompt builtin_exit input_read parser_lexer
+OBJECTS := $(SRCS:%=objs/%.o)
 SRCS := $(SRCS:%=%.c)
-OBJECTS = $(SRCS:.c=.o)
 
 all: $(OBJECTS) $(LIBFT) $(NAME)
 
 $(NAME): $(OBJECTS)
-	@$(CC) $(FLAGS) $(INCLUDES) $(LIB) -o $(NAME) $^
-	@echo "[ + ] 21sh has been compiled"
+	@$(CC) $(FLAGS) $(INCLUDES) $(LIB) -o $(NAME) $<
+	@echo "[ + ] vsh has been compiled"
 
 $(OBJECTS): $(SRCS)
-	@echo "[...] compiling 21sh"
-	@$(CC) $(FLAGS) $(INCLUDES) -c $^
+	@$(CC) $(FLAGS) $(INCLUDES) -o $@ -c $<
 
 $(LIBFT):
 	@$(MAKE) -C libft
