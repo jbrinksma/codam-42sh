@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/04/16 21:36:39 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/04/17 14:06:03 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ INCLUDES = -I./ -I./libft/ -I./includes
 LIBFT= ./libft/libft.a
 LIB = -L./libft/ -lft -ltermcap
 VPATH = ./srcs
-SRCS = main term_init shell_prompt builtin_exit
+SRCS = main term_init shell_prompt builtin_exit input_read
 SRCS := $(SRCS:%=%.c)
 OBJECTS = $(SRCS:.c=.o)
 

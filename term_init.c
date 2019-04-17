@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 10:10:56 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/16 21:33:05 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/17 13:20:55 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int		term_setattr(t_term *term_p)
 	}
 	term_p->termios_p->c_lflag &= ~ICANON;
 	term_p->termios_p->c_lflag &= ~ECHO;
+	term_p->termios_p->c_lflag &= ~ISIG;
 	term_p->termios_p->c_cc[VMIN] = 1;
 	term_p->termios_p->c_cc[VTIME] = 0;
 	/* Is TCSANOW flag correct? */
