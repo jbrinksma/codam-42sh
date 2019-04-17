@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/17 15:18:54 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/17 18:10:33 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int		shell_start(void)
 	{
 		shell_display_prompt();
 		status = input_read(&line);
-		if (status != CTRLD)
-			status = parser_lexer(&cmd_tab, line);
+		// if (status != CTRLD)
+		// 	status = parser_lexer(&cmd_tab, line);
 		ft_strdel(&line);
 		ft_putendl("");
 	}

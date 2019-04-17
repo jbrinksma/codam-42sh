@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/04/17 15:42:07 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/04/17 17:21:23 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,17 +18,17 @@ LIBFT= ./libft/libft.a
 LIB = -L./libft/ -lft -ltermcap
 VPATH = ./srcs
 SRCS = main term_init shell_prompt builtin_exit input_read parser_lexer
-OBJECTS := $(SRCS:%=objs/%.o)
-SRCS := $(SRCS:%=%.c)
+OBJECTS := $(SRCS:%=%.o)
+SRCS := $(SRCS:%=srcs/%.c)
 
 all: $(OBJECTS) $(LIBFT) $(NAME)
 
 $(NAME): $(OBJECTS)
-	@$(CC) $(FLAGS) $(INCLUDES) $(LIB) -o $(NAME) $<
+	@$(CC) $(FLAGS) $(INCLUDES) $(LIB) -o $(NAME) $^
 	@echo "[ + ] vsh has been compiled"
 
 $(OBJECTS): $(SRCS)
-	@$(CC) $(FLAGS) $(INCLUDES) -o $@ -c $<
+	@$(CC) $(FLAGS) $(INCLUDES) -c $(SRCS)
 
 $(LIBFT):
 	@$(MAKE) -C libft
