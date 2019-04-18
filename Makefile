@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/04/18 19:10:55 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/04/18 19:56:41 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,10 +21,12 @@ VPATH = ./srcs ./test ./libft
 SRCS = shell_prompt builtin_exit input_read parser_lexer jornfuckup \
 term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct 
-TESTS = test_main.c
+TESTS = test_main \
+test_term_init_struct
 OBJECTS := $(SRCS:%=%.o)
-TESTOBJECTS := $(TESTS:%.c=%.o)
+TESTOBJECTS := $(TESTS:%=%.o)
 SRCS := $(SRCS:%=%.c)
+TESTS := $(TESTS:%=%.c)
 
 all: $(OBJECTS) $(LIBFT) $(NAME)
 
@@ -39,14 +41,17 @@ $(LIBFT):
 	@$(MAKE) -C libft
 
 clean:
-	@rm -f $(OBJECTS)
+	@rm -f $(OBJECTS) $(TESTOBJECTS) main.o
 	@$(MAKE) -C libft clean
 	@echo "[ - ] removed object files"
+	@rm -f *.gcno
+	@rm -f *.gcda
 	
 fclean: clean
-	@rm -f $(NAME)
+	@rm -f $(NAME) test_coverage
 	@$(MAKE) -C libft fclean
 	@echo "[ - ] removed binaries"
+	@rm -f *.gcov
 
 re: fclean all
 

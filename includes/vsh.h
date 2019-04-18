@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/18 19:12:22 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/18 19:48:06 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,5 +151,13 @@ int		parser_lexer(char ****cmd_tab, char *line);
 */
 
 void	builtin_exit(t_term *term_p);
+
+
+/*
+**==================================TEST PROTOTYPES=============================
+*/
+
+int		test_prompt(void);
+int		test_term_init_struct(void);
 
 #endif
