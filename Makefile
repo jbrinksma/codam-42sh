@@ -6,13 +6,14 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/04/18 16:50:18 by omulder       ########   odam.nl          #
+#    Updated: 2019/04/18 17:33:37 by omulder       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = vsh
 CC = gcc
-FLAGS = -Wall -Werror -Wextra -coverage
+FLAGS = -Wall -Werror -Wextra
+COVERAGE = -coverage
 INCLUDES = -I./ -I./libft/ -I./includes -I../includes
 LIBFT= ./libft/libft.a
 LIB = -L./libft/ -lft -ltermcap
@@ -20,16 +21,17 @@ VPATH = ./srcs ./test ./libft
 SRCS = term_init shell_prompt builtin_exit input_read parser_lexer jornfuckup
 TESTS = test_main.c
 OBJECTS := $(SRCS:%=%.o)
+TESTOBJECTS := $(TESTS:%.c=%.o)
 SRCS := $(SRCS:%=%.c)
 
 all: $(OBJECTS) $(LIBFT) $(NAME)
 
 $(NAME): $(OBJECTS) main.o
-	@$(CC) $(FLAGS) $(INCLUDES) $(LIB) -o $(NAME) $^
+	@$(CC) $(FLAGS) $(COVERAGE) $(INCLUDES) $(LIB) -o $(NAME) $^
 	@echo "[ + ] vsh has been compiled"
 
 $(OBJECTS): $(SRCS) main.c
-	@$(CC) $(FLAGS) $(INCLUDES) -c $^
+	@$(CC) $(FLAGS) $(COVERAGE) $(INCLUDES) -c $^
 
 $(LIBFT):
 	@$(MAKE) -C libft
@@ -53,9 +55,12 @@ test_norm:
 	@echo "[ o ] running norminette+"
 	@sh ${TRAVIS_BUILD_DIR}/test/norminette.sh
 
-test_coverage: $(TESTS)
+$(TESTOBJECTS): $(TESTS)
+	@$(CC) $(FLAGS) $(INCLUDES) -c $^
+
+test_coverage: $(TESTOBJECTS) $(OBJECTS)
 	@ make re
-	@ $(CC) $(FLAGS) -coverage $(INCLUDES) $(LIB) $(OBJECTS) -o test_coverage $^
+	@ $(CC) $(FLAGS) $(COVERAGE) $(INCLUDES) $(LIB) -o test_coverage $^
 	@ ./test_coverage
 	@ gcov $(SRCS)
 
