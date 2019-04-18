@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/11 10:47:29 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/02/01 10:07:01 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/04/18 15:12:27 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	ft_bzero(void *s, size_t n)
 	str = s;
 	while (n > 0)
 	{
-		*str++ = 0;
+		*str = 0;
+		str++;
 		n--;
 	}
 }

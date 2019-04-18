@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/04/17 17:21:23 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/04/18 15:07:01 by tde-jong      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,3 +44,10 @@ fclean: clean
 	@echo "[ - ] removed binaries"
 
 re: fclean all
+
+test_norm:
+	@make
+	@echo "[ + ] cloning norminette+"
+	@git clone https://github.com/thijsdejong/codam-norminette-plus ~/norminette+
+	@echo "[ o ] running norminette+"
+	@sh ${TRAVIS_BUILD_DIR}/test/norminette.sh
