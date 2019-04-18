@@ -1,32 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
+/*   term_init_struct.c                                 :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/10 20:29:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/18 19:14:13 by jbrinksm      ########   odam.nl         */
+/*   Created: 2019/04/18 18:04:22 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/04/18 18:10:08 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-/*
-**	ft_printf alloc error handling
-*/
-
-int		main(int argc, char **argv)
+t_term	*term_init_struct(void)
 {
 	t_term	*term_p;
 
-	(void)argv;
-	(void)argc;
-	term_p = term_prepare();
-	/* if !term_p: send appropriate error message/log */
+	term_p = (t_term*)malloc(sizeof(t_term));
 	if (!term_p)
-		return (EXIT_FAILURE);
-	shell_start();
-	term_reset(term_p);
-	term_free_struct(term_p);
+		return (NULL);
+	term_p->old_termios_p = (struct termios*)malloc(sizeof(struct termios));
+	if (!term_p->old_termios_p)
+	{
+		free(term_p);
+		return (NULL);
+	}
+	term_p->termios_p = (struct termios*)malloc(sizeof(struct termios));
+	if (!term_p->termios_p)
+	{
+		free(term_p->old_termios_p);
+		free(term_p);
+		return (NULL);
+	}
+	return (term_p);
 }

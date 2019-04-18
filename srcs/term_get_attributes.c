@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   jornfuckup.c                                       :+:    :+:            */
+/*   term_get_attributes.c                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/18 18:19:35 by jbrinksm      ########   odam.nl         */
+/*   Created: 2019/04/18 18:08:42 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/04/18 18:11:54 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int		shell_start(void)
+int		term_get_attributes(t_term *term_p)
 {
-	int		status;
-	char	*line;
-	char	***cmd_tab;
+	int	ret;
 
-	status = 1;
-	line = NULL;
-	cmd_tab = NULL;
-	while (status != CTRLD)
+	/* Insert: check if it is a valid terminal file_d */
+	ret = tcgetattr(STDIN_FILENO, term_p->termios_p);
+	if (ret == FUNCT_ERROR)
 	{
-		shell_display_prompt();
-		status = input_read(&line);
-		// if (status != CTRLD)
-		// 	status = parser_lexer(&cmd_tab, line);
-		ft_strdel(&line);
-		ft_putendl("");
+		ft_eprintf("Couldn't get terminal attributes.\n");
+		return (FUNCT_FAILURE);
+	}
+	ret = tcgetattr(STDIN_FILENO, term_p->old_termios_p);
+	if (ret == FUNCT_ERROR)
+	{
+		ft_eprintf("Couldn't get terminal attributes.\n");
+		return (FUNCT_FAILURE);
 	}
 	return (FUNCT_SUCCESS);
 }

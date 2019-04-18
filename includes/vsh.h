@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/17 15:12:08 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/18 19:12:22 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,14 @@ int		shell_start(void);
 **	term_init.c
 */
 
-t_term	*term_init(void);
-t_term	*term_init_termstruct(void);
-int		term_getent(void);
-int		term_setattr(t_term *term_p);
+t_term	*term_prepare(void);
 t_term	*term_return(t_term *term_p, int return_value);
+int		term_is_valid(void);
+t_term	*term_init_struct(void);
+int		term_get_attributes(t_term *term_p);
+int		term_set_attributes(t_term *term_p);
+int		term_reset(t_term *term_p);
+void	term_free_struct(t_term *term_p);
 
 /*
 **-----------------------------------input--------------------------------------
