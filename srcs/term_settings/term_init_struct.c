@@ -6,11 +6,22 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:04:22 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/18 18:10:08 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/19 12:14:23 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+
+/*
+**	Allocates a t_term* and the two termios* which it contains, and returns
+**	the t_term*
+**
+**	*old_termios_p: will be used to save initial termios attributes
+**	*termios_p: will be used to set net termios attributes
+**
+**	If any alloc error occurs, the succesfully allocated pointers are freed,
+**	and a NULL pointer is returned.
+*/
 
 t_term	*term_init_struct(void)
 {

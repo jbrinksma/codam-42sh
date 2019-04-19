@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   test_main.c                                        :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: omulder <omulder@student.codam.nl>           +#+                     */
+/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/18 22:06:27 by omulder       ########   odam.nl         */
+/*   Updated: 2019/04/19 13:05:50 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 #                                                         ::::::::             #
 #    Makefile                                           :+:    :+:             #
 #                                                      +:+                     #
-#    By: omulder <omulder@student.codam.nl>           +#+                      #
+#    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/04/18 22:22:38 by omulder       ########   odam.nl          #
+#    Updated: 2019/04/19 13:06:22 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ COVERAGE = -coverage
 INCLUDES = -I./ -I./libft/ -I./includes -I../includes
 LIBFT= ./libft/libft.a
 LIB = -L./libft/ -lft -ltermcap
-VPATH = ./srcs ./test ./libft
+VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
+./srcs/parsing ./srcs/term_settings
 SRCS = shell_prompt builtin_exit input_read parser_lexer jornfuckup \
 term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct
@@ -65,7 +66,7 @@ test_norm:
 	@make
 	@echo "[ + ] cloning norminette+"
 	@git clone https://github.com/thijsdejong/codam-norminette-plus ~/norminette+
-	@echo "[ o ] running norminette+"
+	@echo "[...] running norminette+"
 	@sh ${TRAVIS_BUILD_DIR}/test/norminette.sh
 
 $(TESTOBJECTS): $(TESTS)
