@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 11:10:09 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/16 21:11:30 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/19 19:06:57 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,8 @@ int				ft_isblank(char c);
 char			*ft_strjoinfree(char *s1, char *s2, int i);
 int				ft_strcmp(const char *s1, const char *s2);
 int				ft_isprint(int c);
+char			*ft_strcdup(char *str, char c);
+void			ft_freearray(char ***array_p);
+int				ft_arraylen(char **array);
 
 #endif

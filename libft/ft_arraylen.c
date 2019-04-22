@@ -1,20 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   builtin_exit.c                                     :+:    :+:            */
+/*   ft_arraylen.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/11 20:15:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/19 19:17:52 by jbrinksm      ########   odam.nl         */
+/*   Created: 2019/03/28 17:38:52 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/04/19 19:06:21 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vsh.h"
+#include "libft.h"
 
-void	builtin_exit(t_term *term_p)
+int		ft_arraylen(char **array)
 {
-	ft_putchar('\n');
-	term_free_struct(&term_p);
-	exit(FUNCT_SUCCESS);
+	int i;
+
+	i = 0;
+	if (array == NULL)
+		return (0);
+	while (array[i] != NULL)
+		i++;
+	return (i);
 }

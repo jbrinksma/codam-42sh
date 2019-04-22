@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   builtin_exit.c                                     :+:    :+:            */
+/*   test_prompt.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/11 20:15:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/19 19:17:52 by jbrinksm      ########   odam.nl         */
+/*   Created: 2019/04/19 19:08:33 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/04/19 19:08:47 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-void	builtin_exit(t_term *term_p)
+int		test_prompt(void)
 {
-	ft_putchar('\n');
-	term_free_struct(&term_p);
-	exit(FUNCT_SUCCESS);
+	shell_display_prompt();
+	return (FUNCT_SUCCESS);
 }

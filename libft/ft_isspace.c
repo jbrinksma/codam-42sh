@@ -3,17 +3,17 @@
 /*                                                        ::::::::            */
 /*   ft_isspace.c                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: omulder <omulder@student.codam.nl>           +#+                     */
+/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/13 13:39:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/01/13 21:51:55 by omulder       ########   odam.nl         */
+/*   Updated: 2019/04/19 18:56:29 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 int		ft_isspace(int c)
 {
 	if (c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r'
-		|| c == ' ')
+	|| c == ' ')
 	{
 		return (1);
 	}

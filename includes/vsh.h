@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/18 19:48:06 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/19 19:36:01 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,17 @@ void	term_free_termp(t_term *term_p);
 int		shell_start(void);
 
 /*
+**---------------------------------environment----------------------------------
+*/
+
+/*
+**	get_environ_cpy.c
+*/
+
+char	**get_environ_cpy(void);
+char	*param_to_env(char *parameter, char **vshenviron);
+
+/*
 **----------------------------------terminal------------------------------------
 */
 
@@ -102,14 +113,14 @@ int		shell_start(void);
 **	term_init.c
 */
 
-t_term	*term_prepare(void);
+t_term	*term_prepare(char **vshenviron);
 t_term	*term_return(t_term *term_p, int return_value);
-int		term_is_valid(void);
+int		term_is_valid(char **vshenviron);
 t_term	*term_init_struct(void);
-int		term_get_attributes(t_term *term_p);
+int		term_get_attributes(int fd, t_term *term_p);
 int		term_set_attributes(t_term *term_p);
 int		term_reset(t_term *term_p);
-void	term_free_struct(t_term *term_p);
+void	term_free_struct(t_term **term_p);
 
 /*
 **-----------------------------------input--------------------------------------
@@ -157,7 +168,34 @@ void	builtin_exit(t_term *term_p);
 **==================================TEST PROTOTYPES=============================
 */
 
-int		test_prompt(void);
+/*
+**----------------------------------environment_testers-------------------------
+*/
+
+int		test_get_environ_cpy(void);
+int		test_param_to_env(void);
+
+/*
+**--------------------------------term_testers----------------------------------
+*/
+
+int		test_term_is_valid(void);
 int		test_term_init_struct(void);
+int		test_term_free_struct(void);
+int		test_term_get_attributes(void);
+
+/*
+**--------------------------------prompt_testers--------------------------------
+*/
+
+int		test_prompt(void);
+
+/*
+**--------------------------------shell_testers---------------------------------
+*/
+
+/*
+**---------------------------------input_read_testers---------------------------
+*/
 
 #endif

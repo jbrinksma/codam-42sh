@@ -6,19 +6,25 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:16:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/18 18:17:06 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/19 20:33:01 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int		term_is_valid(void)
+/*
+**	Checks whether the termcaps database can be found for the current env_var
+**	named 'TERM'.
+*/
+
+int		term_is_valid(char **vshenviron)
 {
 	char	*term_type;
 	int		ret;
 
-	term_type = getenv("TERM");
-	if (!term_type)
+	(void)vshenviron;
+	term_type = param_to_env("TERM", vshenviron);
+	if (term_type == NULL)
 	{
 		ft_eprintf("Term env not set.\n");
 		return (FUNCT_FAILURE);

@@ -1,20 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   builtin_exit.c                                     :+:    :+:            */
+/*   ft_strcdup.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/11 20:15:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/19 19:17:52 by jbrinksm      ########   odam.nl         */
+/*   Created: 2019/03/30 05:29:59 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/04/19 19:05:31 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vsh.h"
+#include "libft.h"
 
-void	builtin_exit(t_term *term_p)
+char	*ft_strcdup(char *str, char c)
 {
-	ft_putchar('\n');
-	term_free_struct(&term_p);
-	exit(FUNCT_SUCCESS);
+	int		index;
+	char	*result;
+
+	index = 0;
+	while (str[index] != c && str[index] != '\0')
+		index++;
+	result = ft_strnew(index + 1);
+	index = 0;
+	while (str[index] != c && str[index] != '\0')
+	{
+		result[index] = str[index];
+		index++;
+	}
+	result[index] = '\0';
+	return (result);
 }

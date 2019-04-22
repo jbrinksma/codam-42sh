@@ -1,34 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   term_get_attributes.c                              :+:    :+:            */
+/*   test_param_to_env.c                                :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/18 18:08:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/19 20:32:26 by jbrinksm      ########   odam.nl         */
+/*   Created: 2019/04/19 18:41:23 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/04/19 20:34:20 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int		term_get_attributes(int fd, t_term *term_p)
+int		test_param_to_env(void)
 {
-	int	ret;
+	extern char	**environ;
+	char		**environ_cpy;
+	char		*buf;
 
-	/* Insert: check if it is a valid terminal file_d */
-	if (term_p == NULL)
+	environ_cpy = get_environ_cpy();
+	buf = param_to_env("PATH", environ_cpy);
+	if (buf == NULL)
 		return (FUNCT_FAILURE);
-	ret = tcgetattr(fd, term_p->termios_p);
-	if (ret == FUNCT_ERROR)
+	if (ft_strcmp(buf, getenv("PATH")))
 	{
-		ft_eprintf("Couldn't get terminal attributes.\n");
+		ft_strdel(&buf);
 		return (FUNCT_FAILURE);
 	}
-	ret = tcgetattr(fd, term_p->old_termios_p);
-	if (ret == FUNCT_ERROR)
+	buf = param_to_env("NO_EXIST", environ_cpy);
+	if (buf)
 	{
-		ft_eprintf("Couldn't get terminal attributes.\n");
+		ft_strdel(&buf);
 		return (FUNCT_FAILURE);
 	}
 	return (FUNCT_SUCCESS);

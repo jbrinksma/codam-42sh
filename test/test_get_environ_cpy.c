@@ -1,35 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   term_get_attributes.c                              :+:    :+:            */
+/*   test_get_environ_cpy.c                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/18 18:08:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/19 20:32:26 by jbrinksm      ########   odam.nl         */
+/*   Created: 2019/04/19 13:43:01 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/04/19 20:34:06 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int		term_get_attributes(int fd, t_term *term_p)
+int		test_get_environ_cpy(void)
 {
-	int	ret;
+	extern char **environ;
+	char		**vshenviron;
+	int			index;
 
-	/* Insert: check if it is a valid terminal file_d */
-	if (term_p == NULL)
+	vshenviron = get_environ_cpy();
+	index = 0;
+	if (vshenviron == NULL)
 		return (FUNCT_FAILURE);
-	ret = tcgetattr(fd, term_p->termios_p);
-	if (ret == FUNCT_ERROR)
+	while (vshenviron[index] != NULL && environ[index] != NULL)
 	{
-		ft_eprintf("Couldn't get terminal attributes.\n");
+		if (ft_strcmp(vshenviron[index], environ[index]))
+		{
+			ft_freearray(&vshenviron);
+			return (FUNCT_FAILURE);
+		}
+		index++;
+	}
+	if (vshenviron[index] != NULL || environ[index] != NULL)
+	{
+		ft_freearray(&vshenviron);
 		return (FUNCT_FAILURE);
 	}
-	ret = tcgetattr(fd, term_p->old_termios_p);
-	if (ret == FUNCT_ERROR)
-	{
-		ft_eprintf("Couldn't get terminal attributes.\n");
-		return (FUNCT_FAILURE);
-	}
+	ft_freearray(&vshenviron);
 	return (FUNCT_SUCCESS);
 }
