@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/03 14:51:48 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/03 15:39:39 by omulder       ########   odam.nl         */
+/*   Updated: 2019/04/23 19:38:10 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_strreplace(char *str, char *find, char *replace)
 	temp = ft_strstr(str, find);
 	if (temp == NULL)
 		return (ft_strdup(str));
-	len = ((int)temp - (int)str);
+	len = (int)(temp - str);
 	new = ft_strsub(str, 0, len);
 	if (new == NULL)
 		return (NULL);

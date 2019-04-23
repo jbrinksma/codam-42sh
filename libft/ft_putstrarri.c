@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/11 15:45:53 by omulder        #+#    #+#                */
-/*   Updated: 2019/02/01 11:56:09 by omulder       ########   odam.nl         */
+/*   Updated: 2019/04/23 19:36:57 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_putstrarri(char **arr)
 	int i;
 
 	i = 0;
-	while (arr[i] != '\0')
+	while (arr[i] != NULL)
 	{
 		ft_putnbr(i);
 		ft_putstr(": ");
