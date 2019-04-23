@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   vsh.h                                              :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/19 19:36:01 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/23 14:58:23 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ int		shell_start(void);
 
 char	**get_environ_cpy(void);
 char	*param_to_env(char *parameter, char **vshenviron);
+int		check_for_single_equalsign(char *environ_arg);
+char	**free_and_return_null(char **vshenviron);
 
 /*
 **----------------------------------terminal------------------------------------
@@ -174,6 +176,8 @@ void	builtin_exit(t_term *term_p);
 
 int		test_get_environ_cpy(void);
 int		test_param_to_env(void);
+int		test_check_for_single_equalsign(void);
+int		test_free_and_return_null(void);
 
 /*
 **--------------------------------term_testers----------------------------------

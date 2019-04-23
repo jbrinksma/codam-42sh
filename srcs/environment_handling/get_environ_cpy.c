@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   get_environ_cpy.c                                  :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/03/28 17:34:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/19 20:35:45 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/23 14:37:25 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 **	Otherwise the var is not copied.
 */
 
-static int	vsh_check_validity_environ(char *environ_arg)
+int		check_for_single_equalsign(char *environ_arg)
 {
 	int index;
 	int	found_equalsign;
@@ -40,7 +40,7 @@ static int	vsh_check_validity_environ(char *environ_arg)
 **	error occured.
 */
 
-static char	**free_and_return(char **vshenviron)
+char	**free_and_return_null(char **vshenviron)
 {
 	ft_freearray(&vshenviron);
 	return (NULL);
@@ -66,12 +66,12 @@ char		**get_environ_cpy(void)
 	new_env_index = 0;
 	while (environ[env_index] != NULL)
 	{
-		valid_var = vsh_check_validity_environ(environ[env_index]);
+		valid_var = check_for_single_equalsign(environ[env_index]);
 		if (valid_var)
 		{
 			vshenviron[env_index] = ft_strdup(environ[new_env_index]);
 			if (vshenviron[env_index] == NULL)
-				return (free_and_return(vshenviron));
+				return (free_and_return_null(vshenviron));
 			new_env_index++;
 		}
 		env_index++;

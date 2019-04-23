@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   test_main.c                                        :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/19 19:34:53 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/23 15:00:05 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 int		main(void)
 {
 	if (test_prompt() == FUNCT_FAILURE)
+		return (EXIT_FAILURE);
+	if (test_check_for_single_equalsign() == FUNCT_FAILURE)
+		return (EXIT_FAILURE);
+	if (test_free_and_return_null() == FUNCT_FAILURE)
 		return (EXIT_FAILURE);
 	if (test_get_environ_cpy() == FUNCT_FAILURE)
 		return (EXIT_FAILURE);
