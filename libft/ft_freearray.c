@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   ft_freearray.c                                     :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/03/30 01:48:39 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/19 19:06:24 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/23 14:51:05 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ void	ft_freearray(char ***array_p)
 			index++;
 		}
 		free(*array_p);
+		*array_p = NULL;
 	}
 }
