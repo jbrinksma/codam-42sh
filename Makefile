@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/04/19 19:40:12 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/04/23 17:12:08 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,19 +18,26 @@ INCLUDES = -I./ -I./libft/ -I./includes -I../includes
 LIBFT= ./libft/libft.a
 LIB = -L./libft/ -lft -ltermcap
 VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
-./srcs/parsing ./srcs/term_settings ./srcs/environment_handling ./srcs/shell
+./srcs/parsing ./srcs/term_settings ./srcs/environment_handling ./srcs/shell \
+./srcs/tools ./test/parser
 SRCS = shell_start shell_prompt \
 builtin_exit \
 input_read \
-parser_lexer \
 term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct \
-get_environ_cpy param_to_env
+get_environ_cpy param_to_env \
+parser_lexer parser_split_commands \
+is_char_escaped update_quote_status
 TESTS = test_main \
 test_prompt \
 test_get_environ_cpy test_param_to_env \
 test_term_is_valid test_term_init_struct test_term_free_struct \
-test_term_get_attributes
+test_term_get_attributes \
+test_parser_split_commands \
+test_parser_strdup_command_from_line \
+test_parser_command_len_from_line \
+test_parser_total_commands_from_line
+# test_parser_lexer
 OBJECTS := $(SRCS:%=%.o)
 TESTOBJECTS := $(TESTS:%=%.o)
 SRCS := $(SRCS:%=%.c)

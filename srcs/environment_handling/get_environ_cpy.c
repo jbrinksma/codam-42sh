@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   get_environ_cpy.c                                  :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: omulder <omulder@student.codam.nl>           +#+                     */
+/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/03/28 17:34:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/23 14:37:25 by omulder       ########   odam.nl         */
+/*   Updated: 2019/04/23 17:41:36 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ char		**get_environ_cpy(void)
 	int			new_env_index;
 	int			valid_var;
 
-	vshenviron = (char**)malloc(sizeof(char*) * (ft_arraylen(environ) + 1));
+	vshenviron = (char**)ft_memalloc(sizeof(char*) * \
+	(ft_arraylen(environ) + 1));
 	if (vshenviron == NULL)
 		return (NULL);
 	env_index = 0;
