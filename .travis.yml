@@ -1,15 +1,5 @@
 language: c
 os: osx
 osx_image: xcode8.3
-
-env:
-  global:
-    - CODECOV_TOKEN=a725e35c-a6da-400e-a56f-ae7b630fc3b2
-
-jobs:
-  include:
-    - stage: "Compile & Norminette+"
-      python: 2.7.10
-      script: make && make test_norm
-    - stage: "Tests & Coverage"
-      script: make test_coverage && bash <(curl -s https://codecov.io/bash)
+python: 2.7.10
+script: make && make test_norm && make test_coverage && bash <(curl -s https://codecov.io/bash)

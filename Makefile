@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/04/24 15:13:52 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/04/24 15:50:24 by tde-jong      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,7 @@ test: $(TESTOBJECTS) $(OBJECTS)
 	@$(CC) $(FLAGS) $(COVERAGE) $(INCLUDES) $(LIB) -o vsh_tests $^
 	@sh test/local_test.sh
 
-test_norm:
+test_norm: fclean
 	@echo "[ + ] cloning norminette+"
 	@git clone https://github.com/thijsdejong/codam-norminette-plus ~/norminette+
 	@echo "[...] running norminette+"
