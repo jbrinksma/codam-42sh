@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/17 14:57:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/23 14:24:40 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/24 15:14:13 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 int			parser_lexer(char *line, char ***commands)
 {
-	*commands = parser_split_commands(line);
+	*commands = parser_split_line_to_commands(line);
 	if (*commands == NULL)
 		return (FUNCT_FAILURE);
 	return (FUNCT_SUCCESS);

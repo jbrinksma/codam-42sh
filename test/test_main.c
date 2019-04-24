@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/24 13:59:18 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/24 15:19:45 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int		main(void)
 		return (test_ret_fail("test_term_free_struct failed!"));
 	if (test_term_get_attributes() != FUNCT_SUCCESS)
 		return (test_ret_fail("test_term_get_attributes failed!"));
-	if (test_parser_split_commands() == FUNCT_FAILURE)
+	if (test_parser_split_line_to_commands() == FUNCT_FAILURE)
 		return (test_ret_fail("test_parser_split_commands failed!"));
 	if (test_parser_strdup_command_from_line() == FUNCT_FAILURE)
 		return (test_ret_fail("test_parser_strdup_command_from_line failed!"));

@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/22 16:05:52 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/23 16:24:55 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/24 15:15:38 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	return_test(char **commands, int ret)
 	return (ret);
 }
 
-static int	test_parser_split_commands_3(void)
+static int	test_parser_split_line_to_commands_3(void)
 {
 	char	*str;
 	char	**commands;
@@ -53,7 +53,7 @@ static int	test_parser_split_commands_3(void)
 	return (return_test(commands, FUNCT_SUCCESS));
 }
 
-static int	test_parser_split_commands_2(void)
+static int	test_parser_split_line_to_commands_2(void)
 {
 	char	*str;
 	char	**commands;
@@ -82,7 +82,7 @@ static int	test_parser_split_commands_2(void)
 	return (return_test(commands, FUNCT_SUCCESS));
 }
 
-static int	test_parser_split_commands_1(void)
+static int	test_parser_split_line_to_commands_1(void)
 {
 	char	*str;
 	char	**commands;
@@ -111,13 +111,13 @@ static int	test_parser_split_commands_1(void)
 	return (return_test(commands, FUNCT_SUCCESS));
 }
 
-int			test_parser_split_commands(void)
+int			test_parser_split_line_to_commands(void)
 {
-	if (test_parser_split_commands_1() == FUNCT_FAILURE)
+	if (test_parser_split_line_to_commands_1() == FUNCT_FAILURE)
 		return (FUNCT_FAILURE);
-	if (test_parser_split_commands_2() == FUNCT_FAILURE)
+	if (test_parser_split_line_to_commands_2() == FUNCT_FAILURE)
 		return (FUNCT_FAILURE);
-	if (test_parser_split_commands_3() == FUNCT_FAILURE)
+	if (test_parser_split_line_to_commands_3() == FUNCT_FAILURE)
 		return (FUNCT_FAILURE);
 	return (FUNCT_SUCCESS);
 }

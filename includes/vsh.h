@@ -132,7 +132,7 @@ void	shell_display_prompt(void);
 
 int		parser_lexer(char *line, char ***commands);
 
-char	**parser_split_commands(char *line);
+char	**parser_split_line_to_commands(char *line);
 char	*parser_strdup_command_from_line(char *line, int *start_arg_index);
 int		parser_command_len_from_line(char *line, int *start_arg_index);
 int		parser_total_commands_from_line(char *line);
@@ -181,7 +181,7 @@ int		test_prompt(void);
 **--------------------------------test_parser_lexer-----------------------------
 */
 
-int		test_parser_split_commands(void);
+int		test_parser_split_line_to_commands(void);
 int		test_parser_strdup_command_from_line(void);
 int		test_parser_total_commands_from_line(void);
 int		test_parser_command_len_from_line(void);

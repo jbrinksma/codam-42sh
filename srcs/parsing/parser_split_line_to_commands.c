@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/23 14:03:51 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/23 17:36:30 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/24 15:12:39 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ char		*parser_strdup_command_from_line(char *line, int *start_arg_index)
 **	Returns FUNCT_SUCCESS if succesful, returns FUNCT_FAILURE if error occured.
 */
 
-char		**parser_split_commands(char *line)
+char		**parser_split_line_to_commands(char *line)
 {
 	char	**commands;
 	int		total;
