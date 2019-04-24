@@ -8,13 +8,8 @@ env:
 
 jobs:
   include:
-    - stage: compile
-      script: make
-    - stage: norminette+
-      os: linux
+    - stage: "Compile & Norminette+"
       python: 2.7.10
-      script: make test_norm
-    - stage: tests
-      script: make test
-    - stage: codecov
+      script: make && make test_norm
+    - stage: "Tests & Coverage"
       script: make test_coverage && bash <(curl -s https://codecov.io/bash)
