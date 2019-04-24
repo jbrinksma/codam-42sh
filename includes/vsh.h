@@ -192,5 +192,6 @@ int		test_parser_command_len_from_line(void);
 */
 
 int		test_is_char_escaped(void);
+int		test_update_quote_status(void);
 
 #endif
