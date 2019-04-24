@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   test_main.c                                        :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
+/*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/23 20:22:49 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/24 12:21:39 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ int		main(void)
 {
 	if (test_prompt() != FUNCT_SUCCESS)
 		return (test_ret_fail("test_prompt failed!"));
-	if (test_check_for_single_equalsign() != FUNCT_SUCCESS)
-		return (test_ret_fail("test_check_for_single_equalsign failed!"));
 	if (test_free_and_return_null() != FUNCT_SUCCESS)
 		return (test_ret_fail("test_free_and_return_null failed!"));
 	if (test_get_environ_cpy() != FUNCT_SUCCESS)

@@ -3,27 +3,14 @@
 /*                                                        ::::::::            */
 /*   test_get_environ_cpy.c                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: omulder <omulder@student.codam.nl>           +#+                     */
+/*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/19 13:43:01 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/23 15:10:25 by omulder       ########   odam.nl         */
+/*   Updated: 2019/04/24 12:21:34 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-
-int		test_check_for_single_equalsign(void)
-{
-	if (check_for_single_equalsign("ENV=value") != FUNCT_SUCCESS)
-		return (FUNCT_FAILURE);
-	if (check_for_single_equalsign("ENVvalue") != FUNCT_FAILURE)
-		return (FUNCT_FAILURE);
-	if (check_for_single_equalsign("ENV=value=") != FUNCT_FAILURE)
-		return (FUNCT_FAILURE);
-	if (check_for_single_equalsign("") != FUNCT_FAILURE)
-		return (FUNCT_FAILURE);
-	return (FUNCT_SUCCESS);
-}
 
 int		test_free_and_return_null(void)
 {

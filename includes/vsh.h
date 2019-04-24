@@ -98,7 +98,6 @@ int		shell_start(void);
 
 char	**get_environ_cpy(void);
 char	*param_to_env(char *parameter, char **vshenviron);
-int		check_for_single_equalsign(char *environ_arg);
 char	**free_and_return_null(char **vshenviron);
 
 /*
@@ -161,7 +160,6 @@ int		update_quote_status(char *line, int cur_index, char *quote);
 
 int		test_get_environ_cpy(void);
 int		test_param_to_env(void);
-int		test_check_for_single_equalsign(void);
 int		test_free_and_return_null(void);
 
 /*

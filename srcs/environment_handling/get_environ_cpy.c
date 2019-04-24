@@ -3,37 +3,14 @@
 /*                                                        ::::::::            */
 /*   get_environ_cpy.c                                  :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
+/*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/03/28 17:34:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/23 17:41:36 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/24 12:21:26 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-
-/*
-**	Makes sure that the environ that is received has exactly one '=' in it.
-**	Otherwise the var is not copied.
-*/
-
-int		check_for_single_equalsign(char *environ_arg)
-{
-	int index;
-	int	found_equalsign;
-
-	index = 0;
-	found_equalsign = 0;
-	while (environ_arg[index] != '\0')
-	{
-		if (environ_arg[index] == '=')
-			found_equalsign++;
-		index++;
-	}
-	if (found_equalsign == 1)
-		return (FUNCT_SUCCESS);
-	return (FUNCT_FAILURE);
-}
 
 /*
 **	free any already allocated memory before returning NULL if any alloc
@@ -56,25 +33,17 @@ char		**get_environ_cpy(void)
 	extern char **environ;
 	char		**vshenviron;
 	int			env_index;
-	int			new_env_index;
-	int			valid_var;
 
 	vshenviron = (char**)ft_memalloc(sizeof(char*) * \
 	(ft_arraylen(environ) + 1));
 	if (vshenviron == NULL)
 		return (NULL);
 	env_index = 0;
-	new_env_index = 0;
 	while (environ[env_index] != NULL)
 	{
-		valid_var = check_for_single_equalsign(environ[env_index]);
-		if (valid_var)
-		{
-			vshenviron[env_index] = ft_strdup(environ[new_env_index]);
-			if (vshenviron[env_index] == NULL)
-				return (free_and_return_null(vshenviron));
-			new_env_index++;
-		}
+		vshenviron[env_index] = ft_strdup(environ[env_index]);
+		if (vshenviron[env_index] == NULL)
+			return (free_and_return_null(vshenviron));
 		env_index++;
 	}
 	vshenviron[env_index] = NULL;
