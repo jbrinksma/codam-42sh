@@ -11,6 +11,8 @@ jobs:
     - stage: compile
       script: make
     - stage: norminette+
+      os: linux
+      python: 2.7.10
       script: make test_norm
     - stage: tests
       script: make test
