@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/04/23 21:14:25 by tde-jong      ########   odam.nl          #
+#    Updated: 2019/04/23 20:22:03 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ LIBFT= ./libft/libft.a
 LIB = -L./libft/ -lft -ltermcap
 VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
 ./srcs/parsing ./srcs/term_settings ./srcs/environment_handling ./srcs/shell \
-./srcs/tools ./test/parser
+./srcs/tools ./test/parser ./test/tools
 SRCS = shell_start shell_prompt \
 builtin_exit \
 input_read \
@@ -36,7 +36,8 @@ test_term_get_attributes \
 test_parser_split_commands \
 test_parser_strdup_command_from_line \
 test_parser_command_len_from_line \
-test_parser_total_commands_from_line
+test_parser_total_commands_from_line \
+test_is_char_escaped
 # test_parser_lexer
 OBJECTS := $(SRCS:%=%.o)
 TESTOBJECTS := $(TESTS:%=%.o)
