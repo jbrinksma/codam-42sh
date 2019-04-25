@@ -109,7 +109,7 @@ char		**parser_split_line_to_commands(char *line)
 	int		start_arg_index;
 
 	total = parser_total_commands_from_line(line);
-	commands = (char**)ft_memalloc(sizeof(char*) * total + 1);
+	commands = (char**)ft_memalloc(sizeof(char*) * (total + 1));
 	if (commands == NULL)
 		return (NULL);
 	arg_index = 0;
