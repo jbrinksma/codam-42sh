@@ -98,7 +98,7 @@ int		shell_start(void);
 
 char	**get_environ_cpy(void);
 char	*param_to_env(char *parameter, char **vshenviron);
-char	**free_and_return_null(char **vshenviron);
+char	**free_and_return_null(char ***vshenviron);
 
 /*
 **----------------------------------terminal------------------------------------

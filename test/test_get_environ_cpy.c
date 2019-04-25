@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   test_get_environ_cpy.c                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
+/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/19 13:43:01 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/24 12:21:34 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/04/25 10:59:25 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@ int		test_free_and_return_null(void)
 	if (testenv == NULL)
 		return (FUNCT_FAILURE);
 	testenv[0] = ft_strdup("test");
-		if (testenv[0] == NULL)
-			return (FUNCT_FAILURE);
+	if (testenv[0] == NULL)
+		return (FUNCT_FAILURE);
 	testenv[1] = ft_strdup("test");
-		if (testenv[1] == NULL)
-			return (FUNCT_FAILURE);
-	if (free_and_return_null(testenv) != NULL)
+	if (testenv[1] == NULL)
 		return (FUNCT_FAILURE);
-	if (testenv[0] != NULL)
+	if (free_and_return_null(&testenv) != NULL)
 		return (FUNCT_FAILURE);
+	if (testenv != NULL)
+    	return (FUNCT_FAILURE);
 	return (FUNCT_SUCCESS);
 }
 

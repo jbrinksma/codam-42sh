@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/04/24 15:50:24 by tde-jong      ########   odam.nl          #
+#    Updated: 2019/04/25 07:56:05 by tde-jong      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,7 +74,7 @@ re: fclean all
 test: $(TESTOBJECTS) $(OBJECTS)
 	@make re
 	@make $(TESTOBJECTS)
-	@$(CC) $(FLAGS) $(COVERAGE) $(INCLUDES) $(LIB) -o vsh_tests $^
+	@$(CC) $(FLAGS) $^ $(COVERAGE) $(INCLUDES) $(LIB) -o vsh_tests
 	@sh test/local_test.sh
 
 test_norm: fclean
@@ -84,12 +84,12 @@ test_norm: fclean
 	@sh ${TRAVIS_BUILD_DIR}/test/norminette.sh
 
 $(TESTOBJECTS): $(TESTS)
-	@$(CC) $(FLAGS) $(INCLUDES) -c $^
+	@$(CC) $(FLAGS) $^ $(INCLUDES) -c
 
 test_coverage: $(TESTOBJECTS) $(OBJECTS)
 	@make re
 	@make $(TESTOBJECTS)
-	@$(CC) $(FLAGS) $(COVERAGE) $(INCLUDES) $(LIB) -o test_coverage $^
+	@$(CC) $(FLAGS) $^ $(COVERAGE) $(INCLUDES) $(LIB) -o test_coverage
 	@./test_coverage
 	@gcov $(SRCS)
 
