@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:16:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/24 14:48:03 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/25 14:43:53 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int		term_is_valid(char **vshenviron)
 		return (FUNCT_FAILURE);
 	}
 	ret = tgetent(NULL, term_type);
-	ft_strdel(&term_type);
 	if (ret == -1)
 		ft_eprintf("Terminfo database could not be found.\n");
 	if (ret == 0)
