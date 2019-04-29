@@ -62,8 +62,8 @@ Functions names should start with the category that they belong to.
 - Tests -> `test_`
 ## Naming: functions and variables
 1. Names should be as concise as possible whilst still being readable. Don't use weird abbreviations.
-- Example: name functions `parser_replace_wildcards`, **instead of** `prsr_rep_wldcrds**`.
-- If a variable is used as an iterator or index in a loop and doesn't hold any other important meaning, it shall be named i, j or k.<br/>(If you need a 'k' please consider refactoring your code.)
-1. Names should make sense and give a clear indication of their purpose when needed.
-- Example: name functions `parser_replace_wildcards` **instead of** `parser_wildcards`.
-- Example: name variables `int total_words` and `int total_chars` **instead of** `int counter1` and `int counter2`.
+  - Example: name functions `parser_replace_wildcards`, **instead of** `prsr_rep_wldcrds**`.
+  - If a variable is used as an iterator or index in a loop and doesn't hold any other important meaning, it shall be named i, j or k.<br/>(If you need a 'k' please consider refactoring your code.)
+2. Names should make sense and give a clear indication of their purpose when needed.
+  - Example: name functions `parser_replace_wildcards` **instead of** `parser_wildcards`.
+  - Example: name variables `int total_words` and `int total_chars` **instead of** `int counter1` and `int counter2`.
