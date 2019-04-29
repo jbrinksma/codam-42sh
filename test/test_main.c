@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/24 15:19:45 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/28 16:56:22 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int		test_ret_fail(char *str)
 {
-	ft_printf("%s\n", str);
+	ft_eprintf("%s\n", str);
 	return (EXIT_FAILURE);
 }
 
@@ -48,5 +48,7 @@ int		main(void)
 		return (test_ret_fail("test_is_char_escaped failed!"));
 	if (test_update_quote_status() == FUNCT_FAILURE)
 		return (test_ret_fail("test_is_char_escaped failed!"));
+	if (test_echo() == FUNCT_FAILURE)
+		return (test_ret_fail("test_echo failed!"));
 	return (EXIT_SUCCESS);
 }

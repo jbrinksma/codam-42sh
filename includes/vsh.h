@@ -27,6 +27,14 @@
 # define CR 0
 
 /*
+**------------------------------------echo--------------------------------------
+*/
+
+# define OPT_E		(1<<0)
+# define OPT_CE		(1<<1)
+# define OPT_N		(1<<2)
+
+/*
 **===============================personal headers===============================
 */
 
@@ -142,6 +150,8 @@ int		parser_total_commands_from_line(char *line);
 */
 
 void	builtin_exit(t_term *term_p);
+int		builtin_echo(char **args);
+char	echo_set_flags(char **args, int *arg_i);
 
 /*
 **---------------------------------tools----------------------------------------
@@ -193,5 +203,11 @@ int		test_parser_command_len_from_line(void);
 
 int		test_is_char_escaped(void);
 int		test_update_quote_status(void);
+
+/*
+**-----------------------------------builtins-----------------------------------
+*/
+
+int		test_echo(void);
 
 #endif
