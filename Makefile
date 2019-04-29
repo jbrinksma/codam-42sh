@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/04/28 17:16:32 by mavan-he      ########   odam.nl          #
+#    Updated: 2019/04/29 15:51:46 by tde-jong      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -94,5 +94,11 @@ test_coverage: $(TESTOBJECTS) $(OBJECTS)
 	@$(CC) $(FLAGS) $^ $(COVERAGE) $(INCLUDES) $(LIB) -o test_coverage
 	@./test_coverage
 	@gcov $(SRCS)
+
+travis_run:
+	@bash ${TRAVIS_BUILD_DIR}/test/travis.sh
+
+travis_linux:
+	make
 
 .PHONY: test_norm test_coverage all clean fclean re test $(TESTOBJECTS)

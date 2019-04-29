@@ -1,5 +1,15 @@
 language: c
-os: osx
-osx_image: xcode8.3
-python: 2.7.10
-script: make && make test_norm && make test_coverage && bash <(curl -s https://codecov.io/bash)
+
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode8.3
+      python: 2.7.10
+      env: MAKE_TRAVIS=travis_run
+    - os: linux
+      env: MAKE_TRAVIS=travis_linux
+  allow_failures:
+    - env: MAKE_TRAVIS=travis_linux
+  fast_finish: true
+
+script: make $MAKE_TRAVIS
