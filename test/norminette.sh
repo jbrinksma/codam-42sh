@@ -5,6 +5,6 @@ if [ "$output" = "" ]
 then
     exit 0
 else
-    echo $output
+    echo "$output"
     exit 42
 fi
