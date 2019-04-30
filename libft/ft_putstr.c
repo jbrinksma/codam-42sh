@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 12:05:27 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/30 10:42:40 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/04/30 13:58:29 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,5 @@
 
 void	ft_putstr(char const *s)
 {
-	int i;
-
-	if (s == NULL)
-		return ;
-	i = 0;
-	while (s[i] != '\0')
-	{
-		ft_putchar(s[i]);
-		i++;
-	}
+	ft_putstr_fd(s, STDOUT_FILENO);
 }

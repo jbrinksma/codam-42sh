@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_putchar.c                                       :+:    :+:            */
+/*   ft_putendl_fd.c                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: omulder <omulder@student.codam.nl>           +#+                     */
+/*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/09 11:27:12 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/30 13:48:13 by mavan-he      ########   odam.nl         */
+/*   Created: 2019/01/12 18:04:31 by mavan-he       #+#    #+#                */
+/*   Updated: 2019/04/30 14:00:36 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putchar(unsigned int c)
+void	ft_putendl_fd(char const *s, int fd)
 {
-	ft_putchar_fd(c, STDOUT_FILENO);
+	ft_putstr_fd(s, fd);
+	ft_putchar_fd('\n', fd);
 }

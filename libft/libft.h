@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 11:10:09 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/30 10:32:20 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/04/30 14:01:40 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,9 @@ void			ft_freearray(char ***array_p);
 int				ft_arraylen(char **array);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
 int				ft_strequ(char const *s1, char const *s2);
+void			ft_putchar_fd(char c, int fd);
+void			ft_putstr_fd(char const *s, int fd);
+void			ft_putendl_fd(char const *s, int fd);
+void			ft_putnbr_fd(int n, int fd);
 
 #endif

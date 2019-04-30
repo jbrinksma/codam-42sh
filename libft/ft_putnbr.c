@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 12:12:44 by omulder        #+#    #+#                */
-/*   Updated: 2019/02/01 11:56:09 by omulder       ########   odam.nl         */
+/*   Updated: 2019/04/30 13:56:57 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,5 @@
 
 void	ft_putnbr(int n)
 {
-	if (n < 0)
-	{
-		ft_putchar('-');
-		if (n < -9)
-			ft_putnbr((n / 10) * -1);
-		ft_putchar(-(n % 10) + '0');
-	}
-	else
-	{
-		if (n > 9)
-			ft_putnbr(n / 10);
-		ft_putchar((n % 10) + '0');
-	}
+	ft_putnbr_fd(n, STDOUT_FILENO);
 }

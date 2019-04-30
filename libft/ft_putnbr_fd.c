@@ -1,18 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_putchar.c                                       :+:    :+:            */
+/*   ft_putnbr_fd.c                                     :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: omulder <omulder@student.codam.nl>           +#+                     */
+/*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/09 11:27:12 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/30 13:48:13 by mavan-he      ########   odam.nl         */
+/*   Created: 2019/01/12 17:36:15 by mavan-he       #+#    #+#                */
+/*   Updated: 2019/04/30 13:56:12 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putchar(unsigned int c)
+void	ft_putnbr_fd(int n, int fd)
 {
-	ft_putchar_fd(c, STDOUT_FILENO);
+	if (n < 0)
+	{
+		ft_putchar_fd('-', fd);
+		if (n < -9)
+			ft_putnbr_fd((n / 10) * -1, fd);
+		ft_putchar_fd(-(n % 10) + '0', fd);
+	}
+	else
+	{
+		if (n > 9)
+			ft_putnbr_fd(n / 10, fd);
+		ft_putchar_fd((n % 10) + '0', fd);
+	}
 }
