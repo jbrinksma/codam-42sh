@@ -5,8 +5,8 @@
 /*                                                     +:+                    */
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/09 15:17:23 by omulder       #+#    #+#                 */
-/*   Updated: 2019/01/09 15:17:25 by omulder       ########   odam.nl         */
+/*   Created: 2019/01/09 15:17:23 by omulder        #+#    #+#                */
+/*   Updated: 2019/04/30 10:19:39 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@ char	*ft_strcpy(char *dst, const char *src)
 		dst[i] = src[i];
 		i++;
 	}
-	dst[i] = src[i];
+	dst[i] = '\0';
 	return (dst);
 }

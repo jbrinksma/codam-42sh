@@ -6,50 +6,33 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/11 21:44:34 by omulder        #+#    #+#                */
-/*   Updated: 2019/02/02 14:00:47 by omulder       ########   odam.nl         */
+/*   Updated: 2019/04/30 12:42:37 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	check_bounds(const char *str, int start, int neg, unsigned long num)
+int	ft_atoi(const char *str)
 {
-	size_t length;
-
-	length = 0;
-	while (str[start + length] != '\0' && ft_isdigit(str[start + length]))
-		length++;
-	if (length > 19 && neg == 1)
-		return (-1);
-	else if (length > 19)
-		return (0);
-	return ((int)num * neg);
-}
-
-int			ft_atoi(const char *str)
-{
-	unsigned long	num;
-	int				neg;
-	int				i;
-	int				first;
+	int i;
+	int	result;
+	int	sign;
 
 	i = 0;
-	neg = 1;
-	while (ft_isspace(str[i]))
+	while (ft_isspace(str[i]) || (str[i] == '+' && (str[i + 1] != '+' &&
+			str[i + 1] != '-' && (ft_isspace(str[i + 1]) == 0))))
 		i++;
+	sign = 1;
 	if (str[i] == '-')
-		neg = -1;
-	if (str[i] == '-' || str[i] == '+')
-		i++;
-	if (!ft_isdigit(str[i]))
-		return (0);
-	first = i;
-	num = (str[i] - '0');
-	i++;
-	while (ft_isdigit(str[i]))
 	{
-		num = (num * 10) + (str[i] - '0');
+		sign = -1;
 		i++;
 	}
-	return (check_bounds(str, first, neg, num));
+	result = 0;
+	while (ft_isdigit(str[i]))
+	{
+		result = (result * 100) + (str[i] - '0');
+		i++;
+	}
+	return (result * sign);
 }

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/10 16:03:08 by omulder        #+#    #+#                */
-/*   Updated: 2019/02/02 12:29:09 by omulder       ########   odam.nl         */
+/*   Updated: 2019/04/30 11:54:46 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,21 @@
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	int	i;
+	unsigned char		*d;
+	unsigned char		*s;
 
-	if (((size_t)dst) - ((size_t)src) >= len)
-		ft_memcpy(dst, (void*)src, len);
-	else if (dst == src)
+	d = (unsigned char*)dst;
+	s = (unsigned char*)src;
+	if (d == s)
 		return (dst);
+	if (d < s)
+		dst = ft_memcpy(d, s, len);
 	else
 	{
-		i = (int)(len - 1);
-		while (i >= 0)
+		while (len)
 		{
-			((unsigned char*)dst)[i] = ((unsigned char*)src)[i];
-			i--;
+			len -= 1;
+			d[len] = s[len];
 		}
 	}
 	return (dst);
