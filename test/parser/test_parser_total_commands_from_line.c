@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/23 16:22:12 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/23 19:03:44 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/30 12:18:40 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static int	test_parser_total_commands_from_line_1(void)
 	result = parser_total_commands_from_line(line);
 	if (result != 3)
 		return (return_test(line, FUNCT_FAILURE));
-	return (return_test(line, FUNCT_SUCCESS));
 	ft_strdel(&line);
 	line = ft_strdup("a;lot;of;commands;though;which;might;be;too;many;?");
 	if (line == NULL)
@@ -59,7 +58,6 @@ static int	test_parser_total_commands_from_line_2(void)
 	result = parser_total_commands_from_line(line);
 	if (result != 4)
 		return (return_test(line, FUNCT_FAILURE));
-	return (return_test(line, FUNCT_SUCCESS));
 	ft_strdel(&line);
 	line = ft_strdup("command\\;line\\;with;more\\;escaped;semi\\;colons");
 	if (line == NULL)
@@ -81,13 +79,12 @@ static int	test_parser_total_commands_from_line_3(void)
 	result = parser_total_commands_from_line(line);
 	if (result != 3)
 		return (return_test(line, FUNCT_FAILURE));
-	return (return_test(line, FUNCT_SUCCESS));
 	ft_strdel(&line);
 	line = ft_strdup("\"nice;weird;\";quoted\"semi;colons\"");
 	if (line == NULL)
 		return (return_test(NULL, E_ALLOC));
 	result = parser_total_commands_from_line(line);
-	if (result != 4)
+	if (result != 2)
 		return (return_test(line, FUNCT_FAILURE));
 	return (return_test(line, FUNCT_SUCCESS));
 }

@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/23 15:29:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/23 19:02:03 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/04/30 12:11:02 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static int	test_parser_command_len_from_line_1(void)
 	result = parser_command_len_from_line(line, &index);
 	if (result != 9)
 		return (return_test(line, FUNCT_FAILURE));
-	return (return_test(line, FUNCT_SUCCESS));
 	ft_strdel(&line);
 	line = ft_strdup("1;2");
 	if (line == NULL)
@@ -56,7 +55,6 @@ static int	test_parser_command_len_from_line_2(void)
 	result = parser_command_len_from_line(line, &index);
 	if (result != 9)
 		return (return_test(line, FUNCT_FAILURE));
-	return (return_test(line, FUNCT_SUCCESS));
 	ft_strdel(&line);
 	line = ft_strdup("1\\;\\;67");
 	if (line == NULL)
@@ -80,7 +78,6 @@ static int	test_parser_command_len_from_line_3(void)
 	result = parser_command_len_from_line(line, &index);
 	if (result != 6)
 		return (return_test(line, FUNCT_FAILURE));
-	return (return_test(line, FUNCT_SUCCESS));
 	ft_strdel(&line);
 	line = ft_strdup("\"2\"\\;;aaa");
 	if (line == NULL)
