@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:16:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/25 14:43:53 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/02 10:27:53 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		term_is_valid(char **vshenviron)
 	char	*term_type;
 	int		ret;
 
-	term_type = param_to_env("TERM", vshenviron);
+	term_type = var_get_value("TERM", vshenviron);
 	if (term_type == NULL)
 	{
 		ft_eprintf("Term env not set.\n");

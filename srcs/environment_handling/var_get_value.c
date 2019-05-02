@@ -1,36 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   test_param_to_env.c                                :+:    :+:            */
+/*   var_get_value.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/19 18:41:23 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/25 07:54:07 by tde-jong      ########   odam.nl         */
+/*   Created: 2019/04/03 18:45:30 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/05/02 10:23:53 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int		test_param_to_env(void)
+char		*var_get_value(char *var_key, char **vararray)
 {
-	char		**environ_cpy;
-	char		*buf;
+	int		var_len;
+	int		env_i;
+	int		i;
 
-	environ_cpy = get_environ_cpy();
-	buf = param_to_env("PATH", environ_cpy);
-	if (buf == NULL)
-		return (FUNCT_FAILURE);
-	if (ft_strcmp(buf, getenv("PATH")))
+	var_len = ft_strlen(var_key);
+	env_i = 0;
+	while (vararray[env_i] != NULL)
 	{
-		ft_strdel(&buf);
-		return (FUNCT_FAILURE);
+		if (ft_strncmp(var_key, vararray[env_i], var_len) == 0 &&
+			vararray[env_i][var_len] == '=')
+		{
+			i = 0;
+			while (vararray[env_i][i] != '=')
+				i++;
+			return (&vararray[env_i][i + 1]);
+		}
+		env_i++;
 	}
-	buf = param_to_env("NO_EXIST", environ_cpy);
-	if (buf)
-	{
-		ft_strdel(&buf);
-		return (FUNCT_FAILURE);
-	}
-	return (FUNCT_SUCCESS);
+	return (NULL);
 }

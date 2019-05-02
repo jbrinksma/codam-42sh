@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/02 11:34:36 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/02 13:22:52 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,22 +76,18 @@ TestSuite(get_environ_cpy);
 Test(get_environ_cpy, basic)
 {
 	extern char **environ;
-	char		**vshenviron;
+	char		**environ_cpy;
 	int			index;
-	
-	vshenviron = get_environ_cpy();
-	cr_assert(vshenviron != NULL);
+
+	environ_cpy = get_environ_cpy();
 	index = 0;
-	while (vshenviron[index] != NULL && environ[index] != NULL)
+	cr_assert(environ_cpy != NULL);
+	while (environ_cpy[index] != NULL && environ[index] != NULL)
 	{
-		cr_expect_str_eq(vshenviron[index], environ[index]);
+		cr_expect_str_eq(environ_cpy[index], environ[index]);
 		index++;
 	}
-	cr_expect_eq(environ[index], NULL);
-	cr_expect_eq(vshenviron[index], NULL);
-	
-	/* Do I have to free? forked program should exit here */
-	ft_freearray(&vshenviron);
+	cr_expect_eq(environ_cpy[index], environ[index]);
 }
 
 /*
@@ -114,9 +110,6 @@ Test(term_get_attributes, basic)
 	cr_expect_eq(term_get_attributes(STDOUT_FILENO, term_p), FUNCT_SUCCESS);
 	cr_expect_eq(term_get_attributes(STDERR_FILENO, term_p), FUNCT_SUCCESS);
 	cr_expect_eq(term_get_attributes(10101, term_p), FUNCT_FAILURE);
-	
-	/* Do I have to free? forked program should exit here */
-	term_free_struct(&term_p);
 }
 
 /*
@@ -136,9 +129,6 @@ Test(parser_split_line_to_commands, basic)
 	cr_expect_str_eq(commands[1], "12234");
 	cr_expect_str_eq(commands[2], "1;");
 	cr_expect_str_eq(commands[3], "");
-
-	/* Do I have to free? forked program should exit here */
-	ft_freearray(&commands);
 }
 
 Test(parser_split_line_to_commands, escaped_command_seperator)
@@ -152,9 +142,6 @@ Test(parser_split_line_to_commands, escaped_command_seperator)
 	cr_expect_str_eq(commands[1], "asdgasdgas\\;dg as");
 	cr_expect_str_eq(commands[2], " dga sgas \\\"");
 	cr_expect_str_eq(commands[3], "@");
-
-	/* Do I have to free? forked program should exit here */
-	ft_freearray(&commands);
 }
 
 Test(parser_split_line_to_commands, escaped_command_seperator2)
@@ -168,9 +155,6 @@ Test(parser_split_line_to_commands, escaped_command_seperator2)
 	cr_expect_str_eq(commands[1], "456\\\\\\;123");
 	cr_expect_str_eq(commands[2], "456");
 	cr_expect_str_eq(commands[3], "");
-
-	/* Do I have to free? forked program should exit here */
-	ft_freearray(&commands);
 }
 
 /*
@@ -188,9 +172,6 @@ Test(parser_strdup_command_from_line, basic)
 	result = parser_strdup_command_from_line("simple;command;line", &index);
 	cr_assert(result != NULL);
 	cr_expect_str_eq(result, "simple");
-
-	/* Do I have to free? forked program should exit here */
-	ft_strdel(&result);
 }
 
 Test(parser_strdup_command_from_line, moderate)
@@ -202,9 +183,6 @@ Test(parser_strdup_command_from_line, moderate)
 	result = parser_strdup_command_from_line("more\\;complicated;line", &index);
 	cr_assert(result != NULL);
 	cr_expect_str_eq(result, "more\\;complicated");
-
-	/* Do I have to free? forked program should exit here */
-	ft_strdel(&result);
 }
 
 Test(parser_strdup_command_from_line, quoted_command_seperator)
@@ -216,9 +194,6 @@ Test(parser_strdup_command_from_line, quoted_command_seperator)
 	result = parser_strdup_command_from_line("\"quoted;command;line\"", &index);
 	cr_assert(result != NULL);
 	cr_expect_str_eq(result, "quoted;command;line");
-
-	/* Do I have to free? forked program should exit here */
-	ft_strdel(&result);
 }
 
 /*
@@ -378,32 +353,69 @@ Test(builtin_echo, return_values)
 	cr_log_warn("Please read comments at builtin_echo testsuite (return_values)");
 }
 
-		// return (test_ret_fail("test_prompt failed!"));
+/*
+**------------------------------------------------------------------------------
+*/
 
-		// return (test_ret_fail("test_free_and_return_null failed!"));
+TestSuite(var_get_value);
 
-		// return (test_ret_fail("test_get_environ_cpy failed!"));
+Test(var_get_value, basic)
+{
+	char	*fakenv[] = {"LOL=didi", "PATH=lala", "PAT=lolo", NULL};
+	cr_expect_str_eq(var_get_value("PATH", fakenv), "lala");
+	cr_expect(var_get_value("NOEXIST", fakenv) == NULL);
+}
 
-		// return (test_ret_fail("test_param_to_env failed!"));
+/*
+**------------------------------------------------------------------------------
+*/
 
-		// return (test_ret_fail("test_term_is_valid failed!"));
+TestSuite(var_join_key_value);
 
-		// return (test_ret_fail("test_term_init_struct failed!"));
+Test(var_join_key_value, basic)
+{
+	cr_expect_str_eq(var_join_key_value("lolo", "lala"), "lolo=lala");
+	cr_expect_str_eq(var_join_key_value("lolo===", "lala"), "lolo====lala");
+	cr_expect_str_eq(var_join_key_value("lolo", "===lala"), "lolo====lala");
+	cr_expect_str_eq(var_join_key_value("=", "="), "===");
+	cr_expect_str_eq(var_join_key_value("", ""), "=");
+	cr_expect_str_eq(var_join_key_value("", "="), "==");
+	cr_expect_str_eq(var_join_key_value("=", ""), "==");
+	cr_expect_str_eq(var_join_key_value("\t", "\t"), "\t=\t");
+}
 
-		// return (test_ret_fail("test_term_free_struct failed!"));
+/*
+**------------------------------------------------------------------------------
+*/
 
-		// return (test_ret_fail("test_term_get_attributes failed!"));
+TestSuite(var_set_value);
 
-		// return (test_ret_fail("test_parser_split_commands failed!"));
+Test(var_set_value, basic)
+{
+	char	*fakenv[4];
+	fakenv[0] = ft_strdup("LOL=didi");
+	fakenv[1] = ft_strdup("PATH=lala");
+	fakenv[2] = ft_strdup("PAT=lolo");
+	fakenv[3] = NULL;
+	cr_assert(fakenv[0] != NULL && fakenv[1] != NULL && fakenv[2] != NULL, "Failed to allocate test strings");
+	var_set_value("PATH", "lala", fakenv);
+	cr_expect(var_set_value("PATH", "changed", fakenv) == FUNCT_SUCCESS);
+	cr_expect(var_set_value("LI", "changed", fakenv) == FUNCT_FAILURE);
+	cr_expect_str_eq(fakenv[1], "PATH=changed");
+}
 
-		// return (test_ret_fail("test_parser_strdup_command_from_line failed!"));
-
-		// return (test_ret_fail("test_parser_command_len_from_line failed!"));
-
-		// return (test_ret_fail("test_parser_total_commands_from_line failed!"));
-
-		// return (test_ret_fail("test_is_char_escaped failed!"));
-
-		// return (test_ret_fail("test_is_char_escaped failed!"));
-
-		// return (test_ret_fail("test_echo failed!"));
+// return (test_ret_fail("test_prompt failed!"));
+// return (test_ret_fail("test_free_and_return_null failed!"));
+// return (test_ret_fail("test_get_environ_cpy failed!"));
+// return (test_ret_fail("test_param_to_env failed!"));
+// return (test_ret_fail("test_term_is_valid failed!"));
+// return (test_ret_fail("test_term_init_struct failed!"));
+// return (test_ret_fail("test_term_free_struct failed!"));
+// return (test_ret_fail("test_term_get_attributes failed!"));
+// return (test_ret_fail("test_parser_split_commands failed!"));
+// return (test_ret_fail("test_parser_strdup_command_from_line failed!"));
+// return (test_ret_fail("test_parser_command_len_from_line failed!"));
+// return (test_ret_fail("test_parser_total_commands_from_line failed!"));
+// return (test_ret_fail("test_is_char_escaped failed!"));
+// return (test_ret_fail("test_is_char_escaped failed!"));
+// return (test_ret_fail("test_echo failed!"));
