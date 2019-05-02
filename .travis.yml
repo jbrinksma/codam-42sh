@@ -5,11 +5,11 @@ matrix:
     - os: osx
       osx_image: xcode8.3
       python: 2.7.10
-      env: MAKE_TRAVIS=travis_run
+      env: OS=macos
     - os: linux
-      env: MAKE_TRAVIS=travis_linux
+      env: OS=linux
   allow_failures:
-    - env: MAKE_TRAVIS=travis_linux
+    - env: OS=linux
   fast_finish: true
 
-script: make $MAKE_TRAVIS
+script: bash ${TRAVIS_BUILD_DIR}/test/travis.bash $OS
