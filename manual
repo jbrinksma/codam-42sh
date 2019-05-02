@@ -1,0 +1,32 @@
+.TH man 1 "03 April 2019" "1.0" "vsh man page"
+.SH NAME
+vsh \- Vela SHell
+.SH SYNOPSIS
+minishell
+.SH DESCRIPTION
+vsh is a beautiful shell.
+.SH OPTIONS
+vsh does not take any options.
+.SH BUILTINS
+.RE 0
+.RS 3
+.po 4
+vsh supports a total of 7 builtin commands. One of them, 'vela', is bonus.
+.SS echo [-neE] [arg ...]
+Output the args, seperated by spaces, followed by a newline. If -n is specified, the trailing newline is not printed. By default, echo will interpret the following backslash-escaped characters. The -e option is currently useless and will do nothing. The -E option will disable interpretation of these escape characters:
+.SS cd [dir]
+Change the current directory to 'dir'. The variable environment variable HOME is default to 'dir'.
+.SS env [REFRESH]
+Display the current environment. If supplied with argument 'REFRESH', it will refresh your whole environment.
+.SS setenv [name] [value]
+Set a environment variable 'name' to 'value'. If no 'value' is specified, 'name' will be set to NULL. If no 'name' is specified, setenv will behave like the env builtin.
+.SS unsetenv [name]
+Unset environment variable 'name'.
+.SS vela
+Display our mighty vela logo in ascii art, and continue with business as usual.
+
+.po 0
+.SH BUGS
+Probably a lot...
+.SH AUTHOR
+Jorn Brinksma (jbrinksm@student.codam.nl)
