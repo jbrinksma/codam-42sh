@@ -13,7 +13,7 @@ vsh does not take any options.
 .po 4
 vsh supports a total of 7 builtin commands. One of them, 'vela', is bonus.
 .SS echo [-neE] [arg ...]
-Output the args, seperated by spaces, followed by a newline. If -n is specified, the trailing newline is not printed. By default, echo will interpret the following backslash-escaped characters. The -e option is currently useless and will do nothing. The -E option will disable interpretation of these escape characters:
+Output the args, seperated by spaces, followed by a newline. If -n is specified, the trailing newline is not printed. The -e option will enable interpretation of these escape characters: \\a \\b \\E \\e \\f \\n \\r \\t \\v \\. Option -E disables interpretation of escape characters.
 .SS cd [dir]
 Change the current directory to 'dir'. The variable environment variable HOME is default to 'dir'.
 .SS env [REFRESH]

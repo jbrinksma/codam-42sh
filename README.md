@@ -19,7 +19,7 @@ The following is a brief description of the shell’s operation when it reads an
 4. Performs the various shell expansions (see Shell Expansions), breaking the expanded tokens into lists of filenames (see Filename Expansion) and commands and arguments.
 5. Performs any necessary redirections (see Redirections) and removes the redirection operators and their operands from the argument list.
 6. Executes the command (see Executing Commands).
-7. Optionally waits for the command to complete and collects its exit status (see Exit Status). 
+7. Optionally waits for the command to complete and collects its exit status (see Exit Status).
 
 ## Adding tests
 
@@ -60,10 +60,13 @@ Functions names should start with the category that they belong to.
 - Builtins -> `builtin_`
 - Libft -> `ft_`
 - Tests -> `test_`
-## Naming: functions and variables
+## Naming: functions, variables and defines
 1. Names should be as concise as possible whilst still being readable. Don't use weird abbreviations.
   - Example: name functions `parser_replace_wildcards`, **instead of** `prsr_rep_wldcrds**`.
   - If a variable is used as an iterator or index in a loop and doesn't hold any other important meaning, it shall be named i, j or k.<br/>(If you need a 'k' please consider refactoring your code.)
 2. Names should make sense and give a clear indication of their purpose when needed.
   - Example: name functions `parser_replace_wildcards` **instead of** `parser_wildcards`.
   - Example: name variables `int total_words` and `int total_chars` **instead of** `int counter1` and `int counter2`.
+3. Defines should start with the function name they belong to. L (lowercase) and U (uppercase) are used to specifiy if an option/flag is upper or lowercase.
+  - Example: name define `ECHO_HOME` **instead of** `HOME`.
+  - Example: name option/flag `ECHO_OPT_EU` and `ECHO_OPT_EL` **instead of** `ECHO_OPT_CE` or `ECHO_OPT_E`.

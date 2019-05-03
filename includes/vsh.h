@@ -30,9 +30,11 @@
 **------------------------------------echo--------------------------------------
 */
 
-# define OPT_E		(1<<0)
-# define OPT_CE		(1<<1)
-# define OPT_N		(1<<2)
+# define ECHO_OPT_EL		(1 << 0)
+# define ECHO_OPT_EU		(1 << 1)
+# define ECHO_OPT_NL		(1 << 2)
+# define BS					8
+# define ESC				27
 
 /*
 **===============================personal headers===============================

@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/28 11:03:19 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/04/28 17:10:45 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/03 16:46:12 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,34 @@
 
 static void	echo_merge_flags(char *flags, char tmp_flags)
 {
-	if (tmp_flags & OPT_N)
-		*flags |= OPT_N;
-	if (tmp_flags & OPT_E)
+	if (tmp_flags & ECHO_OPT_NL)
+		*flags |= ECHO_OPT_NL;
+	if (tmp_flags & ECHO_OPT_EL)
 	{
-		*flags |= OPT_E;
-		*flags &= ~OPT_CE;
+		*flags |= ECHO_OPT_EL;
+		*flags &= ~ECHO_OPT_EU;
 	}
-	if (tmp_flags & OPT_CE)
+	if (tmp_flags & ECHO_OPT_EU)
 	{
-		*flags |= OPT_CE;
-		*flags &= ~OPT_E;
+		*flags |= ECHO_OPT_EU;
+		*flags &= ~ECHO_OPT_EL;
 	}
 }
 
-static int	echo_validate_flag(char *tmp_flags, char c)
+static int	echo_validate_flag(char *tmp_flags, char flag)
 {
-	if (c == 'E')
+	if (flag == 'E')
 	{
-		*tmp_flags |= OPT_CE;
-		*tmp_flags &= ~OPT_E;
+		*tmp_flags |= ECHO_OPT_EU;
+		*tmp_flags &= ~ECHO_OPT_EL;
 	}
-	else if (c == 'e')
+	else if (flag == 'e')
 	{
-		*tmp_flags |= OPT_E;
-		*tmp_flags &= ~OPT_CE;
+		*tmp_flags |= ECHO_OPT_EL;
+		*tmp_flags &= ~ECHO_OPT_EU;
 	}
-	else if (c == 'n')
-		*tmp_flags |= OPT_N;
+	else if (flag == 'n')
+		*tmp_flags |= ECHO_OPT_NL;
 	else
 		return (FUNCT_FAILURE);
 	return (FUNCT_SUCCESS);
