@@ -13,3 +13,6 @@
 vsh
 vsh_tests
 test_coverage
+
+#vscode
+.vscode
