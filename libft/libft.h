@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 11:10:09 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/04 11:40:15 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/04 17:03:00 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "ft_printf.h"
+
+typedef struct		s_list
+{
+	void			*content;
+	size_t			content_size;
+	struct s_list	*next;
+}					t_list;
 
 char			*ft_itoa(int n);
 char			*ft_strdup(const char *s1);
@@ -59,6 +66,11 @@ void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(char const *s, int fd);
 void			ft_putendl_fd(char const *s, int fd);
 void			ft_putnbr_fd(int n, int fd);
+int				ft_lstlen(t_list *lst);
+char			**ft_lsttoarray(t_list *lst);
+void			ft_lstadd(t_list **alst, t_list *new);
+void			ft_lstaddback(t_list *alst, t_list *new);
+t_list			*ft_lstnew(void *content, size_t content_size);
 char			*ft_strchr(const char *s, int c);
 char			**ft_strsplit(const char *s, char c);
 
