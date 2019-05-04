@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/03 18:45:30 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/02 10:23:53 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/05/03 15:56:14 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ char		*var_get_value(char *var_key, char **vararray)
 {
 	int		var_len;
 	int		env_i;
-	int		i;
 
 	var_len = ft_strlen(var_key);
 	env_i = 0;
@@ -24,12 +23,7 @@ char		*var_get_value(char *var_key, char **vararray)
 	{
 		if (ft_strncmp(var_key, vararray[env_i], var_len) == 0 &&
 			vararray[env_i][var_len] == '=')
-		{
-			i = 0;
-			while (vararray[env_i][i] != '=')
-				i++;
-			return (&vararray[env_i][i + 1]);
-		}
+			return (ft_strchr(vararray[env_i], '=') + 1);
 		env_i++;
 	}
 	return (NULL);

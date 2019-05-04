@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/03 18:45:30 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/02 10:28:07 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/05/03 16:30:12 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		var_set_value(char *var_key, char *var_value, char **vararray)
 			free(vararray[env_i]);
 			vararray[env_i] = var_join_key_value(var_key, var_value);
 			if (vararray[env_i] == NULL)
-				return (FUNCT_ERROR); // add error message here ??
+				return (FUNCT_ERROR);
 			return (FUNCT_SUCCESS);
 		}
 		env_i++;

@@ -110,6 +110,7 @@ char	**get_environ_cpy(void);
 char	*var_get_value(char *var_key, char **vararray);
 char	*var_join_key_value(char *var_key, char *var_value);
 int		var_set_value(char *var_key, char *var_value, char **vararray);
+int		var_add_value(char *var_key, char *var_value, char ***vararray);
 char	**free_and_return_null(char ***vshenviron);
 
 /*
