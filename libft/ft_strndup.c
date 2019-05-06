@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_lstaddback.c                                    :+:    :+:            */
+/*   ft_strndup.c                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
+/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/01/16 13:03:09 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/04/29 18:26:48 by jbrinksm      ########   odam.nl         */
+/*   Created: 2019/01/09 13:26:21 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/05/05 12:59:24 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstaddback(t_list *alst, t_list *new)
+char	*ft_strndup(const char *s1, size_t n)
 {
-	if (alst->next != NULL)
-		ft_lstaddback(alst->next, new);
-	else
-		alst->next = new;
+	char	*cpy;
+
+	cpy = ft_strnew(n);
+	ft_strncpy(cpy, s1, n);
+	return (cpy);
 }

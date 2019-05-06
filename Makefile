@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/05/03 20:09:15 by mavan-he      ########   odam.nl          #
+#    Updated: 2019/05/05 12:51:21 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = vsh
 CC = gcc
 FLAGS = -Wall -Werror -Wextra -Wunreachable-code
 COVERAGE = -coverage
-INCLUDES = -I./libft/ -I./includes -I../includes \
+INCLUDES = -I./libft/ -I./includes \
 -I$(HOME)/.brew/include
 LIBFT= ./libft/libft.a
 LIB = -L./libft/ -lft -ltermcap -L$(HOME)/.brew/lib -lcriterion
@@ -28,10 +28,13 @@ input_read \
 term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct \
 get_environ_cpy var_get_value var_set_value var_join_key_value var_add_value \
-parser_lexer parser_split_line_to_commands \
-is_char_escaped update_quote_status \
+parser_lexer parser_split_line_to_commands parser_split_command_to_args \
+parser_remove_quotes \
+parser_rem_esc_char_quotes parser_rem_esc_char_semicolons \
+parser_rem_esc_char_blanks \
+is_char_escaped update_quote_status add_str_to_lst add_lst_to_lst \
 builtin_echo builtin_echo_set_flags
-TESTS = unit_test
+TESTS = unit_test parser_tests is_uninhibited_tests
 OBJECTS := $(SRCS:%=%.o)
 TESTOBJECTS := $(TESTS:%=%.o)
 SRCS := $(SRCS:%=%.c)

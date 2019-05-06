@@ -6,9 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-
-/*   Updated: 2019/04/23 16:54:55 by jbrinksm      ########   odam.nl         */
-
+/*   Updated: 2019/05/05 12:52:35 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +38,7 @@
 **===============================personal headers===============================
 */
 
-#include "libft.h"
+# include "libft.h"
 
 /*
 **==================================headers=====================================
@@ -143,12 +141,24 @@ void	shell_display_prompt(void);
 **----------------------------------parser--------------------------------------
 */
 
-int		parser_lexer(char *line, char ***commands);
+int		parser_lexer(char *line, t_list **cmd_tab);
 
-char	**parser_split_line_to_commands(char *line);
-char	*parser_strdup_command_from_line(char *line, int *start_arg_index);
-int		parser_command_len_from_line(char *line, int *start_arg_index);
-int		parser_total_commands_from_line(char *line);
+int		is_uninhibited_semicolon(char *str, int i, char quote);
+int		is_uninhibited_blank(char *str, int i, char quote);
+
+void	parser_remove_quotes(t_list *cmdstr_lst);
+void	parser_rem_esc_char_quotes(t_list *cmdstr_lst);
+void	parser_rem_esc_char_semicolons(t_list *cmdstr_lst);
+void	parser_rem_esc_char_blanks(t_list *cmdstr_lst);
+
+void	add_str_to_lst(char *arg, t_list **args);
+void	add_lst_to_lst(t_list *lst_content, t_list **lst_lst);
+
+t_list	*parser_split_line_to_commands(char *line);
+int		parser_strlen_cmd(char *line);
+
+t_list	*parser_split_command_to_args(char *cmd);
+int		parser_strlen_arg(char *cmd);
 
 /*
 **----------------------------------bultins-------------------------------------
