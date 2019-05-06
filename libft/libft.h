@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 11:10:09 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/04 17:03:00 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/06 14:13:07 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,7 @@ void			ft_lstaddback(t_list *alst, t_list *new);
 t_list			*ft_lstnew(void *content, size_t content_size);
 char			*ft_strchr(const char *s, int c);
 char			**ft_strsplit(const char *s, char c);
+char			*ft_strjoinchr(char const *s1, char c);
+char			*ft_strjoinchrfree(char *s1, char c, int i);
 
 #endif
