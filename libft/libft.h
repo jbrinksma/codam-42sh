@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 11:10:09 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/02 16:49:00 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/16 17:04:03 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int				ft_arraylen(char **array);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
 t_list	        *ft_lstnew(void *content, size_t content_size);
 void	        ft_lstadd(t_list **alst, t_list *new);
-void	        ft_lstaddback(t_list *alst, t_list *new);
 char	        *ft_strndup(const char *s1, size_t n);
 int				ft_strequ(char const *s1, char const *s2);
 void			ft_putchar_fd(char c, int fd);
@@ -75,6 +74,9 @@ char			**ft_lsttoarray(t_list *lst);
 void			ft_lstadd(t_list **alst, t_list *new);
 void			ft_lstaddback(t_list *alst, t_list *new);
 t_list			*ft_lstnew(void *content, size_t content_size);
+void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
+void			ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
+void			ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 char			*ft_strchr(const char *s, int c);
 char			**ft_strsplit(const char *s, char c);
 char			*ft_strjoinchr(char const *s1, char c);

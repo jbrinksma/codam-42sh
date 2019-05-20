@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/23 13:59:19 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/23 19:12:25 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/16 20:43:54 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,19 @@
 **	Returns FUNCT_SUCCESS if escaped, FUNCT_FAILURE if not escaped.
 */
 
-int	is_char_escaped(char *line, int cur_index)
+int	is_char_escaped(char *line, int i)
 {
-	int index;
-	int	total_escape_chars;
+	int i_tmp;
+	int	escape_count;
 
-	index = cur_index - 1;
-	if (index < 0 || index > (int)ft_strlen(line))
-		return (FUNCT_FAILURE);
-	if (line[index] == '\\')
+	i_tmp = i - 1;
+	escape_count = 0;
+	while (i_tmp >= 0 && line[i_tmp] == '\\')
 	{
-		total_escape_chars = 0;
-		while (line[index] == '\\' && index >= 0)
-		{
-			total_escape_chars++;
-			index--;
-		}
-		if (total_escape_chars % 2 == 1)
-			return (FUNCT_SUCCESS);
-		else
-			return (FUNCT_FAILURE);
+		escape_count++;
+		i_tmp--;
 	}
+	if (escape_count % 2 != 0)
+		return (FUNCT_SUCCESS);
 	return (FUNCT_FAILURE);
 }

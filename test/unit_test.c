@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/04 16:37:53 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/19 16:09:26 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ Test(is_char_escaped, edge_cases)
 **------------------------------------------------------------------------------
 */
 
-TestSuite(update_quote_status);
+/* TestSuite(update_quote_status);
 
 Test(update_quote_status, basic)
 {
@@ -203,7 +203,7 @@ Test(update_quote_status, edge_cases)
 	quote = '\0';
 	cr_expect_eq(update_quote_status("\\\"harder'line", 8, &quote), 1);
 	cr_expect_eq(quote, '\'');
-}
+} */
 
 /*
 **------------------------------------------------------------------------------
@@ -293,6 +293,25 @@ Test(var_add_value, basic)
 	cr_expect_str_eq(fakenv[1], "PATH=changed");
 	cr_expect(var_add_value("TEST", "success", &fakenv) == FUNCT_SUCCESS);
 	cr_expect_str_eq(fakenv[3], "TEST=success");
+}
+
+TestSuite(lexer_error);
+
+Test(lexer_error, basic, .init=redirect_all_stdout)
+{
+	t_token token;
+	t_list	*token_lst;
+	char	*str;
+
+	token.type = START;
+	token_lst = NULL;
+	ft_lstadd(&token_lst, ft_lstnew(&token, sizeof(t_token)));
+	token.type = WORD;
+	str = ft_strdup("hoi");
+	token.value.str = str;
+	add_tk_to_lst(&token_lst, &token);
+	lexer_error(&token_lst);
+	cr_expect(token_lst == NULL);
 }
 
 // return (test_ret_fail("test_prompt failed!"));

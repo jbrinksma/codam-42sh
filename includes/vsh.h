@@ -6,12 +6,13 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/20 10:21:03 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/05/20 13:12:35 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VSH_H
 # define VSH_H
+# define DEBUG
 
 /*
 **==================================defines=====================================
@@ -33,6 +34,12 @@
 # define ECHO_OPT_NL		(1 << 2)
 # define BS					8
 # define ESC				27
+
+/*
+**------------------------------------lexer-------------------------------------
+*/
+
+# define CURRENT_CHAR (scanner->str)[scanner->str_index]
 
 /*
 **-----------------------------------input--------------------------------------
@@ -96,7 +103,7 @@
 # include <sys/param.h>
 
 /*
-**=================================structs======================================
+**=================================typedefs====================================
 */
 
 typedef struct	s_term
@@ -105,6 +112,72 @@ typedef struct	s_term
 	struct termios	*termios_p;
 }				t_term;
 
+/*
+**----------------------------------lexer--------------------------------------
+*/
+
+/*
+**	START,
+**	WORD, // bascially any string
+**	ASSIGN, WORD=[WORD]
+**	IO_NUMBER, // NUM followed by > or <
+**	AND_IF, // &&
+**	OR_IF, // ||
+**	DLESS, // <<
+**	DGREAT, // >>
+**	SLESS, // <
+**	SGREAT, // >
+**	LESSAND, // <&
+**	GREATAND, // >&
+**	BG // & in background
+**	PIPE, // |
+**	SEMICOL // ;
+	NEWLINE,
+**	END,
+**	ERROR // malloc fail
+*/
+typedef enum	e_tokens
+{
+	START,
+	WORD,
+	ASSIGN,
+	IO_NUMBER,
+	AND_IF,
+	OR_IF,
+	DLESS,
+	DGREAT,
+	SLESS,
+	SGREAT,
+	LESSAND,
+	GREATAND,
+	BG,
+	PIPE,
+	SEMICOL,
+	NEWLINE,
+	END,
+	ERROR
+}				t_tokens;
+
+typedef union	u_tk_value
+{
+	char		*str;
+	char		**array;
+	int			io;
+}				t_tk_value;
+
+typedef struct	s_token
+{
+	t_tokens	type;
+	t_tk_value	value;
+}				t_token;
+
+typedef struct	s_scanner
+{
+	t_tokens	tk_type;
+	int			tk_len;
+	char		*str;
+	int			str_index;
+}				t_scanner;
 /*
 **=================================prototypes===================================
 */
@@ -170,6 +243,39 @@ int		input_parse_ctrl_down(char c, int *input_state,	unsigned *index,
 void	shell_display_prompt(void);
 
 /*
+**----------------------------------lexer---------------------------------------
+*/
+int		lexer(char *line, t_list **token_lst);
+int		add_tk_to_lst(t_list **lst, t_token *token);
+void	del_tk_node(void *content, size_t size);
+int		lexer_error(t_list **token_lst);
+void	evaluator(t_list *token_lst);
+int		lexer_scanner(char *line, t_list *token_lst);
+
+void	change_state(t_scanner *scanner, void (*state_x)(t_scanner *scanner));
+void	print_token(t_scanner *scanner);
+
+void	state_1(t_scanner *scanner);
+void	state_2(t_scanner *scanner);
+void	state_3(t_scanner *scanner);
+void	state_4(t_scanner *scanner);
+void	state_5(t_scanner *scanner);
+void	state_6(t_scanner *scanner);
+void	state_7(t_scanner *scanner);
+void	state_8(t_scanner *scanner);
+void	state_9(t_scanner *scanner);
+void	state_10(t_scanner *scanner);
+void	state_11(t_scanner *scanner);
+void	state_12(t_scanner *scanner);
+void	state_13(t_scanner *scanner);
+void	state_14(t_scanner *scanner);
+void	state_15(t_scanner *scanner);
+void	state_16(t_scanner *scanner);
+void	state_17(t_scanner *scanner);
+void	state_18(t_scanner *scanner);
+void	state_19(t_scanner *scanner);
+
+/*
 **----------------------------------parser--------------------------------------
 */
 
@@ -204,7 +310,13 @@ char	echo_set_flags(char **args, int *arg_i);
 **---------------------------------tools----------------------------------------
 */
 
-int		is_char_escaped(char *line, int cur_index);
+int		is_char_escaped(char *line, int i);
 int		update_quote_status(char *line, int cur_index, char *quote);
+
+/*
+**----------------------------------debugging-----------------------------------
+*/
+
+void	print_node(t_list *node);
 
 #endif
