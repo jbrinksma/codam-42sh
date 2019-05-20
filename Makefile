@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/05/05 12:51:21 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/05/17 14:52:30 by rkuijper      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,10 @@ VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
 ./test/environment_handling
 SRCS = shell_start shell_prompt \
 builtin_exit \
-input_read \
+input_read input_parse_char input_parse_escape input_parse_home \
+input_parse_end input_parse_prev input_parse_next input_parse_backspace \
+input_parse_delete input_parse_ctrl_d input_parse_ctrl_k \
+input_parse_ctrl_up input_parse_ctrl_down input_is_word_start \
 term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct \
 get_environ_cpy var_get_value var_set_value var_join_key_value var_add_value \
