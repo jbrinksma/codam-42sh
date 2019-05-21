@@ -1,0 +1,51 @@
+/*----------------------------------*/
+/*              TOKENS              */
+/*----------------------------------*/
+
+%token    WORD
+%token    ASSIGNMENT_WORD
+%token    IO_NUMBER
+
+%token    SEMICOLON    BG
+/*        ';'          '&'                                        */
+%token    AND_IF    OR_IF
+/*        '&&'      '||'                                          */
+%token    PIPE
+/*        '|'                                                     */
+%token    SLESS    SGREAT    DLESS    DGREAT    LESSAND    GREATAND
+/*        '<'      '>'       '<<'     '>>'      '<&'       '>&'   */
+
+
+/*----------------------------------*/
+/*              GRAMMAR             */
+/*----------------------------------*/
+
+%start      complete_command
+%%
+complete_command    ::=    list separator?
+
+list                ::=    and_or [[seperator and_or]*  
+
+and_or              ::=    pipe_sequence [[AND_IF | OR_IF] pipe_sequence]*
+
+pipe_sequence       ::=    command [PIPE command]*
+
+command             ::=    [cmd_prefix [cmd_word [cmd_suffix]?]?] | [cmd_word cmd_suffix?]
+       
+cmd_prefix          ::=    [io_redirect | ASSIGNMENT_WORD]*
+
+io_redirect         ::=    IO_NUMBER? [io_file | io_here]
+
+io_file             ::=    [SLESS | SGREAT | LESSAND | GREATAND | DGREAT] filename
+
+filename            ::=    WORD
+
+io_here             ::=    DLESS here_end
+
+here_end            ::=    WORD
+
+cmd_word            ::=    WORD
+
+cmd_suffix          ::=    [io_redirect | WORD]*
+
+separator_op        ::=    BG | SEMICOLON
