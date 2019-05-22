@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/05/20 13:12:39 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/05/22 15:37:03 by omulder       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,10 +14,11 @@ NAME = vsh
 CC = gcc
 FLAGS = -Wall -Werror -Wextra -Wunreachable-code
 COVERAGE = -coverage
-INCLUDES = -I./libft/ -I./includes \
--I$(HOME)/.brew/include
-LIBFT= ./libft/libft.a
-LIB = -L./libft/ -lft -ltermcap -L$(HOME)/.brew/lib -lcriterion
+INCLUDES = -I./libft/ -I./includes
+LIBFT = ./libft/libft.a
+LIB = -L./libft/ -lft -ltermcap
+CRITERIONINCLUDES = -I$(HOME)/.brew/include
+CRITERION = $(CRITERIONINCLUDES) -L$(HOME)/.brew/lib -lcriterion
 VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
 ./srcs/term_settings ./srcs/environment_handling ./srcs/shell \
 ./srcs/tools ./test/parser ./test/tools ./test/builtins \
@@ -75,12 +76,12 @@ test_norm: fclean
 	@sh ${TRAVIS_BUILD_DIR}/test/norminette.sh
 
 $(TESTOBJECTS): $(TESTS)
-	@$(CC) $(FLAGS) $^ $(INCLUDES) -c
+	@$(CC) $(FLAGS) $^ $(INCLUDES) $(CRITERIONINCLUDES) -c
 
 test: $(TESTOBJECTS) $(OBJECTS)
 	@make re
 	@make $(TESTOBJECTS)
-	@$(CC) $(FLAGS) $^ $(COVERAGE) $(INCLUDES) $(LIB) -o vsh_tests
+	@$(CC) $(FLAGS) $^ $(COVERAGE) $(INCLUDES) $(CRITERION) $(LIB) -o vsh_tests
 	@./vsh_tests
 
 test_coverage: test
