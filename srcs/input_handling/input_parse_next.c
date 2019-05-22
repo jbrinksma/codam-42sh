@@ -6,13 +6,13 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:41:00 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/20 11:44:01 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/05/22 11:57:08 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-static void		parse_next_move_word(unsigned *index, char **line)
+static void	parse_next_move_word(unsigned *index, char **line)
 {
 	unsigned i;
 
@@ -29,7 +29,7 @@ static void		parse_next_move_word(unsigned *index, char **line)
 	*index = i;
 }
 
-int				input_parse_next(char c, int *input_state,
+int			input_parse_next(char c, int *input_state,
 	unsigned *index, char **line)
 {
 	if (((*input_state == INPUT_BRACE || *input_state == INPUT_D_BRACE) &&

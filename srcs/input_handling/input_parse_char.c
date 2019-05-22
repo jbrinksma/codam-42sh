@@ -6,13 +6,13 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:33:54 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/21 12:15:10 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/22 11:54:00 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-static int		add_char_at(char **line, int index, char c)
+static int	add_char_at(char **line, int index, char c)
 {
 	int			i;
 	char		*tmp;
@@ -34,7 +34,7 @@ static int		add_char_at(char **line, int index, char c)
 	return (FUNCT_SUCCESS);
 }
 
-int				input_parse_char(char c, unsigned *index, char **line)
+int			input_parse_char(char c, unsigned *index, char **line)
 {
 	unsigned len;
 

@@ -6,13 +6,13 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/17 14:03:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/21 12:20:24 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/22 11:57:34 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-void			input_clear_char_at(char **line, unsigned index)
+void	input_clear_char_at(char **line, unsigned index)
 {
 	unsigned i;
 
@@ -24,7 +24,7 @@ void			input_clear_char_at(char **line, unsigned index)
 	}
 }
 
-int				input_read(char **line)
+int		input_read(char **line)
 {
 	char		c;
 	unsigned	index;

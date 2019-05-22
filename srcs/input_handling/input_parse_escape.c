@@ -6,13 +6,13 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:36:25 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/21 12:17:34 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/22 11:56:55 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int				input_parse_escape(char c, int *input_state)
+int	input_parse_escape(char c, int *input_state)
 {
 	if (*input_state == INPUT_NONE && c == '\e')
 		*input_state = INPUT_ESC;

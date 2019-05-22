@@ -6,13 +6,13 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:48:04 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/17 14:35:33 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/05/22 11:54:52 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int				input_parse_ctrl_k(char c, unsigned *index, char **line)
+int	input_parse_ctrl_k(char c, unsigned *index, char **line)
 {
 	unsigned i;
 

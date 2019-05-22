@@ -6,22 +6,22 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 15:03:17 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/21 12:16:35 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/22 12:19:09 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <sys/ioctl.h>
 
-static void		parse_ctrl_line_up(unsigned *index)
+static void	parse_ctrl_line_up(unsigned *index)
 {
-	struct ttysize		ts;
+	struct winsize	ws;
 
-	ioctl(STDIN_FILENO, TIOCGSIZE, &ts);
-	if (*index >= ts.ts_cols)
+	ioctl(STDIN_FILENO, TIOCGWINSZ, &ws);
+	if (*index >= ws.ws_col)
 	{
 		ft_printf("\e[A");
-		*index -= ts.ts_cols;
+		*index -= ws.ws_col;
 	}
 	else
 	{
@@ -30,7 +30,7 @@ static void		parse_ctrl_line_up(unsigned *index)
 	}
 }
 
-int				input_parse_ctrl_up(char c, int *input_state,
+int			input_parse_ctrl_up(char c, int *input_state,
 	unsigned *index, char **line)
 {
 	(void)line;

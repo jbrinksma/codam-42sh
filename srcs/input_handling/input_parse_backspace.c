@@ -6,13 +6,13 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:43:07 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/21 12:14:30 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/22 11:53:45 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int				input_parse_backspace(char c, unsigned *index, char **line)
+int		input_parse_backspace(char c, unsigned *index, char **line)
 {
 	unsigned len;
 

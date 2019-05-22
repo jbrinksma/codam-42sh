@@ -6,13 +6,13 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:39:59 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/21 12:18:29 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/22 11:57:23 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-static void		parse_prev_move_word(unsigned *index, char **line)
+static void	parse_prev_move_word(unsigned *index, char **line)
 {
 	unsigned i;
 
@@ -29,8 +29,8 @@ static void		parse_prev_move_word(unsigned *index, char **line)
 	*index = i;
 }
 
-int				input_parse_prev(char c, int *input_state,
-	unsigned *index, char **line)
+int			input_parse_prev(char c, int *input_state, unsigned *index,
+				char **line)
 {
 	if (((*input_state == INPUT_BRACE || *input_state == INPUT_D_BRACE) &&
 		c == 'D') || c == '\2')

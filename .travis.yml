@@ -8,8 +8,8 @@ matrix:
       env: OS=macos
     - os: linux
       env: OS=linux
-  allow_failures:
-    - env: OS=linux
-  fast_finish: true
+  # allow_failures:
+  #   - env: OS=linux
+  # fast_finish: true
 
 script: bash ${TRAVIS_BUILD_DIR}/test/travis.bash $OS
