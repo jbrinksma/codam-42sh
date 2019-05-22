@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 16:06:49 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/19 16:14:19 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/21 21:14:57 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #ifdef DEBUG
 
-void	put_token(t_token *node)
+void	put_token(t_tokenlst *node)
 {
 	char	*token;
 
@@ -56,19 +56,16 @@ void	put_token(t_token *node)
 	ft_printf("%-16s", token);
 }
 
-void	print_node(t_list *node)
+void	print_node(t_tokenlst *node)
 {
-	t_token *token;
-
-	token = (t_token*)node->content;
-	put_token(token);
-	if (token->type == IO_NUMBER)
-		ft_putnbr(token->value.io);
-	else if (token->type == WORD || token->type == ASSIGN)
-		ft_putstr(token->value.str);
+	put_token(node);
+	if (node->type == IO_NUMBER)
+		ft_putnbr(ft_atoi(node->value));
+	else if (node->type == WORD || node->type == ASSIGN)
+		ft_putstr(node->value);
 	else
-		put_token(token);
-	if (token->type != END)
+		put_token(node);
+	if (node->type != END)
 		ft_putchar('\n');
 }
 

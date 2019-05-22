@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/14 15:14:31 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/19 16:01:29 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/22 11:16:56 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,46 @@
 **	After that, the evaluator will remove any unnecessary '\', '\'' and '"'.
 */
 
-int			lexer(char *line, t_list **token_lst)
+t_tokenlst	*tokenlstnew(t_tokens type, char *value)
 {
-	t_token token;
-	t_list	*new;
+	t_tokenlst	*new;
 
-	token.type = START;
-	new = ft_lstnew(&token, sizeof(t_token));
+	new = (t_tokenlst*)ft_memalloc(sizeof(t_tokenlst));
 	if (new == NULL)
+		return (NULL);
+	new->type = type;
+	new->value = value;
+	new->next = NULL;
+	return (new);
+}
+
+int			tokenlstaddback(t_tokenlst **token_lst, t_tokens type, char *value)
+{
+	if (*token_lst == NULL)
+	{
+		*token_lst = tokenlstnew(type, value);
+		if (*token_lst == NULL)
+			return (FUNCT_ERROR);
+		return (FUNCT_SUCCESS);
+	}
+	else if ((*token_lst)->next == NULL)
+	{
+		(*token_lst)->next = tokenlstnew(type, value);
+		if ((*token_lst)->next == NULL)
+			return (FUNCT_ERROR);
+		return (FUNCT_SUCCESS);
+	}
+	else
+		return (tokenlstaddback(&(*token_lst)->next, type, value));
+}
+
+int			lexer(char *line, t_tokenlst **token_lst)
+{
+	if (tokenlstaddback(token_lst, START, NULL) != FUNCT_SUCCESS)
 		return (lexer_error(token_lst));
-	ft_lstadd(token_lst, new);
-	if (lexer_scanner(line, *token_lst) == FUNCT_ERROR)
+	if (lexer_scanner(line, *token_lst) != FUNCT_SUCCESS)
 		return (lexer_error(token_lst));
-	token.type = END;
-	if (add_tk_to_lst(token_lst, &token) == FUNCT_ERROR)
+	if (tokenlstaddback(token_lst, END, NULL) != FUNCT_SUCCESS)
 		return (lexer_error(token_lst));
 	evaluator(*token_lst);
 	return (FUNCT_SUCCESS);
