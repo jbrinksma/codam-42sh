@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:39:59 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/20 11:44:17 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/05/21 12:18:29 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void		parse_prev_move_word(unsigned *index, char **line)
 		return ;
 	while (i > 0)
 	{
-		if (input_is_word_start(*line, i - 1, i) &&	i != *index)
+		if (input_is_word_start(*line, i - 1, i) && i != *index)
 			break ;
 		i--;
 	}

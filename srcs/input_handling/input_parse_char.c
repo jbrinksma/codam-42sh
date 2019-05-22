@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:33:54 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/20 12:49:02 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/05/21 12:15:10 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int		add_char_at(char **line, int index, char c)
 int				input_parse_char(char c, unsigned *index, char **line)
 {
 	unsigned len;
-	
+
 	if (ft_isprint(c))
 	{
 		if (add_char_at(line, *index, c) == FUNCT_FAILURE)

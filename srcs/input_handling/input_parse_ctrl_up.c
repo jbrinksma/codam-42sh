@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 15:03:17 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/20 11:43:44 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/05/21 12:16:35 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 static void		parse_ctrl_line_up(unsigned *index)
 {
 	struct ttysize		ts;
-	
-    ioctl(STDIN_FILENO, TIOCGSIZE, &ts);
+
+	ioctl(STDIN_FILENO, TIOCGSIZE, &ts);
 	if (*index >= ts.ts_cols)
 	{
 		ft_printf("\e[A");

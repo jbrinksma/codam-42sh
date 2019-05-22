@@ -6,10 +6,9 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/06 14:10:46 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/06 14:11:47 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/05/21 10:50:27 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "libft.h"
 
@@ -23,6 +22,6 @@ char	*ft_strjoinchr(char const *s1, char c)
 	if (join == NULL)
 		return (NULL);
 	ft_strcpy(join, s1);
-    join[ft_strlen(s1)] = c;
+	join[ft_strlen(s1)] = c;
 	return (join);
 }

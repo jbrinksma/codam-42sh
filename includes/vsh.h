@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/20 13:12:35 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/21 12:14:22 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@
 # define INPUT_D_ESC		4
 # define INPUT_D_BRACE		5
 # define INPUT_D_THREE		6
-
+# define INPUT_BACKSPACE	127
 
 /*
 **===============================personal headers===============================
@@ -106,16 +106,15 @@
 **=================================typedefs====================================
 */
 
-typedef struct	s_term
+typedef struct		s_term
 {
 	struct termios	*old_termios_p;
 	struct termios	*termios_p;
-}				t_term;
+}					t_term;
 
 /*
 **----------------------------------lexer--------------------------------------
 */
-
 /*
 **	START,
 **	WORD, // bascially any string
@@ -132,11 +131,11 @@ typedef struct	s_term
 **	BG // & in background
 **	PIPE, // |
 **	SEMICOL // ;
-	NEWLINE,
+**	NEWLINE,
 **	END,
 **	ERROR // malloc fail
 */
-typedef enum	e_tokens
+typedef enum		e_tokens
 {
 	START,
 	WORD,
@@ -156,167 +155,151 @@ typedef enum	e_tokens
 	NEWLINE,
 	END,
 	ERROR
-}				t_tokens;
+}					t_tokens;
 
-typedef union	u_tk_value
+typedef union		u_tk_value
 {
-	char		*str;
-	char		**array;
-	int			io;
-}				t_tk_value;
+	char			*str;
+	char			**array;
+	int				io;
+}					t_tk_value;
 
-typedef struct	s_token
+typedef struct		s_token
 {
-	t_tokens	type;
-	t_tk_value	value;
-}				t_token;
+	t_tokens		type;
+	t_tk_value		value;
+}					t_token;
 
-typedef struct	s_scanner
+typedef struct		s_scanner
 {
-	t_tokens	tk_type;
-	int			tk_len;
-	char		*str;
-	int			str_index;
-}				t_scanner;
+	t_tokens		tk_type;
+	int				tk_len;
+	char			*str;
+	int				str_index;
+}					t_scanner;
 /*
 **=================================prototypes===================================
 */
 
-int		term_reset(t_term *term_p);
-void	term_free_termp(t_term *term_p);
-int		shell_start(void);
+int					term_reset(t_term *term_p);
+void				term_free_termp(t_term *term_p);
+int					shell_start(void);
 
 /*
 **---------------------------------environment----------------------------------
 */
 
-char	**get_environ_cpy(void);
-char	*var_get_value(char *var_key, char **vararray);
-char	*var_join_key_value(char *var_key, char *var_value);
-int		var_set_value(char *var_key, char *var_value, char **vararray);
-int		var_add_value(char *var_key, char *var_value, char ***vararray);
-char	**free_and_return_null(char ***vshenviron);
+char				**get_environ_cpy(void);
+char				*var_get_value(char *var_key, char **vararray);
+char				*var_join_key_value(char *var_key, char *var_value);
+int					var_set_value(char *var_key, char *var_value,
+					char **vararray);
+int					var_add_value(char *var_key, char *var_value,
+					char ***vararray);
+char				**free_and_return_null(char ***vshenviron);
 
 /*
 **----------------------------------terminal------------------------------------
 */
 
-t_term	*term_prepare(char **vshenviron);
-t_term	*term_return(t_term *term_p, int return_value);
-int		term_is_valid(char **vshenviron);
-t_term	*term_init_struct(void);
-int		term_get_attributes(int fd, t_term *term_p);
-int		term_set_attributes(t_term *term_p);
-int		term_reset(t_term *term_p);
-void	term_free_struct(t_term **term_p);
+t_term				*term_prepare(char **vshenviron);
+t_term				*term_return(t_term *term_p, int return_value);
+int					term_is_valid(char **vshenviron);
+t_term				*term_init_struct(void);
+int					term_get_attributes(int fd, t_term *term_p);
+int					term_set_attributes(t_term *term_p);
+int					term_reset(t_term *term_p);
+void				term_free_struct(t_term **term_p);
 
 /*
 **-----------------------------------input--------------------------------------
 */
 
-int		input_read(char **line);
-int		input_is_word_start(char *str, int i1, int i2);
-void	input_clear_char_at(char **line, unsigned index);
-
-int		input_parse_escape(char c, int *input_state);
-int		input_parse_char(char c, unsigned *index, char **line);
-int		input_parse_home(char c, int *input_state, unsigned *index);
-int		input_parse_backspace(char c, unsigned *index, char **line);
-int		input_parse_end(char c, int *input_state, unsigned *index, char **line);
-int		input_parse_next(char c, int *input_state, unsigned *index,
-			char **line);
-int		input_parse_prev(char c, int *input_state, unsigned *index,
-			char **line);
-int		input_parse_delete(char c, int *input_state, unsigned *index,
-			char **line);
-int		input_parse_ctrl_d(char c, unsigned *index, char **line);
-int		input_parse_ctrl_k(char c, unsigned *index, char **line);
-int		input_parse_ctrl_up(char c, int *input_state, unsigned *index,
-			char **line);
-int		input_parse_ctrl_down(char c, int *input_state,	unsigned *index,
-			char **line);
+int					input_read(char **line);
+int					input_is_word_start(char *str, int i1, int i2);
+void				input_clear_char_at(char **line, unsigned index);
+int					input_parse_escape(char c, int *input_state);
+int					input_parse_char(char c, unsigned *index, char **line);
+int					input_parse_home(char c, int *input_state,
+					unsigned *index);
+int					input_parse_backspace(char c, unsigned *index,
+					char **line);
+int					input_parse_end(char c, int *input_state,
+					unsigned *index, char **line);
+int					input_parse_next(char c, int *input_state,
+					unsigned *index, char **line);
+int					input_parse_prev(char c, int *input_state,
+					unsigned *index, char **line);
+int					input_parse_delete(char c, int *input_state,
+					unsigned *index, char **line);
+int					input_parse_ctrl_d(char c, unsigned *index, char **line);
+int					input_parse_ctrl_k(char c, unsigned *index, char **line);
+int					input_parse_ctrl_up(char c, int *input_state,
+					unsigned *index, char **line);
+int					input_parse_ctrl_down(char c, int *input_state,
+					unsigned *index, char **line);
 
 /*
 **----------------------------------shell---------------------------------------
 */
 
-void	shell_display_prompt(void);
+void				shell_display_prompt(void);
 
 /*
 **----------------------------------lexer---------------------------------------
 */
-int		lexer(char *line, t_list **token_lst);
-int		add_tk_to_lst(t_list **lst, t_token *token);
-void	del_tk_node(void *content, size_t size);
-int		lexer_error(t_list **token_lst);
-void	evaluator(t_list *token_lst);
-int		lexer_scanner(char *line, t_list *token_lst);
-
-void	change_state(t_scanner *scanner, void (*state_x)(t_scanner *scanner));
-void	print_token(t_scanner *scanner);
-
-void	state_1(t_scanner *scanner);
-void	state_2(t_scanner *scanner);
-void	state_3(t_scanner *scanner);
-void	state_4(t_scanner *scanner);
-void	state_5(t_scanner *scanner);
-void	state_6(t_scanner *scanner);
-void	state_7(t_scanner *scanner);
-void	state_8(t_scanner *scanner);
-void	state_9(t_scanner *scanner);
-void	state_10(t_scanner *scanner);
-void	state_11(t_scanner *scanner);
-void	state_12(t_scanner *scanner);
-void	state_13(t_scanner *scanner);
-void	state_14(t_scanner *scanner);
-void	state_15(t_scanner *scanner);
-void	state_16(t_scanner *scanner);
-void	state_17(t_scanner *scanner);
-void	state_18(t_scanner *scanner);
-void	state_19(t_scanner *scanner);
+int					lexer(char *line, t_list **token_lst);
+int					add_tk_to_lst(t_list **lst, t_token *token);
+void				del_tk_node(void *content, size_t size);
+int					lexer_error(t_list **token_lst);
+void				evaluator(t_list *token_lst);
+int					lexer_scanner(char *line, t_list *token_lst);
+void				change_state(t_scanner *scanner,
+					void (*state_x)(t_scanner *scanner));
+void				print_token(t_scanner *scanner);
+void				state_1(t_scanner *scanner);
+void				state_2(t_scanner *scanner);
+void				state_3(t_scanner *scanner);
+void				state_4(t_scanner *scanner);
+void				state_5(t_scanner *scanner);
+void				state_6(t_scanner *scanner);
+void				state_7(t_scanner *scanner);
+void				state_8(t_scanner *scanner);
+void				state_9(t_scanner *scanner);
+void				state_10(t_scanner *scanner);
+void				state_11(t_scanner *scanner);
+void				state_12(t_scanner *scanner);
+void				state_13(t_scanner *scanner);
+void				state_14(t_scanner *scanner);
+void				state_15(t_scanner *scanner);
+void				state_16(t_scanner *scanner);
+void				state_17(t_scanner *scanner);
+void				state_18(t_scanner *scanner);
+void				state_19(t_scanner *scanner);
 
 /*
 **----------------------------------parser--------------------------------------
 */
 
-int		parser_lexer(char *line, t_list **cmd_tab);
-
-int		is_uninhibited_semicolon(char *str, int i, char quote);
-int		is_uninhibited_blank(char *str, int i, char quote);
-
-void	parser_remove_quotes(t_list *cmdstr_lst);
-void	parser_rem_esc_char_quotes(t_list *cmdstr_lst);
-void	parser_rem_esc_char_semicolons(t_list *cmdstr_lst);
-void	parser_rem_esc_char_blanks(t_list *cmdstr_lst);
-
-void	add_str_to_lst(char *arg, t_list **args);
-void	add_lst_to_lst(t_list *lst_content, t_list **lst_lst);
-
-t_list	*parser_split_line_to_commands(char *line);
-int		parser_strlen_cmd(char *line);
-
-t_list	*parser_split_command_to_args(char *cmd);
-int		parser_strlen_arg(char *cmd);
-
 /*
 **----------------------------------bultins-------------------------------------
 */
 
-void	builtin_exit(t_term *term_p);
-int		builtin_echo(char **args);
-char	echo_set_flags(char **args, int *arg_i);
+void				builtin_exit(t_term *term_p);
+int					builtin_echo(char **args);
+char				echo_set_flags(char **args, int *arg_i);
 
 /*
 **---------------------------------tools----------------------------------------
 */
 
-int		is_char_escaped(char *line, int i);
-int		update_quote_status(char *line, int cur_index, char *quote);
+int					is_char_escaped(char *line, int i);
+int					update_quote_status(char *line, int cur_index, char *quote);
 
 /*
 **----------------------------------debugging-----------------------------------
 */
 
-void	print_node(t_list *node);
+void				print_node(t_list *node);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/17 11:50:51 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/20 11:43:32 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/05/21 12:17:15 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static void		parse_ctrl_line_down(unsigned *index, char **line)
 {
 	struct ttysize		ts;
 	unsigned			len;
-	
+
 	len = ft_strlen(*line);
-    ioctl(STDIN_FILENO, TIOCGSIZE, &ts);
+	ioctl(STDIN_FILENO, TIOCGSIZE, &ts);
 	if (*index + ts.ts_cols < len)
 	{
 		ft_printf("\e[B");
