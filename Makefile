@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/05/24 11:36:27 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/05/25 14:45:20 by mavan-he      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ get_environ_cpy var_get_value var_set_value var_join_key_value var_add_value \
 is_char_escaped \
 builtin_echo builtin_echo_set_flags \
 lexer lexer_utils lexer_debug lexer_evaluator lexer_scanner \
-lexer_state_1_5 lexer_state_6_10 lexer_state_11_15 lexer_state_16_20
+lexer_state_if_else lexer_state_single lexer_state_start lexer_state_strings
 TESTS = unit_test
 OBJECTS := $(SRCS:%=%.o)
 TESTOBJECTS := $(TESTS:%=%.o)

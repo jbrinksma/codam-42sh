@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 16:06:49 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/21 21:14:57 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/25 16:31:09 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,13 @@ void	print_node(t_tokenlst *node)
 {
 	put_token(node);
 	if (node->type == IO_NUMBER)
-		ft_putnbr(ft_atoi(node->value));
+		ft_printf("%-16s", node->value);
 	else if (node->type == WORD || node->type == ASSIGN)
-		ft_putstr(node->value);
+		ft_printf("%-16s", node->value);
 	else
 		put_token(node);
+	if (node->flags & T_FLAG_HASDOLLAR)
+		ft_putstr("<has_dollar>");
 	if (node->type != END)
 		ft_putchar('\n');
 }

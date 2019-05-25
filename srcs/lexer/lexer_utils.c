@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 10:23:43 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/22 10:56:56 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/25 12:06:47 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	tokenlstdel(t_tokenlst **token_lst)
 		return ;
 	if ((*token_lst)->next != NULL)
 		tokenlstdel(&(*token_lst)->next);
-	if ((*token_lst)->type == WORD || (*token_lst)->type == ASSIGN)
+	if ((*token_lst)->type == WORD || (*token_lst)->type == ASSIGN
+		|| (*token_lst)->type == IO_NUMBER)
 		ft_strdel(&(*token_lst)->value);
 	ft_memdel((void**)token_lst);
 }
@@ -36,4 +37,11 @@ void	change_state(t_scanner *scanner, void (*state_x)(t_scanner *scanner))
 	(scanner->str_index)++;
 	(scanner->tk_len)++;
 	state_x(scanner);
+}
+
+bool	is_shellspec(char c)
+{
+	if (c == '|' || c == '>' || c == '<' || c == '&' || c == ';' || c == '\n')
+		return (true);
+	return (false);
 }
