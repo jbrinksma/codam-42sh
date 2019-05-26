@@ -70,3 +70,19 @@ Functions names should start with the category that they belong to.
 3. Defines should start with the function name they belong to. L (lowercase) and U (uppercase) are used to specifiy if an option/flag is upper or lowercase.
   - Example: name define `ECHO_HOME` **instead of** `HOME`.
   - Example: name option/flag `ECHO_OPT_EU` and `ECHO_OPT_EL` **instead of** `ECHO_OPT_CE` or `ECHO_OPT_E`.
+
+## Running in Docker
+First, build the container:
+```
+docker build -t vsh .
+```
+Then, run the container from the repository dir:
+```
+docker run -v $PWD:/vsh -it vsh
+```
+To run the tests you can type `make test` or `make test_valgrind` to run the tests with valgrind.
+Usefull commands:
+```
+docker ps	#lists running containers
+docker images	#lists docker images on system
+```

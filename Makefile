@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/05/25 14:45:20 by mavan-he      ########   odam.nl          #
+#    Updated: 2019/05/26 18:03:46 by tde-jong      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,11 +78,16 @@ test_norm: fclean
 $(TESTOBJECTS): $(TESTS)
 	@$(CC) $(FLAGS) $^ $(INCLUDES) $(CRITERIONINCLUDES) -c
 
-test: $(TESTOBJECTS) $(OBJECTS)
+build_test: $(TESTOBJECTS) $(OBJECTS)
 	@make re
 	@make $(TESTOBJECTS)
 	@$(CC) $(FLAGS) $^ $(COVERAGE) $(INCLUDES) $(CRITERION) $(LIB) -o vsh_tests
+
+test: build_test
 	@./vsh_tests
+
+test_valgrind: build_test
+	@valgrind --tool=memcheck --leak-check=full ./vsh_tests
 
 test_coverage: test
 	@gcov $(SRCS)
