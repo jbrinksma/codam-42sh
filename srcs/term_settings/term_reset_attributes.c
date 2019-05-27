@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:19:47 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/21 20:41:40 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/27 10:21:17 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ int		term_reset(t_term *term_p)
 	/* Is TCSANOW flag correct? */
 	ret = tcsetattr(STDIN_FILENO, TCSANOW, term_p->old_termios_p);
 	if (ret == -1)
-		return (FUNCT_ERROR);
+		return (FUNCT_FAILURE);
 	return (FUNCT_SUCCESS);
 }
