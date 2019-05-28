@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_environ_cpy.c                                  :+:    :+:            */
+/*   env_get_environ_cpy.c                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/03/28 17:34:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/25 10:47:04 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/27 15:51:51 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 **	error occured.
 */
 
-char	**free_and_return_null(char ***vshenviron)
+char	**env_free_and_return_null(char ***vshenviron)
 {
 	ft_freearray(vshenviron);
 	return (NULL);
@@ -28,7 +28,7 @@ char	**free_and_return_null(char ***vshenviron)
 **	system's(???) environ.
 */
 
-char	**get_environ_cpy(void)
+char	**env_get_environ_cpy(void)
 {
 	extern char **environ;
 	char		**vshenviron;
@@ -43,7 +43,7 @@ char	**get_environ_cpy(void)
 	{
 		vshenviron[env_index] = ft_strdup(environ[env_index]);
 		if (vshenviron[env_index] == NULL)
-			return (free_and_return_null(&vshenviron));
+			return (env_free_and_return_null(&vshenviron));
 		env_index++;
 	}
 	vshenviron[env_index] = NULL;

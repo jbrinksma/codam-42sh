@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 16:06:49 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/25 16:31:09 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/27 16:58:32 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	print_node(t_tokenlst *node)
 
 void	print_token(t_scanner *scanner)
 {
-	char			*type;
+	char	*type;
 	char	*lexeme;
 
 	if (scanner->tk_type == WORD)
@@ -101,7 +101,8 @@ void	print_token(t_scanner *scanner)
 	else
 		type = "UNKNOWN";
 	ft_printf("\n%s (%i): ", type, scanner->tk_len);
-	lexeme = ft_strndup(&(scanner->str[scanner->str_index - scanner->tk_len]), scanner->tk_len);
+	lexeme = ft_strndup(&(scanner->str[scanner->str_index - scanner->tk_len]),
+		scanner->tk_len);
 	ft_printf("\t%s\n", lexeme);
 	ft_strdel(&lexeme);
 }

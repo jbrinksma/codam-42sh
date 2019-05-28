@@ -6,18 +6,18 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/21 19:37:59 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/27 16:47:06 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-void	tokenlstiter(t_tokenlst *lst, void (*f)(t_tokenlst *elem))
+void	lexer_tokenlstiter(t_tokenlst *lst, void (*f)(t_tokenlst *elem))
 {
 	if (lst == NULL || f == NULL)
 		return ;
 	f(lst);
-	tokenlstiter(lst->next, f);
+	lexer_tokenlstiter(lst->next, f);
 }
 
 int		shell_start(void)
@@ -40,13 +40,13 @@ int		shell_start(void)
 		}
 		#ifdef DEBUG
 		ft_printf("\n>>>> LINE <<<<\n%s\n\n>>>> TOKEN_LST <<<<\n", line);
-		tokenlstiter(lst, print_node);
+		lexer_tokenlstiter(lst, print_node);
 		#endif
 		/* ADD EXPANSION FUNC ? */
 		/* ADD PARSER */
-		/* ADD EVALUATOR */
+		/* ADD lexer_evaluator */
 		/* ADD AST DEL */
-		tokenlstdel(&lst);
+		lexer_tokenlstdel(&lst);
 		ft_strdel(&line);
 		ft_putendl("");
 	}

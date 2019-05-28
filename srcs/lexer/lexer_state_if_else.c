@@ -6,44 +6,44 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 12:12:00 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/25 14:42:01 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/27 16:50:01 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-void	state_pipe(t_scanner *scanner)
+void	lexer_state_pipe(t_scanner *scanner)
 {
 	if (CURRENT_CHAR == '|')
-		change_state(scanner, &state_orif);
+		lexer_change_state(scanner, &lexer_state_orif);
 	else
 		scanner->tk_type = PIPE;
 }
 
-void	state_bg(t_scanner *scanner)
+void	lexer_state_bg(t_scanner *scanner)
 {
 	if (CURRENT_CHAR == '&')
-		change_state(scanner, &state_andif);
+		lexer_change_state(scanner, &lexer_state_andif);
 	else
 		scanner->tk_type = BG;
 }
 
-void	state_sless(t_scanner *scanner)
+void	lexer_state_sless(t_scanner *scanner)
 {
 	if (CURRENT_CHAR == '<')
-		change_state(scanner, &state_dless);
+		lexer_change_state(scanner, &lexer_state_dless);
 	else if (CURRENT_CHAR == '&')
-		change_state(scanner, &state_lessand);
+		lexer_change_state(scanner, &lexer_state_lessand);
 	else
 		scanner->tk_type = SLESS;
 }
 
-void	state_sgreat(t_scanner *scanner)
+void	lexer_state_sgreat(t_scanner *scanner)
 {
 	if (CURRENT_CHAR == '>')
-		change_state(scanner, &state_dgreat);
+		lexer_change_state(scanner, &lexer_state_dgreat);
 	else if (CURRENT_CHAR == '&')
-		change_state(scanner, &state_greatand);
+		lexer_change_state(scanner, &lexer_state_greatand);
 	else
 		scanner->tk_type = SGREAT;
 }

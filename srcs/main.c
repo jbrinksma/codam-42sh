@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/29 16:28:59 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/05/27 15:57:23 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		main(int argc, char **argv)
 
 	(void)argv;
 	(void)argc;
-	vshenviron = get_environ_cpy();
+	vshenviron = env_get_environ_cpy();
 	term_p = term_prepare(vshenviron);
 	/* if !term_p: send appropriate error message/log */
 	if (term_p == NULL)

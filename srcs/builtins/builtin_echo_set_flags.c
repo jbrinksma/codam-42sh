@@ -6,13 +6,13 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/28 11:03:19 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/03 16:46:12 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/27 15:47:32 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-static void	echo_merge_flags(char *flags, char tmp_flags)
+static void	builtin_echo_merge_flags(char *flags, char tmp_flags)
 {
 	if (tmp_flags & ECHO_OPT_NL)
 		*flags |= ECHO_OPT_NL;
@@ -28,7 +28,7 @@ static void	echo_merge_flags(char *flags, char tmp_flags)
 	}
 }
 
-static int	echo_validate_flag(char *tmp_flags, char flag)
+static int	builtin_echo_validate_flag(char *tmp_flags, char flag)
 {
 	if (flag == 'E')
 	{
@@ -47,7 +47,7 @@ static int	echo_validate_flag(char *tmp_flags, char flag)
 	return (FUNCT_SUCCESS);
 }
 
-char		echo_set_flags(char **args, int *arg_i)
+char		builtin_echo_set_flags(char **args, int *arg_i)
 {
 	char	tmp_flags;
 	char	flags;
@@ -63,11 +63,11 @@ char		echo_set_flags(char **args, int *arg_i)
 		i++;
 		while (args[*arg_i][i] != '\0')
 		{
-			if (echo_validate_flag(&tmp_flags, args[*arg_i][i]) == 0)
+			if (builtin_echo_validate_flag(&tmp_flags, args[*arg_i][i]) == 0)
 				return (flags);
 			i++;
 		}
-		echo_merge_flags(&flags, tmp_flags);
+		builtin_echo_merge_flags(&flags, tmp_flags);
 		(*arg_i)++;
 	}
 	return (flags);

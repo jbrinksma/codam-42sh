@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   is_char_escaped.c                                  :+:    :+:            */
+/*   tools_is_char_escaped.c                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/23 13:59:19 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/16 20:43:54 by mavan-he      ########   odam.nl         */
+/*   Created: 2019/05/27 16:52:15 by omulder        #+#    #+#                */
+/*   Updated: 2019/05/27 16:52:26 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 **	Returns FUNCT_SUCCESS if escaped, FUNCT_FAILURE if not escaped.
 */
 
-int	is_char_escaped(char *line, int i)
+int	tools_is_char_escaped(char *line, int i)
 {
 	int i_tmp;
 	int	escape_count;

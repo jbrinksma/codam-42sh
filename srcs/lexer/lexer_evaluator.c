@@ -6,14 +6,14 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/18 19:03:52 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/22 10:37:56 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/27 16:49:32 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
 /*
-**	The evaluator removes '\', '\'' and '"' from token WORD and ASSIGN.
+**	The lexer_evaluator removes '\', '\'' and '"' from token WORD and ASSIGN.
 */
 
 static void	trim_backwardslash(char *str, int *i_new, int *i)
@@ -89,7 +89,7 @@ static void	trim_word(char *str)
 	ft_bzero(&str[i_new], i - i_new);
 }
 
-void		evaluator(t_tokenlst *token_lst)
+void		lexer_evaluator(t_tokenlst *token_lst)
 {
 	while (token_lst)
 	{
