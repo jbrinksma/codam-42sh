@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 13:28:01 by omulder        #+#    #+#                */
-/*   Updated: 2019/02/01 11:56:09 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/29 18:12:19 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 size_t	ft_strlen(const char *s)
 {
-	size_t	i;
+	char *e;
 
-	i = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
+	e = (char*)s;
+	while (*e)
+		e++;
+	return ((size_t)(e - s));
 }
