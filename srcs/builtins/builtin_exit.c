@@ -6,15 +6,14 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 20:15:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/19 19:17:52 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/28 19:08:56 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-void	builtin_exit(t_term *term_p)
+void	builtin_exit(unsigned char exitcode)
 {
-	ft_putchar('\n');
-	term_free_struct(&term_p);
-	exit(FUNCT_SUCCESS);
+	ft_printf("exit\n");
+	exit((int)exitcode);
 }
