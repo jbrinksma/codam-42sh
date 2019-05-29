@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 11:12:49 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/27 16:48:51 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/29 14:26:31 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static void	init_scanner(char *str, t_scanner *scanner)
 {
 	scanner->str = str;
 	scanner->str_index = 0;
+	scanner->flags = 0;
 	scanner->tk_len = 0;
 	scanner->tk_type = ERROR;
 }
@@ -56,7 +57,7 @@ int			lexer_scanner(char *line, t_tokenlst *token_lst)
 	t_scanner scanner;
 
 	init_scanner(line, &scanner);
-	while (ft_isspace((scanner.str)[scanner.str_index]))
+	while (ft_isspace(scanner.str[scanner.str_index]))
 		(scanner.str_index)++;
 	while ((scanner.str)[scanner.str_index] != '\0')
 	{

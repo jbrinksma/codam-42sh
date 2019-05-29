@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/27 16:47:06 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/29 14:35:33 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,31 +24,33 @@ int		shell_start(void)
 {
 	int			status;
 	char		*line;
-	t_tokenlst	*lst;
+	t_tokenlst	*token_lst;
+	t_ast		*ast;
 
 	status = 1;
 	line = NULL;
-	lst = NULL;
+	token_lst = NULL;
+	ast = NULL;
 	while (status != CTRLD)
 	{
 		shell_display_prompt();
 		status = input_read(&line);
-		if (lexer(line, &lst) != FUNCT_SUCCESS)
-		{
-			ft_strdel(&line);
-			continue ;
-		}
 		#ifdef DEBUG
 		ft_printf("\n>>>> LINE <<<<\n%s\n\n>>>> TOKEN_LST <<<<\n", line);
-		lexer_tokenlstiter(lst, print_node);
 		#endif
-		/* ADD EXPANSION FUNC ? */
-		/* ADD PARSER */
-		/* ADD lexer_evaluator */
-		/* ADD AST DEL */
-		lexer_tokenlstdel(&lst);
-		ft_strdel(&line);
-		ft_putendl("");
+		if (lexer(&line, &token_lst) != FUNCT_SUCCESS)
+			continue ;
+		#ifdef DEBUG
+ 		lexer_tokenlstiter(token_lst, print_node);
+		#endif
+		if (parser_start(&token_lst, &ast) != FUNCT_SUCCESS)
+			continue ;
+		#ifdef DEBUG
+		print_tree(ast);
+		#endif
+		parser_astdel(&ast);
+		/* ADD EVALUATOR */
+		ft_putchar('\n');
 	}
 	return (FUNCT_SUCCESS);
 }

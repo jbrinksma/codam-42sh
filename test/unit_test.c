@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/27 16:51:42 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/29 14:41:03 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,7 +307,7 @@ Test(lexer_error, one_item)
 
 	lst = NULL;
 	lexer_tokenlstaddback(&lst, START, NULL, 0);
-	lexer_error(&lst);
+	lexer_error(&lst, NULL);
 	cr_expect(lst == NULL);
 	cr_expect_stderr_eq_str("vsh: lexer: malloc error\n");
 }
@@ -345,7 +345,7 @@ Test(lexer_error, long_list)
 	lexer_tokenlstaddback(&lst, WORD, ft_strdup("testword"), 0);
 	lexer_tokenlstaddback(&lst, PIPE, NULL, 0);
 	lexer_tokenlstaddback(&lst, END, NULL, 0);
-	lexer_error(&lst);
+	lexer_error(&lst, NULL);
 	cr_expect(lst == NULL);
 	cr_expect_stderr_eq_str("vsh: lexer: malloc error\n");
 }
@@ -373,7 +373,7 @@ Test(lexer_error, all_items)
 	lexer_tokenlstaddback(&lst, SEMICOL, NULL, 0);
 	lexer_tokenlstaddback(&lst, NEWLINE, NULL, 0);
 	lexer_tokenlstaddback(&lst, END,  NULL, 0);
-	lexer_error(&lst);
+	lexer_error(&lst, NULL);
 	cr_expect(lst == NULL);
 	cr_expect_stderr_eq_str("vsh: lexer: malloc error\n");
 }
@@ -407,7 +407,7 @@ Test(lexer_tokenlstaddback, invalid_values)
 	lexer_tokenlstaddback(&lst, END, NULL, 0);
 	lexer_tokenlstaddback(&lst, START, NULL, 0);
 	lexer_tokenlstaddback(&lst, ERROR, ft_strdup("testword"), 0);
-	lexer_error(&lst);
+	lexer_error(&lst, NULL);
 	cr_expect(lst == NULL);
 	cr_expect_stderr_eq_str("vsh: lexer: malloc error\n");
 }
@@ -421,11 +421,19 @@ TestSuite(lexer);
 Test(lexer, basic)
 {
 	t_tokenlst	*lst;
+	t_tokenlst	*tmp;
+	char 		*str;
 
+	str = ft_strdup("HOME=/ ls -la || ls 2>file \"Documents\";");
 	lst = NULL;
-	lexer("ls -la", &lst);
+	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
+	cr_expect(str == NULL);
+	tmp = lst;
 	cr_expect(lst->type == START);
 	cr_expect(lst->value == NULL);
+	lst = lst->next;
+	cr_expect(lst->type == ASSIGN);
+	cr_expect_str_eq(lst->value, "HOME=/");
 	lst = lst->next;
 	cr_expect(lst->type == WORD);
 	cr_expect_str_eq(lst->value, "ls");
@@ -433,7 +441,49 @@ Test(lexer, basic)
 	cr_expect(lst->type == WORD);
 	cr_expect_str_eq(lst->value, "-la");
 	lst = lst->next;
+	cr_expect(lst->type == OR_IF);
+	cr_expect(lst->value == NULL);
+	lst = lst->next;
+	cr_expect(lst->type == WORD);
+	cr_expect_str_eq(lst->value, "ls");
+	lst = lst->next;
+	cr_expect(lst->type == IO_NUMBER);
+	cr_expect_str_eq(lst->value, "2");
+	lst = lst->next;
+	cr_expect(lst->type == SGREAT);
+	cr_expect(lst->value == NULL);
+	lst = lst->next;
+	cr_expect(lst->type == WORD);
+	cr_expect_str_eq(lst->value, "file");
+	lst = lst->next;
+	cr_expect(lst->type == WORD);
+	cr_expect_str_eq(lst->value, "\"Documents\"");
+	lst = lst->next;
+	cr_expect(lst->type == SEMICOL);
+	lst = lst->next;
 	cr_expect(lst->type == END);
 	cr_expect(lst->value == NULL);
-	// lexer("ls -la; | lala \"pretty long sentence to test quotes\" lala", &lst);
+	lexer_tokenlstdel(&tmp);
+}
+
+TestSuite(parser);
+
+Test(parser, basic)
+{
+	t_tokenlst	*lst;
+	t_ast		*ast;
+	t_ast		*tmp_ast;
+	char 		*str;
+
+	str = ft_strdup("HOME=/ ls -la || ls 2>file \"Documents\";");
+	lst = NULL;
+	ast = NULL;
+	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
+	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
+	tmp_ast = ast;
+	cr_expect(ast->type == SEMICOL);
+	ast = ast->child;
+	cr_expect(ast->type == OR_IF);
+	parser_astdel(&tmp_ast);
+	cr_expect(tmp_ast == NULL);
 }

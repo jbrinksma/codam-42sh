@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/28 19:08:51 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/29 14:36:31 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,13 @@
 # define T_STATE_SQUOTE (1 << 1)
 # define T_STATE_DQUOTE (1 << 2)
 # define T_FLAG_HASEQUAL (1 << 3)
+# define T_MALLOC_ERROR (1 << 4)
+
+/*
+**------------------------------------parser------------------------------------
+*/
+
+# define TK_TYPE (*token_lst)->type
 
 /*
 **-----------------------------------input--------------------------------------
@@ -75,6 +82,7 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <stdbool.h>
 
 # include <sys/ioctl.h>
 # include <termios.h>
@@ -176,8 +184,21 @@ typedef struct	s_scanner
 	int			tk_len;
 	char		*str;
 	int			str_index;
-	int			flags;
+	char		flags;
 }				t_scanner;
+
+/*
+**----------------------------------parser--------------------------------------
+*/
+
+typedef struct	s_ast
+{
+	t_tokens		type;
+	char			flags;
+	char			*value;
+	struct s_ast	*child;
+	struct s_ast	*sibling;
+}				t_ast;
 
 /*
 **---------------------------------environment----------------------------------
@@ -248,8 +269,8 @@ void			lexer_tokenlstiter(t_tokenlst *token_lst,
 					void (*f)(t_tokenlst *elem));
 bool			lexer_is_shellspec(char c);
 
-int				lexer(char *line, t_tokenlst **token_lst);
-int				lexer_error(t_tokenlst **token_lst);
+int				lexer(char **line, t_tokenlst **token_lst);
+int				lexer_error(t_tokenlst **token_lst, char **line);
 void			lexer_evaluator(t_tokenlst *token_lst);
 int				lexer_scanner(char *line, t_tokenlst *token_lst);
 
@@ -278,9 +299,17 @@ void			lexer_state_ionum(t_scanner *scanner);
 /*
 **----------------------------------parser--------------------------------------
 */
+int				parser_start(t_tokenlst **token_lst, t_ast **ast);
+bool			parser_add_astnode(t_tokenlst **token_lst, t_ast **ast);
+bool			parser_add_sibling(t_tokenlst **token_lst, t_ast **ast,
+				bool (*parse_priority_x)(t_tokenlst **, t_ast **));
+t_ast			*parser_new_node(t_tokenlst *token);
+bool			parser_command(t_tokenlst **token_lst, t_ast **ast);
+char			*parser_return_token_str(t_tokens type);
+void			parser_astdel(t_ast **ast);
 
 /*
-**----------------------------------bultins-------------------------------------
+**----------------------------------builtins-------------------------------------
 */
 
 void			builtin_exit(unsigned char exitcode);
@@ -293,6 +322,7 @@ char			builtin_echo_set_flags(char **args, int *arg_i);
 
 int				tools_is_char_escaped(char *line, int i);
 int				tools_update_quote_status(char *line, int cur_index, char *quote);
+bool			tool_is_redirect_tk(t_tokens type);
 
 /*
 **----------------------------------debugging-----------------------------------
@@ -300,5 +330,6 @@ int				tools_update_quote_status(char *line, int cur_index, char *quote);
 
 void			print_node(t_tokenlst *node);
 void			print_token(t_scanner *scanner);
+void			print_tree(t_ast *root);
 
 #endif
