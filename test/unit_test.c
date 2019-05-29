@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/29 14:41:03 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/29 18:12:38 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -486,4 +486,20 @@ Test(parser, basic)
 	cr_expect(ast->type == OR_IF);
 	parser_astdel(&tmp_ast);
 	cr_expect(tmp_ast == NULL);
+}
+
+TestSuite(history);
+
+Test(history, basic)
+{
+	FILE	*f;
+	char	buf[7];
+
+	ft_bzero(buf, 7);
+	cr_expect(history_line_to_file("check") == FUNCT_SUCCESS);
+	f = fopen("/tmp/.vsh_history", "r");
+	cr_expect(f != NULL);
+	fseek(f, -6, SEEK_END);
+	fread(buf, 1, 6, f);
+	cr_expect(ft_strcmp(buf, "check\n") == 0);
 }

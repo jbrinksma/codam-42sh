@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/05/29 14:37:07 by omulder       ########   odam.nl          #
+#    Updated: 2019/05/29 15:58:02 by mavan-he      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ CRITERION = $(CRITERIONINCLUDES) -L$(HOME)/.brew/lib -lcriterion
 VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
 ./srcs/term_settings ./srcs/environment_handling ./srcs/shell \
 ./srcs/tools ./test/parser ./test/tools ./test/builtins \
-./test/environment_handling ./srcs/lexer ./srcs/parser
+./test/environment_handling ./srcs/lexer ./srcs/parser ./srcs/history
 SRCS = shell_start shell_prompt \
 builtin_exit \
 input_read input_parse_char input_parse_escape input_parse_home \
@@ -38,7 +38,8 @@ builtin_echo builtin_echo_set_flags \
 lexer lexer_utils lexer_debug lexer_evaluator lexer_scanner \
 lexer_state_if_else lexer_state_single lexer_state_start lexer_state_strings \
 parser_start parser_debug parser_utils parser_command parser_error \
-parser_astdel 
+parser_astdel \
+history_line_to_file
 TESTS = unit_test
 OBJECTS := $(SRCS:%=%.o)
 TESTOBJECTS := $(TESTS:%=%.o)
