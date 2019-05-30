@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/29 18:12:38 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/30 13:49:22 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -488,6 +488,30 @@ Test(parser, basic)
 	cr_expect(tmp_ast == NULL);
 }
 
+/*
+**------------------------------------------------------------------------------
+*/
+
+TestSuite(command_exit);
+
+Test(command_exec, basic)
+{
+	t_tokenlst	*lst;
+	t_ast		*ast;
+	char 		*str;
+
+	str = ft_strdup("1=1");
+	lst = NULL;
+	ast = NULL;
+	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
+	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
+	cr_expect(exec_start(ast) == FUNCT_FAILURE); // this fails in the first version, shoudln't fail later
+	parser_astdel(&ast);
+}
+
+/*
+**------------------------------------------------------------------------------
+*/
 TestSuite(history);
 
 Test(history, basic)

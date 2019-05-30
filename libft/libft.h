@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 11:10:09 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/21 12:10:07 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/29 18:16:16 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,7 @@ char				*ft_strchr(const char *s, int c);
 char				**ft_strsplit(const char *s, char c);
 char				*ft_strjoinchr(char const *s1, char c);
 char				*ft_strjoinchrfree(char *s1, char c, int i);
+int					ft_strarradd(char ***arr, char *add); // Not sure if this func is save2use
+void				ft_strarrdel(char ***arr);
 
 #endif

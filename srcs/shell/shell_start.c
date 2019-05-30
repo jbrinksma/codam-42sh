@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/29 17:44:16 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/29 18:52:37 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ int		shell_start(void)
 		#ifdef DEBUG
 		print_tree(ast);
 		#endif
+		exec_start(ast);
 		parser_astdel(&ast);
-		/* ADD EVALUATOR */
 		ft_putchar('\n');
 	}
 	return (FUNCT_SUCCESS);
