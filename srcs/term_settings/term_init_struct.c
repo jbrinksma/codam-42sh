@@ -6,11 +6,12 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:04:22 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/23 17:40:10 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/31 14:51:50 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <termios.h>
 
 /*
 **	Allocates a t_term* and the two termios* which it contains, and returns

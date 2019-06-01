@@ -6,11 +6,12 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 11:27:12 by omulder        #+#    #+#                */
-/*   Updated: 2019/03/21 20:28:48 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/31 14:25:29 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <unistd.h>
 
 static int	putmore(int fd, unsigned int c)
 {

@@ -6,11 +6,12 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:16:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/27 15:57:07 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/31 14:46:52 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <term.h>
 
 /*
 **	Checks whether the termcaps database can be found for the current env_var

@@ -6,11 +6,12 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 10:10:56 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/04/19 20:33:42 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/31 15:17:59 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <unistd.h>
 
 t_term	*term_return(t_term *term_p, int return_value)
 {

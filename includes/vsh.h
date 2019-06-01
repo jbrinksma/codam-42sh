@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/31 11:05:52 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/06/01 13:46:27 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,23 +84,7 @@
 **==================================headers=====================================
 */
 
-# include <stdlib.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <dirent.h>
-# include <sys/stat.h>
-# include <sys/wait.h>
-# include <signal.h>
 # include <stdbool.h>
-
-# include <sys/ioctl.h>
-# include <termios.h>
-# include <curses.h>
-# include <term.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <sys/uio.h>
-# include <signal.h>
 
 /*
 **	malloc, free, close, fork, execve, exit | getenv
@@ -120,8 +104,6 @@
 **	read
 **	signal
 */
-
-# include <sys/param.h>
 
 /*
 **=================================typedefs====================================

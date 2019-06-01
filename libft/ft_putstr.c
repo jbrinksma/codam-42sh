@@ -6,11 +6,12 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 12:05:27 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/30 13:58:29 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/31 14:35:37 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <unistd.h>
 
 void	ft_putstr(char const *s)
 {

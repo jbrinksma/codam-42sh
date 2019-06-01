@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/31 17:00:25 by omulder       ########   odam.nl         */
+/*   Updated: 2019/06/01 13:45:58 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include <limits.h>
+#include <unistd.h>
 
 void redirect_all_stdout(void)
 {
@@ -581,4 +582,4 @@ Test(exec_echo, basic2, .init=redirect_all_stdout)
 	cr_expect(exec_start(ast, &exit_code) == FUNCT_SUCCESS);
 	cr_expect_stdout_eq_str("\"Hi, this is a string\"\n");
 	parser_astdel(&ast);
-} 
+}

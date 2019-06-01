@@ -6,12 +6,13 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/17 11:50:51 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/22 12:19:20 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/05/31 15:17:51 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <sys/ioctl.h>
+#include <unistd.h>
 
 static void	parse_ctrl_line_down(unsigned *index, char **line)
 {

@@ -6,11 +6,12 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:08:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/27 10:27:45 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/31 14:53:28 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <termios.h>
 
 int		term_get_attributes(int fd, t_term *term_p)
 {

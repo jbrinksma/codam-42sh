@@ -6,11 +6,12 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 10:23:43 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/29 14:34:00 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/31 15:18:25 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <unistd.h>
 
 void	lexer_tokenlstdel(t_tokenlst **token_lst)
 {

@@ -6,11 +6,13 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:11:05 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/27 10:27:17 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/31 15:18:05 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <termios.h>
+#include <unistd.h>
 
 int		term_set_attributes(t_term *term_p)
 {

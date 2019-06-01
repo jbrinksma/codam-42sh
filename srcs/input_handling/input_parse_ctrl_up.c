@@ -6,12 +6,13 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 15:03:17 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/22 12:19:09 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/05/31 15:17:43 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <sys/ioctl.h>
+#include <unistd.h>
 
 static void	parse_ctrl_line_up(unsigned *index)
 {

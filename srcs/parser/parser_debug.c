@@ -6,11 +6,12 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/21 21:13:37 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/27 17:22:41 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/05/31 14:53:42 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <stdio.h>
 
 static int		get_tree_height(t_ast *root)
 {

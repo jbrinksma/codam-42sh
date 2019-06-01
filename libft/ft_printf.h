@@ -6,14 +6,13 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/05 07:43:01 by omulder        #+#    #+#                */
-/*   Updated: 2019/04/11 14:54:45 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/31 14:27:43 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 # include <stdarg.h>
-# include <unistd.h>
 # include <stdlib.h>
 
 # define HASH	opt[0]

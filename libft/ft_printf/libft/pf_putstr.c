@@ -6,11 +6,12 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 12:05:27 by omulder        #+#    #+#                */
-/*   Updated: 2019/03/21 20:32:01 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/31 14:25:59 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <unistd.h>
 
 void	pf_putstr(int fd, char const *s)
 {
