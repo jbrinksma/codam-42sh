@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/30 15:31:56 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/31 10:20:28 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,20 @@ static char	**create_args(t_ast *ast)
 	return (args);
 }
 
-int			exec_start(t_ast *ast)
+int			exec_start(t_ast *ast, int *exit_code)
 {
 	char	**env;
 	char	**args;
 
 	env = env_get_environ_cpy();
+	if (env == NULL)
+		return (FUNCT_FAILURE);
 	if (ast->type == WORD)
 	{
 		args = create_args(ast);
 		if (args == NULL)
 			return (FUNCT_FAILURE);
-		return (exec_cmd(args, &env));
+		return (exec_cmd(args, &env, exit_code));
 	}
 	else
 	{

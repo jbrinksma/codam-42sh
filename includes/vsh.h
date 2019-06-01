@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/30 14:04:23 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/31 11:05:52 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@
 # define E_ALLOC 420
 # define CTRLD -1
 # define CR 0
+
+/*
+**=================================exit codes====================================
+*/
+
+# define EXIT_OK 0
+# define EXIT_NOTFOUND 127
 
 /*
 **------------------------------------echo--------------------------------------
@@ -314,8 +321,8 @@ void			parser_astdel(t_ast **ast);
 **----------------------------------builtins-------------------------------------
 */
 
-void			builtin_exit(char **args);
-int				builtin_echo(char **args);
+void			builtin_exit(char **args, int *exit_code);
+void			builtin_echo(char **args, int *exit_code);
 char			builtin_echo_set_flags(char **args, int *arg_i);
 
 /*
@@ -334,9 +341,10 @@ int				history_line_to_file(char *line);
 **---------------------------------exec-----------------------------------------
 */
 
-int				exec_cmd(char **args, char ***env);
-int				exec_start(t_ast *ast);
-int				exec_builtin(char **args, char ***env);
+int				exec_cmd(char **args, char ***env, int *exit_code);
+int				exec_start(t_ast *ast, int *exit_code);
+bool			exec_builtin(char **args, char ***env, int *exit_code);
+bool			exec_external(char **args, char ***env, int *exit_code);
 
 /*
 **----------------------------------debugging-----------------------------------

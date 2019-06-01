@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/03/28 10:21:20 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/27 15:48:47 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/31 10:22:25 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static void	builtin_echo_escape_chars(char *arg)
 ** Option -E disables interpretation of escape characters.
 */
 
-int			builtin_echo(char **args)
+void		builtin_echo(char **args, int *exit_code)
 {
 	int		arg_i;
 	char	flags;
@@ -90,5 +90,5 @@ int			builtin_echo(char **args)
 	}
 	if ((flags & ECHO_OPT_NL) == 0)
 		ft_putchar('\n');
-	return (FUNCT_SUCCESS);
+	*exit_code = 0;
 }

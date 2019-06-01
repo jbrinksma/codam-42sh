@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/29 18:52:37 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/31 10:21:15 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ void	lexer_tokenlstiter(t_tokenlst *lst, void (*f)(t_tokenlst *elem))
 int		shell_start(void)
 {
 	int			status;
+	int			exit_code;
 	char		*line;
 	t_tokenlst	*token_lst;
 	t_ast		*ast;
 
+	exit_code = 0;
 	status = 1;
 	line = NULL;
 	token_lst = NULL;
@@ -49,7 +51,7 @@ int		shell_start(void)
 		#ifdef DEBUG
 		print_tree(ast);
 		#endif
-		exec_start(ast);
+		exec_start(ast, &exit_code);
 		parser_astdel(&ast);
 		ft_putchar('\n');
 	}
