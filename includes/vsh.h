@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/06/01 13:46:27 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/06/02 10:34:38 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@
 */
 
 # include "libft.h"
+# include "vsh_history.h"
 
 /*
 **==================================headers=====================================
@@ -314,11 +315,7 @@ char			builtin_echo_set_flags(char **args, int *arg_i);
 int				tools_is_char_escaped(char *line, int i);
 int				tools_update_quote_status(char *line, int cur_index, char *quote);
 bool			tool_is_redirect_tk(t_tokens type);
-/*
-**----------------------------------history-------------------------------------
-*/
 
-int				history_line_to_file(char *line);
 /*
 **---------------------------------exec-----------------------------------------
 */

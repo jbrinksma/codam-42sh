@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/27 15:57:23 by omulder       ########   odam.nl         */
+/*   Updated: 2019/05/30 19:02:23 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int		main(int argc, char **argv)
 	(void)argc;
 	vshenviron = env_get_environ_cpy();
 	term_p = term_prepare(vshenviron);
-	/* if !term_p: send appropriate error message/log */
+	history_get_file_content();
+	/* if !term_p or history failed: send appropriate error message/log */
 	if (term_p == NULL)
 		return (EXIT_FAILURE);
 	shell_start();
