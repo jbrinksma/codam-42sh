@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/17 11:50:51 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/31 15:17:51 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/06/02 15:13:34 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int			input_parse_ctrl_down(char c, int *input_state, unsigned *index,
 		c == 'B')
 	{
 		if (*input_state == INPUT_BRACE)
-			;
+			history_change_line(line, index, ARROW_DOWN);
 		else
 			parse_ctrl_line_down(index, line);
 		*input_state = INPUT_NONE;
