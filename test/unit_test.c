@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/06/02 08:53:10 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/05/29 17:30:34 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,7 @@ Test(shell_quote_checker, basic)
 /*
 **------------------------------------------------------------------------------
 */
+
 TestSuite(builtin_echo);
 
 Test(builtin_echo, basic, .init=redirect_all_stdout)
@@ -473,9 +474,9 @@ Test(lexer, basic)
 	char 		*str;
 
 	str = ft_strdup("HOME=/ ls -la || ls 2>file \"Documents\";");
+	cr_assert(str != NULL);
 	lst = NULL;
-	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
-	cr_expect(str == NULL);
+	cr_expect(lexer(&str, &lst) == FUNCT_SUCCESS);
 	tmp = lst;
 	cr_expect(lst->type == START);
 	cr_expect(lst->value == NULL);
@@ -526,7 +527,7 @@ Test(parser, basic)
 	str = ft_strdup("HOME=/ ls -la || ls 2>file \"Documents\";");
 	lst = NULL;
 	ast = NULL;
-	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
+	cr_expect(lexer(&str, &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
 	tmp_ast = ast;
 	cr_expect(ast->type == SEMICOL);
