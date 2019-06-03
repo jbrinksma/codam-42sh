@@ -6,20 +6,21 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/27 16:52:15 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/27 16:52:26 by omulder       ########   odam.nl         */
+/*   Updated: 2019/06/02 08:50:50 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <stdbool.h>
 
 /*
 **	Checks the given string with it's given index, and looks back to check if
 **	the line[cur_index] is escaped.
 **
-**	Returns FUNCT_SUCCESS if escaped, FUNCT_FAILURE if not escaped.
+**	Returns true if escaped, false if not escaped.
 */
 
-int	tools_is_char_escaped(char *line, int i)
+bool	tools_is_char_escaped(char *line, int i)
 {
 	int i_tmp;
 	int	escape_count;
@@ -32,6 +33,6 @@ int	tools_is_char_escaped(char *line, int i)
 		i_tmp--;
 	}
 	if (escape_count % 2 != 0)
-		return (FUNCT_SUCCESS);
-	return (FUNCT_FAILURE);
+		return (true);
+	return (false);
 }

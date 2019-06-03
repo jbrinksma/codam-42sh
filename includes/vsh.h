@@ -199,8 +199,10 @@ typedef struct	s_ast
 char			**env_get_environ_cpy(void);
 char			*env_var_get_value(char *var_key, char **vararray);
 char			*env_var_join_key_value(char *var_key, char *var_value);
-int				env_var_set_value(char *var_key, char *var_value, char **vararray);
-int				env_var_add_value(char *var_key, char *var_value, char ***vararray);
+int				env_var_set_value(char *var_key, char *var_value,
+					char **vararray);
+int				env_var_add_value(char *var_key, char *var_value,
+					char ***vararray);
 char			**env_free_and_return_null(char ***vshenviron);
 
 /*
@@ -247,6 +249,10 @@ int				input_parse_ctrl_down(char c, int *input_state, unsigned *index,
 */
 
 void			shell_display_prompt(void);
+int				shell_read_till_stop(char **heredoc, char *stop);
+void			shell_dless_input(t_tokenlst *token_lst);
+int				shell_quote_checker(char **line);
+char			shell_quote_checker_find_quote(char *line);
 int				shell_start(void);
 
 /*
@@ -301,7 +307,7 @@ char			*parser_return_token_str(t_tokens type);
 void			parser_astdel(t_ast **ast);
 
 /*
-**----------------------------------builtins-------------------------------------
+**----------------------------------builtins------------------------------------
 */
 
 void			builtin_exit(char **args, int *exit_code);
@@ -312,8 +318,10 @@ char			builtin_echo_set_flags(char **args, int *arg_i);
 **---------------------------------tools----------------------------------------
 */
 
-int				tools_is_char_escaped(char *line, int i);
-int				tools_update_quote_status(char *line, int cur_index, char *quote);
+bool			tool_is_redirect_tk(t_tokens type);
+bool			tools_is_char_escaped(char *line, int i);
+int				tools_update_quote_status(char *line, int cur_index,
+					char *quote);
 bool			tool_is_redirect_tk(t_tokens type);
 
 /*
@@ -330,6 +338,7 @@ bool			exec_external(char **args, char ***env, int *exit_code);
 */
 
 void			print_node(t_tokenlst *node);
+void			print_tree(t_ast *root);
 void			print_token(t_scanner *scanner);
 void			print_tree(t_ast *root);
 
