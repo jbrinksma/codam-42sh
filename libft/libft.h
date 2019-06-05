@@ -15,6 +15,7 @@
 
 # define BUFF_SIZE 64
 # include "ft_printf.h"
+# include <stdbool.h>
 
 typedef struct		s_list
 {
@@ -85,7 +86,7 @@ char				*ft_joinstrcstr_free_s2(char *s1, char c, char *s2);
 char				*ft_joinstrcstr_free_all(char *s1, char c, char *s2);
 char				*ft_chartostr(char c);
 int					ft_get_next_line(const int fd, char **line);
-int					ft_strarradd(char ***arr, char *add); // Not sure if this func is save2use
+int					ft_strarradd(char ***arr, const char *add);
 void				ft_strarrdel(char ***arr);
 char				*ft_strjoinfree_s1(char *s1, char *s2);
 char				*ft_strjoinfree_s2(char *s1, char *s2);

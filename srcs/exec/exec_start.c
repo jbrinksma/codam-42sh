@@ -12,11 +12,9 @@
 
 #include "vsh.h"
 
-static char	**create_args(t_ast *ast)
+static char	**init_array(t_ast *ast)
 {
 	char	**args;
-	char	*temp;
-	t_ast	*probe;
 
 	if (ast == NULL)
 		return (NULL);
@@ -25,14 +23,45 @@ static char	**create_args(t_ast *ast)
 		return (NULL);
 	args[0] = ft_strdup(ast->value);
 	if (args[0] == NULL)
+	{
+		ft_strarrdel(&args);
+		return (NULL);
+	}
+	return (args);
+}
+
+static int	add_argument(char ***args, char *value)
+{
+	char	*temp;
+
+	temp = ft_strdup(value);
+	if (temp == NULL)
+	{
+		ft_strarrdel(args);
+		return (FUNCT_FAILURE);
+	}
+	if (ft_strarradd(args, temp) == FUNCT_FAILURE)
+	{
+		ft_strdel(&temp);
+		ft_strarrdel(args);
+		return (FUNCT_FAILURE);
+	}
+	ft_strdel(&temp);
+	return (FUNCT_SUCCESS);
+}
+
+static char	**create_args(t_ast *ast)
+{
+	char	**args;
+	t_ast	*probe;
+
+	args = (init_array(ast));
+	if (args == NULL)
 		return (NULL);
 	probe = ast->child;
 	while (probe)
 	{
-		temp = ft_strdup(probe->value);
-		if (temp == NULL)
-			return (NULL);
-		if (ft_strarradd(&args, temp) == FUNCT_ERROR)
+		if (add_argument(&args, probe->value) == FUNCT_FAILURE)
 			return (NULL);
 		probe = probe->child;
 	}
@@ -51,7 +80,10 @@ int			exec_start(t_ast *ast, int *exit_code)
 	{
 		args = create_args(ast);
 		if (args == NULL)
+		{
+			ft_strarrdel(&env);
 			return (FUNCT_FAILURE);
+		}
 		return (exec_cmd(args, &env, exit_code));
 	}
 	else
