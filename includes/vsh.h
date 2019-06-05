@@ -33,6 +33,7 @@
 
 # define EXIT_OK 0
 # define EXIT_NOTFOUND 127
+# define EXIT_FATAL 128
 
 /*
 **------------------------------------echo--------------------------------------
@@ -326,13 +327,13 @@ int				tools_update_quote_status(char *line, int cur_index,
 bool			tool_is_redirect_tk(t_tokens type);
 
 /*
-**---------------------------------exec-----------------------------------------
+**----------------------------------execution-----------------------------------
 */
 
-int				exec_cmd(char **args, char ***env, int *exit_code);
-int				exec_start(t_ast *ast, int *exit_code);
-bool			exec_builtin(char **args, char ***env, int *exit_code);
-bool			exec_external(char **args, char ***env, int *exit_code);
+int		exec_start(t_ast *ast, int *exit_code);
+int		exec_cmd(char **args, char ***env, int *exit_code);
+bool	exec_builtin(char **args, char ***env, int *exit_code);
+bool	exec_external(char **args, char ***env, int *exit_code);
 
 /*
 **----------------------------------debugging-----------------------------------

@@ -656,4 +656,50 @@ Test(exec_echo, basic2, .init=redirect_all_stdout)
 	cr_expect(exec_start(ast, &exit_code) == FUNCT_SUCCESS);
 	cr_expect_stdout_eq_str("\"Hi, this is a string\"\n");
 	parser_astdel(&ast);
+} 
+
+/*
+**------------------------------------------------------------------------------
+*/
+
+TestSuite(exec_cmd);
+
+Test(exec_cmd, basic, .init=redirect_all_stdout)
+{
+	t_tokenlst	*lst;
+	t_ast		*ast;
+	char 		*str;
+	char 		*cwd;
+	int			exit_code;
+
+	str = ft_strdup("/bin/pwd");
+	cwd = getcwd(NULL, 0);
+	lst = NULL;
+	ast = NULL;
+	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
+	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
+	cr_expect(exec_start(ast, &exit_code) == FUNCT_SUCCESS);
+	ft_strdel(&str);
+	str = ft_strjoin(cwd, "\n");
+	cr_expect_stdout_eq_str(str);
+	ft_strdel(&str);
+	ft_strdel(&cwd);
+	parser_astdel(&ast);
 }
+
+Test(exec_cmd, basic2, .init=redirect_all_stdout)
+{
+	t_tokenlst	*lst;
+	t_ast		*ast;
+	char 		*str;
+	int			exit_code;
+
+	str = ft_strdup("/bin/echo hoi");
+	lst = NULL;
+	ast = NULL;
+	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
+	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
+	cr_expect(exec_start(ast, &exit_code) == FUNCT_SUCCESS);
+	cr_expect_stdout_eq_str("hoi\n");
+	parser_astdel(&ast);
+} 
