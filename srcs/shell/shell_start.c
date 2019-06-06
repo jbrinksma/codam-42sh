@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/29 17:28:39 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/06/05 17:08:47 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int		shell_start(void)
 	t_tokenlst	*token_lst;
 	t_ast		*ast;
 
-	exit_code = 0;
+	exit_code = EXIT_SUCCESS;
 	status = 1;
 	line = NULL;
 	token_lst = NULL;
