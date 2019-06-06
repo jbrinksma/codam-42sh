@@ -49,6 +49,22 @@ static int	ft_word_length(const char *s, char c)
 	return (l);
 }
 
+static char		**clean_memory(char **new)
+{
+	int i;
+
+	if (new == NULL)
+		return (NULL);
+	i = 0;
+	while (new[i] != NULL)
+	{
+		free(&(new[i]));
+		i++;
+	}
+	free(new);
+	return (NULL);
+}
+
 char		**ft_strsplit(const char *s, char c)
 {
 	int		j;
@@ -68,11 +84,10 @@ char		**ft_strsplit(const char *s, char c)
 			s++;
 		res[j] = ft_strsub(s, 0, ft_word_length(s, c));
 		if (res[j] == NULL)
-			return (NULL);
+			return (clean_memory(res));
 		s += ft_word_length(s, c);
 		j++;
 		len--;
 	}
-	res[j] = NULL;
 	return (res);
 }
