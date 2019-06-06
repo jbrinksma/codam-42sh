@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/29 17:29:02 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/06/05 16:45:05 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,10 +330,11 @@ bool			tool_is_redirect_tk(t_tokens type);
 **----------------------------------execution-----------------------------------
 */
 
-int		exec_start(t_ast *ast, int *exit_code);
-int		exec_cmd(char **args, char ***env, int *exit_code);
-bool	exec_builtin(char **args, char ***env, int *exit_code);
-bool	exec_external(char **args, char ***env, int *exit_code);
+int				exec_start(t_ast *ast, int *exit_code);
+int				exec_cmd(char **args, char ***env, int *exit_code);
+bool			exec_builtin(char **args, char ***env, int *exit_code);
+bool			exec_external(char **args, char ***env, int *exit_code);
+char			*exec_find_binary(char *filename, char **vararray);
 
 /*
 **----------------------------------debugging-----------------------------------

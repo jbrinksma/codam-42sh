@@ -703,3 +703,107 @@ Test(exec_cmd, basic2, .init=redirect_all_stdout)
 	cr_expect_stdout_eq_str("hoi\n");
 	parser_astdel(&ast);
 } 
+
+/*
+**------------------------------------------------------------------------------
+*/
+
+TestSuite(exec_find_bin);
+
+Test(exec_find_bin, basic)
+{
+	char 		*str;
+	char		*bin;
+	char		**env;
+
+	env = env_get_environ_cpy();
+	env_var_add_value("PATH", "./", &env);
+	str = ft_strdup("vsh");
+	bin = exec_find_binary(str, env);
+	cr_expect_str_eq(bin, ".//vsh");
+	ft_freearray(&env);
+	ft_strdel(&bin);
+	ft_strdel(&str);
+}
+
+Test(exec_find_bin, basic2)
+{
+	char 		*str;
+	char		*bin;
+	char		**env;
+
+	env = env_get_environ_cpy();
+	env_var_add_value("PATH", "/usr/bin:/bin:./", &env);
+	str = ft_strdup("ls");
+	bin = exec_find_binary(str, env);
+	cr_expect_str_eq(bin, "/bin/ls");
+	ft_freearray(&env);
+	ft_strdel(&bin);
+	ft_strdel(&str);
+}
+
+Test(exec_find_bin, advanced)
+{
+	char 		*str;
+	char		*bin;
+	char		**env;
+
+	env = env_get_environ_cpy();
+	env_var_add_value("PATH", "/Users/travis/.rvm/gems/ruby-2.4.2/bin:/Users/travis/.rvm/gems/ruby-2.4.2@global/bin:/Users/travis/.rvm/rubies/ruby-2.4.2/bin:/Users/travis/.rvm/bin:/Users/travis/bin:/Users/travis/.local/bin:/Users/travis/.nvm/versions/node/v6.11.4/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin", &env);
+	str = ft_strdup("ls");
+	bin = exec_find_binary(str, env);
+	cr_expect_str_eq(bin, "/bin/ls");
+	ft_freearray(&env);
+	ft_strdel(&bin);
+	ft_strdel(&str);
+}
+
+Test(exec_find_bin, nopath)
+{
+	char 		*str;
+	char		*bin;
+	char		**env;
+
+	env = env_get_environ_cpy();
+	env_var_set_value("PATH", "", env);
+	str = ft_strdup("ls");
+	bin = exec_find_binary(str, env);
+	cr_expect(bin == NULL);
+	ft_freearray(&env);
+	ft_strdel(&bin);
+	ft_strdel(&str);
+}
+
+Test(exec_find_bin, execution, .init=redirect_all_stdout)
+{
+	t_tokenlst	*lst;
+	t_ast		*ast;
+	char 		*str;
+	int			exit_code;
+
+	str = ft_strdup("ls vsh");
+	lst = NULL;
+	ast = NULL;
+	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
+	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
+	cr_expect(exec_start(ast, &exit_code) == FUNCT_SUCCESS);
+	cr_expect_stdout_eq_str("vsh\n");
+	parser_astdel(&ast);
+}
+
+Test(exec_find_bin, execnonexistent, .init=redirect_all_stdout)
+{
+	t_tokenlst	*lst;
+	t_ast		*ast;
+	char 		*str;
+	int			exit_code;
+
+	str = ft_strdup("idontexist");
+	lst = NULL;
+	ast = NULL;
+	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
+	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
+	cr_expect(exec_start(ast, &exit_code) == FUNCT_SUCCESS);
+	cr_expect_stdout_eq_str("idontexist: Command not found.\n");
+	parser_astdel(&ast);
+}
