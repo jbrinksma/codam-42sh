@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/30 19:02:23 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/06/06 14:52:21 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,23 @@
 
 int		main(int argc, char **argv)
 {
-	t_term	*term_p;
-	char	**vshenviron;
+	t_term		*term_p;
+	t_envlst	*envlst;
 
 	(void)argv;
 	(void)argc;
-	vshenviron = env_get_environ_cpy();
-	term_p = term_prepare(vshenviron);
+	envlst = env_getlst();
+	if (envlst == NULL)
+		return (EXIT_FAILURE);
+	term_p = term_prepare(envlst);
 	history_get_file_content();
 	/* if !term_p or history failed: send appropriate error message/log */
 	if (term_p == NULL)
 		return (EXIT_FAILURE);
-	shell_start();
+	shell_start(envlst);
 	if (term_reset(term_p) == FUNCT_FAILURE)
 		return (EXIT_FAILURE);
 	term_free_struct(&term_p);
-	ft_freearray(&vshenviron);
+	/* add t_envlst free */
 	return (EXIT_SUCCESS);
 }

@@ -92,5 +92,6 @@ void				ft_strarrdel(char ***arr);
 char				*ft_strjoinfree_s1(char *s1, char *s2);
 char				*ft_strjoinfree_s2(char *s1, char *s2);
 char				*ft_strjoinfree_all(char *s1, char *s2);
+int					ft_strclen(char *arg, char c);
 
 #endif

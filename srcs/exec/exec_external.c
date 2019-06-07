@@ -14,7 +14,7 @@
 #include "unistd.h"
 #include <sys/wait.h>
 
-static bool	exec_bin(char **args, char **env, int *exit_code)
+static bool	exec_bin(char **args, char **vshenviron, int *exit_code)
 {
 	pid_t	pid;
 	int		status;
@@ -23,7 +23,7 @@ static bool	exec_bin(char **args, char **env, int *exit_code)
 	if (pid < 0)
 		return (false);
 	if (pid == 0)
-		execve(args[0], args, env);
+		execve(args[0], args, vshenviron);
 	waitpid(pid, &status, WUNTRACED);
 	if (WIFEXITED(status))
 		*exit_code = WEXITSTATUS(status);
@@ -32,17 +32,28 @@ static bool	exec_bin(char **args, char **env, int *exit_code)
 	return (true);
 }
 
-bool		exec_external(char **args, char ***env, int *exit_code)
+bool		exec_external(char **args, t_envlst *envlst, int *exit_code)
 {
-	char *binary;
+	char	**vshenviron;
+	char 	*binary;
+	bool	ret;
 
 	if (args[0][0] != '/' && !ft_strnequ(args[0], "./", 2))
 	{
-		binary = exec_find_binary(args[0], *env);
+		binary = exec_find_binary(args[0], envlst);
 		if (binary == NULL)
 			return (false);
 		free(args[0]);
 		args[0] = binary;
 	}
-	return (exec_bin(args, *env, exit_code));
+	vshenviron = env_lsttoarr(envlst, ENV_EXTERN);
+	if (vshenviron == NULL)
+	{
+		ft_printf("vsh: failed to allocate enough memory!\n");
+		*exit_code = EXIT_FAILURE;
+		return (false);
+	}
+	ret = exec_bin(args, vshenviron, exit_code);
+	free(vshenviron);
+	return (ret);
 }

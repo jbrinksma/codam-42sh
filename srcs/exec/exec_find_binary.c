@@ -13,11 +13,11 @@
 #include "vsh.h"
 #include <dirent.h>
 
-static char		**get_paths(char **vararray)
+static char		**get_paths(t_envlst *envlst)
 {
 	char *paths;
 
-	paths = env_var_get_value("PATH", vararray);
+	paths = env_getvalue("PATH", envlst);
 	if (paths == NULL || *paths == '\0') // second condition should be fixed in env var get value
 		return (NULL);
 	return (ft_strsplit(paths, ':'));
@@ -37,14 +37,14 @@ static char		*check_dir(DIR *d, char *filename, char *path)
 	return (NULL);
 }
 
-char			*exec_find_binary(char *filename, char **vararray)
+char			*exec_find_binary(char *filename, t_envlst *envlst)
 {
 	DIR				*d;
 	char			**paths;
 	char			*ret;
 	size_t			i;
 
-	paths = get_paths(vararray);
+	paths = get_paths(envlst);
 	if (paths == NULL)
 		return (NULL);
 	i = 0;

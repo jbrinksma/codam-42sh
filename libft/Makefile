@@ -28,7 +28,8 @@ ft_lstiter.c ft_lstdel.c ft_lstdelone.c ft_strarradd.c ft_strarrdel.c \
 ft_joinstrcstr.c ft_chartostr.c ft_joinstrcstr_free_s1.c \
 ft_joinstrcstr_free_s2.c ft_joinstrcstr_free_all.c \
 ft_get_next_line.c \
-ft_strjoinfree_s1.c ft_strjoinfree_s2.c ft_strjoinfree_all.c
+ft_strjoinfree_s1.c ft_strjoinfree_s2.c ft_strjoinfree_all.c \
+ft_strclen.c
 OBJECTS = $(FILES:.c=.o)
 
 all: $(OBJECTS) $(NAME)

@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   env_var_get_value.c                                :+:    :+:            */
+/*   env_getvalue.c                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/03 18:45:30 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/27 15:51:34 by omulder       ########   odam.nl         */
+/*   Updated: 2019/06/06 14:52:37 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-char		*env_var_get_value(char *var_key, char **vararray)
+char		*env_getvalue(char *var_key, t_envlst *envlst)
 {
-	int		var_len;
-	int		env_i;
+	t_envlst	*probe;
+	int			var_len;
 
+	probe = envlst;
 	var_len = ft_strlen(var_key);
-	env_i = 0;
-	while (vararray[env_i] != NULL)
+	while (probe != NULL)
 	{
-		if (ft_strncmp(var_key, vararray[env_i], var_len) == 0 &&
-			vararray[env_i][var_len] == '=')
-			return (ft_strchr(vararray[env_i], '=') + 1);
-		env_i++;
+		if (ft_strnequ(var_key, probe->var, var_len) &&
+			probe->var[var_len] == '=')
+			return (ft_strchr(probe->var, '=') + 1);
+		probe = probe->next;
 	}
 	return (NULL);
 }

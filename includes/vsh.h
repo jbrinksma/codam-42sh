@@ -56,6 +56,14 @@
 # define T_MALLOC_ERROR (1 << 4)
 
 /*
+**---------------------------------environment----------------------------------
+*/
+
+# define ENV_EXTERN 2
+# define ENV_LOCAL 1
+# define ENV_TEMP 0
+
+/*
 **------------------------------------parser------------------------------------
 */
 
@@ -196,22 +204,30 @@ typedef struct	s_ast
 **---------------------------------environment----------------------------------
 */
 
-char			**env_get_environ_cpy(void);
-char			*env_var_get_value(char *var_key, char **vararray);
-char			*env_var_join_key_value(char *var_key, char *var_value);
-int				env_var_set_value(char *var_key, char *var_value,
-					char **vararray);
-int				env_var_add_value(char *var_key, char *var_value,
-					char ***vararray);
+typedef struct	s_envlst
+{
+	char			*var;
+	unsigned char	type;
+	struct s_envlst	*next;
+}				t_envlst;
+
+char			*env_getvalue(char *var_key, t_envlst *envlst);
 char			**env_free_and_return_null(char ***vshenviron);
+
+/* environment branch -jorn */
+
+t_envlst	*env_getlst(void);
+void		env_lstaddback(t_envlst **lst, t_envlst *new);
+t_envlst	*env_lstnew(char *var, unsigned char type);
+char		**env_lsttoarr(t_envlst *lst, unsigned char minimal_type);
+int			env_lstlen(t_envlst *lst, unsigned char minimal_type);
 
 /*
 **----------------------------------terminal------------------------------------
 */
 
-t_term			*term_prepare(char **vshenviron);
-t_term			*term_return(t_term *term_p, int return_value);
-int				term_is_valid(char **vshenviron);
+t_term			*term_prepare(t_envlst *lst);
+int				term_is_valid(t_envlst *envlst);
 t_term			*term_init_struct(void);
 int				term_get_attributes(int fd, t_term *term_p);
 int				term_set_attributes(t_term *term_p);
@@ -254,7 +270,7 @@ int				shell_dless_set_tk_val(t_tokenlst *probe, char **heredoc, char *stop);
 int				shell_dless_input(t_tokenlst *token_lst);
 int				shell_quote_checker(char **line);
 char			shell_quote_checker_find_quote(char *line);
-int				shell_start(void);
+int				shell_start(t_envlst *envlst);
 
 /*
 **----------------------------------lexer---------------------------------------
@@ -329,11 +345,11 @@ bool			tool_is_redirect_tk(t_tokens type);
 **----------------------------------execution-----------------------------------
 */
 
-int				exec_start(t_ast *ast, int *exit_code);
-int				exec_cmd(char **args, char ***env, int *exit_code);
-bool			exec_builtin(char **args, char ***env, int *exit_code);
-bool			exec_external(char **args, char ***env, int *exit_code);
-char			*exec_find_binary(char *filename, char **vararray);
+void	exec_start(t_ast *ast, t_envlst *envlst, int *exit_code);
+void	exec_cmd(char **args, t_envlst *envlst, int *exit_code);
+bool	exec_builtin(char **args, t_envlst *envlst, int *exit_code);
+bool	exec_external(char **args, t_envlst *envlst, int *exit_code);
+char	*exec_find_binary(char *filename, t_envlst *envlst);
 
 /*
 **----------------------------------debugging-----------------------------------

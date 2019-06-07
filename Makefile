@@ -31,8 +31,7 @@ input_parse_delete input_parse_ctrl_d input_parse_ctrl_k \
 input_parse_ctrl_up input_parse_ctrl_down input_is_word_start \
 term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct \
-env_get_environ_cpy env_var_get_value env_var_set_value env_var_join_key_value \
-env_var_add_value \
+env_getvalue env_getlst env_lsttoarr \
 tools_is_char_escaped tool_is_redirect_tk \
 builtin_echo builtin_echo_set_flags builtin_exit \
 lexer lexer_utils lexer_debug lexer_evaluator lexer_scanner \

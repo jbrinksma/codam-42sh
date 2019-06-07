@@ -20,7 +20,7 @@ void	lexer_tokenlstiter(t_tokenlst *lst, void (*f)(t_tokenlst *elem))
 	lexer_tokenlstiter(lst->next, f);
 }
 
-int		shell_start(void)
+int		shell_start(t_envlst *envlst)
 {
 	int			status;
 	int			exit_code;
@@ -58,7 +58,7 @@ int		shell_start(void)
 		#ifdef DEBUG
 		print_tree(ast);
 		#endif
-		exec_start(ast, &exit_code);
+		exec_start(ast, envlst, &exit_code);
 		parser_astdel(&ast);
 		/* ADD EVALUATOR */
 		/* ADD EXPANSION FUNC ? */
