@@ -234,19 +234,19 @@ Test(builtin_echo, basic, .init=redirect_all_stdout)
 	exit_code = INT_MIN;
 	builtin_echo(args, &exit_code);
 	cr_expect(exit_code == 0);
-	ft_freearray(&args);
+	ft_strarrdel(&args);
 
 	args = ft_strsplit("echo|-Eea|\n", '|');
 	exit_code = INT_MIN;
 	builtin_echo(args, &exit_code);
 	cr_expect(exit_code == 0);
-	ft_freearray(&args);
+	ft_strarrdel(&args);
 
 	args = ft_strsplit("echo|-nEe", '|');
 	exit_code = INT_MIN;
 	builtin_echo(args, &exit_code);
 	cr_expect(exit_code == 0);
-	ft_freearray(&args);
+	ft_strarrdel(&args);
 
 	args = ft_strsplit("echo|-E", '|');
 	exit_code = INT_MIN;

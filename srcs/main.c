@@ -35,6 +35,5 @@ int		main(int argc, char **argv)
 	if (term_reset(term_p) == FUNCT_FAILURE)
 		return (EXIT_FAILURE);
 	term_free_struct(&term_p);
-	/* add t_envlst free */
 	return (EXIT_SUCCESS);
 }
