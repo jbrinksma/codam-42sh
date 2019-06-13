@@ -1,36 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   env_getlst.c                                       :+:    :+:            */
+/*   env_lstnew.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/06/04 08:06:54 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/06/07 18:37:10 by jbrinksm      ########   odam.nl         */
+/*   Created: 2019/06/07 18:35:25 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/06/07 18:36:52 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-t_envlst	*env_getlst(void)
+t_envlst	*env_lstnew(char *var, unsigned char type)
 {
-	t_envlst	*envlst;
 	t_envlst	*new;
-	extern char	**environ;
-	int			i;
 
-	i = 0;
-	envlst = NULL;
-	while (environ[i] != NULL)
+	if (var == NULL)
+		return (NULL);
+	new = (t_envlst*)ft_memalloc(sizeof(t_envlst));
+	if (new == NULL)
+		return (NULL);
+	new->var = ft_strdup(var);
+	if (new->var == NULL)
 	{
-		new = env_lstnew(environ[i], ENV_EXTERN);
-		if (new == NULL)
-		{
-			env_lstdel(&envlst);
-			return (NULL);
-		}
-		env_lstaddback(&envlst, new);
-		i++;
+		free(new);
+		return (NULL);
 	}
-	return (envlst);
+	new->type = type;
+	new->next = NULL;
+	return (new);
 }
