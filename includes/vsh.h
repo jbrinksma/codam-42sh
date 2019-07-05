@@ -331,6 +331,9 @@ void			parser_astdel(t_ast **ast);
 void			builtin_exit(char **args, int *exit_code);
 void			builtin_echo(char **args, int *exit_code);
 char			builtin_echo_set_flags(char **args, int *arg_i);
+void			builtin_assign(char *arg, t_envlst *envlst, int *exit_code);
+int				builtin_assign_addexist(t_envlst *envlst, char *arg, char *var);
+int				builtin_assign_addnew(t_envlst *envlst, char *var);
 
 /*
 **---------------------------------tools----------------------------------------

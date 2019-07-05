@@ -33,7 +33,7 @@ term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct \
 env_getvalue env_getlst env_lsttoarr env_lstnew env_lstaddback env_lstdel \
 tools_is_char_escaped tool_is_redirect_tk \
-builtin_echo builtin_echo_set_flags builtin_exit \
+builtin_echo builtin_echo_set_flags builtin_exit builtin_assign \
 lexer lexer_utils lexer_debug lexer_evaluator lexer_scanner \
 lexer_state_if_else lexer_state_single lexer_state_start lexer_state_strings \
 parser_start parser_debug parser_utils parser_command parser_error \
@@ -41,7 +41,7 @@ parser_astdel \
 history_to_file history_get_file_content history_line_to_array history_print \
 history_change_line \
 exec_builtin exec_cmd exec_external exec_start exec_find_binary
-TESTS = unit_test
+TESTS = unit_test builtin_assign_test
 OBJECTS := $(SRCS:%=%.o)
 TESTOBJECTS := $(TESTS:%=%.o)
 SRCS := $(SRCS:%=%.c)

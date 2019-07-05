@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/02 13:23:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/06/02 13:59:38 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/06/13 16:08:03 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		shell_dless_read_till_stop(char **heredoc, char *stop)
 int		shell_dless_set_tk_val(t_tokenlst *probe, char **heredoc, char *stop)
 {
 	int	ret;
-	
+
 	ft_strdel(&(probe->value));
 	ret = shell_dless_read_till_stop(heredoc, stop);
 	if (ret == FUNCT_SUCCESS)
@@ -65,7 +65,7 @@ int		shell_dless_set_tk_val(t_tokenlst *probe, char **heredoc, char *stop)
 
 int		shell_dless_input(t_tokenlst *token_lst)
 {
-	char 		*heredoc;
+	char		*heredoc;
 	t_tokenlst	*probe;
 	char		*stop;
 
@@ -80,7 +80,8 @@ int		shell_dless_input(t_tokenlst *token_lst)
 			if (stop == NULL || shell_dless_set_tk_val(probe, &heredoc, stop)
 			== FUNCT_ERROR)
 			{
-				ft_printf("vsh: failed to allocate enough memory for heredoc\n");
+				ft_printf("vsh: failed to allocate enough memory for "
+				"heredoc\n");
 				return (FUNCT_ERROR);
 			}
 			ft_strdel(&heredoc);

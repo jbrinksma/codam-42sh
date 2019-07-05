@@ -6,7 +6,7 @@
 /*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/06/06 10:46:47 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/06/13 16:07:06 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static bool	exec_bin(char **args, char **vshenviron, int *exit_code)
 bool		exec_external(char **args, t_envlst *envlst, int *exit_code)
 {
 	char	**vshenviron;
-	char 	*binary;
+	char	*binary;
 	bool	ret;
 
 	if (args[0][0] != '/' && !ft_strnequ(args[0], "./", 2))
