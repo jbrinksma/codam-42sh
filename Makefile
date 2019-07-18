@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/06/07 18:37:47 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/07/18 11:23:47 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,8 +53,8 @@ $(NAME): $(OBJECTS) main.o
 	@$(CC) $(FLAGS) $^ $(COVERAGE) $(INCLUDES) $(LIB) -o $(NAME)
 	@echo "[ + ] vsh has been compiled"
 
-$(OBJECTS): $(SRCS) main.c
-	@$(CC) $(FLAGS) $^ $(COVERAGE) $(INCLUDES) -c
+%.o: %.c
+	@$(CC) -o $@ $(FLAGS) $^ $(COVERAGE) $(INCLUDES) -c
 
 $(LIBFT):
 	@$(MAKE) -C libft
