@@ -14,5 +14,6 @@ vsh
 vsh_tests
 test_coverage
 
-#vscode
+# VSCode
 .vscode
+*.dSYM/
