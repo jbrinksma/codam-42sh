@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/06/05 17:08:47 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/18 11:18:37 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,32 +39,32 @@ int		shell_start(t_envlst *envlst)
 		status = input_read(&line);
 		while (shell_quote_checker(&line) != FUNCT_SUCCESS)
 			continue ;
+		ft_putchar('\n');
 		history_line_to_array(line);
 		#ifdef DEBUG
 		ft_printf("\n>>>> LINE <<<<\n%s\n\n>>>> TOKEN_LST <<<<\n", line);
 		#endif
 		if (lexer(&line, &token_lst) != FUNCT_SUCCESS)
 			continue ;
-		#ifdef DEBUG
-		lexer_tokenlstiter(token_lst, print_node);
-		#endif
 		if (shell_dless_input(token_lst) != FUNCT_SUCCESS)
 			continue ;
+		if ((token_lst->next)->type == NEWLINE)
+		{
+			lexer_tokenlstdel(&token_lst);
+			continue ;
+		}
+
 		#ifdef DEBUG
  		lexer_tokenlstiter(token_lst, print_node);
 		#endif
 		if (parser_start(&token_lst, &ast) != FUNCT_SUCCESS)
 			continue ;
 		#ifdef DEBUG
+		ft_putstr("\n\n\nTREE:\n\n");
 		print_tree(ast);
 		#endif
-		exec_start(ast, envlst, &exit_code);
+		exec_start(ast, envlst, &exit_code, 0);
 		parser_astdel(&ast);
-		/* ADD EVALUATOR */
-		/* ADD EXPANSION FUNC ? */
-		lexer_tokenlstdel(&token_lst);
-		ft_putchar('\n');
-		ft_strdel(&line);
 	}
 	return (FUNCT_SUCCESS);
 }

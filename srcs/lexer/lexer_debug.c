@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 16:06:49 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/29 14:26:26 by omulder       ########   odam.nl         */
+/*   Updated: 2019/07/09 15:44:56 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ void	print_node(t_tokenlst *node)
 		ft_printf("%-16s", parser_return_token_str(node->type));
 	if (node->flags & T_FLAG_HASDOLLAR)
 		ft_putstr("<has_dollar>");
-	if (node->type != END)
-		ft_putchar('\n');
+	ft_putchar('\n');
 }
 
 void	print_token(t_scanner *scanner)

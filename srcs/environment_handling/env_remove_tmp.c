@@ -1,38 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   lexer_state_single.c                               :+:    :+:            */
+/*   env_remove_tmp.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/05/19 12:14:21 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/09 15:23:00 by tde-jong      ########   odam.nl         */
+/*   Created: 2019/07/18 12:14:39 by mavan-he       #+#    #+#                */
+/*   Updated: 2019/07/19 20:55:27 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-void	lexer_state_dgreat(t_scanner *scanner)
+static void env_node_del(t_envlst **node)
 {
-	scanner->tk_type = DGREAT;
+	ft_strdel(&(*node)->var);
+	ft_memdel((void**)node);
 }
 
-void	lexer_state_dless(t_scanner *scanner)
+void        env_remove_tmp(t_envlst *env)
 {
-	scanner->tk_type = DLESS;
-}
+    t_envlst *tmp;
 
-void	lexer_state_greatand(t_scanner *scanner)
-{
-	scanner->tk_type = GREATAND;
-}
-
-void	lexer_state_lessand(t_scanner *scanner)
-{
-	scanner->tk_type = LESSAND;
-}
-
-void	lexer_state_newline(t_scanner *scanner)
-{
-	scanner->tk_type = NEWLINE;
+    if (env == NULL || env->next == NULL)
+        return ;
+    if (env->next->type == ENV_TEMP)
+    {
+        tmp = env->next;
+        env->next = env->next->next;
+        env_node_del(&tmp);
+        env_remove_tmp(env);
+    }
+    else
+        env_remove_tmp(env->next);
 }

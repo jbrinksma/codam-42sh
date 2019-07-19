@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 12:12:00 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/27 17:27:33 by omulder       ########   odam.nl         */
+/*   Updated: 2019/07/09 15:06:25 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	lexer_state_word(t_scanner *scanner)
 	if (CURRENT_CHAR == '$')
 		scanner->flags |= T_FLAG_HASDOLLAR;
 	if (CURRENT_CHAR == '=' && (scanner->flags & T_STATE_DQUOTE
-		|| scanner->flags & T_STATE_SQUOTE) == false)
+			|| scanner->flags & T_STATE_SQUOTE) == false)
 		scanner->flags |= T_FLAG_HASEQUAL;
 	if (CURRENT_CHAR == '"')
 		scanner->flags ^= T_STATE_DQUOTE;
@@ -42,7 +42,7 @@ void	lexer_state_word(t_scanner *scanner)
 	if (CURRENT_CHAR == '\\')
 		lexer_change_state(scanner, &lexer_state_word_esc);
 	else if (lexer_is_shellspec(CURRENT_CHAR) == false &&
-		ft_isspace(CURRENT_CHAR) == false && CURRENT_CHAR != '\0')
+			ft_isspace(CURRENT_CHAR) == false && CURRENT_CHAR != '\0')
 		lexer_change_state(scanner, &lexer_state_word);
 	else if ((scanner->flags & T_STATE_DQUOTE ||
 			scanner->flags & T_STATE_SQUOTE) && CURRENT_CHAR != '\0')

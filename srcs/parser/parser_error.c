@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/26 12:11:35 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/27 17:22:17 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/16 15:46:08 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ char		*parser_return_token_str(t_tokens type)
 		return ("WORD");
 	else if (type == IO_NUMBER)
 		return ("IO_NUM");
+	else if (type == NEWLINE)
+		return ("NEWLINE");
 	else if (type == END)
 		return ("END");
 	else

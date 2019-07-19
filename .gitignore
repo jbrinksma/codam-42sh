@@ -15,5 +15,8 @@ vsh_tests
 test_coverage
 
 # VSCode
-.vscode
+.vscode/
 *.dSYM/
+
+# MacOS
+.DS_Store

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/06/07 18:38:06 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/19 20:56:09 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,33 @@
 # define ESC				27
 
 /*
+**-----------------------------------export-------------------------------------
+*/
+
+# define EXP_FLAG_LN	(1 << 0)
+# define EXP_FLAG_LP	(1 << 1)
+
+/*
 **------------------------------------lexer-------------------------------------
 */
 
 # define CURRENT_CHAR (scanner->str)[scanner->str_index]
+# define SCANNER_CHAR scanner.str[scanner.str_index]
 # define T_FLAG_HASDOLLAR (1 << 0)
 # define T_STATE_SQUOTE (1 << 1)
 # define T_STATE_DQUOTE (1 << 2)
 # define T_FLAG_HASEQUAL (1 << 3)
 # define T_MALLOC_ERROR (1 << 4)
+
+/*
+**-----------------------------------executor-----------------------------------
+*/
+
+# define EXEC_PIPE (1 << 0)
+# define EXEC_BG (1 << 1)
+# define EXEC_AND_IF (1 << 2)
+# define EXEC_OR_IF (1 << 3)
+# define EXEC_SEMICOL (1 << 4)
 
 /*
 **---------------------------------environment----------------------------------
@@ -62,6 +80,7 @@
 # define ENV_EXTERN 2
 # define ENV_LOCAL 1
 # define ENV_TEMP 0
+# define ENV_HEAD -1
 
 /*
 **------------------------------------parser------------------------------------
@@ -222,6 +241,7 @@ t_envlst	*env_lstnew(char *var, unsigned char type);
 char		**env_lsttoarr(t_envlst *lst, unsigned char minimal_type);
 int			env_lstlen(t_envlst *lst, unsigned char minimal_type);
 void		env_lstdel(t_envlst **envlst);
+void   		 env_remove_tmp(t_envlst *env);
 
 /*
 **----------------------------------terminal------------------------------------
@@ -243,7 +263,7 @@ int				input_read(char **line);
 int				input_is_word_start(char *str, int i1, int i2);
 void			input_clear_char_at(char **line, unsigned index);
 int				input_parse_escape(char c, int *input_state);
-int				input_parse_char(char c, unsigned *index, char **line);
+int				input_parse_char(char c, unsigned *index, char **line, int *len_max);
 int				input_parse_home(char c, int *input_state, unsigned *index);
 int				input_parse_backspace(char c, unsigned *index, char **line);
 int				input_parse_end(char c, int *input_state, unsigned *index,
@@ -323,6 +343,12 @@ t_ast			*parser_new_node(t_tokenlst *token);
 bool			parser_command(t_tokenlst **token_lst, t_ast **ast);
 char			*parser_return_token_str(t_tokens type);
 void			parser_astdel(t_ast **ast);
+bool			parser_return_del(t_ast **ast);
+bool			parser_io_redirect(t_tokenlst **token_lst, t_ast **ast);
+bool			parser_cmd_param(t_tokenlst **token_lst, t_ast **cmd,
+				t_ast **last_cmd_arg, t_ast **last_prefix);
+bool			parser_cmd_suffix(t_tokenlst **token_lst, t_ast **cmd,
+				t_ast **last_cmd_arg, t_ast **last_prefix);
 
 /*
 **----------------------------------builtins------------------------------------
@@ -331,9 +357,15 @@ void			parser_astdel(t_ast **ast);
 void			builtin_exit(char **args, int *exit_code);
 void			builtin_echo(char **args, int *exit_code);
 char			builtin_echo_set_flags(char **args, int *arg_i);
-void			builtin_assign(char *arg, t_envlst *envlst, int *exit_code);
-int				builtin_assign_addexist(t_envlst *envlst, char *arg, char *var);
-int				builtin_assign_addnew(t_envlst *envlst, char *var);
+void			builtin_export(char **args, t_envlst *envlst, int *exit_code);
+void			builtin_export_var_to_type(char *varname, t_envlst *envlst, int *exit_code, int type);
+void			builtin_export_print(t_envlst *envlst, int flags);
+void			builtin_export_args(char **args, t_envlst *envlst, int *exit_code, int i);
+void			builtin_assign(char *arg, t_envlst *envlst, int *exit_code, int env_type);
+int				builtin_assign_addexist(t_envlst *envlst, char *arg, char *var, int env_type);
+int				builtin_assign_addnew(t_envlst *envlst, char *var, int env_type);
+void			builtin_set(char **args, t_envlst *envlst, int *exit_code);
+void			builtin_unset(char **args, t_envlst *envlst, int *exit_code);
 
 /*
 **---------------------------------tools----------------------------------------
@@ -344,16 +376,18 @@ bool			tools_is_char_escaped(char *line, int i);
 int				tools_update_quote_status(char *line, int cur_index,
 					char *quote);
 bool			tool_is_redirect_tk(t_tokens type);
+bool			tools_is_valid_identifier(char *str);
 
 /*
 **----------------------------------execution-----------------------------------
 */
 
-void	exec_start(t_ast *ast, t_envlst *envlst, int *exit_code);
+void	exec_start(t_ast *ast, t_envlst *envlst, int *exit_code, int flags);
 void	exec_cmd(char **args, t_envlst *envlst, int *exit_code);
 bool	exec_builtin(char **args, t_envlst *envlst, int *exit_code);
 bool	exec_external(char **args, t_envlst *envlst, int *exit_code);
 char	*exec_find_binary(char *filename, t_envlst *envlst);
+void	exec_quote_remove(t_ast *node);
 
 /*
 **----------------------------------debugging-----------------------------------

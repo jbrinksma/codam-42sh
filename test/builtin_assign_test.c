@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/07 16:55:26 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/06/07 17:22:09 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/18 17:56:13 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ Test(builtin_assign, basic_change_existingvar_1)
 	envlst = env_getlst();
 	cr_assert(envlst != NULL);
 	exit_code = 0;
-	builtin_assign("PATH=nothing", envlst, &exit_code);
+	builtin_assign("PATH=nothing", envlst, &exit_code, ENV_EXTERN);
 	while (envlst != NULL && ft_strnequ(envlst->var, "PATH", 4) == 0)
 		envlst = envlst->next;
 	cr_assert(envlst != NULL);
@@ -47,7 +47,7 @@ Test(builtin_assign, basic_add_newvar_1)
 	envlst = env_getlst();
 	cr_assert(envlst != NULL);
 	exit_code = 0;
-	builtin_assign("NeWvAr=blabla", envlst, &exit_code);
+	builtin_assign("NeWvAr=blabla", envlst, &exit_code, ENV_LOCAL);
 	while (envlst != NULL && ft_strnequ(envlst->var, "NeWvAr", 6) == 0)
 		envlst = envlst->next;
 	cr_assert(envlst != NULL);
@@ -64,7 +64,7 @@ Test(builtin_assign, basic_change_existingvar_2)
 	envlst = env_getlst();
 	cr_assert(envlst != NULL);
 	exit_code = 0;
-	builtin_assign("SHELL=jbrinksm", envlst, &exit_code);
+	builtin_assign("SHELL=jbrinksm", envlst, &exit_code, ENV_EXTERN);
 	while (envlst != NULL && ft_strnequ(envlst->var, "SHELL", 4) == 0)
 		envlst = envlst->next;
 	cr_assert(envlst != NULL);
@@ -81,7 +81,7 @@ Test(builtin_assign, test_failed_exitcode_1)
 	envlst = env_getlst();
 	cr_assert(envlst != NULL);
 	exit_code = 0;
-	builtin_assign(NULL, envlst, &exit_code);
+	builtin_assign(NULL, envlst, &exit_code, ENV_LOCAL);
 	cr_assert(envlst != NULL);
 	cr_expect_str_eq(ft_itoa(exit_code), ft_itoa(EXIT_FAILURE));
 }

@@ -1,38 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   env_getlst.c                                       :+:    :+:            */
+/*   tools_is_valid_identifier.c                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/06/04 08:06:54 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/18 12:29:57 by mavan-he      ########   odam.nl         */
+/*   Created: 2019/06/18 16:31:00 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/07/08 15:07:54 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-t_envlst	*env_getlst(void)
+bool	tools_is_valid_identifier(char *str)
 {
-	t_envlst	*envlst;
-	t_envlst	*new;
-	extern char	**environ;
-	int			i;
+	int i;
 
+	if (str == NULL || *str == '\0' || *str == '=')
+		return (false);
 	i = 0;
-	envlst = env_lstnew("HEAD", ENV_HEAD);
-	if (envlst == NULL)
-			return (NULL);
-	while (environ[i] != NULL)
+	while (str[i] != '\0' && str[i] != '=')
 	{
-		new = env_lstnew(environ[i], ENV_EXTERN);
-		if (new == NULL)
-		{
-			env_lstdel(&envlst);
-			return (NULL);
-		}
-		env_lstaddback(&envlst, new);
+		if (ft_isalnum(str[i]) == false && str[i] != '_')
+			return (false);
 		i++;
 	}
-	return (envlst);
+	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/02 13:23:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/06/13 16:08:03 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/17 14:39:56 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@ int		shell_dless_read_till_stop(char **heredoc, char *stop)
 	done = false;
 	while (done == false)
 	{
+		ft_putstr("> ");
 		input_read(&temp);
 		if (temp == NULL)
 			return (FUNCT_ERROR);
 		done = ft_strequ(temp, stop);
+		ft_putstr("\n");
 		if (done == true)
 			continue ;
 		if (*heredoc == NULL)
@@ -36,8 +38,6 @@ int		shell_dless_read_till_stop(char **heredoc, char *stop)
 			return (FUNCT_ERROR);
 	}
 	ft_strdel(&temp);
-	if (*heredoc == NULL)
-		return (FUNCT_FAILURE);
 	return (FUNCT_SUCCESS);
 }
 
@@ -48,20 +48,16 @@ int		shell_dless_set_tk_val(t_tokenlst *probe, char **heredoc, char *stop)
 	ft_strdel(&(probe->value));
 	ret = shell_dless_read_till_stop(heredoc, stop);
 	if (ret == FUNCT_SUCCESS)
-		probe->value = ft_strdup(*heredoc);
-	else if (ret == FUNCT_FAILURE)
-		probe->value = ft_strnew(0);
+	{
+		if (*heredoc != NULL)
+			probe->value = ft_strdup(*heredoc);
+		else
+			probe->value = ft_strnew(0);
+	}
 	if (probe->value == NULL)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
-
-/*
-**	Right now this function will not include any '\n'
-**	in between the lines read. This should be fine since I'm
-**	pretty sure our input_read is supposed to read those '\n's
-**	whenever you press return.
-*/
 
 int		shell_dless_input(t_tokenlst *token_lst)
 {
@@ -76,7 +72,7 @@ int		shell_dless_input(t_tokenlst *token_lst)
 		if (probe->type == DLESS)
 		{
 			probe = probe->next;
-			stop = ft_strdup(probe->value);
+			stop = ft_strjoin(probe->value, "\n");
 			if (stop == NULL || shell_dless_set_tk_val(probe, &heredoc, stop)
 			== FUNCT_ERROR)
 			{

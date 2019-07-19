@@ -6,29 +6,85 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/21 21:13:37 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/31 14:53:42 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/13 14:16:55 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <stdio.h>
 
-static int		get_tree_height(t_ast *root)
+/* static void		tree_print_rec(t_ast *root, int depth, int width, int is_child, char ***lines)
 {
-	int lh;
-	int rh;
-
-	if (root == NULL)
-		return (0);
-	if (root->type != END)
+	if (is_child == true)
 	{
-		lh = get_tree_height(root->child);
-		rh = get_tree_height(root->sibling);
-		return (1 + ((lh > rh) ? lh : rh));
+		if (root->type == WORD || root->type == ASSIGN)
+			(*lines)[depth] = ft_strjoin(root->value, (*lines)[depth]);
+		else
+			(*lines)[depth] = ft_strjoin(parser_return_token_str(root->type), (*lines)[depth]);
 	}
 	else
-		return (1);
+	{
+		if (root->type == WORD || root->type == ASSIGN)
+			(*lines)[depth] = ft_strjoin((*lines)[depth], root->value);
+		else
+			(*lines)[depth] = ft_strjoin((*lines)[depth], parser_return_token_str(root->type));
+	}
+
+	if (root->sibling)
+	{
+		(*lines)[depth] = ft_strjoin((*lines)[depth], " -- ");
+		tree_print_rec(root->sibling, depth, width + 1, false, lines);
+	}
+
+	if (root->child)
+	{
+		depth++;
+		(*lines)[depth] = ft_strjoin("|   ", (*lines)[depth]);
+		tree_print_rec(root->child, depth + 1, width, true, lines);
+	}
 }
+
+void			print_tree(t_ast *root)
+{
+	char **array;
+	int i;
+
+	array = ft_memalloc(sizeof(char*) * 1000);
+	i = 0;
+	while (i < 999)
+	{
+		array[i] = ft_strnew(0);
+		i++;
+	}
+	array[i] = NULL;
+	ft_putstr("\n\nTREE:\n");
+	tree_print_rec(root, 0, 0, false, &array);
+	i = 0;
+	while (i < 10)
+	{
+		ft_putendl(array[i]);
+		i++;
+	}
+	ft_putendl("END OF TREE");
+	ft_putchar('\n');
+} */
+
+// static int		get_tree_height(t_ast *root)
+// {
+// 	int lh;
+// 	int rh;
+
+// 	if (root == NULL)
+// 		return (0);
+// 	if (root->type != END)
+// 	{
+// 		lh = get_tree_height(root->child);
+// 		rh = get_tree_height(root->sibling);
+// 		return (1 + ((lh > rh) ? lh : rh));
+// 	}
+// 	else
+// 		return (1);
+// }
 
 static void		get_tree_width(t_ast *root, int *l_width)
 {
@@ -92,13 +148,12 @@ static void		tree_print_rec(t_ast *root, int depth, int space, int width)
 void			print_tree(t_ast *root)
 {
 	int width;
-	int height;
 
 	width = 4;
 	if (!root)
 		return ;
-	height = get_tree_height(root);
-	printf("Tree height: %d\n", height);
+	printf("\n>>>> TREE <<<<\n");
 	get_tree_width(root, &width);
 	tree_print_rec(root, 0, 0, width);
+	printf("\n>>>> END TREE <<<<\n\n");
 }

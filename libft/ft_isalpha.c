@@ -1,38 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   env_getlst.c                                       :+:    :+:            */
+/*   ft_isalpha.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/06/04 08:06:54 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/18 12:29:57 by mavan-he      ########   odam.nl         */
+/*   Created: 2019/01/09 19:56:38 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/01/14 16:08:05 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vsh.h"
+#include "libft.h"
 
-t_envlst	*env_getlst(void)
+int		ft_isalpha(int c)
 {
-	t_envlst	*envlst;
-	t_envlst	*new;
-	extern char	**environ;
-	int			i;
-
-	i = 0;
-	envlst = env_lstnew("HEAD", ENV_HEAD);
-	if (envlst == NULL)
-			return (NULL);
-	while (environ[i] != NULL)
-	{
-		new = env_lstnew(environ[i], ENV_EXTERN);
-		if (new == NULL)
-		{
-			env_lstdel(&envlst);
-			return (NULL);
-		}
-		env_lstaddback(&envlst, new);
-		i++;
-	}
-	return (envlst);
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+		return (1);
+	else
+		return (0);
 }
