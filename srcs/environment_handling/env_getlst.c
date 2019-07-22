@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/04 08:06:54 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/18 12:29:57 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/20 18:45:43 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_envlst	*env_getlst(void)
 	i = 0;
 	envlst = env_lstnew("HEAD", ENV_HEAD);
 	if (envlst == NULL)
-			return (NULL);
+		return (NULL);
 	while (environ[i] != NULL)
 	{
 		new = env_lstnew(environ[i], ENV_EXTERN);
@@ -34,5 +34,6 @@ t_envlst	*env_getlst(void)
 		env_lstaddback(&envlst, new);
 		i++;
 	}
+	env_sort(envlst);
 	return (envlst);
 }

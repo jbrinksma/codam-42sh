@@ -6,13 +6,13 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/19 18:45:24 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/19 19:52:46 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/20 19:17:15 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-static void builtin_unset_del(t_envlst *probe)
+static void	builtin_unset_del(t_envlst *probe)
 {
 	t_envlst	*tmp;
 
@@ -38,7 +38,7 @@ static void	builtin_unset_search(t_envlst *envlst, char *arg, int len)
 		else
 			probe = probe->next;
 	}
-}	
+}
 
 void		builtin_unset(char **args, t_envlst *envlst, int *exit_code)
 {

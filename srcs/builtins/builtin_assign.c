@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 09:09:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/19 12:30:21 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/20 19:10:29 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int		builtin_assign_addnew(t_envlst *envlst, char *var, int env_type)
 	ft_strdel(&var);
 	if (newitem == NULL)
 		return (FUNCT_ERROR);
-	env_lstaddback(&envlst, newitem);
+	env_lstadd_to_sortlst(envlst, newitem);
 	return (FUNCT_SUCCESS);
 }
 

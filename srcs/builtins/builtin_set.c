@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/03 17:50:50 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/19 21:00:38 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/20 19:16:55 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,10 @@ static void	builtin_set_print(t_envlst *envlst)
 	while (envlst != NULL)
 	{
 		if (envlst->type == ENV_EXTERN || envlst->type == ENV_LOCAL)
-				ft_putendl(envlst->var);
+			ft_putendl(envlst->var);
 		envlst = envlst->next;
 	}
 }
-
 
 void		builtin_set(char **args, t_envlst *envlst, int *exit_code)
 {
