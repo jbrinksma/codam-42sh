@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 12:10:51 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/09 15:04:49 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/22 13:36:27 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	lexer_state_orif(t_scanner *scanner)
 
 void	lexer_state_start(t_scanner *scanner)
 {
-	if (CURRENT_CHAR == '$')
-		scanner->flags |= T_FLAG_HASDOLLAR;
+	if (tool_has_special(CURRENT_CHAR) == true)
+		scanner->flags |= T_FLAG_HASSPECIAL;
 	if (CURRENT_CHAR == '"')
 		scanner->flags ^= T_STATE_DQUOTE;
 	if (CURRENT_CHAR == '\'')
