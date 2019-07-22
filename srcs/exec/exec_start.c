@@ -42,10 +42,6 @@ static char	**create_args(t_ast *ast)
 	probe = ast;
 	while (i < total_args)
 	{
-		#ifdef DEBUG
-		if (probe->type != WORD)
-			ft_putendl("Found non-WORD item in child-flow of WORD's (aka I messed something up -Jorn)");
-		#endif
 		args[i] = ft_strdup(probe->value);
 		if (args[i] == NULL)
 		{
@@ -57,9 +53,6 @@ static char	**create_args(t_ast *ast)
 	}
 	return (args);
 }
-
-
-
 
 /*
 **	This will edit the I/O table based on the redirect given as input.

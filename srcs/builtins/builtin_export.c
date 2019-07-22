@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 10:33:08 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/19 12:22:09 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/21 16:17:43 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ static void	builtin_export_arg(char *arg, t_envlst *envlst,
 			if (ft_strnequ(arg, probe->var, arglen) == true &&
 			(probe->var[arglen] == '=' || probe->var[arglen] == '\0'))
 			{
-				probe->type = type;
+				probe->type &= ENV_MASK;
+				probe->type |= type;
 				return ;
 			}
 			probe = probe->next;
