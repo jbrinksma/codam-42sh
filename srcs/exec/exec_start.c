@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/18 12:26:35 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/20 16:23:40 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,8 @@ void		exec_start(t_ast *ast, t_envlst *envlst, int *exit_code, int flags)
 	
 	/* Runs after the above exec_start returns or isn't run */
 	if (ast->type == AND_IF && *exit_code != EXIT_SUCCESS)
+		return ;
+	else if (ast->type == OR_IF && *exit_code == EXIT_SUCCESS)
 		return ;
 	else if (ast->type == WORD || ast->type == ASSIGN || ast->type == SGREAT)
 		exec_complete_command(ast, envlst, exit_code, flags);
