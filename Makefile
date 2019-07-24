@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/07/22 11:52:56 by mavan-he      ########   odam.nl          #
+#    Updated: 2019/07/22 11:18:20 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
 ./srcs/term_settings ./srcs/environment_handling ./srcs/shell \
 ./srcs/tools ./test/parser ./test/tools ./test/builtins \
 ./test/environment_handling ./srcs/lexer ./srcs/parser ./srcs/history \
-./srcs/exec ./includes
+./srcs/exec ./srcs/redir ./srcs/error_handling ./srcs/exec ./includes
 SRCS = shell_start shell_prompt shell_quote_checker shell_dless_input \
 input_read input_parse_char input_parse_escape input_parse_home \
 input_parse_end input_parse_prev input_parse_next input_parse_backspace \
@@ -34,7 +34,7 @@ term_set_attributes term_reset_attributes term_free_struct \
 env_getvalue env_getlst env_lsttoarr env_lstnew env_lstaddback env_lstdel \
 env_remove_tmp env_sort env_lstadd_to_sortlst \
 tools_is_char_escaped tool_is_redirect_tk tools_is_valid_identifier \
-tool_has_special tool_check_for_whitespace \
+tool_has_special tool_check_for_whitespace tools_is_fdnumstr \
 builtin_echo builtin_echo_set_flags builtin_exit builtin_assign \
 builtin_export builtin_export_print builtin_set builtin_unset \
 lexer lexer_utils lexer_debug lexer_evaluator lexer_scanner \
@@ -44,7 +44,9 @@ parser_astdel \
 history_to_file history_get_file_content history_line_to_array history_print \
 history_change_line \
 exec_builtin exec_cmd exec_external exec_start exec_find_binary \
-exec_quote_remove 
+exec_quote_remove \
+redir redir_tools \
+print_errors
 TESTS = unit_test builtin_assign_test
 OBJECTS := $(SRCS:%=%.o)
 TESTOBJECTS := $(TESTS:%=%.o)
