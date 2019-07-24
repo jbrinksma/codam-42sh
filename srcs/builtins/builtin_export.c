@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 10:33:08 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/21 16:17:43 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/22 15:34:57 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,10 @@ int			builtin_export_readflags(char *arg, int *flags)
 			*flags |= EXP_FLAG_LP;
 		else
 		{
-			ft_printf("vsh: export: -%c: invalid option\n",
-			arg[i]);
+			ft_printf("vsh: export: -%c: invalid option\n", arg[i]);
 			ft_putendl("export: usage: export");
 			ft_putendl(" [-n] [name[=value] ...] or export -p");
-			return (FUNCT_ERROR);
+			return (FUNCT_FAILURE);
 		}
 		i++;
 	}
@@ -92,8 +91,8 @@ int			builtin_export_getflags(char **args, int *flags, int *argc)
 			return (FUNCT_SUCCESS);
 		if (args[i][0] == '-')
 		{
-			if (builtin_export_readflags(args[i], flags) == FUNCT_ERROR)
-				return (FUNCT_ERROR);
+			if (builtin_export_readflags(args[i], flags) == FUNCT_FAILURE)
+				return (FUNCT_FAILURE);
 		}
 		else
 		{
@@ -121,7 +120,7 @@ void		builtin_export_args(char **args, t_envlst *envlst,
 			builtin_export_arg(args[i], envlst, exit_code, type);
 		else
 		{
-			*exit_code = EXIT_FAILURE;
+			*exit_code = EXIT_WRONG_USE;
 			ft_printf("vsh: export: '%s': not a valid identifier\n", args[i]);
 		}
 		i++;
@@ -134,11 +133,11 @@ void		builtin_export(char **args, t_envlst *envlst, int *exit_code)
 	int	flags;
 
 	i = 1;
-	*exit_code = EXIT_FAILURE;
+	*exit_code = EXIT_WRONG_USE;
 	if (args == NULL)
 		return ;
 	flags = 0;
-	if (builtin_export_getflags(&(args[1]), &flags, &i) == FUNCT_ERROR)
+	if (builtin_export_getflags(&(args[1]), &flags, &i) == FUNCT_FAILURE)
 		return ;
 	*exit_code = EXIT_SUCCESS;
 	if (args[i] == NULL)

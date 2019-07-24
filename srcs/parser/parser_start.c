@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 19:58:40 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/16 14:58:12 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/22 15:41:02 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,18 +80,23 @@ static bool	parser_complete_command(t_tokenlst **token_lst, t_ast **ast)
 int			parser_start(t_tokenlst **token_lst, t_ast **ast)
 {
 	t_tokenlst	*tmp;
+	int			ret;
 
 	tmp = (*token_lst)->next;
 	if (parser_complete_command(&tmp, ast) != true)
 	{
+		ret = FUNCT_FAILURE;
 		if ((tmp)->flags & T_MALLOC_ERROR)
+		{
+			ret = FUNCT_ERROR;
 			ft_putstr("vsh: parser: malloc error\n");
+		}
 		else
 			ft_printf("vsh: syntax error near unexpected token `%s'\n",
 			parser_return_token_str((tmp)->type));
 		lexer_tokenlstdel(token_lst);
 		parser_astdel(ast);
-		return (FUNCT_FAILURE);
+		return (ret);
 	}
 	lexer_tokenlstdel(token_lst);
 	return (FUNCT_SUCCESS);
