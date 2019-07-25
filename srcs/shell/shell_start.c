@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/23 11:29:47 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/25 13:32:21 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ int		shell_start(t_envlst *envlst)
 	while (status != CTRLD)
 	{
 		shell_display_prompt();
-		status = input_read(&line);
-		while (shell_quote_checker(&line) != FUNCT_SUCCESS)
+		if (input_read(&line, &status) == FUNCT_ERROR)
+			continue;
+		while (shell_quote_checker(&line, &status) == FUNCT_ERROR)
 			continue ;
 		ft_putchar('\n');
 		history_line_to_array(line);

@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:33:54 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/07/13 18:40:43 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/25 13:35:22 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	add_char_at(char **line, int index, char c, int *len_max)
 		*len_max *= 2;
 		tmp = ft_strnew(*len_max);
 		if (tmp == NULL)
-			return (FUNCT_FAILURE);
+			return (FUNCT_ERROR);
 		ft_strcpy(tmp, *line);
 		ft_strdel(line);
 		create_char_gap(tmp, len, index);
@@ -81,10 +81,10 @@ static int	add_newline(char **line, int *len_max)
 		(*line)[len] = '\n';
 	else
 	{
-		*len_max += 1; // keep for clarity?
-		tmp = ft_strnew(*len_max + 1);
+		*len_max += 1;
+		tmp = ft_strnew(*len_max);
 		if (tmp == NULL)
-			return (FUNCT_FAILURE);
+			return (FUNCT_ERROR);
 		ft_strcpy(tmp, *line);
 		ft_strdel(line);
 		tmp[len] = '\n';
@@ -99,8 +99,8 @@ int			input_parse_char(char c, unsigned *index, char **line, int *len_max)
 
 	if (ft_isprint(c))
 	{
-		if (add_char_at(line, *index, c, len_max) == FUNCT_FAILURE)
-			return (FUNCT_FAILURE);
+		if (add_char_at(line, *index, c, len_max) == FUNCT_ERROR)
+			return (FUNCT_ERROR);
 		len = ft_strlen(*line + *index);
 		ft_printf("%s", *line + *index);
 		if (len - 1 > 0)
@@ -109,8 +109,8 @@ int			input_parse_char(char c, unsigned *index, char **line, int *len_max)
 	}
 	else if (c == '\n')
 	{
-		if (add_newline(line, len_max) == FUNCT_FAILURE)
-			return (FUNCT_FAILURE);
+		if (add_newline(line, len_max) == FUNCT_ERROR)
+			return (FUNCT_ERROR);
 	}
 	return (FUNCT_SUCCESS);
 }

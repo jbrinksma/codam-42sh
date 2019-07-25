@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 07:47:19 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/23 14:49:23 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/25 13:30:00 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char		shell_quote_checker_find_quote(char *line)
 **	some termcaps shit.
 */
 
-int		shell_quote_checker(char **line)
+int		shell_quote_checker(char **line, int *status)
 {
 	char	quote;
 	char	*extra_line;
@@ -56,7 +56,8 @@ int		shell_quote_checker(char **line)
 			ft_printf("\nquote> ");
 		else if (quote == '"')
 			ft_printf("\ndquote> ");
-		input_read(&extra_line);
+		if (input_read(&extra_line, status) == FUNCT_ERROR)
+			return (FUNCT_ERROR);
 		*line = ft_joinstrcstr_free_all(*line, '\n', extra_line);
 		if (*line == NULL)
 		{
