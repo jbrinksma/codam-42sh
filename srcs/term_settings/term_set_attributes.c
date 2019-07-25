@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:11:05 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/31 15:18:05 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/23 14:36:56 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int		term_set_attributes(t_term *term_p)
 	term_p->termios_p->c_lflag &= ~ISIG;
 	term_p->termios_p->c_cc[VMIN] = 1;
 	term_p->termios_p->c_cc[VTIME] = 0;
-	/* Is TCSANOW flag correct? */
 	ret = tcsetattr(STDIN_FILENO, TCSANOW, term_p->termios_p);
 	if (ret == -1)
 	{

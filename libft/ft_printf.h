@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/02/05 07:43:01 by omulder        #+#    #+#                */
-/*   Updated: 2019/05/31 14:27:43 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/23 14:50:26 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FT_PRINTF_H
 # include <stdarg.h>
 # include <stdlib.h>
+# include <unistd.h>
 
 # define HASH	opt[0]
 # define ZERO	opt[1]

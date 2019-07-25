@@ -6,11 +6,12 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 07:47:19 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/06/02 08:52:11 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/23 14:49:23 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <unistd.h>
 
 char		shell_quote_checker_find_quote(char *line)
 {
@@ -59,8 +60,8 @@ int		shell_quote_checker(char **line)
 		*line = ft_joinstrcstr_free_all(*line, '\n', extra_line);
 		if (*line == NULL)
 		{
-			ft_printf("vsh: failed to allocate enough memory for"
-			" commandline input\n");
+			ft_eprintf("vsh: failed to allocate enough memory for commandline "
+				"input\n");
 			return (FUNCT_ERROR);
 		}
 		quote = shell_quote_checker_find_quote(*line);
