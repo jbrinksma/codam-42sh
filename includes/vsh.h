@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/22 15:29:52 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/25 12:59:22 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,13 @@ typedef struct	s_term
 	struct termios	*old_termios_p;
 	struct termios	*termios_p;
 }				t_term;
+
+typedef struct	s_state
+{
+	int exit_code;
+}				t_state;
+
+t_state *g_state;
 
 /*
 **----------------------------------lexer--------------------------------------
@@ -375,18 +382,18 @@ bool			parser_cmd_suffix(t_tokenlst **token_lst, t_ast **cmd,
 **----------------------------------builtins------------------------------------
 */
 
-void			builtin_exit(char **args, int *exit_code);
-void			builtin_echo(char **args, int *exit_code);
+void			builtin_exit(char **args);
+void			builtin_echo(char **args);
 char			builtin_echo_set_flags(char **args, int *arg_i);
-void			builtin_export(char **args, t_envlst *envlst, int *exit_code);
-void			builtin_export_var_to_type(char *varname, t_envlst *envlst, int *exit_code, int type);
+void			builtin_export(char **args, t_envlst *envlst);
+void			builtin_export_var_to_type(char *varname, t_envlst *envlst, int type);
 void			builtin_export_print(t_envlst *envlst, int flags);
-void			builtin_export_args(char **args, t_envlst *envlst, int *exit_code, int i);
-int				builtin_assign(char *arg, t_envlst *envlst, int *exit_code, int env_type);
+void			builtin_export_args(char **args, t_envlst *envlst, int i);
+int				builtin_assign(char *arg, t_envlst *envlst, int env_type);
 int				builtin_assign_addexist(t_envlst *envlst, char *arg, char *var, int env_type);
 int				builtin_assign_addnew(t_envlst *envlst, char *var, int env_type);
-void			builtin_set(char **args, t_envlst *envlst, int *exit_code);
-void			builtin_unset(char **args, t_envlst *envlst, int *exit_code);
+void			builtin_set(char **args, t_envlst *envlst);
+void			builtin_unset(char **args, t_envlst *envlst);
 
 /*
 **---------------------------------tools----------------------------------------
@@ -406,10 +413,10 @@ bool			tool_check_for_whitespace(char *str);
 **----------------------------------execution-----------------------------------
 */
 
-void	exec_start(t_ast *ast, t_envlst *envlst, int *exit_code, int flags);
-void	exec_cmd(char **args, t_envlst *envlst, int *exit_code);
-bool	exec_builtin(char **args, t_envlst *envlst, int *exit_code);
-bool	exec_external(char **args, t_envlst *envlst, int *exit_code);
+void	exec_start(t_ast *ast, t_envlst *envlst, int flags);
+void	exec_cmd(char **args, t_envlst *envlst);
+bool	exec_builtin(char **args, t_envlst *envlst);
+bool	exec_external(char **args, t_envlst *envlst);
 char	*exec_find_binary(char *filename, t_envlst *envlst);
 void	exec_quote_remove(t_ast *node);
 
@@ -417,21 +424,21 @@ void	exec_quote_remove(t_ast *node);
 **------------------------------------redir-------------------------------------
 */
 
-int			redir(t_ast *node, int *exit_code);
-int			redir_output(t_ast *node, int *exit_code);
-int			redir_input(t_ast *node, int *exit_code);
+int			redir(t_ast *node);
+int			redir_output(t_ast *node);
+int			redir_input(t_ast *node);
 bool		redir_is_open_fd(int fd);
-int			redir_input_closefd(int left_side_fd, int *exit_code);
+int			redir_input_closefd(int left_side_fd);
 void		redir_change_if_leftside(t_ast *node, int *left_side_fd,
 char **right_side);
-int			redir_create_heredoc_fd(char *right_side, int *exit_code);
+int			redir_create_heredoc_fd(char *right_side);
 
 
 /*
 **--------------------------------error_handling--------------------------------
 */
 
-int			error_return(int ret, int error, int *exit_code, char *opt_str);
+int			error_return(int ret, int error, char *opt_str);
 
 /*
 **----------------------------------debugging-----------------------------------

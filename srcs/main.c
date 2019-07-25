@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/18 12:14:13 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/23 11:24:04 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ int		main(int argc, char **argv)
 
 	(void)argv;
 	(void)argc;
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	if (g_state == NULL)
+		return (EXIT_FAILURE);
 	envlst = env_getlst();
 	if (envlst == NULL)
 		return (EXIT_FAILURE);

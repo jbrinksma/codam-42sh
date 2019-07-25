@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 09:09:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/23 11:19:05 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/25 12:54:29 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,11 @@ int			builtin_assign_addnew(t_envlst *envlst, char *var, int env_type)
 	return (FUNCT_SUCCESS);
 }
 
-int			builtin_assign(char *arg, t_envlst *envlst,
-	int *exit_code, int env_type)
+int		builtin_assign(char *arg, t_envlst *envlst, int env_type)
 {
 	char		*var;
 
-	*exit_code = EXIT_FAILURE;
+	g_state->exit_code = EXIT_FAILURE;
 	if (envlst == NULL || arg == NULL)
 		return (FUNCT_ERROR);
 	var = ft_strdup(arg);
@@ -67,13 +66,13 @@ int			builtin_assign(char *arg, t_envlst *envlst,
 		env_type |= ENV_WHITESPACE;
 	else
 		env_type &= ~ENV_WHITESPACE;
-	*exit_code = EXIT_SUCCESS;
+	g_state->exit_code = EXIT_SUCCESS;
 	if (builtin_assign_addexist(envlst, arg, var, env_type) != FUNCT_SUCCESS)
 	{
 		if (builtin_assign_addnew(envlst, var, env_type) != FUNCT_SUCCESS)
 		{
 			ft_printf("assign: failed to allocate enough memory\n");
-			*exit_code = EXIT_FAILURE;
+			g_state->exit_code = EXIT_FAILURE;
 			return (FUNCT_ERROR);
 		}
 	}

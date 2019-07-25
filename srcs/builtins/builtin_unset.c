@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/19 18:45:24 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/20 19:17:15 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/23 11:37:23 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,16 @@ static void	builtin_unset_search(t_envlst *envlst, char *arg, int len)
 	}
 }
 
-void		builtin_unset(char **args, t_envlst *envlst, int *exit_code)
+void		builtin_unset(char **args, t_envlst *envlst)
 {
 	args++;
-	*exit_code = FUNCT_SUCCESS;
+	g_state->exit_code = EXIT_SUCCESS;
 	while (args != NULL && *args != NULL)
 	{
 		if (tools_is_valid_identifier(*args) == false)
 		{
 			ft_printf("vsh: unset: '%s': not a valid identifier\n", *args);
-			*exit_code = FUNCT_FAILURE;
+			g_state->exit_code = EXIT_FAILURE;
 		}
 		else
 			builtin_unset_search(envlst, *args, ft_strlen(*args));

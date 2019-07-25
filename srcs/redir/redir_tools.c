@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/22 09:18:19 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/22 11:53:09 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/25 12:58:52 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 **	and returns its READ fd.
 */
 
-int			redir_create_heredoc_fd(char *right_side, int *exit_code)
+int			redir_create_heredoc_fd(char *right_side)
 {
 	int		pipefds[2];
 
-	*exit_code = EXIT_FATAL;
+	g_state->exit_code = EXIT_FATAL;
 	if (pipe(pipefds) == -1)
 		return (FUNCT_ERROR);
 	if (write(pipefds[1], right_side, ft_strlen(right_side)) == -1)
@@ -34,7 +34,7 @@ int			redir_create_heredoc_fd(char *right_side, int *exit_code)
 		return (FUNCT_ERROR);
 	}
 	close(pipefds[1]);
-	*exit_code = EXIT_SUCCESS;
+	g_state->exit_code = EXIT_SUCCESS;
 	return (pipefds[0]);
 }
 
@@ -55,10 +55,10 @@ char **right_side)
 	}
 }
 
-int			redir_input_closefd(int left_side_fd, int *exit_code)
+int			redir_input_closefd(int left_side_fd)
 {
 	if (close(left_side_fd) == -1)
-		return (error_return(FUNCT_ERROR, E_CLOSE, exit_code, NULL));
+		return (error_return(FUNCT_ERROR, E_CLOSE, NULL));
 	return (FUNCT_SUCCESS);
 }
 

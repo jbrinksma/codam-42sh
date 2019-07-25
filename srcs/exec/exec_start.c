@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/24 10:28:38 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/25 12:54:11 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,7 @@ static char	**create_args(t_ast *ast)
 **	complete_command
 */
 
-static int	exec_redirs_or_assigns(t_ast *node, t_envlst *envlst, int env_type,
-int *exit_code)
+static int	exec_redirs_or_assigns(t_ast *node, t_envlst *envlst, int env_type)
 {
 	t_ast	*probe;
 
@@ -70,12 +69,12 @@ int *exit_code)
 	{
 		if (tool_is_redirect_tk(node->type) == true)
 		{
-			if (redir(probe, exit_code) == FUNCT_ERROR)
+			if (redir(probe) == FUNCT_ERROR)
 				return (FUNCT_ERROR);
 		}
 		else if (probe->type == ASSIGN)
 		{
-			if (builtin_assign(node->value, envlst, exit_code, env_type)
+			if (builtin_assign(node->value, envlst, env_type)
 			== FUNCT_ERROR)
 				return (FUNCT_ERROR);
 		}
@@ -121,7 +120,7 @@ static int	return_and_reset_fds(int retval, int *stdfds)
 	return (retval);
 }
 
-static int	exec_complete_command(t_ast *node, t_envlst *envlst, int *exit_code, int flags)
+int			exec_complete_command(t_ast *node, t_envlst *envlst, int flags)
 {
 	char	**command;
 	int		stdfds[3];
@@ -133,17 +132,17 @@ static int	exec_complete_command(t_ast *node, t_envlst *envlst, int *exit_code, 
 	if (node->type == WORD)
 	{
 		if (node->sibling &&
-		exec_redirs_or_assigns(node->sibling, envlst, ENV_TEMP, exit_code)
+		exec_redirs_or_assigns(node->sibling, envlst, ENV_TEMP)
 		== FUNCT_ERROR)
 			return (return_and_reset_fds(FUNCT_ERROR, stdfds));
 		command = create_args(node);
 		if (command == NULL)
 			return (return_and_reset_fds(FUNCT_ERROR, stdfds));
-		exec_cmd(command, envlst, exit_code);
+		exec_cmd(command, envlst);
 	}
 	else if (node->type == ASSIGN || tool_is_redirect_tk(node->type) == true)
 	{
-		if (exec_redirs_or_assigns(node, envlst, ENV_LOCAL, exit_code)
+		if (exec_redirs_or_assigns(node, envlst, ENV_LOCAL)
 		== FUNCT_ERROR)
 			return (return_and_reset_fds(FUNCT_ERROR, stdfds));
 	}
@@ -155,7 +154,7 @@ static int	exec_complete_command(t_ast *node, t_envlst *envlst, int *exit_code, 
 **	Read PR.
 */
 
-void		exec_start(t_ast *ast, t_envlst *envlst, int *exit_code, int flags)
+void		exec_start(t_ast *ast, t_envlst *envlst, int flags)
 {
 	if (ast == NULL)
 		return ;
@@ -171,20 +170,20 @@ void		exec_start(t_ast *ast, t_envlst *envlst, int *exit_code, int flags)
 		flags &= ~EXEC_SEMICOL;
 	if (ast->type != WORD && ast->type != ASSIGN &&
 	tool_is_redirect_tk(ast->type) == false)
-		exec_start(ast->child, envlst, exit_code, flags);
-	if (ast->type == AND_IF && *exit_code != EXIT_SUCCESS)
+		exec_start(ast->child, envlst, flags);
+	if (ast->type == AND_IF && g_state->exit_code != EXIT_SUCCESS)
 		return ;
-	else if (ast->type == OR_IF && *exit_code == EXIT_SUCCESS)
+	else if (ast->type == OR_IF && g_state->exit_code == EXIT_SUCCESS)
 		return ;
 	else if (ast->type == WORD || ast->type == ASSIGN
 	|| tool_is_redirect_tk(ast->type) == true)
 	{
-		if (exec_complete_command(ast, envlst, exit_code, flags)
+		if (exec_complete_command(ast, envlst, flags)
 		== FUNCT_ERROR)
 			return ;
 	}
 	else if (ast->sibling != NULL && (ast->sibling->type == WORD
 	|| ast->sibling->type == ASSIGN
 	|| tool_is_redirect_tk(ast->sibling->type) == true))
-		exec_start(ast->sibling, envlst, exit_code, flags);
+		exec_start(ast->sibling, envlst, flags);
 }

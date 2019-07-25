@@ -6,14 +6,14 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/22 11:14:25 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/23 16:18:56 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/25 12:57:03 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <unistd.h>
 
-int	error_return(int ret, int error, int *exit_code, char *opt_str)
+int	error_return(int ret, int error, char *opt_str)
 {
 	if (error == E_BADFD)
 		ft_eprintf("vsh: %s: bad file descriptor\n", opt_str);
@@ -28,6 +28,6 @@ int	error_return(int ret, int error, int *exit_code, char *opt_str)
 	else if (error == E_CLOSE)
 		ft_putstr_fd("vsh: failed to close file descriptor\n",
 		STDERR_FILENO);
-	*exit_code = EXIT_FATAL;
+	g_state->exit_code = EXIT_FATAL;
 	return (ret);
 }

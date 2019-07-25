@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/20 19:32:02 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/25 13:07:07 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,30 +228,35 @@ TestSuite(builtin_echo);
 Test(builtin_echo, basic, .init=redirect_all_stdout)
 {
 	char	**args;
-	int		exit_code;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
 
 	args = ft_strsplit("echo|-nEe|\\\\test\\a\\t\\v\\r\\n\\b\\f\\E", '|');
-	exit_code = INT_MIN;
-	builtin_echo(args, &exit_code);
-	cr_expect(exit_code == 0);
+	g_state->exit_code = INT_MIN;
+	builtin_echo(args);
+	cr_expect(g_state->exit_code == 0);
 	ft_strarrdel(&args);
 
+	g_state->exit_code = 0;
 	args = ft_strsplit("echo|-Eea|\n", '|');
-	exit_code = INT_MIN;
-	builtin_echo(args, &exit_code);
-	cr_expect(exit_code == 0);
+	g_state->exit_code = INT_MIN;
+	builtin_echo(args);
+	cr_expect(g_state->exit_code == 0);
 	ft_strarrdel(&args);
 
+	g_state->exit_code = 0;
 	args = ft_strsplit("echo|-nEe", '|');
-	exit_code = INT_MIN;
-	builtin_echo(args, &exit_code);
-	cr_expect(exit_code == 0);
+	g_state->exit_code = INT_MIN;
+	builtin_echo(args);
+	cr_expect(g_state->exit_code == 0);
 	ft_strarrdel(&args);
 
+	g_state->exit_code = 0;
 	args = ft_strsplit("echo|-E", '|');
-	exit_code = INT_MIN;
-	builtin_echo(args, &exit_code);
-	cr_expect(exit_code == 0);
+	g_state->exit_code = INT_MIN;
+	builtin_echo(args);
+	cr_expect(g_state->exit_code == 0);
 
 	cr_expect_stdout_eq_str("\\test\a\t\v\r\n\b\f\e-Eea \n\n\n");
 }
@@ -487,8 +492,10 @@ Test(command_exec, basic, .init=redirect_all_stdout)
 	t_tokenlst	*lst;
 	t_ast		*ast;
 	char 		*str;
-	int			exit_code;
 	t_envlst	*envlst;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
 
 	str = ft_strdup("ls\n");
 	lst = NULL;
@@ -496,8 +503,8 @@ Test(command_exec, basic, .init=redirect_all_stdout)
 	envlst = env_getlst();
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, &exit_code, 0);
-	cr_expect(exit_code == EXIT_SUCCESS);
+	exec_start(ast, envlst, 0);
+	cr_expect(g_state->exit_code == EXIT_SUCCESS);
 	parser_astdel(&ast);
 }
 
@@ -571,8 +578,10 @@ Test(exec_echo, basic, .init=redirect_all_stdout)
 	t_tokenlst	*lst;
 	t_ast		*ast;
 	char 		*str;
-	int			exit_code;
 	t_envlst	*envlst;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
 
 	str = ft_strdup("echo hoi\n");
 	lst = NULL;
@@ -580,8 +589,8 @@ Test(exec_echo, basic, .init=redirect_all_stdout)
 	envlst = env_getlst();
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, &exit_code, 0);
-	cr_expect(exit_code == 0);
+	exec_start(ast, envlst, 0);
+	cr_expect(g_state->exit_code == 0);
 	cr_expect_stdout_eq_str("hoi\n");
 	parser_astdel(&ast);
 }
@@ -591,8 +600,10 @@ Test(exec_echo, basic2, .init=redirect_all_stdout)
 	t_tokenlst	*lst;
 	t_ast		*ast;
 	char 		*str;
-	int			exit_code;
 	t_envlst	*envlst;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
 
 	str = ft_strdup("echo \"Hi, this is a string\"\n");
 	lst = NULL;
@@ -600,8 +611,8 @@ Test(exec_echo, basic2, .init=redirect_all_stdout)
 	envlst = env_getlst();
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, &exit_code, 0);
-	cr_expect(exit_code == 0);
+	exec_start(ast, envlst, 0);
+	cr_expect(g_state->exit_code == 0);
 	cr_expect_stdout_eq_str("Hi, this is a string\n");
 	parser_astdel(&ast);
 } 
@@ -618,8 +629,10 @@ Test(exec_cmd, basic, .init=redirect_all_stdout)
 	t_ast		*ast;
 	char 		*str;
 	char 		*cwd;
-	int			exit_code;
 	t_envlst	*envlst;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
 
 	str = ft_strdup("/bin/pwd\n");
 	cwd = getcwd(NULL, 0);
@@ -628,8 +641,8 @@ Test(exec_cmd, basic, .init=redirect_all_stdout)
 	envlst = env_getlst();
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, &exit_code, 0);
-	cr_expect(exit_code == 0);
+	exec_start(ast, envlst, 0);
+	cr_expect(g_state->exit_code == 0);
 	ft_strdel(&str);
 	str = ft_strjoin(cwd, "\n");
 	cr_expect_stdout_eq_str(str);
@@ -643,8 +656,10 @@ Test(exec_cmd, basic2, .init=redirect_all_stdout)
 	t_tokenlst	*lst;
 	t_ast		*ast;
 	char 		*str;
-	int			exit_code;
 	t_envlst	*envlst;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
 
 	str = ft_strdup("/bin/echo hoi\n");
 	lst = NULL;
@@ -652,8 +667,8 @@ Test(exec_cmd, basic2, .init=redirect_all_stdout)
 	envlst = env_getlst();
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, &exit_code, 0);
-	cr_expect(exit_code == 0);
+	exec_start(ast, envlst, 0);
+	cr_expect(g_state->exit_code == 0);
 	cr_expect_stdout_eq_str("hoi\n");
 	parser_astdel(&ast);
 } 
@@ -733,8 +748,10 @@ Test(exec_find_bin, execution, .init=redirect_all_stdout)
 	t_tokenlst	*lst;
 	t_ast		*ast;
 	char 		*str;
-	int			exit_code;
 	t_envlst	*envlst;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
 
 	envlst = env_getlst();
 	str = ft_strdup("ls vsh\n");
@@ -742,8 +759,8 @@ Test(exec_find_bin, execution, .init=redirect_all_stdout)
 	ast = NULL;
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, &exit_code, 0);
-	cr_expect(exit_code == EXIT_SUCCESS);
+	exec_start(ast, envlst, 0);
+	cr_expect(g_state->exit_code == EXIT_SUCCESS);
 	cr_expect_stdout_eq_str("vsh\n");
 	parser_astdel(&ast);
 }
@@ -753,8 +770,10 @@ Test(exec_find_bin, execnonexistent, .init=redirect_all_stdout)
 	t_tokenlst	*lst;
 	t_ast		*ast;
 	char 		*str;
-	int			exit_code;
 	t_envlst	*envlst;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
 
 	envlst = env_getlst();
 	str = ft_strdup("idontexist\n");
@@ -762,8 +781,8 @@ Test(exec_find_bin, execnonexistent, .init=redirect_all_stdout)
 	ast = NULL;
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, &exit_code, 0);
-	cr_expect(exit_code == EXIT_NOTFOUND);
+	exec_start(ast, envlst, 0);
+	cr_expect(g_state->exit_code == EXIT_NOTFOUND);
 	cr_expect_stdout_eq_str("idontexist: Command not found.\n");
 	parser_astdel(&ast);
 }
@@ -773,19 +792,20 @@ TestSuite(builtin_export);
 Test(builtin_export, basic_test)
 {
 	t_envlst    *envlst;
-	int			exit_code;
 	char		*args[3];
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
 
 	args[0] = "export";
 	args[1] = "key=value";
 	args[2] = NULL;
 	envlst = env_getlst();
-	exit_code = 0;
-	builtin_export(args, envlst, &exit_code);
+	builtin_export(args, envlst);
 	while (envlst != NULL && ft_strnequ(envlst->var, "key", 3) == 0)
 		envlst = envlst->next;
 	cr_assert(envlst != NULL);
-	cr_expect_str_eq(ft_itoa(exit_code), ft_itoa(EXIT_SUCCESS));
+	cr_expect_str_eq(ft_itoa(g_state->exit_code), ft_itoa(EXIT_SUCCESS));
 	cr_expect_str_eq(ft_itoa(envlst->type), ft_itoa(ENV_EXTERN));
 	cr_expect_str_eq(envlst->var, "key=value");
 }
@@ -793,23 +813,25 @@ Test(builtin_export, basic_test)
 Test(builtin_export, basic_test_n_option)
 {
 	t_envlst    *envlst;
-	int			exit_code;
 	char		*args[4];
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+
 	args[0] = "export";
 	args[1] = "key=value";
 	args[2] = NULL;
 	envlst = env_getlst();
-	exit_code = 0;
-	builtin_export(args, envlst, &exit_code);
+	builtin_export(args, envlst);
 	args[0] = "export";
 	args[1] = "-n";
 	args[2] = "key=value";
 	args[3] = NULL;
-	builtin_export(args, envlst, &exit_code);
+	builtin_export(args, envlst);
 	while (envlst != NULL && ft_strnequ(envlst->var, "key", 3) == 0)
 		envlst = envlst->next;
 	cr_assert(envlst != NULL);
-	cr_expect_str_eq(ft_itoa(exit_code), ft_itoa(EXIT_SUCCESS));
+	cr_expect_str_eq(ft_itoa(g_state->exit_code), ft_itoa(EXIT_SUCCESS));
 	cr_expect_str_eq(ft_itoa(envlst->type), ft_itoa(ENV_LOCAL));
 	cr_expect_str_eq(envlst->var, "key=value");
 }
@@ -817,30 +839,34 @@ Test(builtin_export, basic_test_n_option)
 Test(builtin_export, basic_output_error_test, .init=redirect_all_stdout)
 {
 	t_envlst    *envlst;
-	int			exit_code;
 	char		*args[3];
 
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+
+	g_state->exit_code = 0;
 	args[0] = "export";
 	args[1] = "key*=value";
 	args[2] = NULL;
 	envlst = env_getlst();
-	builtin_export(args, envlst, &exit_code);
-	cr_expect(exit_code == EXIT_WRONG_USE);
+	builtin_export(args, envlst);
+	cr_expect(g_state->exit_code == EXIT_WRONG_USE);
 	cr_expect_stdout_eq_str("vsh: export: 'key*=value': not a valid identifier\n");
 }
 
 Test(builtin_export, basic_output_error_test2, .init=redirect_all_stdout)
 {
 	t_envlst    *envlst;
-	int			exit_code;
 	char		*args[3];
 
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	
+	g_state->exit_code = 0;
 	args[0] = "export";
 	args[1] = "-h";
 	args[2] = NULL;
 	envlst = env_getlst();
-	builtin_export(args, envlst, &exit_code);
-	cr_expect(exit_code == EXIT_WRONG_USE);
+	builtin_export(args, envlst);
+	cr_expect(g_state->exit_code == EXIT_WRONG_USE);
 }
 
 TestSuite(env_sort);

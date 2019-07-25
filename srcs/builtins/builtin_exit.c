@@ -6,14 +6,14 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 20:15:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/06/01 18:42:17 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/23 11:24:29 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include "vsh_history.h"
 
-void	builtin_exit(char **args, int *exit_code)
+void	builtin_exit(char **args)
 {
 	history_to_file();
 	ft_printf("exit\n");
@@ -31,5 +31,5 @@ void	builtin_exit(char **args, int *exit_code)
 		ft_printf("b4sh: 3x1t: T00 M4ny ArGum3nts\n");
 		exit(-1);
 	}
-	exit(*exit_code);
+	exit(g_state->exit_code);
 }

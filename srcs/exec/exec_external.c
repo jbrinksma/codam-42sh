@@ -6,7 +6,7 @@
 /*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/06/13 16:07:06 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/23 11:27:49 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "unistd.h"
 #include <sys/wait.h>
 
-static bool	exec_bin(char **args, char **vshenviron, int *exit_code)
+static bool	exec_bin(char **args, char **vshenviron)
 {
 	pid_t	pid;
 	int		status;
@@ -26,13 +26,13 @@ static bool	exec_bin(char **args, char **vshenviron, int *exit_code)
 		execve(args[0], args, vshenviron);
 	waitpid(pid, &status, WUNTRACED);
 	if (WIFEXITED(status))
-		*exit_code = WEXITSTATUS(status);
+		g_state->exit_code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		*exit_code = EXIT_FATAL + WTERMSIG(status);
+		g_state->exit_code = EXIT_FATAL + WTERMSIG(status);
 	return (true);
 }
 
-bool		exec_external(char **args, t_envlst *envlst, int *exit_code)
+bool		exec_external(char **args, t_envlst *envlst)
 {
 	char	**vshenviron;
 	char	*binary;
@@ -50,10 +50,10 @@ bool		exec_external(char **args, t_envlst *envlst, int *exit_code)
 	if (vshenviron == NULL)
 	{
 		ft_printf("vsh: failed to allocate enough memory!\n");
-		*exit_code = EXIT_FAILURE;
+		g_state->exit_code = EXIT_FAILURE;
 		return (false);
 	}
-	ret = exec_bin(args, vshenviron, exit_code);
+	ret = exec_bin(args, vshenviron);
 	free(vshenviron);
 	return (ret);
 }

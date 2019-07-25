@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/07 16:55:26 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/18 17:56:13 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/23 12:15:31 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,17 @@ TestSuite(builtin_assign);
 Test(builtin_assign, basic_change_existingvar_1)
 {
 	t_envlst    *envlst;
-	int			exit_code;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 
 	envlst = env_getlst();
 	cr_assert(envlst != NULL);
-	exit_code = 0;
-	builtin_assign("PATH=nothing", envlst, &exit_code, ENV_EXTERN);
+	g_state->exit_code = 0;
+	builtin_assign("PATH=nothing", envlst, ENV_EXTERN);
 	while (envlst != NULL && ft_strnequ(envlst->var, "PATH", 4) == 0)
 		envlst = envlst->next;
 	cr_assert(envlst != NULL);
-	cr_expect_str_eq(ft_itoa(exit_code), ft_itoa(EXIT_SUCCESS));
+	cr_expect_str_eq(ft_itoa(g_state->exit_code), ft_itoa(EXIT_SUCCESS));
 	cr_expect_str_eq(ft_itoa(envlst->type), ft_itoa(ENV_EXTERN));
 	cr_expect_str_eq(envlst->var, "PATH=nothing");
 }
@@ -42,16 +43,17 @@ Test(builtin_assign, basic_change_existingvar_1)
 Test(builtin_assign, basic_add_newvar_1)
 {
 	t_envlst    *envlst;
-	int			exit_code;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 
 	envlst = env_getlst();
 	cr_assert(envlst != NULL);
-	exit_code = 0;
-	builtin_assign("NeWvAr=blabla", envlst, &exit_code, ENV_LOCAL);
+	g_state->exit_code = 0;
+	builtin_assign("NeWvAr=blabla", envlst, ENV_LOCAL);
 	while (envlst != NULL && ft_strnequ(envlst->var, "NeWvAr", 6) == 0)
 		envlst = envlst->next;
 	cr_assert(envlst != NULL);
-	cr_expect_str_eq(ft_itoa(exit_code), ft_itoa(EXIT_SUCCESS));
+	cr_expect_str_eq(ft_itoa(g_state->exit_code), ft_itoa(EXIT_SUCCESS));
 	cr_expect_str_eq(ft_itoa(envlst->type), ft_itoa(ENV_LOCAL));
 	cr_expect_str_eq(envlst->var, "NeWvAr=blabla");
 }
@@ -59,16 +61,17 @@ Test(builtin_assign, basic_add_newvar_1)
 Test(builtin_assign, basic_change_existingvar_2)
 {
 	t_envlst    *envlst;
-	int			exit_code;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 
 	envlst = env_getlst();
 	cr_assert(envlst != NULL);
-	exit_code = 0;
-	builtin_assign("SHELL=jbrinksm", envlst, &exit_code, ENV_EXTERN);
+	g_state->exit_code = 0;
+	builtin_assign("SHELL=jbrinksm", envlst, ENV_EXTERN);
 	while (envlst != NULL && ft_strnequ(envlst->var, "SHELL", 4) == 0)
 		envlst = envlst->next;
 	cr_assert(envlst != NULL);
-	cr_expect_str_eq(ft_itoa(exit_code), ft_itoa(EXIT_SUCCESS));
+	cr_expect_str_eq(ft_itoa(g_state->exit_code), ft_itoa(EXIT_SUCCESS));
 	cr_expect_str_eq(ft_itoa(envlst->type), ft_itoa(ENV_EXTERN));
 	cr_expect_str_eq(envlst->var, "SHELL=jbrinksm");
 }
@@ -76,14 +79,15 @@ Test(builtin_assign, basic_change_existingvar_2)
 Test(builtin_assign, test_failed_exitcode_1)
 {
 	t_envlst    *envlst;
-	int			exit_code;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 
 	envlst = env_getlst();
 	cr_assert(envlst != NULL);
-	exit_code = 0;
-	builtin_assign(NULL, envlst, &exit_code, ENV_LOCAL);
+	g_state->exit_code = 0;
+	builtin_assign(NULL, envlst, ENV_LOCAL);
 	cr_assert(envlst != NULL);
-	cr_expect_str_eq(ft_itoa(exit_code), ft_itoa(EXIT_FAILURE));
+	cr_expect_str_eq(ft_itoa(g_state->exit_code), ft_itoa(EXIT_FAILURE));
 }
 
 /*
