@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/25 13:29:33 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/25 16:08:03 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -493,7 +493,7 @@ Test(command_exec, basic, .init=redirect_all_stdout)
 	t_tokenlst	*lst;
 	t_ast		*ast;
 	char 		*str;
-	t_envlst	*envlst;
+	t_vshdata	vshdata;
 
 	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 	g_state->exit_code = 0;
@@ -501,10 +501,10 @@ Test(command_exec, basic, .init=redirect_all_stdout)
 	str = ft_strdup("ls\n");
 	lst = NULL;
 	ast = NULL;
-	envlst = env_getlst();
+	vshdata.envlst = env_getlst();
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, 0);
+	exec_start(ast, &vshdata, 0);
 	cr_expect(g_state->exit_code == EXIT_SUCCESS);
 	parser_astdel(&ast);
 }
@@ -579,7 +579,7 @@ Test(exec_echo, basic, .init=redirect_all_stdout)
 	t_tokenlst	*lst;
 	t_ast		*ast;
 	char 		*str;
-	t_envlst	*envlst;
+	t_vshdata	vshdata;
 
 	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 	g_state->exit_code = 0;
@@ -587,10 +587,10 @@ Test(exec_echo, basic, .init=redirect_all_stdout)
 	str = ft_strdup("echo hoi\n");
 	lst = NULL;
 	ast = NULL;
-	envlst = env_getlst();
+	vshdata.envlst = env_getlst();
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, 0);
+	exec_start(ast, &vshdata, 0);
 	cr_expect(g_state->exit_code == 0);
 	cr_expect_stdout_eq_str("hoi\n");
 	parser_astdel(&ast);
@@ -601,7 +601,7 @@ Test(exec_echo, basic2, .init=redirect_all_stdout)
 	t_tokenlst	*lst;
 	t_ast		*ast;
 	char 		*str;
-	t_envlst	*envlst;
+	t_vshdata	vshdata;
 
 	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 	g_state->exit_code = 0;
@@ -609,10 +609,10 @@ Test(exec_echo, basic2, .init=redirect_all_stdout)
 	str = ft_strdup("echo \"Hi, this is a string\"\n");
 	lst = NULL;
 	ast = NULL;
-	envlst = env_getlst();
+	vshdata.envlst = env_getlst();
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, 0);
+	exec_start(ast, &vshdata, 0);
 	cr_expect(g_state->exit_code == 0);
 	cr_expect_stdout_eq_str("Hi, this is a string\n");
 	parser_astdel(&ast);
@@ -630,7 +630,7 @@ Test(exec_cmd, basic, .init=redirect_all_stdout)
 	t_ast		*ast;
 	char 		*str;
 	char 		*cwd;
-	t_envlst	*envlst;
+	t_vshdata	vshdata;
 
 	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 	g_state->exit_code = 0;
@@ -639,10 +639,10 @@ Test(exec_cmd, basic, .init=redirect_all_stdout)
 	cwd = getcwd(NULL, 0);
 	lst = NULL;
 	ast = NULL;
-	envlst = env_getlst();
+	vshdata.envlst = env_getlst();
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, 0);
+	exec_start(ast, &vshdata, 0);
 	cr_expect(g_state->exit_code == 0);
 	ft_strdel(&str);
 	str = ft_strjoin(cwd, "\n");
@@ -657,7 +657,7 @@ Test(exec_cmd, basic2, .init=redirect_all_stdout)
 	t_tokenlst	*lst;
 	t_ast		*ast;
 	char 		*str;
-	t_envlst	*envlst;
+	t_vshdata	vshdata;
 
 	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 	g_state->exit_code = 0;
@@ -665,10 +665,10 @@ Test(exec_cmd, basic2, .init=redirect_all_stdout)
 	str = ft_strdup("/bin/echo hoi\n");
 	lst = NULL;
 	ast = NULL;
-	envlst = env_getlst();
+	vshdata.envlst = env_getlst();
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, 0);
+	exec_start(ast, &vshdata, 0);
 	cr_expect(g_state->exit_code == 0);
 	cr_expect_stdout_eq_str("hoi\n");
 	parser_astdel(&ast);
@@ -749,18 +749,18 @@ Test(exec_find_bin, execution, .init=redirect_all_stdout)
 	t_tokenlst	*lst;
 	t_ast		*ast;
 	char 		*str;
-	t_envlst	*envlst;
+	t_vshdata	vshdata;
 
 	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 	g_state->exit_code = 0;
 
-	envlst = env_getlst();
+	vshdata.envlst = env_getlst();
 	str = ft_strdup("ls vsh\n");
 	lst = NULL;
 	ast = NULL;
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, 0);
+	exec_start(ast, &vshdata, 0);
 	cr_expect(g_state->exit_code == EXIT_SUCCESS);
 	cr_expect_stdout_eq_str("vsh\n");
 	parser_astdel(&ast);
@@ -771,18 +771,18 @@ Test(exec_find_bin, execnonexistent, .init=redirect_all_stdout)
 	t_tokenlst	*lst;
 	t_ast		*ast;
 	char 		*str;
-	t_envlst	*envlst;
+	t_vshdata	vshdata;
 
 	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 	g_state->exit_code = 0;
 
-	envlst = env_getlst();
+	vshdata.envlst = env_getlst();
 	str = ft_strdup("idontexist\n");
 	lst = NULL;
 	ast = NULL;
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
-	exec_start(ast, envlst, 0);
+	exec_start(ast, &vshdata, 0);
 	cr_expect(g_state->exit_code == EXIT_NOTFOUND);
 	cr_expect_stdout_eq_str("idontexist: Command not found.\n");
 	parser_astdel(&ast);

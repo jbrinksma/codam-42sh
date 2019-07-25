@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/25 13:33:24 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/25 15:58:35 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,18 +156,42 @@
 **=================================typedefs====================================
 */
 
-typedef struct	s_term
-{
-	struct termios	*old_termios_p;
-	struct termios	*termios_p;
-}				t_term;
-
 typedef struct	s_state
 {
 	int exit_code;
 }				t_state;
 
 t_state *g_state;
+
+/*
+**---------------------------------environment----------------------------------
+*/
+
+typedef struct	s_envlst
+{
+	char			*var;
+	unsigned char	type;
+	struct s_envlst	*next;
+}				t_envlst;
+
+/*
+**-----------------------------------vsh_data-----------------------------------
+*/
+
+typedef struct	s_vshdata
+{
+	t_envlst 	*envlst;
+}				t_vshdata;
+
+/*
+**-----------------------------------term---------------------------------------
+*/
+
+typedef struct	s_term
+{
+	struct termios	*old_termios_p;
+	struct termios	*termios_p;
+}				t_term;
 
 /*
 **----------------------------------lexer--------------------------------------
@@ -245,16 +269,6 @@ typedef struct	s_ast
 	struct s_ast	*sibling;
 }				t_ast;
 
-/*
-**---------------------------------environment----------------------------------
-*/
-
-typedef struct	s_envlst
-{
-	char			*var;
-	unsigned char	type;
-	struct s_envlst	*next;
-}				t_envlst;
 
 char			*env_getvalue(char *var_key, t_envlst *envlst);
 char			**env_free_and_return_null(char ***vshenviron);
@@ -319,7 +333,7 @@ int				shell_dless_set_tk_val(t_tokenlst *probe, char **heredoc, char *stop);
 int				shell_dless_input(t_tokenlst *token_lst);
 int				shell_quote_checker(char **line, int *status);
 char			shell_quote_checker_find_quote(char *line);
-int				shell_start(t_envlst *envlst);
+int				shell_start(t_vshdata *vshdata);
 
 /*
 **----------------------------------lexer---------------------------------------
@@ -413,9 +427,9 @@ bool			tool_check_for_whitespace(char *str);
 **----------------------------------execution-----------------------------------
 */
 
-void	exec_start(t_ast *ast, t_envlst *envlst, int flags);
-void	exec_cmd(char **args, t_envlst *envlst);
-bool	exec_builtin(char **args, t_envlst *envlst);
+void	exec_start(t_ast *ast, t_vshdata *vshdata, int flags);
+void	exec_cmd(char **args, t_vshdata *vshdata);
+bool	exec_builtin(char **args, t_vshdata *vshdata);
 bool	exec_external(char **args, t_envlst *envlst);
 char	*exec_find_binary(char *filename, t_envlst *envlst);
 void	exec_quote_remove(t_ast *node);

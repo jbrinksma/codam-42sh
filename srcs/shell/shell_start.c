@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/25 13:32:21 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/25 15:49:41 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	lexer_tokenlstiter(t_tokenlst *lst, void (*f)(t_tokenlst *elem))
 	lexer_tokenlstiter(lst->next, f);
 }
 
-int		shell_start(t_envlst *envlst)
+int		shell_start(t_vshdata *vshdata)
 {
 	int			status;
 	char		*line;
@@ -63,7 +63,7 @@ int		shell_start(t_envlst *envlst)
 		ft_putstr("\n\n\nTREE:\n\n");
 		print_tree(ast);
 		#endif
-		exec_start(ast, envlst, 0);
+		exec_start(ast, vshdata, 0);
 		parser_astdel(&ast);
 	}
 	return (FUNCT_SUCCESS);

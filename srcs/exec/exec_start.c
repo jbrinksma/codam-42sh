@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/25 12:54:11 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/25 15:51:49 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ static char	**create_args(t_ast *ast)
 **	complete_command
 */
 
-static int	exec_redirs_or_assigns(t_ast *node, t_envlst *envlst, int env_type)
+static int	exec_redirs_or_assigns(t_ast *node, t_vshdata *vshdata,
+	int env_type)
 {
 	t_ast	*probe;
 
@@ -74,7 +75,7 @@ static int	exec_redirs_or_assigns(t_ast *node, t_envlst *envlst, int env_type)
 		}
 		else if (probe->type == ASSIGN)
 		{
-			if (builtin_assign(node->value, envlst, env_type)
+			if (builtin_assign(node->value, vshdata->envlst, env_type)
 			== FUNCT_ERROR)
 				return (FUNCT_ERROR);
 		}
@@ -120,7 +121,7 @@ static int	return_and_reset_fds(int retval, int *stdfds)
 	return (retval);
 }
 
-int			exec_complete_command(t_ast *node, t_envlst *envlst, int flags)
+int			exec_complete_command(t_ast *node, t_vshdata *vshdata, int flags)
 {
 	char	**command;
 	int		stdfds[3];
@@ -132,17 +133,17 @@ int			exec_complete_command(t_ast *node, t_envlst *envlst, int flags)
 	if (node->type == WORD)
 	{
 		if (node->sibling &&
-		exec_redirs_or_assigns(node->sibling, envlst, ENV_TEMP)
+		exec_redirs_or_assigns(node->sibling, vshdata, ENV_TEMP)
 		== FUNCT_ERROR)
 			return (return_and_reset_fds(FUNCT_ERROR, stdfds));
 		command = create_args(node);
 		if (command == NULL)
 			return (return_and_reset_fds(FUNCT_ERROR, stdfds));
-		exec_cmd(command, envlst);
+		exec_cmd(command, vshdata);
 	}
 	else if (node->type == ASSIGN || tool_is_redirect_tk(node->type) == true)
 	{
-		if (exec_redirs_or_assigns(node, envlst, ENV_LOCAL)
+		if (exec_redirs_or_assigns(node, vshdata, ENV_LOCAL)
 		== FUNCT_ERROR)
 			return (return_and_reset_fds(FUNCT_ERROR, stdfds));
 	}
@@ -154,7 +155,7 @@ int			exec_complete_command(t_ast *node, t_envlst *envlst, int flags)
 **	Read PR.
 */
 
-void		exec_start(t_ast *ast, t_envlst *envlst, int flags)
+void		exec_start(t_ast *ast, t_vshdata *vshdata, int flags)
 {
 	if (ast == NULL)
 		return ;
@@ -170,7 +171,7 @@ void		exec_start(t_ast *ast, t_envlst *envlst, int flags)
 		flags &= ~EXEC_SEMICOL;
 	if (ast->type != WORD && ast->type != ASSIGN &&
 	tool_is_redirect_tk(ast->type) == false)
-		exec_start(ast->child, envlst, flags);
+		exec_start(ast->child, vshdata, flags);
 	if (ast->type == AND_IF && g_state->exit_code != EXIT_SUCCESS)
 		return ;
 	else if (ast->type == OR_IF && g_state->exit_code == EXIT_SUCCESS)
@@ -178,12 +179,12 @@ void		exec_start(t_ast *ast, t_envlst *envlst, int flags)
 	else if (ast->type == WORD || ast->type == ASSIGN
 	|| tool_is_redirect_tk(ast->type) == true)
 	{
-		if (exec_complete_command(ast, envlst, flags)
+		if (exec_complete_command(ast, vshdata, flags)
 		== FUNCT_ERROR)
 			return ;
 	}
 	else if (ast->sibling != NULL && (ast->sibling->type == WORD
 	|| ast->sibling->type == ASSIGN
 	|| tool_is_redirect_tk(ast->sibling->type) == true))
-		exec_start(ast->sibling, envlst, flags);
+		exec_start(ast->sibling, vshdata, flags);
 }
