@@ -6,14 +6,14 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/02 13:23:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/28 12:32:16 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/28 17:13:18 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <unistd.h>
 
-int		shell_dless_read_till_stop(char **heredoc, char *stop)
+int		shell_dless_read_till_stop(char **heredoc, char *stop, t_vshdata *vshdata)
 {
 	char	*temp;
 	int		done;
@@ -24,7 +24,7 @@ int		shell_dless_read_till_stop(char **heredoc, char *stop)
 	while (done == false)
 	{
 		ft_putstr("> ");
-		if (input_read(&temp, &status) == FUNCT_ERROR)
+		if (input_read(vshdata, &temp, &status) == FUNCT_ERROR)
 			return (FUNCT_ERROR);
 		done = ft_strequ(temp, stop);
 		ft_putstr("\n");
@@ -42,12 +42,12 @@ int		shell_dless_read_till_stop(char **heredoc, char *stop)
 	return (FUNCT_SUCCESS);
 }
 
-int		shell_dless_set_tk_val(t_tokenlst *probe, char **heredoc, char *stop)
+int		shell_dless_set_tk_val(t_tokenlst *probe, char **heredoc, char *stop, t_vshdata *vshdata)
 {
 	int	ret;
 
 	ft_strdel(&(probe->value));
-	ret = shell_dless_read_till_stop(heredoc, stop);
+	ret = shell_dless_read_till_stop(heredoc, stop, vshdata);
 	if (ret == FUNCT_SUCCESS)
 	{
 		if (*heredoc != NULL)
@@ -60,7 +60,7 @@ int		shell_dless_set_tk_val(t_tokenlst *probe, char **heredoc, char *stop)
 	return (FUNCT_SUCCESS);
 }
 
-int		shell_dless_input(t_tokenlst **token_lst)
+int		shell_dless_input(t_vshdata *vshdata, t_tokenlst **token_lst)
 {
 	char		*heredoc;
 	t_tokenlst	*probe;
@@ -74,7 +74,7 @@ int		shell_dless_input(t_tokenlst **token_lst)
 		{
 			probe = probe->next;
 			stop = ft_strjoin(probe->value, "\n");
-			if (stop == NULL || shell_dless_set_tk_val(probe, &heredoc, stop)
+			if (stop == NULL || shell_dless_set_tk_val(probe, &heredoc, stop, vshdata)
 			== FUNCT_ERROR)
 			{
 				lexer_tokenlstdel(token_lst);

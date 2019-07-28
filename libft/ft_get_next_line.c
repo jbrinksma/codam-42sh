@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/19 11:29:53 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/30 16:06:22 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/18 16:30:52 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 #include <unistd.h>
 #include "libft.h"
 
-static int		set_line(t_list *current, char **line)
+static int		set_line(t_list *current, char **line, char delim)
 {
 	char *tmp;
 
-	tmp = ft_strchr(current->content, '\n');
-	if (!tmp)
+	tmp = ft_strchr(current->content, delim);
+	if (tmp == NULL)
 	{
 		*line = ft_strdup(current->content);
 		free(current->content);
 		current->content = ft_strdup("");
-		if (!*line || !current->content)
+		if (*line == NULL || current->content == NULL)
 			return (-1);
 		return (1);
 	}
@@ -33,7 +33,7 @@ static int		set_line(t_list *current, char **line)
 		*tmp = 0;
 		*line = ft_strdup(current->content);
 		tmp = ft_strdup(tmp + 1);
-		if (!tmp || !*line)
+		if (tmp == NULL || *line == NULL)
 			return (-1);
 		free(current->content);
 		current->content = tmp;
@@ -56,7 +56,7 @@ static int		get_lst(t_list **alist, const int fd, t_list **current)
 		new = new->next;
 	}
 	new = ft_lstnew("", 1);
-	if (!new)
+	if (new == NULL)
 		return (-1);
 	new->content_size = fd;
 	ft_lstadd(alist, new);
@@ -64,13 +64,13 @@ static int		get_lst(t_list **alist, const int fd, t_list **current)
 	return (0);
 }
 
-static int		read_buff(t_list *current, const int fd)
+static int		read_buff(t_list *current, const int fd, char delim)
 {
 	ssize_t ret;
 	char	buff[BUFF_SIZE + 1];
 	char	*tmp;
 
-	while (!ft_strchr(current->content, '\n'))
+	while (ft_strchr(current->content, delim) == NULL)
 	{
 		ret = read(fd, &buff, BUFF_SIZE);
 		if (ret == -1)
@@ -81,25 +81,30 @@ static int		read_buff(t_list *current, const int fd)
 		tmp = current->content;
 		current->content = ft_strjoin(current->content, buff);
 		free(tmp);
-		if (!current->content)
+		if (current->content == NULL)
 			return (-1);
 	}
 	return (1);
 }
 
-int				ft_get_next_line(const int fd, char **line)
+int				ft_get_next_line_delim(const int fd, char **line, char delim)
 {
 	static t_list	*file_list;
 	t_list			*current;
 	ssize_t			ret;
 
-	if (fd < 0 || !line || get_lst(&file_list, fd, &current))
+	if (fd < 0 || line == NULL || get_lst(&file_list, fd, &current))
 		return (-1);
-	ret = read_buff(current, fd);
+	ret = read_buff(current, fd, delim);
 	if (ret == -1)
 		return (-1);
 	if (ret == 0 && *(char*)(current->content) == '\0')
 		return (0);
-	ret = set_line(current, line);
+	ret = set_line(current, line, delim);
 	return (ret);
+}
+
+int				ft_get_next_line(const int fd, char **line)
+{
+	return (ft_get_next_line_delim(fd, line, '\n'));
 }

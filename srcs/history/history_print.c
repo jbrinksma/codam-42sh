@@ -6,27 +6,51 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/30 20:47:41 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/06/03 15:29:07 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/26 17:13:39 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-#include "vsh_history.h"
 #include "libft.h"
 
-void	history_print(void)
+/*
+** Print the history
+*/
+
+static void	find_start(t_history **history, int *smallest, int *start)
 {
 	int i;
-	int tmp;
 
 	i = 0;
-	tmp = 1;
-	if (history_i >= 500)
-		tmp = history_i - (500 - 1);
-	while (i < 500 && history[i] != NULL)
+	*smallest = HISTORY_MAX + 1;
+	while (i < HISTORY_MAX && history[i]->str != NULL)
 	{
-		ft_printf("%5d  %s\n", tmp, history[i]);
+		if (history[i]->number < *smallest)
+		{
+			*start = i;
+			*smallest = history[i]->number;
+		}
 		i++;
-		tmp++;
+	}
+}
+
+void	history_print(t_history **history)
+{
+	int i;
+	int	smallest;
+	int start;
+
+	find_start(history, &smallest, &start);
+	i = start;
+	while (i < HISTORY_MAX && history[i]->str != NULL)
+	{
+		ft_printf("%5d  %s\n", history[i]->number, history[i]->str);
+		i++;
+	}
+	i = 0;
+	while (start != 0 && i < start && history[i]->str != NULL)
+	{
+		ft_printf("%5d  %s\n", history[i]->number, history[i]->str);
+		i++;
 	}
 }

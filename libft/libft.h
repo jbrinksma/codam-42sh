@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 11:10:09 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/19 12:01:15 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/26 15:20:10 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ char				*ft_joinstrcstr_free_s2(char *s1, char c, char *s2);
 char				*ft_joinstrcstr_free_all(char *s1, char c, char *s2);
 char				*ft_chartostr(char c);
 int					ft_get_next_line(const int fd, char **line);
+int					ft_get_next_line_delim(const int fd, char **line,
+						char delim);
 int					ft_strarradd(char ***arr, const char *add);
 char				*ft_strjoinfree_s1(char *s1, char *s2);
 char				*ft_strjoinfree_s2(char *s1, char *s2);

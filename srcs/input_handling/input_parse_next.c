@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:41:00 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/22 11:57:08 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/15 16:34:17 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,22 @@ static void	parse_next_move_word(unsigned *index, char **line)
 	*index = i;
 }
 
-int			input_parse_next(char c, int *input_state,
-	unsigned *index, char **line)
+int			input_parse_next(t_inputdata *data, char **line)
 {
-	if (((*input_state == INPUT_BRACE || *input_state == INPUT_D_BRACE) &&
-		c == 'C') || c == '\6')
+	if (((data->input_state == INPUT_BRACE || data->input_state == INPUT_D_BRACE) &&
+		data->c == 'C') || data->c == '\6')
 	{
-		if (*input_state == INPUT_BRACE)
+		if (data->input_state == INPUT_BRACE)
 		{
-			if (*index < ft_strlen(*line))
+			if (data->index < ft_strlen(*line))
 			{
-				ft_putchar((*line)[*index]);
-				*index += 1;
+				ft_putchar((*line)[data->index]);
+				data->index += 1;
 			}
 		}
 		else
-			parse_next_move_word(index, line);
-		*input_state = INPUT_NONE;
+			parse_next_move_word(&data->index, line);
+		data->input_state = INPUT_NONE;
 		return (FUNCT_SUCCESS);
 	}
 	return (FUNCT_FAILURE);

@@ -3,35 +3,39 @@
 /*                                                        ::::::::            */
 /*   history_to_file.c                                  :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 15:25:10 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/06/02 10:37:20 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/28 18:16:45 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-#include "vsh_history.h"
 #include "libft.h"
 #include <fcntl.h>
 #include <unistd.h>
 
-int		history_to_file(void)
+/*
+** Write the history to file
+*/
+
+int		history_to_file(t_vshdata *vshdata)
 {
 	int		fd;
 	int		i;
 
-	fd = open("/tmp/.vsh_history",
-		O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+	if (vshdata->history == NULL || vshdata->history_file == NULL)
+		return (FUNCT_ERROR);
+	fd = open(vshdata->history_file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
 	if (fd == -1)
 	{
 		ft_putstr_fd("Cannot open/create vsh history file \n", STDERR_FILENO);
 		return (FUNCT_ERROR);
 	}
 	i = 0;
-	while (history[i] != NULL)
+	while (i < HISTORY_MAX && vshdata->history[i]->str != NULL)
 	{
-		ft_putendl_fd(history[i], fd);
+		ft_dprintf(fd, "%s%c", vshdata->history[i]->str, '\n');
 		i++;
 	}
 	close(fd);

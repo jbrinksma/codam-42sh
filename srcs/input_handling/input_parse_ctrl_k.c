@@ -6,28 +6,28 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:48:04 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/22 11:54:52 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/15 16:31:45 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int	input_parse_ctrl_k(char c, unsigned *index, char **line)
+int	input_parse_ctrl_k(t_inputdata *data, char **line)
 {
 	unsigned i;
 
-	if (c == '\v')
+	if (data->c == '\v')
 	{
-		if (*index < ft_strlen(*line))
+		if (data->index < ft_strlen(*line))
 		{
-			i = (*index);
+			i = (data->index);
 			while ((*line)[i])
 			{
 				ft_putchar(' ');
 				(*line)[i] = '\0';
 				i++;
 			}
-			ft_printf("\e[%dD", i - *index);
+			ft_printf("\e[%dD", i - data->index);
 		}
 		return (FUNCT_SUCCESS);
 	}

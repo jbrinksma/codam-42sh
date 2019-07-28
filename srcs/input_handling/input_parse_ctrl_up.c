@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 15:03:17 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/06/02 15:13:57 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/28 17:06:52 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,20 @@ static void	parse_ctrl_line_up(unsigned *index)
 	}
 }
 
-int			input_parse_ctrl_up(char c, int *input_state,
-	unsigned *index, char **line)
+int			input_parse_ctrl_up(t_inputdata *data, char **line)
 {
 	(void)line;
-	if ((*input_state == INPUT_BRACE || *input_state == INPUT_D_BRACE) &&
-		c == 'A')
+	if ((data->input_state == INPUT_BRACE
+	|| data->input_state == INPUT_D_BRACE) && data->c == 'A')
 	{
-		if (*input_state == INPUT_BRACE)
-			history_change_line(line, index, ARROW_UP);
+		if (data->input_state == INPUT_BRACE)
+		{
+			if (history_change_line(data, line, ARROW_UP) == FUNCT_ERROR)
+				return (FUNCT_ERROR);
+		}
 		else
-			parse_ctrl_line_up(index);
-		*input_state = INPUT_NONE;
+			parse_ctrl_line_up(&data->index);
+		data->input_state = INPUT_NONE;
 		return (FUNCT_SUCCESS);
 	}
 	return (FUNCT_FAILURE);

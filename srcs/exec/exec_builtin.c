@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 16:59:41 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/25 17:11:03 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/28 17:12:49 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,15 @@ bool	exec_builtin(char **args, t_vshdata *vshdata)
 	if (ft_strequ(args[0], "echo"))
 		builtin_echo(args);
 	else if (ft_strequ(args[0], "exit"))
-		builtin_exit(args);
+		builtin_exit(args, vshdata);
 	else if (ft_strequ(args[0], "export"))
 		builtin_export(args, vshdata->envlst);
 	else if (ft_strequ(args[0], "set"))
 		builtin_set(args, vshdata->envlst);
 	else if (ft_strequ(args[0], "unset"))
 		builtin_unset(args, vshdata->envlst);
+	else if (ft_strequ(args[0], "history"))
+		history_print(vshdata->history);
 	else if (ft_strequ(args[0], "alias"))
 		builtin_alias(args, &vshdata->aliaslst);
 	else if (ft_strequ(args[0], "unalias"))

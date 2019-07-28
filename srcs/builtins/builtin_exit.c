@@ -6,17 +6,16 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 20:15:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/23 11:24:29 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/28 15:57:09 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-#include "vsh_history.h"
 
-void	builtin_exit(char **args)
+void	builtin_exit(char **args, t_vshdata *vshdata)
 {
-	history_to_file();
 	ft_printf("exit\n");
+	history_to_file(vshdata);
 	if (args[1] != NULL && args[2] == NULL)
 	{
 		if (ft_isdigit(args[1][0]) == false)

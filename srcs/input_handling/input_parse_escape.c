@@ -6,24 +6,24 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:36:25 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/22 11:56:55 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/15 15:53:31 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int	input_parse_escape(char c, int *input_state)
+int	input_parse_escape(t_inputdata *data)
 {
-	if (*input_state == INPUT_NONE && c == '\e')
-		*input_state = INPUT_ESC;
-	else if (*input_state == INPUT_ESC && c == '\e')
-		*input_state = INPUT_D_ESC;
-	else if ((*input_state == INPUT_ESC || *input_state == INPUT_D_ESC)
-			&& c == '[')
-		(*input_state)++;
-	else if ((*input_state == INPUT_BRACE || *input_state == INPUT_D_BRACE)
-			&& c == '3')
-		(*input_state)++;
+	if (data->input_state == INPUT_NONE && data->c == '\e')
+		data->input_state = INPUT_ESC;
+	else if (data->input_state == INPUT_ESC && data->c == '\e')
+		data->input_state = INPUT_D_ESC;
+	else if ((data->input_state == INPUT_ESC || data->input_state == INPUT_D_ESC)
+			&& data->c == '[')
+		(data->input_state)++;
+	else if ((data->input_state == INPUT_BRACE || data->input_state == INPUT_D_BRACE)
+			&& data->c == '3')
+		(data->input_state)++;
 	else
 		return (FUNCT_FAILURE);
 	return (FUNCT_SUCCESS);

@@ -6,23 +6,23 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:44:53 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/22 11:53:31 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/15 16:38:15 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int	input_parse_delete(char c, int *input_state, unsigned *index, char **line)
+int	input_parse_delete(t_inputdata *data, char **line)
 {
-	if (*input_state == INPUT_THREE && c == '~')
+	if (data->input_state == INPUT_THREE && data->c == '~')
 	{
-		if (*index < ft_strlen(*line))
+		if (data->index < ft_strlen(*line))
 		{
-			input_clear_char_at(line, *index);
-			ft_printf("%s ", *line + *index);
-			ft_printf("\e[%dD", ft_strlen(*line + *index) + 1);
+			input_clear_char_at(line, data->index);
+			ft_printf("%s ", *line + data->index);
+			ft_printf("\e[%dD", ft_strlen(*line + data->index) + 1);
 		}
-		*input_state = INPUT_NONE;
+		data->input_state = INPUT_NONE;
 		return (FUNCT_SUCCESS);
 	}
 	return (FUNCT_FAILURE);
