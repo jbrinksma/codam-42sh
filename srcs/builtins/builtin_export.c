@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 10:33:08 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/25 12:55:03 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/25 16:30:38 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void		builtin_export_args(char **args, t_envlst *envlst, int flags)
 		else
 		{
 			g_state->exit_code = EXIT_WRONG_USE;
-			ft_printf("vsh: export: '%s': not a valid identifier\n", args[i]);
+			ft_eprintf("vsh: export: '%s': not a valid identifier\n", args[i]);
 		}
 		i++;
 	}

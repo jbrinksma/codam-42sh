@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 09:09:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/25 12:54:29 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/25 15:43:30 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int			builtin_assign_addnew(t_envlst *envlst, char *var, int env_type)
 	return (FUNCT_SUCCESS);
 }
 
-int		builtin_assign(char *arg, t_envlst *envlst, int env_type)
+int			builtin_assign(char *arg, t_envlst *envlst, int env_type)
 {
 	char		*var;
 

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/25 15:51:49 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/26 22:43:08 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,8 +183,6 @@ void		exec_start(t_ast *ast, t_vshdata *vshdata, int flags)
 		== FUNCT_ERROR)
 			return ;
 	}
-	else if (ast->sibling != NULL && (ast->sibling->type == WORD
-	|| ast->sibling->type == ASSIGN
-	|| tool_is_redirect_tk(ast->sibling->type) == true))
+	else if (ast->sibling != NULL)
 		exec_start(ast->sibling, vshdata, flags);
 }

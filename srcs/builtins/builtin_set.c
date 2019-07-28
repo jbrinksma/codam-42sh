@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/03 17:50:50 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/25 12:55:33 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/25 15:43:15 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static void	builtin_set_print(t_envlst *envlst)
 		envlst = envlst->next;
 	}
 }
-
 
 void		builtin_set(char **args, t_envlst *envlst)
 {

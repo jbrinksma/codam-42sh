@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/25 16:08:03 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/28 16:44:59 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -851,7 +851,7 @@ Test(builtin_export, basic_output_error_test, .init=redirect_all_stdout)
 	envlst = env_getlst();
 	builtin_export(args, envlst);
 	cr_expect(g_state->exit_code == EXIT_WRONG_USE);
-	cr_expect_stdout_eq_str("vsh: export: 'key*=value': not a valid identifier\n");
+	cr_expect_stderr_eq_str("vsh: export: 'key*=value': not a valid identifier\n");
 }
 
 Test(builtin_export, basic_output_error_test2, .init=redirect_all_stdout)
@@ -883,4 +883,131 @@ Test(env_sort, basic_test)
 	cr_assert(envlst != NULL);
 	cr_expect_str_eq(envlst->next->var, "abc");
 	cr_expect_str_eq(envlst->next->next->var, "def");
+}
+
+
+TestSuite(builtin_alias);
+
+Test(builtin_alias, basic_test)
+{
+	t_aliaslst *aliaslst;
+	char		*args[3];
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+	aliaslst = NULL;
+	args[0] = "alias";
+	args[1] = "dit=dat";
+	args[2] = NULL;
+	builtin_alias(args, &aliaslst);
+	cr_assert(aliaslst != NULL);
+	cr_expect_str_eq(aliaslst->var, "dit=dat");
+	cr_expect(g_state->exit_code == EXIT_SUCCESS);
+}
+
+Test(builtin_alias, basic_error_test, .init=redirect_all_stdout)
+{
+	t_aliaslst *aliaslst;
+	char		*args[3];
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+	aliaslst = NULL;
+	args[0] = "alias";
+	args[1] = "dit";
+	args[2] = NULL;
+	builtin_alias(args, &aliaslst);
+	cr_assert(aliaslst == NULL);
+	cr_expect_stderr_eq_str("vsh: alias: dit: not found\n");
+	cr_expect(g_state->exit_code == EXIT_FAILURE);
+}
+
+Test(builtin_alias, basic_error_test2, .init=redirect_all_stdout)
+{
+	t_aliaslst *aliaslst;
+	char		*args[3];
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+	aliaslst = NULL;
+	args[0] = "alias";
+	args[1] = "-n";
+	args[2] = NULL;
+	builtin_alias(args, &aliaslst);
+	cr_assert(aliaslst == NULL);
+	cr_expect(g_state->exit_code == EXIT_WRONG_USE);
+}
+
+Test(builtin_unalias, basic_test)
+{
+	t_aliaslst *aliaslst;
+	char		*args[3];
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+	aliaslst = NULL;
+	args[0] = "alias";
+	args[1] = "dit=dat";
+	args[2] = NULL;
+	builtin_alias(args, &aliaslst);
+	cr_assert(aliaslst != NULL);
+	args[0] = "unalias";
+	args[1] = "dit";
+	args[2] = NULL;
+	builtin_unalias(args, &aliaslst);
+	cr_assert(aliaslst == NULL);
+	cr_expect(g_state->exit_code == EXIT_SUCCESS);
+}
+
+Test(builtin_unalias, basic_error_test, .init=redirect_all_stdout)
+{
+	t_aliaslst *aliaslst;
+	char		*args[3];
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+	aliaslst = NULL;
+	args[0] = "alias";
+	args[1] = "dit=dat";
+	args[2] = NULL;
+	builtin_alias(args, &aliaslst);
+	cr_assert(aliaslst != NULL);
+	args[0] = "unalias";
+	args[1] = "dat";
+	args[2] = NULL;
+	builtin_unalias(args, &aliaslst);
+	cr_assert(aliaslst != NULL);
+	cr_expect(g_state->exit_code == EXIT_FAILURE);
+}
+
+TestSuite(alias);
+
+Test(alias, basic_test)
+{
+	char		*line;
+	t_vshdata	vshdata;
+	t_tokenlst	*token_lst;
+	t_ast		*ast;
+
+	line = ft_strdup("alias echo='echo hoi ; echo dit ' ; alias hoi=ditte ; alias dit=dat\n");
+	vshdata.aliaslst = NULL;
+	vshdata.envlst = env_getlst();
+	cr_assert(vshdata.envlst != NULL);
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+	token_lst = NULL;
+	cr_expect(lexer(&line, &token_lst) == FUNCT_SUCCESS);
+	cr_assert(token_lst != NULL);
+	cr_expect(parser_start(&token_lst, &ast) == FUNCT_SUCCESS);
+	cr_assert(ast != NULL);
+	exec_start(ast, &vshdata, 0);
+	cr_expect_str_eq(vshdata.aliaslst->var, "dit=dat");
+	line = ft_strdup("echo\n");
+	cr_assert(line != NULL);
+	cr_expect(lexer(&line, &token_lst) == FUNCT_SUCCESS);
+	cr_assert(token_lst != NULL);
+	cr_expect(alias_expansion(&vshdata, &token_lst, NULL) == FUNCT_SUCCESS);
+	cr_assert(token_lst != NULL);
+	cr_expect_str_eq(token_lst->next->next->value, "hoi");
+	cr_expect_str_eq(token_lst->next->next->next->next->value, "echo");
 }
