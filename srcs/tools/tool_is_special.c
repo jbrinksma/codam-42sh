@@ -6,14 +6,14 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/22 11:31:54 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/22 11:34:40 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/29 11:35:33 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-bool	tool_has_special(char c)
+bool	tool_is_special(char c)
 {
 	return (c == '*' || c == '\'' || c == '"' || c == '\\'
-		|| c == '$' || c == '~');
+		|| c == '$' || c == '~' || c == '#');
 }

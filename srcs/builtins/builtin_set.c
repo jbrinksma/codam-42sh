@@ -6,27 +6,47 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/03 17:50:50 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/25 15:43:15 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/29 13:02:13 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <unistd.h>
 
+static void	builtin_print_with_special(char *var)
+{
+	char		*value;
+	int			i;
+
+	value = ft_strchr(var, '=');
+	if (value != NULL)
+	{
+		i = 1;
+		ft_printf("%.*s\'", value - var + 1, var);
+		while (value[i] != '\0')
+		{
+			if (value[i] == '\'')
+				ft_putstr("\'\\\'\'");
+			else
+				ft_putchar(value[i]);
+			i++;
+		}
+		ft_putstr("\'\n");
+	}
+	else
+		ft_putendl(var);
+
+}
+
 static void	builtin_set_print(t_envlst *envlst)
 {
-	char	*str_equal;
-
 	while (envlst != NULL)
 	{
 		if (envlst->type & ENV_EXTERN || envlst->type & ENV_LOCAL)
 		{
-			if (envlst->type & ENV_WHITESPACE)
-			{
-				str_equal = ft_strchr(envlst->var, '=');
-				ft_printf("%.*s\'%s\'\n", str_equal - envlst->var + 1,
-				envlst->var, str_equal + 1);
-			}
+			if (envlst->type & ENV_SPECIAL ||
+				tool_check_for_whitespace(envlst->var) == true)
+				builtin_print_with_special(envlst->var);
 			else
 				ft_putendl(envlst->var);
 		}

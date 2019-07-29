@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/28 18:32:15 by omulder       ########   odam.nl         */
+/*   Updated: 2019/07/29 13:00:03 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@
 
 
 # define ENV_MASK 0xF8
-# define ENV_WHITESPACE (1 << 3)
+# define ENV_SPECIAL (1 << 3)
 # define ENV_EXTERN (1 << 2)
 # define ENV_LOCAL (1 << 1)
 # define ENV_TEMP (1 << 0)
@@ -476,7 +476,8 @@ int				tools_update_quote_status(char *line, int cur_index,
 bool			tool_is_redirect_tk(t_tokens type);
 bool			tools_is_valid_identifier(char *str);
 bool			tools_is_fdnumstr(char *str);
-bool			tool_has_special(char c);
+bool			tool_is_special(char c);
+bool			tool_check_for_special(char *str);
 bool			tool_check_for_whitespace(char *str);
 
 /*

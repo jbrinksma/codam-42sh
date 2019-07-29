@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 09:09:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/25 15:43:30 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/29 11:33:59 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ int			builtin_assign(char *arg, t_envlst *envlst, int env_type)
 	var = ft_strdup(arg);
 	if (var == NULL)
 		return (FUNCT_ERROR);
-	if (tool_check_for_whitespace(arg) == true)
-		env_type |= ENV_WHITESPACE;
+	if (tool_check_for_special(arg) == true)
+		env_type |= ENV_SPECIAL;
 	else
-		env_type &= ~ENV_WHITESPACE;
+		env_type &= ~ENV_SPECIAL;
 	g_state->exit_code = EXIT_SUCCESS;
 	if (builtin_assign_addexist(envlst, arg, var, env_type) != FUNCT_SUCCESS)
 	{
