@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/29 17:08:01 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/28 18:44:20 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -488,6 +488,33 @@ Test(parser, basic)
 /*
 **------------------------------------------------------------------------------
 */
+
+TestSuite(command_exit);
+
+Test(command_exec, basic, .init=redirect_all_stdout)
+{
+	t_tokenlst	*lst;
+	t_ast		*ast;
+	char 		*str;
+	t_vshdata	vshdata;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+
+	str = ft_strdup("ls\n");
+	lst = NULL;
+	ast = NULL;
+	vshdata.envlst = env_getlst();
+	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
+	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
+	exec_start(ast, &vshdata, 0);
+	cr_expect(g_state->exit_code == EXIT_SUCCESS);
+	parser_astdel(&ast);
+}
+
+/*
+**------------------------------------------------------------------------------
+*/
 TestSuite(history_check);
 
 Test(history_check, history_to_file)
@@ -656,7 +683,63 @@ Test(exec_echo, basic2, .init=redirect_all_stdout)
 	cr_expect(g_state->exit_code == 0);
 	cr_expect_stdout_eq_str("Hi, this is a string\n");
 	parser_astdel(&ast);
+} 
+
+/*
+**------------------------------------------------------------------------------
+*/
+
+TestSuite(exec_cmd);
+
+Test(exec_cmd, basic, .init=redirect_all_stdout)
+{
+	t_tokenlst	*lst;
+	t_ast		*ast;
+	char 		*str;
+	char 		*cwd;
+	t_vshdata	vshdata;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+
+	str = ft_strdup("/bin/pwd\n");
+	cwd = getcwd(NULL, 0);
+	lst = NULL;
+	ast = NULL;
+	vshdata.envlst = env_getlst();
+	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
+	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
+	exec_start(ast, &vshdata, 0);
+	cr_expect(g_state->exit_code == 0);
+	ft_strdel(&str);
+	str = ft_strjoin(cwd, "\n");
+	cr_expect_stdout_eq_str(str);
+	ft_strdel(&str);
+	ft_strdel(&cwd);
+	parser_astdel(&ast);
 }
+
+Test(exec_cmd, basic2, .init=redirect_all_stdout)
+{
+	t_tokenlst	*lst;
+	t_ast		*ast;
+	char 		*str;
+	t_vshdata	vshdata;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+
+	str = ft_strdup("/bin/echo hoi\n");
+	lst = NULL;
+	ast = NULL;
+	vshdata.envlst = env_getlst();
+	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
+	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
+	exec_start(ast, &vshdata, 0);
+	cr_expect(g_state->exit_code == 0);
+	cr_expect_stdout_eq_str("hoi\n");
+	parser_astdel(&ast);
+} 
 
 /*
 **------------------------------------------------------------------------------
@@ -726,6 +809,28 @@ Test(exec_find_bin, nopath)
 	cr_expect(bin == NULL);
 	ft_strdel(&bin);
 	ft_strdel(&str);
+}
+
+Test(exec_find_bin, execution, .init=redirect_all_stdout)
+{
+	t_tokenlst	*lst;
+	t_ast		*ast;
+	char 		*str;
+	t_vshdata	vshdata;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+
+	vshdata.envlst = env_getlst();
+	str = ft_strdup("ls vsh\n");
+	lst = NULL;
+	ast = NULL;
+	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
+	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
+	exec_start(ast, &vshdata, 0);
+	cr_expect(g_state->exit_code == EXIT_SUCCESS);
+	cr_expect_stdout_eq_str("vsh\n");
+	parser_astdel(&ast);
 }
 
 Test(exec_find_bin, execnonexistent, .init=redirect_all_stdout)

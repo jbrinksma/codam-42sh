@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/07/29 16:29:50 by tde-jong      ########   odam.nl          #
+#    Updated: 2019/07/29 13:00:42 by mavan-he      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
 SRCS = shell_start shell_prompt shell_quote_checker shell_dless_input \
 input_read input_parse_char input_parse_escape input_parse_home \
 input_parse_end input_parse_prev input_parse_next input_parse_backspace \
-input_parse_delete input_parse_ctrl_c input_parse_ctrl_d input_parse_ctrl_k \
+input_parse_delete input_parse_ctrl_d input_parse_ctrl_k \
 input_parse_ctrl_up input_parse_ctrl_down input_is_word_start \
 term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct \
