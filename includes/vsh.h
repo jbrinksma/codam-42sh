@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/29 13:00:03 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/29 19:39:29 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # define FUNCT_ERROR -1
 # define PROG_FAILURE 1
 # define PROG_SUCCESS 0
+# define NEW_PROMPT -1
 # define E_ALLOC 420
 # define E_DUP 100
 # define E_OPEN 101
@@ -173,7 +174,8 @@
 
 typedef struct	s_state
 {
-	int exit_code;
+	int				exit_code;
+	struct termios	*termios_p;
 }				t_state;
 
 t_state *g_state;
@@ -360,6 +362,7 @@ int				input_parse_end(t_inputdata *data, char **line);
 int				input_parse_next(t_inputdata *data, char **line);
 int				input_parse_prev(t_inputdata *data, char **line);
 int				input_parse_delete(t_inputdata *data, char **line);
+int				input_parse_ctrl_c(t_inputdata *data);
 int				input_parse_ctrl_d(t_inputdata *data, char **line);
 int				input_parse_ctrl_up(t_inputdata *data, char **line);
 int				input_parse_ctrl_down(t_inputdata *data, char **line);
@@ -488,6 +491,7 @@ void	exec_start(t_ast *ast, t_vshdata *vshdata, int flags);
 void	exec_cmd(char **args, t_vshdata *vshdata);
 bool	exec_builtin(char **args, t_vshdata *vshdata);
 bool	exec_external(char **args, t_envlst *envlst);
+void	signal_print_newline(int signum);
 char	*exec_find_binary(char *filename, t_envlst *envlst);
 void	exec_quote_remove(t_ast *node);
 

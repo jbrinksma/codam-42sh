@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:46:55 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/07/15 16:31:56 by omulder       ########   odam.nl         */
+/*   Updated: 2019/07/29 13:53:27 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ int	input_parse_ctrl_d(t_inputdata *data, char **line)
 	{
 		len = ft_strlen(*line);
 		if (len == 0)
-			exit(0);
+		{
+			ft_putstr("exit\n");
+			exit(g_state->exit_code);
+		}
 		if (data->index < len)
 		{
 			input_clear_char_at(line, data->index);
