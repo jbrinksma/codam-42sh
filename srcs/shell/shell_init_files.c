@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   history_find_file.c                                :+:    :+:            */
+/*   shell_init_files.c                                 :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/27 12:39:59 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/27 12:47:42 by omulder       ########   odam.nl         */
+/*   Updated: 2019/07/29 12:33:36 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-char	*history_find_histfile(t_vshdata *vshdata)
+int		shell_init_files(t_vshdata *vshdata)
 {
-	char	*histfile;
 	char	*homedir;
 
 	homedir = env_getvalue("HOME", vshdata->envlst);
 	if (homedir == NULL)
-		return (NULL);
-	histfile = ft_strjoinfree_s2(homedir, ft_strjoin("/", HISTFILENAME));
-	return (histfile);
+		return (FUNCT_ERROR);
+	vshdata->history_file =
+	ft_strjoinfree_s2(homedir, ft_strjoin("/", HISTFILENAME));
+	vshdata->alias_file =
+	ft_strjoinfree_s2(homedir, ft_strjoin("/", ALIASFILENAME));
+	if (vshdata->history_file != NULL && vshdata->alias_file != NULL)
+		return (FUNCT_SUCCESS);
+	return (FUNCT_ERROR);
 }

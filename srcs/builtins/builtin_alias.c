@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/24 13:36:44 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/25 17:49:24 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/30 10:26:00 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	builtin_alias_args(char **args, int i, t_aliaslst **aliaslst)
 	char	*str_equal;
 
 	ret = FUNCT_SUCCESS;
-	while (args[i] != NULL)
+	while (args[i] != NULL && ret != FUNCT_ERROR)
 	{
 		str_equal = ft_strchr(args[i], '=');
 		if (str_equal != NULL)
@@ -59,13 +59,13 @@ static int	builtin_alias_args(char **args, int i, t_aliaslst **aliaslst)
 			{
 				ft_eprintf("vsh: alias: `%.*s': invalid alias name\n",
 				str_equal - args[i], args[i]);
-				ret = FUNCT_ERROR;
+				ret = FUNCT_FAILURE;
 			}
 			else if (builtin_alias_set(args[i], aliaslst) == FUNCT_ERROR)
 				ret = FUNCT_ERROR;
 		}
 		else if (builtin_alias_print(args[i], *aliaslst) == FUNCT_FAILURE)
-			ret = FUNCT_ERROR;
+			ret = FUNCT_FAILURE;
 		i++;
 	}
 	return (ret);
@@ -113,6 +113,7 @@ void		builtin_alias(char **args, t_aliaslst **aliaslst)
 {
 	int		flag;
 	int		i;
+	int		ret;
 
 	i = 1;
 	flag = 0;
@@ -123,8 +124,14 @@ void		builtin_alias(char **args, t_aliaslst **aliaslst)
 	}
 	if (args[i] == NULL || flag & ALIAS_FLAG_LP)
 		builtin_alias_printlst(*aliaslst);
-	if (args[i] != NULL && builtin_alias_args(args, i, aliaslst) == FUNCT_ERROR)
-		g_state->exit_code = EXIT_FAILURE;
-	else
-		g_state->exit_code = EXIT_SUCCESS;
+	if (args[i] != NULL)
+	{
+		ret = builtin_alias_args(args, i, aliaslst);
+		if (ret == FUNCT_FAILURE)
+			g_state->exit_code = EXIT_WRONG_USE;
+		else if (ret == FUNCT_ERROR)
+			g_state->exit_code = EXIT_FAILURE;
+		else
+			g_state->exit_code = EXIT_SUCCESS;
+	}	
 }
