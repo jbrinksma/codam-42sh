@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/29 15:25:06 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/30 13:25:16 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int		shell_start(t_vshdata *vshdata)
 	ast = NULL;
 	while (status != CTRLD)
 	{
+		parser_astdel(&ast);
+		lexer_tokenlstdel(&token_lst);
 		shell_display_prompt();
 		if (input_read(vshdata, &line, &status) == FUNCT_ERROR)
 			continue;
@@ -51,11 +53,7 @@ int		shell_start(t_vshdata *vshdata)
 		if (alias_expansion(vshdata, &token_lst, NULL) != FUNCT_SUCCESS)
 			continue ;
 		if ((token_lst->next)->type == NEWLINE)
-		{
-			lexer_tokenlstdel(&token_lst);
 			continue ;
-		}
-
 		#ifdef DEBUG
  		lexer_tokenlstiter(token_lst, print_node);
 		#endif
@@ -66,7 +64,6 @@ int		shell_start(t_vshdata *vshdata)
 		print_tree(ast);
 		#endif
 		exec_start(ast, vshdata, 0);
-		parser_astdel(&ast);
 	}
 	return (FUNCT_SUCCESS);
 }

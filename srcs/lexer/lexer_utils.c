@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 10:23:43 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/05/31 15:18:25 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/30 13:26:24 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,9 @@ void	lexer_tokenlstdel(t_tokenlst **token_lst)
 	ft_memdel((void**)token_lst);
 }
 
-int		lexer_error(t_tokenlst **token_lst, char **line)
+int		lexer_error(char **line)
 {
 	ft_strdel(line);
-	if (*token_lst != NULL)
-		lexer_tokenlstdel(token_lst);
 	ft_putstr_fd("vsh: lexer: malloc error\n", STDERR_FILENO);
 	return (FUNCT_ERROR);
 }

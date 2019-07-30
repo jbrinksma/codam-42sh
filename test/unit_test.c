@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/30 10:52:36 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/30 13:55:46 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,8 +304,7 @@ Test(lexer_error, one_item)
 
 	lst = NULL;
 	lexer_tokenlstaddback(&lst, START, NULL, 0);
-	lexer_error(&lst, NULL);
-	cr_expect(lst == NULL);
+	lexer_error(NULL);
 	cr_expect_stderr_eq_str("vsh: lexer: malloc error\n");
 }
 
@@ -342,8 +341,7 @@ Test(lexer_error, long_list)
 	lexer_tokenlstaddback(&lst, WORD, ft_strdup("testword"), 0);
 	lexer_tokenlstaddback(&lst, PIPE, NULL, 0);
 	lexer_tokenlstaddback(&lst, END, NULL, 0);
-	lexer_error(&lst, NULL);
-	cr_expect(lst == NULL);
+	lexer_error(NULL);
 	cr_expect_stderr_eq_str("vsh: lexer: malloc error\n");
 }
 
@@ -370,8 +368,7 @@ Test(lexer_error, all_items)
 	lexer_tokenlstaddback(&lst, SEMICOL, NULL, 0);
 	lexer_tokenlstaddback(&lst, NEWLINE, NULL, 0);
 	lexer_tokenlstaddback(&lst, END,  NULL, 0);
-	lexer_error(&lst, NULL);
-	cr_expect(lst == NULL);
+	lexer_error(NULL);
 	cr_expect_stderr_eq_str("vsh: lexer: malloc error\n");
 }
 
@@ -404,8 +401,7 @@ Test(lexer_tokenlstaddback, invalid_values)
 	lexer_tokenlstaddback(&lst, END, NULL, 0);
 	lexer_tokenlstaddback(&lst, START, NULL, 0);
 	lexer_tokenlstaddback(&lst, ERROR, ft_strdup("testword"), 0);
-	lexer_error(&lst, NULL);
-	cr_expect(lst == NULL);
+	lexer_error(NULL);
 	cr_expect_stderr_eq_str("vsh: lexer: malloc error\n");
 }
 
