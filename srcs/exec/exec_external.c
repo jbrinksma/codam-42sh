@@ -6,7 +6,7 @@
 /*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/07/29 19:31:26 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/30 12:15:06 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	signal_print_newline(int signum)
 	ft_putchar('\n');
 }
 
-static bool	exec_bin(char **args, char **vshenviron)
+static bool	exec_bin(char *binary, char **args, char **vshenviron)
 {
 	pid_t	pid;
 	int		status;
@@ -50,7 +50,7 @@ static bool	exec_bin(char **args, char **vshenviron)
 	if (pid > 0)
 		signal(SIGINT, signal_print_newline);
 	else
-		execve(args[0], args, vshenviron);
+		execve(binary, args, vshenviron);
 	waitpid(pid, &status, WUNTRACED);
 	if (WIFEXITED(status))
 		g_state->exit_code = WEXITSTATUS(status);
@@ -58,6 +58,7 @@ static bool	exec_bin(char **args, char **vshenviron)
 		g_state->exit_code = EXIT_FATAL + WTERMSIG(status);
 	signal(SIGINT, SIG_DFL);
 	term_flags_destroy();
+	free(vshenviron);
 	return (true);
 }
 
@@ -65,15 +66,17 @@ bool		exec_external(char **args, t_envlst *envlst)
 {
 	char	**vshenviron;
 	char	*binary;
-	bool	ret;
 
-	if (args[0][0] != '/' && !ft_strnequ(args[0], "./", 2))
+	binary = ft_strdup(args[0]);
+	if (binary == NULL)
+		return (false);
+	if (args[0][0] != '/' && ft_strnequ(args[0], "./", 2) == 0 &&
+		ft_strnequ(args[0], "../", 3) == 0)
 	{
+		ft_strdel(&binary);
 		binary = exec_find_binary(args[0], envlst);
 		if (binary == NULL)
 			return (false);
-		free(args[0]);
-		args[0] = binary;
 	}
 	vshenviron = env_lsttoarr(envlst, ENV_EXTERN);
 	if (vshenviron == NULL)
@@ -82,7 +85,5 @@ bool		exec_external(char **args, t_envlst *envlst)
 		g_state->exit_code = EXIT_FAILURE;
 		return (false);
 	}
-	ret = exec_bin(args, vshenviron);
-	free(vshenviron);
-	return (ret);
+	return (exec_bin(binary, args, vshenviron));
 }
