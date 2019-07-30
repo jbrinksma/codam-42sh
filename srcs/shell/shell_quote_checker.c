@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 07:47:19 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/28 17:14:14 by omulder       ########   odam.nl         */
+/*   Updated: 2019/07/30 14:45:58 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char		shell_quote_checker_find_quote(char *line)
 	quote = '\0';
 	while (line[i] != '\0')
 	{
-		if (tools_is_char_escaped(line, i) == true)
+		if (quote != '\'' && tools_is_char_escaped(line, i) == true)
 		{
 			i++;
 			continue ;
@@ -64,8 +64,7 @@ int		shell_quote_checker(t_vshdata *vshdata, char **line, int *status)
 		*line = ft_joinstrcstr_free_all(*line, '\n', extra_line);
 		if (*line == NULL)
 		{
-			ft_eprintf("vsh: failed to allocate enough memory for commandline "
-				"input\n");
+			ft_eprintf("vsh: failed to allocate enough memory\n");
 			return (FUNCT_ERROR);
 		}
 		quote = shell_quote_checker_find_quote(*line);
