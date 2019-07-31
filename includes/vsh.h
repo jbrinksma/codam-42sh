@@ -410,7 +410,7 @@ int				input_parse_ctrl_k(t_inputdata *data, char **line);
 **----------------------------------shell---------------------------------------
 */
 
-void			shell_display_prompt(void);
+void			shell_display_prompt(t_envlst *envlst);
 int				shell_dless_read_till_stop(char **heredoc, char *stop,
 					t_vshdata *vshdata);
 int				shell_dless_set_tk_val(t_tokenlst *probe, char **heredoc,
