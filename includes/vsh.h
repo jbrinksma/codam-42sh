@@ -6,13 +6,15 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/30 13:44:49 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/30 17:50:31 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VSH_H
 # define VSH_H
 // # define DEBUG
+# include <sys/stat.h>
+# include <fcntl.h>
 
 /*
 **==================================defines=====================================
@@ -34,7 +36,7 @@
 # define CR 0
 
 /*
-**=================================exit codes====================================
+**=================================exit codes===================================
 */
 
 # define EXIT_WRONG_USE 2
@@ -89,15 +91,15 @@
 # define EXEC_OR_IF (1 << 3)
 # define EXEC_SEMICOL (1 << 4)
 
-# define STDIN_BAK stdfds[0]
-# define STDOUT_BAK stdfds[1]
-# define STDERR_BAK stdfds[2]
-
 /*
 **--------------------------------redirections----------------------------------
 */
 
-# define FD_UNINIT -1
+# define FD_UNINIT				-1
+# define REG_PERM				S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
+# define SGREAT_OPEN_FLAGS		O_WRONLY | O_CREAT | O_TRUNC
+# define DGREAT_OPEN_FLAGS		O_WRONLY | O_CREAT | O_APPEND
+
 
 /*
 **---------------------------------environment----------------------------------
@@ -129,6 +131,14 @@
 # define INPUT_D_BRACE		5
 # define INPUT_D_THREE		6
 # define INPUT_BACKSPACE	127
+
+/*
+**=================================pipe defines=================================
+*/
+
+# define PIPE_UNINIT	-42
+# define PIPE_START		0
+# define PIPE_EXTEND	1
 
 /*
 **----------------------------------history-------------------------------------
@@ -197,11 +207,11 @@ typedef struct	s_envlst
 **-----------------------------------history------------------------------------
 */
 
-typedef struct  s_history
+typedef struct	s_history
 {
-    int     number;
-    char    *str;
-}               t_history;
+	int		number;
+	char	*str;
+}				t_history;
 
 /*
 **------------------------------------alias-------------------------------------
@@ -219,9 +229,10 @@ typedef struct	s_aliaslst
 
 typedef struct	s_vshdata
 {
-	t_envlst 	*envlst;
+	t_envlst	*envlst;
 	t_history	**history;
 	t_aliaslst	*aliaslst;
+	int			stdfds[3];
 	char		*history_file;
 	char		*alias_file;
 }				t_vshdata;
@@ -312,12 +323,25 @@ typedef struct	s_ast
 	struct s_ast	*sibling;
 }				t_ast;
 
+/*
+**----------------------------------pipes---------------------------------------
+*/
+
+typedef struct	s_pipes
+{
+	int			pipeside;
+	int			parentpipe[2];
+	int			currentpipe[2];
+}				t_pipes;
+
+/*
+**---------------------------------environment----------------------------------
+*/
 
 char			*env_getvalue(char *var_key, t_envlst *envlst);
 char			**env_free_and_return_null(char ***vshenviron);
 
 /* environment branch -jorn */
-
 t_envlst	*env_getlst(void);
 void		env_lstaddback(t_envlst **lst, t_envlst *new);
 t_envlst	*env_lstnew(char *var, unsigned char type);
@@ -484,6 +508,7 @@ int				tools_update_quote_status(char *line, int cur_index,
 					char *quote);
 bool			tool_is_redirect_tk(t_tokens type);
 bool			tools_is_valid_identifier(char *str);
+bool			tools_is_builtin(char *exec_name);
 bool			tools_is_fdnumstr(char *str);
 bool			tool_is_special(char c);
 bool			tool_check_for_special(char *str);
@@ -493,26 +518,40 @@ bool			tool_check_for_whitespace(char *str);
 **----------------------------------execution-----------------------------------
 */
 
-void	exec_start(t_ast *ast, t_vshdata *vshdata, int flags);
-void	exec_cmd(char **args, t_vshdata *vshdata);
-bool	exec_builtin(char **args, t_vshdata *vshdata);
-bool	exec_external(char **args, t_envlst *envlst);
-void	signal_print_newline(int signum);
-char	*exec_find_binary(char *filename, t_envlst *envlst);
-void	exec_quote_remove(t_ast *node);
+int				exec_start(t_ast *ast, t_vshdata *vshdata, t_pipes pipes);
+void			exec_cmd(char **args, t_vshdata *vshdata);
+int				exec_complete_command(t_ast *node, t_vshdata *vshdata,
+					t_pipes pipes);
+bool			exec_builtin(char **args, t_vshdata *vshdata);
+bool			exec_external(char **args, t_vshdata *vshdata);
+char			*exec_find_binary(char *filename, t_vshdata *vshdata);
+void			exec_quote_remove(t_ast *node);
+
+void			signal_print_newline(int signum);
 
 /*
 **------------------------------------redir-------------------------------------
 */
 
-int			redir(t_ast *node);
-int			redir_output(t_ast *node);
-int			redir_input(t_ast *node);
-bool		redir_is_open_fd(int fd);
-int			redir_input_closefd(int left_side_fd);
-void		redir_change_if_leftside(t_ast *node, int *left_side_fd,
-char **right_side);
-int			redir_create_heredoc_fd(char *right_side);
+int				redir(t_ast *node);
+int				redir_output(t_ast *node);
+int				redir_input(t_ast *node);
+bool			redir_is_open_fd(int fd);
+int				redir_input_closefd(int left_side_fd);
+void			redir_change_if_leftside(t_ast *node, int *left_side_fd,
+					char **right_side);
+int				redir_create_heredoc_fd(char *right_side);
+
+t_pipes			redir_init_pipestruct(void);
+int				redir_pipe(t_ast *pipe_node);
+int				redir_run_pipesequence(t_ast *pipenode, t_vshdata *vshdata,
+					t_pipes pipes);
+int				redir_handle_pipe(t_pipes pipes);
+
+int				redir_save_stdfds(t_vshdata *vshdata);
+int				return_and_reset_fds(int retval, t_vshdata *vshdata);
+int				redir_reset_stdfds(t_vshdata *vshdata);
+int				redir_close_saved_stdfds(t_vshdata *vshdata);
 
 /*
 **------------------------------------history-----------------------------------
@@ -528,7 +567,7 @@ int				history_change_line(t_inputdata *data, char **line, char arrow);
 **--------------------------------error_handling--------------------------------
 */
 
-int			error_return(int ret, int error, char *opt_str);
+int				error_return(int ret, int error, char *opt_str);
 
 /*
 **----------------------------------debugging-----------------------------------

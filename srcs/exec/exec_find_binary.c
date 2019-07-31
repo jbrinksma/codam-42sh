@@ -6,7 +6,7 @@
 /*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 15:16:46 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/06/06 10:34:30 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/30 11:02:55 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char		**get_paths(t_envlst *envlst)
 	char *paths;
 
 	paths = env_getvalue("PATH", envlst);
-	if (paths == NULL || *paths == '\0') // second condition should be fixed in env var get value
+	if (paths == NULL || *paths == '\0')
 		return (NULL);
 	return (ft_strsplit(paths, ':'));
 }
@@ -37,14 +37,14 @@ static char		*check_dir(DIR *d, char *filename, char *path)
 	return (NULL);
 }
 
-char			*exec_find_binary(char *filename, t_envlst *envlst)
+char			*exec_find_binary(char *filename, t_vshdata *vshdata)
 {
 	DIR				*d;
 	char			**paths;
 	char			*ret;
 	size_t			i;
 
-	paths = get_paths(envlst);
+	paths = get_paths(vshdata->envlst);
 	if (paths == NULL)
 		return (NULL);
 	i = 0;

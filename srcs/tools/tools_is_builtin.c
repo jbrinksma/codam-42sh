@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   tools_is_fdnumstr.c                                :+:    :+:            */
+/*   tools_is_builtin.c                                 :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/07/21 20:18:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/24 15:22:55 by jbrinksm      ########   odam.nl         */
+/*   Created: 2019/07/20 21:28:30 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/07/20 21:32:44 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-bool	tools_is_fdnumstr(char *str)
+bool	tools_is_builtin(char *exec_name)
 {
-	int	i;
-
-	if (str == NULL || *str == '\0')
+	if (exec_name == NULL)
 		return (false);
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (ft_isdigit(str[i]) == false)
-			return (false);
-		i++;
-	}
-	return (true);
+	if (ft_strequ(exec_name, "echo") == true
+	|| ft_strequ(exec_name, "exit") == true
+	|| ft_strequ(exec_name, "export") == true
+	|| ft_strequ(exec_name, "set") == true
+	|| ft_strequ(exec_name, "unset") == true)
+		return (true);
+	return (false);
 }

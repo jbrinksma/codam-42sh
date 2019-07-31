@@ -16,7 +16,7 @@ void		exec_cmd(char **args, t_vshdata *vshdata)
 {
 	if (exec_builtin(args, vshdata) == false)
 	{
-		if (exec_external(args, vshdata->envlst) == false)
+		if (exec_external(args, vshdata) == false)
 		{
 			ft_printf("%s: Command not found.\n", args[0]);
 			g_state->exit_code = EXIT_NOTFOUND;

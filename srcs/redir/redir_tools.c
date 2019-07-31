@@ -6,14 +6,11 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/22 09:18:19 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/25 12:58:52 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/30 16:44:21 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/stat.h>
 
 /*
 **	Creates a pipe in which the heredoc can be written to
@@ -64,7 +61,7 @@ int			redir_input_closefd(int left_side_fd)
 
 bool		redir_is_open_fd(int fd)
 {
-	struct stat buf;
+	struct stat	buf;
 
 	if (fstat(fd, &buf) == -1)
 		return (false);

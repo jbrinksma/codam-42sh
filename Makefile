@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/07/30 11:19:15 by tde-jong      ########   odam.nl          #
+#    Updated: 2019/07/30 16:36:06 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ term_set_attributes term_reset_attributes term_free_struct \
 env_getvalue env_getlst env_lsttoarr env_lstnew env_lstaddback env_lstdel \
 env_remove_tmp env_sort env_lstadd_to_sortlst \
 tools_is_char_escaped tool_is_redirect_tk tools_is_valid_identifier \
+tools_is_builtin \
 tool_is_special tool_check_for_special tools_is_fdnumstr \
 tool_check_for_whitespace \
 builtin_echo builtin_echo_set_flags builtin_exit builtin_assign \
@@ -49,7 +50,7 @@ history_to_file history_get_file_content history_line_to_array history_print \
 history_change_line \
 exec_builtin exec_cmd exec_external exec_start exec_find_binary \
 exec_quote_remove \
-redir redir_tools \
+redir_pipe redir redir_tools redir_tools2 \
 print_errors
 TESTS = unit_test builtin_assign_test
 OBJECTS := $(SRCS:%=%.o)

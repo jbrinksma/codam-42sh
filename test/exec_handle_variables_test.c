@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   tools_is_fdnumstr.c                                :+:    :+:            */
+/*   exec_handle_variables.c                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/07/21 20:18:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/24 15:22:55 by jbrinksm      ########   odam.nl         */
+/*   Created: 2019/07/24 11:35:41 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/07/24 11:42:34 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <criterion/criterion.h>
 
-bool	tools_is_fdnumstr(char *str)
+TestSuite(exec_handle_variables);
+
+Test(exec_handle_variables, basic)
 {
-	int	i;
+	t_envlst *envlst;
 
-	if (str == NULL || *str == '\0')
-		return (false);
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (ft_isdigit(str[i]) == false)
-			return (false);
-		i++;
-	}
-	return (true);
+	envlst = env_getlst();
 }

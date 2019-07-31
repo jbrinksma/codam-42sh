@@ -6,12 +6,11 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/26 22:43:08 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/30 16:43:17 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-#include <unistd.h>
 
 static size_t	count_args(t_ast *ast)
 {
@@ -28,7 +27,7 @@ static size_t	count_args(t_ast *ast)
 	return (i);
 }
 
-static char	**create_args(t_ast *ast)
+static char		**create_args(t_ast *ast)
 {
 	char	**args;
 	t_ast	*probe;
@@ -60,7 +59,7 @@ static char	**create_args(t_ast *ast)
 **	complete_command
 */
 
-static int	exec_redirs_or_assigns(t_ast *node, t_vshdata *vshdata,
+static int		exec_redirs_or_assigns(t_ast *node, t_vshdata *vshdata,
 	int env_type)
 {
 	t_ast	*probe;
@@ -84,70 +83,37 @@ static int	exec_redirs_or_assigns(t_ast *node, t_vshdata *vshdata,
 	return (FUNCT_SUCCESS);
 }
 
-static int	redir_save_stdfds(int *stdfds)
-{
-	STDIN_BAK = dup(STDIN_FILENO);
-	if (STDIN_BAK == -1)
-		return (FUNCT_ERROR);
-	STDOUT_BAK = dup(STDOUT_FILENO);
-	if (STDOUT_BAK == -1)
-		return (FUNCT_ERROR);
-	STDERR_BAK = dup(STDERR_FILENO);
-	if (STDERR_BAK == -1)
-		return (FUNCT_ERROR);
-	return (FUNCT_SUCCESS);
-}
-
-static int	redir_reset_stdfds(int *stdfds)
-{
-	if (dup2(STDIN_BAK, STDIN_FILENO) == -1)
-		return (FUNCT_ERROR);
-	if (dup2(STDOUT_BAK, STDOUT_FILENO) == -1)
-		return (FUNCT_ERROR);
-	if (dup2(STDERR_BAK, STDERR_FILENO) == -1)
-		return (FUNCT_ERROR);
-	return (FUNCT_SUCCESS);
-}
-
 /*
 **	This function has to prepare the complete_command before
 **	execution.
 */
 
-static int	return_and_reset_fds(int retval, int *stdfds)
-{
-	if (redir_reset_stdfds(stdfds) == FUNCT_ERROR)
-		return (FUNCT_ERROR);
-	return (retval);
-}
-
-int			exec_complete_command(t_ast *node, t_vshdata *vshdata, int flags)
+int				exec_complete_command(t_ast *node, t_vshdata *vshdata,
+				t_pipes pipes)
 {
 	char	**command;
-	int		stdfds[3];
 
-	(void)flags;
-	if (redir_save_stdfds(stdfds) == FUNCT_ERROR)
-		return (FUNCT_ERROR);
 	exec_quote_remove(node);
 	if (node->type == WORD)
 	{
+		redir_handle_pipe(pipes);
 		if (node->sibling &&
 		exec_redirs_or_assigns(node->sibling, vshdata, ENV_TEMP)
 		== FUNCT_ERROR)
-			return (return_and_reset_fds(FUNCT_ERROR, stdfds));
+			return (return_and_reset_fds(FUNCT_ERROR, vshdata));
 		command = create_args(node);
 		if (command == NULL)
-			return (return_and_reset_fds(FUNCT_ERROR, stdfds));
+			return (return_and_reset_fds(FUNCT_ERROR, vshdata));
 		exec_cmd(command, vshdata);
 	}
 	else if (node->type == ASSIGN || tool_is_redirect_tk(node->type) == true)
 	{
+		redir_handle_pipe(pipes);
 		if (exec_redirs_or_assigns(node, vshdata, ENV_LOCAL)
 		== FUNCT_ERROR)
-			return (return_and_reset_fds(FUNCT_ERROR, stdfds));
+			return (return_and_reset_fds(FUNCT_ERROR, vshdata));
 	}
-	return (return_and_reset_fds(FUNCT_SUCCESS, stdfds));
+	return (return_and_reset_fds(FUNCT_SUCCESS, vshdata));
 }
 
 /*
@@ -155,34 +121,30 @@ int			exec_complete_command(t_ast *node, t_vshdata *vshdata, int flags)
 **	Read PR.
 */
 
-void		exec_start(t_ast *ast, t_vshdata *vshdata, int flags)
+int				exec_start(t_ast *ast, t_vshdata *vshdata, t_pipes pipes)
 {
 	if (ast == NULL)
-		return ;
+		return (FUNCT_ERROR);
 	if (ast->type == PIPE)
-		flags &= ~EXEC_PIPE;
-	else if (ast->type == BG)
-		flags &= ~EXEC_BG;
-	else if (ast->type == AND_IF)
-		flags &= ~EXEC_AND_IF;
-	else if (ast->type == OR_IF)
-		flags &= ~EXEC_OR_IF;
-	else if (ast->type == SEMICOL)
-		flags &= ~EXEC_SEMICOL;
-	if (ast->type != WORD && ast->type != ASSIGN &&
-	tool_is_redirect_tk(ast->type) == false)
-		exec_start(ast->child, vshdata, flags);
+		return (redir_run_pipesequence(ast, vshdata, pipes));
+	if (ast->type != WORD && ast->type != ASSIGN)
+	{
+		if (tool_is_redirect_tk(ast->type) == false)
+			exec_start(ast->child, vshdata, pipes);
+	}
 	if (ast->type == AND_IF && g_state->exit_code != EXIT_SUCCESS)
-		return ;
+		return (FUNCT_ERROR);
 	else if (ast->type == OR_IF && g_state->exit_code == EXIT_SUCCESS)
-		return ;
+		return (FUNCT_FAILURE);
 	else if (ast->type == WORD || ast->type == ASSIGN
 	|| tool_is_redirect_tk(ast->type) == true)
 	{
-		if (exec_complete_command(ast, vshdata, flags)
+		if (exec_complete_command(ast, vshdata, pipes)
 		== FUNCT_ERROR)
-			return ;
+			return (FUNCT_ERROR);
 	}
-	else if (ast->sibling != NULL)
-		exec_start(ast->sibling, vshdata, flags);
+	else if (ast->sibling != NULL
+	&& exec_start(ast->sibling, vshdata, pipes) == FUNCT_ERROR)
+		return (FUNCT_ERROR);
+	return (FUNCT_SUCCESS);
 }

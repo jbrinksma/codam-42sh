@@ -6,7 +6,7 @@
 /*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/07/30 12:15:06 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/30 18:42:00 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <termios.h>
 #include <signal.h>
 
-static void	term_flags_init(void)
+static void		term_flags_init(void)
 {
 	g_state->termios_p->c_lflag |= ICANON;
 	g_state->termios_p->c_lflag |= ECHO;
@@ -24,7 +24,7 @@ static void	term_flags_init(void)
 	tcsetattr(STDIN_FILENO, TCSANOW, g_state->termios_p);
 }
 
-static void	term_flags_destroy(void)
+static void		term_flags_destroy(void)
 {
 	g_state->termios_p->c_lflag &= ~ICANON;
 	g_state->termios_p->c_lflag &= ~ECHO;
@@ -32,7 +32,7 @@ static void	term_flags_destroy(void)
 	tcsetattr(STDIN_FILENO, TCSANOW, g_state->termios_p);
 }
 
-void	signal_print_newline(int signum)
+void			signal_print_newline(int signum)
 {
 	(void)signum;
 	ft_putchar('\n');
@@ -62,7 +62,7 @@ static bool	exec_bin(char *binary, char **args, char **vshenviron)
 	return (true);
 }
 
-bool		exec_external(char **args, t_envlst *envlst)
+bool			exec_external(char **args, t_vshdata *vshdata)
 {
 	char	**vshenviron;
 	char	*binary;
@@ -74,11 +74,11 @@ bool		exec_external(char **args, t_envlst *envlst)
 		ft_strnequ(args[0], "../", 3) == 0)
 	{
 		ft_strdel(&binary);
-		binary = exec_find_binary(args[0], envlst);
+		binary = exec_find_binary(args[0], vshdata);
 		if (binary == NULL)
 			return (false);
 	}
-	vshenviron = env_lsttoarr(envlst, ENV_EXTERN);
+	vshenviron = env_lsttoarr(vshdata->envlst, ENV_EXTERN);
 	if (vshenviron == NULL)
 	{
 		ft_printf("vsh: failed to allocate enough memory!\n");

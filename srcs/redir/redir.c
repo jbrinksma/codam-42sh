@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/21 15:14:08 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/25 12:58:00 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/30 11:00:01 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,14 @@ int			redir_input(t_ast *node)
 		right_side_fd = redir_create_heredoc_fd(right_side);
 	else if (ft_strequ(right_side, "-") == true)
 		return (redir_input_closefd(left_side_fd));
-	else
-	{
-		if (getvalidfd(&right_side_fd, right_side) == FUNCT_ERROR)
-			return (FUNCT_ERROR);
-	}
+	else if (getvalidfd(&right_side_fd, right_side) == FUNCT_ERROR)
+		return (FUNCT_ERROR);
 	if (right_side_fd == -1)
 		return (error_return(FUNCT_ERROR, E_OPEN, NULL));
 	if (dup2(right_side_fd, left_side_fd) == -1)
 		return (error_return(FUNCT_ERROR, E_DUP, NULL));
-	close(right_side_fd);
+	if (node->type == SLESS || node->type == DLESS)
+		close(right_side_fd);
 	return (FUNCT_SUCCESS);
 }
 
@@ -72,21 +70,19 @@ int			redir_output(t_ast *node)
 	right_side_fd = FD_UNINIT;
 	redir_change_if_leftside(node, &left_side_fd, &right_side);
 	if (node->type == SGREAT)
-		right_side_fd = open(right_side, O_WRONLY | O_CREAT | O_TRUNC);
+		right_side_fd = open(right_side, SGREAT_OPEN_FLAGS, REG_PERM);
 	else if (node->type == DGREAT)
-		right_side_fd = open(right_side, O_WRONLY | O_CREAT | O_APPEND);
+		right_side_fd = open(right_side, DGREAT_OPEN_FLAGS, REG_PERM);
 	else if (ft_strequ(right_side, "-") == true)
 		return (redir_input_closefd(left_side_fd));
-	else
-	{
-		if (getvalidfd(&right_side_fd, right_side) == FUNCT_ERROR)
-			return (FUNCT_ERROR);
-	}
+	else if (getvalidfd(&right_side_fd, right_side) == FUNCT_ERROR)
+		return (FUNCT_ERROR);
 	if (right_side_fd == -1)
 		return (error_return(FUNCT_ERROR, E_OPEN, NULL));
 	if (dup2(right_side_fd, left_side_fd) == -1)
 		return (error_return(FUNCT_ERROR, E_DUP, NULL));
-	close(right_side_fd);
+	if (node->type == SGREAT || node->type == DGREAT)
+		close(right_side_fd);
 	return (FUNCT_SUCCESS);
 }
 
