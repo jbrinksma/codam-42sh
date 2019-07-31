@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/31 11:24:10 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/31 14:25:24 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,15 +409,22 @@ int				input_parse_ctrl_k(t_inputdata *data, char **line);
 */
 
 void			shell_display_prompt(void);
-int				shell_dless_read_till_stop(char **heredoc, char *stop, t_vshdata *vshdata);
-int				shell_dless_set_tk_val(t_tokenlst *probe, char **heredoc, char *stop, t_vshdata *vshdata);
+int				shell_dless_read_till_stop(char **heredoc, char *stop,
+					t_vshdata *vshdata);
+int				shell_dless_set_tk_val(t_tokenlst *probe, char **heredoc,
+					char *stop, t_vshdata *vshdata);
 int				shell_dless_input(t_vshdata *vshdata, t_tokenlst **token_lst);
-int				shell_quote_checker(t_vshdata *vshdata, char **line, int *status);
-char			shell_quote_checker_find_quote(char *line);
+int				shell_close_unclosed_quotes(t_vshdata *vshdata, char **line,
+					int *status);
 int				shell_init_files(t_vshdata *vshdata);
 int				shell_start(t_vshdata *vshdata);
 int				shell_init_vshdata(t_vshdata *vshdata);
 char			*shell_getcurrentdir(char *cwd);
+int				shell_close_quote_and_esc(t_vshdata *vshdata, char **line,
+					int *status);
+char			shell_quote_checker_find_quote(char *line);
+int				shell_handle_escaped_newlines(t_vshdata *vshdata, char **line,
+					int *status);
 
 /*
 **----------------------------------lexer---------------------------------------
