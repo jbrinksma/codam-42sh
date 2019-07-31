@@ -399,7 +399,7 @@ int				input_parse_next(t_inputdata *data, char **line);
 int				input_parse_prev(t_inputdata *data, char **line);
 int				input_parse_delete(t_inputdata *data, char **line);
 int				input_parse_ctrl_c(t_inputdata *data);
-int				input_parse_ctrl_d(t_inputdata *data, char **line);
+int				input_parse_ctrl_d(t_inputdata *data, t_vshdata *vshdata, char **line);
 int				input_parse_ctrl_up(t_inputdata *data, char **line);
 int				input_parse_ctrl_down(t_inputdata *data, char **line);
 int				input_parse_ctrl_k(t_inputdata *data, char **line);

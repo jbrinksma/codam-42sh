@@ -3,16 +3,16 @@
 /*                                                        ::::::::            */
 /*   input_parse_ctrl_d.c                               :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:46:55 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/07/29 13:53:27 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/31 13:00:06 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int	input_parse_ctrl_d(t_inputdata *data, char **line)
+int	input_parse_ctrl_d(t_inputdata *data, t_vshdata *vshdata, char **line)
 {
 	unsigned	len;
 
@@ -20,10 +20,7 @@ int	input_parse_ctrl_d(t_inputdata *data, char **line)
 	{
 		len = ft_strlen(*line);
 		if (len == 0)
-		{
-			ft_putstr("exit\n");
-			exit(g_state->exit_code);
-		}
+			builtin_exit(NULL, vshdata);
 		if (data->index < len)
 		{
 			input_clear_char_at(line, data->index);
