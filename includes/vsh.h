@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/31 10:39:53 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/31 11:24:10 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,15 @@
 # define EXIT_WRONG_USE 2
 # define EXIT_NOTFOUND 127
 # define EXIT_FATAL 128
+
+/*
+**================================shell colors==================================
+*/
+
+# define RESET		"\033[0m"
+# define RED		"\033[1;31m"
+# define YEL		"\033[1;33m"
+# define BLU		"\033[1;36m"
 
 /*
 **------------------------------------echo--------------------------------------
@@ -408,6 +417,7 @@ char			shell_quote_checker_find_quote(char *line);
 int				shell_init_files(t_vshdata *vshdata);
 int				shell_start(t_vshdata *vshdata);
 int				shell_init_vshdata(t_vshdata *vshdata);
+char			*shell_getcurrentdir(char *cwd);
 
 /*
 **----------------------------------lexer---------------------------------------
