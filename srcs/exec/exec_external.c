@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   exec_external.c                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/07/30 18:42:00 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/31 16:13:33 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,13 @@
 
 static void		term_flags_init(void)
 {
-	g_state->termios_p->c_lflag |= ICANON;
-	g_state->termios_p->c_lflag |= ECHO;
-	g_state->termios_p->c_lflag |= ISIG;
+	g_state->termios_p->c_lflag |= (ECHO | ICANON | ISIG);
 	tcsetattr(STDIN_FILENO, TCSANOW, g_state->termios_p);
 }
 
 static void		term_flags_destroy(void)
 {
-	g_state->termios_p->c_lflag &= ~ICANON;
-	g_state->termios_p->c_lflag &= ~ECHO;
-	g_state->termios_p->c_lflag &= ~ISIG;
+	g_state->termios_p->c_lflag &= ~(ECHO | ICANON | ISIG);
 	tcsetattr(STDIN_FILENO, TCSANOW, g_state->termios_p);
 }
 

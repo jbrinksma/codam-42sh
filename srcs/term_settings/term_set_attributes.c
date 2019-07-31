@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   term_set_attributes.c                              :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:11:05 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/29 14:56:53 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/07/31 13:24:54 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ int		term_set_attributes(t_term *term_p)
 {
 	int	ret;
 
-	term_p->termios_p->c_lflag &= ~ICANON;
-	term_p->termios_p->c_lflag &= ~ECHO;
-	term_p->termios_p->c_lflag &= ~ISIG;
+	term_p->termios_p->c_lflag &= ~(ECHO | ICANON | ISIG);
 	term_p->termios_p->c_cc[VMIN] = 1;
 	term_p->termios_p->c_cc[VTIME] = 0;
 	ret = tcsetattr(STDIN_FILENO, TCSANOW, term_p->termios_p);

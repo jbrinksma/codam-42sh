@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   input_parse_prev.c                                 :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:39:59 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/07/15 16:37:52 by omulder       ########   odam.nl         */
+/*   Updated: 2019/07/31 13:27:13 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@ static void	parse_prev_move_word(unsigned *index, char **line)
 
 int			input_parse_prev(t_inputdata *data, char **line)
 {
-	if (((data->input_state == INPUT_BRACE || data->input_state == INPUT_D_BRACE) &&
-		data->c == 'D') || data->c == '\2')
+	if (((data->input_state == INPUT_BRACE ||
+	data->input_state == INPUT_D_BRACE) && data->c == 'D') ||
+	(data->input_state == INPUT_ESC && data->c == 'b'))
 	{
 		if (data->input_state == 2)
 		{

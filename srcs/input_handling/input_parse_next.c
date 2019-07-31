@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   input_parse_next.c                                 :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:41:00 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/07/15 16:34:17 by omulder       ########   odam.nl         */
+/*   Updated: 2019/07/31 13:26:32 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@ static void	parse_next_move_word(unsigned *index, char **line)
 
 int			input_parse_next(t_inputdata *data, char **line)
 {
-	if (((data->input_state == INPUT_BRACE || data->input_state == INPUT_D_BRACE) &&
-		data->c == 'C') || data->c == '\6')
+	if (((data->input_state == INPUT_BRACE ||
+	data->input_state == INPUT_D_BRACE) && data->c == 'C') ||
+	(data->input_state == INPUT_ESC && data->c == 'f'))
 	{
 		if (data->input_state == INPUT_BRACE)
 		{
