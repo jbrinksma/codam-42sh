@@ -6,13 +6,13 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/30 17:50:31 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/07/31 10:39:53 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VSH_H
 # define VSH_H
-// # define DEBUG
+# define DEBUG
 # include <sys/stat.h>
 # include <fcntl.h>
 
