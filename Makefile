@@ -3,10 +3,10 @@
 #                                                         ::::::::             #
 #    Makefile                                           :+:    :+:             #
 #                                                      +:+                     #
-#    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
+#    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/07/31 14:20:28 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/07/31 16:04:43 by omulder       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ parser_start parser_debug parser_utils parser_command parser_error \
 parser_astdel \
 alias_expansion alias_replace alias_read_file \
 history_to_file history_get_file_content history_line_to_array history_print \
-history_change_line \
+history_change_line history_index_change \
 exec_builtin exec_cmd exec_external exec_start exec_find_binary \
 exec_quote_remove \
 redir_pipe redir redir_tools redir_tools2 \

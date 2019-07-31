@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   history_get_file_content.c                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/30 13:49:22 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/28 15:47:49 by omulder       ########   odam.nl         */
+/*   Updated: 2019/07/31 14:50:47 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static int		allocate_leftover_history(t_vshdata *vshdata, int i)
 		vshdata->history[i] = (t_history*)ft_memalloc(sizeof(t_history));
 		if (vshdata->history[i] == NULL)
 			return (FUNCT_ERROR);
+		vshdata->history[i]->number = -1;
 		i++;
 	}
 	return (FUNCT_SUCCESS);

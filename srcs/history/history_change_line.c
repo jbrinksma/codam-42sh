@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   history_change_line.c                              :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/02 14:28:54 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/28 17:08:31 by omulder       ########   odam.nl         */
+/*   Updated: 2019/07/31 16:00:12 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,8 @@ static int	malloc_and_copy(t_inputdata *data, char **line, char *str)
 	return (FUNCT_SUCCESS);
 }
 
-static int	set_line(t_inputdata *data, char **line, int change)
+static int	set_line(t_inputdata *data, char **line)
 {
-	data->hist_index += change;
 	if (malloc_and_copy(data, line, data->history[data->hist_index]->str)
 	== FUNCT_ERROR)
 		return (FUNCT_ERROR);
@@ -60,26 +59,20 @@ static int	set_line(t_inputdata *data, char **line, int change)
 int			history_change_line(t_inputdata *data, char **line, char arrow)
 {
 	history_clear_line(&(data->index), ft_strlen(*line));
-	if (arrow == ARROW_UP && (data->hist_index - 1) >= 0 &&
-	data->history[(data->hist_index - 1)]->str != NULL)
+	if (arrow == ARROW_UP)
 	{
-		if (set_line(data, line, -1) == FUNCT_ERROR)
-			return (FUNCT_ERROR);
-	}
-	else if (arrow == ARROW_DOWN && (data->hist_index + 1) <= HISTORY_MAX &&
-		data->history[(data->hist_index + 1)]->str != NULL)
-	{
-		if (set_line(data, line, 1) == FUNCT_ERROR)
-			return (FUNCT_ERROR);
+		if (history_index_change_up(data))
+			set_line(data, line);
+		else
+			ft_printf("\a");
 	}
 	else if (arrow == ARROW_DOWN)
 	{
-		if (data->history[(data->hist_index)]->str != NULL)
-			data->hist_index += 1;
-		ft_bzero(*line, data->len_max);
+		if (history_index_change_down(data))
+			set_line(data, line);
+		else
+			ft_bzero(*line, data->len_max);
 	}
-	else
-		ft_printf("\a");
 	ft_putstr(*line);
 	data->index = ft_strlen(*line);
 	return (FUNCT_SUCCESS);

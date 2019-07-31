@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/17 14:03:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/31 12:59:45 by omulder       ########   odam.nl         */
+/*   Updated: 2019/07/31 16:04:14 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ t_inputdata	*init_inputdata(t_vshdata *vshdata)
 	new->index = 0;
 	new->input_state = 0;
 	new->hist_index = find_start(vshdata->history);
+	new->hist_start = new->hist_index - 1;
+	new->hist_first = true;
 	new->history = vshdata->history;
 	new->len_max = 64;
 	return (new);
