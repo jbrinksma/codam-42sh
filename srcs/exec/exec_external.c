@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/07/31 16:13:33 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/01 11:43:31 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ static bool	exec_bin(char *binary, char **args, char **vshenviron)
 	signal(SIGINT, SIG_DFL);
 	term_flags_destroy();
 	free(vshenviron);
+	ft_strdel(&binary);
 	return (true);
 }
 
@@ -79,6 +80,7 @@ bool			exec_external(char **args, t_vshdata *vshdata)
 	{
 		ft_printf("vsh: failed to allocate enough memory!\n");
 		g_state->exit_code = EXIT_FAILURE;
+		ft_strdel(&binary);
 		return (false);
 	}
 	return (exec_bin(binary, args, vshenviron));
