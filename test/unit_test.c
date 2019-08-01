@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/31 14:24:20 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/01 16:55:12 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -959,19 +959,21 @@ Test(alias, basic_test)
 	t_ast		*ast;
 	t_pipes		pipes;
 
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
 	line = ft_strdup("alias echo='echo hoi ; echo dit ' ; alias hoi=ditte ; alias dit=dat\n");
 	vshdata.aliaslst = NULL;
 	vshdata.envlst = env_getlst();
+	redir_save_stdfds(&vshdata);
 	cr_assert(vshdata.envlst != NULL);
-	g_state = (t_state*)ft_memalloc(sizeof(t_state));
-	g_state->exit_code = 0;
 	token_lst = NULL;
+	ast = NULL;
 	pipes = redir_init_pipestruct();
 	cr_expect(lexer(&line, &token_lst) == FUNCT_SUCCESS);
 	cr_assert(token_lst != NULL);
 	cr_expect(parser_start(&token_lst, &ast) == FUNCT_SUCCESS);
 	cr_assert(ast != NULL);
-	exec_start(ast, &vshdata, pipes);
+	cr_expect(exec_start(ast, &vshdata, pipes) == FUNCT_SUCCESS);
 	cr_expect_str_eq(vshdata.aliaslst->var, "dit=dat");
 	line = ft_strdup("echo\n");
 	cr_assert(line != NULL);
@@ -981,6 +983,33 @@ Test(alias, basic_test)
 	cr_assert(token_lst != NULL);
 	cr_expect_str_eq(token_lst->next->next->value, "hoi");
 	cr_expect_str_eq(token_lst->next->next->next->next->value, "echo");
+}
+
+Test(alias, multi_line_test)
+{
+	char		*line;
+	char		*args[3];
+	t_vshdata	vshdata;
+	t_tokenlst	*token_lst;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+	vshdata.envlst = env_getlst();
+	cr_assert(vshdata.envlst != NULL);
+	vshdata.aliaslst = NULL;
+	args[0] = "alias";
+	args[1] = ft_strdup("echo=echo hoi\necho doei\n\n");
+	args[2] = NULL;
+	builtin_alias(args, &vshdata.aliaslst);
+	cr_assert(g_state->exit_code == EXIT_SUCCESS);
+	line = ft_strdup("echo\n");
+	cr_assert(line != NULL);
+	token_lst = NULL;
+	cr_expect(lexer(&line, &token_lst) == FUNCT_SUCCESS);
+	cr_assert(token_lst != NULL);
+	cr_expect(alias_expansion(&vshdata, &token_lst, NULL) == FUNCT_SUCCESS);
+	cr_expect_str_eq(token_lst->next->next->value, "hoi");
+	cr_expect(token_lst->next->next->next->type == SEMICOL);
 }
 
 TestSuite(alias_file);

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/31 16:04:49 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/01 13:27:45 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -475,6 +475,7 @@ int				alias_expansion(t_vshdata *vhsdata, t_tokenlst **tokenlst, char **expande
 int				alias_replace(t_vshdata *vshdata, t_tokenlst *probe, char *alias, char **expanded_aliases);
 int				alias_error(char **expanded);
 int				alias_read_file(t_vshdata *vshdata);
+char			**alias_add_expanded(char **expanded, char *alias, char *alias_equal);
 
 
 /*
@@ -526,6 +527,7 @@ bool			tools_is_char_escaped(char *line, int i);
 int				tools_update_quote_status(char *line, int cur_index,
 					char *quote);
 bool			tool_is_redirect_tk(t_tokens type);
+bool			tools_isidentifierchar(char c);
 bool			tools_is_valid_identifier(char *str);
 bool			tools_is_builtin(char *exec_name);
 bool			tools_is_fdnumstr(char *str);
@@ -544,6 +546,9 @@ int				exec_complete_command(t_ast *node, t_vshdata *vshdata,
 bool			exec_builtin(char **args, t_vshdata *vshdata);
 bool			exec_external(char **args, t_vshdata *vshdata);
 char			*exec_find_binary(char *filename, t_vshdata *vshdata);
+int				exec_handle_variables(t_ast *node, t_envlst *envlst);
+int				exec_handle_bracketed_var(char **value, int *i, t_envlst *envlst);
+int				exec_handle_dollar(char **value, int *i, t_envlst *envlst);
 void			exec_quote_remove(t_ast *node);
 
 void			signal_print_newline(int signum);

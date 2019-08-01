@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/08/01 11:43:31 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/08/01 11:00:05 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void			signal_print_newline(int signum)
 	ft_putchar('\n');
 }
 
-static bool	exec_bin(char *binary, char **args, char **vshenviron)
+static bool		exec_bin(char *binary, char **args, char **vshenviron)
 {
 	pid_t	pid;
 	int		status;
