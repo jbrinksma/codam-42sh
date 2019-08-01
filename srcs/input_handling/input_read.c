@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/17 14:03:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/31 16:04:14 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/01 14:59:52 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int			input_read(t_vshdata *vshdata, char **line, int *status)
 		return (FUNCT_ERROR);
 	*line = ft_strnew(data->len_max);
 	if (*line == NULL)
-		return (FUNCT_ERROR);
+		return (ft_free_return(data, FUNCT_ERROR));
 	while (read(STDIN_FILENO, &data->c, 1) > 0)
 	{
 		local_status = 0;
@@ -90,15 +90,14 @@ int			input_read(t_vshdata *vshdata, char **line, int *status)
 			data->input_state = 0;
 		local_status |= input_parse_backspace(data, line);
 		if (input_parse_ctrl_c(data) == FUNCT_SUCCESS)
-			return (NEW_PROMPT);
+			return (ft_free_return(data, NEW_PROMPT));
 		local_status |= input_parse_ctrl_d(data, vshdata, line);
 		local_status |= input_parse_ctrl_k(data, line);
 		if (local_status == 0 && input_parse_char(data, line) == FUNCT_ERROR)
-			return (FUNCT_ERROR);
+			return (ft_free_return(data, FUNCT_ERROR));
 		if (data->c == '\n')
 			break ;
 	}
-	free(data);
 	*status = local_status;
-	return (FUNCT_SUCCESS);
+	return (ft_free_return(data, FUNCT_SUCCESS));
 }

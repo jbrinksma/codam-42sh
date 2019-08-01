@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 11:10:09 by omulder        #+#    #+#                */
-/*   Updated: 2019/07/31 17:11:55 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/01 14:59:16 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,5 +100,6 @@ char				*ft_strjoinfree_all(char *s1, char *s2);
 int					ft_strclen(const char *arg, char c);
 int					ft_isalnum(int c);
 int					ft_isalpha(int c);
+int					ft_free_return(void *tofree, int ret);
 
 #endif
