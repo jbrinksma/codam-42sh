@@ -50,6 +50,7 @@ int		shell_start(t_vshdata *vshdata)
 	token_lst = NULL;
 	ast = NULL;
 	pipes = redir_init_pipestruct();
+	env_add_extern_value(vshdata->envlst, "OLDPWD", "");
 	while (status != CTRLD)
 	{
 		ft_strdel(&line);

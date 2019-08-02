@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   builtin_assign.c                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 09:09:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/29 11:33:59 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/07/30 17:33:41 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,16 @@
 **	Depending on the flag given to assign, the variable will be local or extern
 */
 
-int			builtin_assign_addexist(t_envlst *envlst, char *arg,
-		char *var, int env_type)
+int			builtin_assign_addexist(t_envlst *envlst, char *var, int env_type)
 {
 	t_envlst	*probe;
 	int			varlen;
 
 	probe = envlst;
-	varlen = ft_strclen(arg, '=');
+	varlen = ft_strclen(var, '=');
 	while (probe != NULL)
 	{
-		if (ft_strnequ(arg, probe->var, varlen) == true &&
+		if (ft_strnequ(var, probe->var, varlen) == true &&
 		probe->var[varlen] == '=')
 		{
 			ft_strdel(&probe->var);
@@ -67,7 +66,7 @@ int			builtin_assign(char *arg, t_envlst *envlst, int env_type)
 	else
 		env_type &= ~ENV_SPECIAL;
 	g_state->exit_code = EXIT_SUCCESS;
-	if (builtin_assign_addexist(envlst, arg, var, env_type) != FUNCT_SUCCESS)
+	if (builtin_assign_addexist(envlst, var, env_type) != FUNCT_SUCCESS)
 	{
 		if (builtin_assign_addnew(envlst, var, env_type) != FUNCT_SUCCESS)
 		{

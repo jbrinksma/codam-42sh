@@ -6,13 +6,13 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/08/01 13:28:19 by mavan-he      ########   odam.nl          #
+#    Updated: 2019/08/02 15:12:53 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = vsh
 CC = gcc
-FLAGS = -Wall -Werror -Wextra -Wunreachable-code
+FLAGS = -Wall -Werror -Wextra -Wunreachable-code -g
 COVERAGE =
 INCLUDES = -I./libft/ -I./includes
 LIBFT = ./libft/libft.a
@@ -34,13 +34,15 @@ input_parse_ctrl_up input_parse_ctrl_down input_is_word_start \
 term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct \
 env_getvalue env_getlst env_lsttoarr env_lstnew env_lstaddback env_lstdel \
-env_remove_tmp env_sort env_lstadd_to_sortlst \
+env_remove_tmp env_sort env_lstadd_to_sortlst env_addvalue \
 tools_is_char_escaped tool_is_redirect_tk tools_is_valid_identifier \
 tools_is_builtin tool_is_special tool_check_for_special tools_is_fdnumstr \
 tools_isidentifierchar tool_check_for_whitespace \
 builtin_echo builtin_echo_set_flags builtin_exit builtin_assign \
 builtin_export builtin_export_print builtin_set builtin_unset \
 builtin_alias builtin_alias_set builtin_alias_lstdel builtin_unalias \
+builtin_cd builtin_cd_error builtin_cd_pathparsing \
+builtin_cd_pathparsing_tools builtin_cd_changedir \
 lexer lexer_utils lexer_debug lexer_evaluator lexer_scanner \
 lexer_state_if_else lexer_state_single lexer_state_start lexer_state_strings \
 parser_start parser_debug parser_utils parser_command parser_error \

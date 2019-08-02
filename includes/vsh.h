@@ -79,6 +79,13 @@
 # define ALIAS_MAX	500
 
 /*
+**-----------------------------------builtin------------------------------------
+*/
+
+# define BUILTIN_CD_UL		(1 << 0)
+# define BUILTIN_CD_UP		(2 << 0)
+
+/*
 **------------------------------------lexer-------------------------------------
 */
 
@@ -361,6 +368,7 @@ void		env_lstdel(t_envlst **envlst);
 void   		env_remove_tmp(t_envlst *env);
 void		env_sort(t_envlst *head);
 void		env_lstadd_to_sortlst(t_envlst *envlst, t_envlst *new);
+int			env_add_extern_value(t_envlst *envlst, char *name, char *value);
 
 /*
 **----------------------------------terminal------------------------------------
@@ -509,7 +517,7 @@ void			builtin_export_var_to_type(char *varname, t_envlst *envlst, int type);
 void			builtin_export_print(t_envlst *envlst, int flags);
 void			builtin_export_args(char **args, t_envlst *envlst, int i);
 int				builtin_assign(char *arg, t_envlst *envlst, int env_type);
-int				builtin_assign_addexist(t_envlst *envlst, char *arg, char *var, int env_type);
+int				builtin_assign_addexist(t_envlst *envlst, char *var, int env_type);
 int				builtin_assign_addnew(t_envlst *envlst, char *var, int env_type);
 void			builtin_set(char **args, t_envlst *envlst);
 void			builtin_unset(char **args, t_envlst *envlst);
@@ -518,6 +526,16 @@ int				builtin_alias_set(char *arg, t_aliaslst **aliaslst);
 void			builtin_alias_delnode(t_aliaslst **node);
 void			builtin_alias_lstdel(t_aliaslst **lst);
 void			builtin_unalias(char **args, t_aliaslst **aliaslst);
+int				builtin_cd(char **args, t_envlst *envlst);
+void			builtin_cd_create_newpath(char **newpath, char *argpath);
+int				builtin_cd_change_dir(char *argpath, t_envlst *envlst,
+					char cd_flag, int print);
+char			*builtin_cd_create_newpath_wrap(char *currpath, char *argpath);
+int				cd_print_usage(void);
+int				cd_change_dir_error(char *realpath, char *argpath,
+					char **newpath, char **currpath);
+int				cd_alloc_error(void);
+int				cd_invalid_option(char c);
 
 /*
 **---------------------------------tools----------------------------------------
