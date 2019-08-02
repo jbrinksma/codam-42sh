@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/26 20:29:50 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/02 13:12:34 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/02 15:13:39 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ static void	alias_combine_tokenlsts(t_tokenlst *probe, t_tokenlst *new_tokenlst)
 	probe->next = new_tokenlst;
 }
 
-int			alias_error(char **line, t_tokenlst **tokenlst, char **expanded)
+int			alias_error(char **line, t_tokenlst **tokenlst, char ***expanded)
 {
 	ft_eprintf("vsh: alias: failed to allocate enough memory\n");
-	if (expanded != NULL && expanded != NULL)
-		ft_strarrdel(&expanded);
+	if (expanded != NULL && *expanded != NULL)
+		ft_strarrdel(expanded);
 	if (tokenlst != NULL && *tokenlst != NULL)
 		lexer_tokenlstdel(tokenlst);
 	if (line != NULL && *line != NULL)
@@ -97,9 +97,9 @@ int			alias_replace(t_vshdata *vshdata, t_tokenlst *probe, char *alias,
 		return (alias_error(&new_line, &new_tokenlst, NULL));
 	new_expanded = alias_add_expanded(expanded, alias, alias_equal);
 	if (new_expanded == NULL)
-		return (alias_error(&new_line, &new_tokenlst, new_expanded));
+		return (alias_error(&new_line, &new_tokenlst, &new_expanded));
 	if (alias_expansion(vshdata, &new_tokenlst, new_expanded) == FUNCT_ERROR)
-		return (alias_error(&new_line, &new_tokenlst, new_expanded));
+		return (alias_error(&new_line, &new_tokenlst, &new_expanded));
 	ft_strarrdel(&new_expanded);
 	alias_combine_tokenlsts(probe, new_tokenlst);
 	return (FUNCT_SUCCESS);

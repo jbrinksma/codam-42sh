@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/02 16:52:23 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/02 17:41:32 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1072,4 +1072,33 @@ Test(replace_var, basic_test, .init=redirect_all_stdout)
 	cr_assert(ast != NULL);
 	cr_expect(exec_start(ast, &vshdata, pipes) == FUNCT_SUCCESS);
 	cr_expect_stdout_eq_str("dat daar\n");
+}
+
+TestSuite(tilde_expansion);
+
+Test(tilde_expansion, basic_test)
+{
+	t_vshdata	vshdata;
+	t_ast		ast;
+	char		*home;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+	vshdata.aliaslst = NULL;
+	vshdata.envlst = env_getlst();
+	cr_assert(vshdata.envlst != NULL);
+	home = getenv("HOME");
+	cr_assert(home != NULL);
+	ast.child = NULL;
+	ast.sibling = NULL;
+	ast.flags = T_FLAG_HASSPECIAL;
+	ast.type = WORD;
+	ast.value = ft_strdup("~/");
+	cr_expect(exec_handle_variables(&ast, vshdata.envlst) == FUNCT_SUCCESS);
+	cr_expect_str_eq(ast.value, ft_strjoin(home, "/"));
+	ast.flags = T_FLAG_HASSPECIAL;
+	ast.type = ASSIGN;
+	ast.value = ft_strdup("dit=~");
+	cr_expect(exec_handle_variables(&ast, vshdata.envlst) == FUNCT_SUCCESS);
+	cr_expect_str_eq(ast.value, ft_strjoin("dit=", home));
 }
