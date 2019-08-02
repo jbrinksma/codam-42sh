@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/01 13:26:37 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/01 17:15:54 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/02 12:28:49 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,12 @@ static char	**alias_malloc_expanded(char **expanded, int *i)
 	return (new_expanded);
 }
 
-static char	**alias_error_expaneded(char **expanded)
+static char	**alias_expand_error(char **alias_key, char ***expanded)
 {
-	if (expanded != NULL)
-		ft_strarrdel(&expanded);
+	if (expanded != NULL && *expanded != NULL)
+		ft_strarrdel(expanded);
+	if (alias_key != NULL && *alias_key != NULL)
+		ft_strdel(alias_key);
 	return (NULL);
 }
 
@@ -46,16 +48,13 @@ char		**alias_add_expanded(char **expanded, char *alias,
 	new_expanded = alias_malloc_expanded(expanded, &i);
 	alias_key = ft_strndup(alias, alias_equal - alias);
 	if (new_expanded == NULL || alias_key == NULL)
-		return (alias_error_expaneded(new_expanded));
+		return (alias_expand_error(&alias_key, &new_expanded));
 	new_i = 0;
 	while (new_i < i)
 	{
 		new_expanded[new_i] = ft_strdup(expanded[new_i]);
 		if (new_expanded[new_i] == NULL)
-		{
-			ft_strarrdel(&new_expanded);
-			return (NULL);
-		}
+			return (alias_expand_error(&alias_key, &new_expanded));
 		new_i++;
 	}
 	new_expanded[new_i] = alias_key;

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/01 16:55:12 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/02 12:42:02 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1036,4 +1036,40 @@ Test(alias_file, basic_file_test)
 	alias_read_file(&vshdata);
 	cr_expect_str_eq(vshdata.aliaslst->var, "test=alias");
 	remove(vshdata.alias_file);
+}
+
+TestSuite(replace_var);
+
+Test(replace_var, basic_test, .init=redirect_all_stdout)
+{
+	char		*line;
+	t_vshdata	vshdata;
+	t_tokenlst	*token_lst;
+	t_ast		*ast;
+	t_pipes		pipes;
+
+	g_state = (t_state*)ft_memalloc(sizeof(t_state));
+	g_state->exit_code = 0;
+	line = ft_strdup("dit=dat ; hier=daar\n");
+	vshdata.aliaslst = NULL;
+	vshdata.envlst = env_getlst();
+	redir_save_stdfds(&vshdata);
+	cr_assert(vshdata.envlst != NULL);
+	token_lst = NULL;
+	ast = NULL;
+	pipes = redir_init_pipestruct();
+	cr_expect(lexer(&line, &token_lst) == FUNCT_SUCCESS);
+	cr_assert(token_lst != NULL);
+	cr_expect(parser_start(&token_lst, &ast) == FUNCT_SUCCESS);
+	cr_assert(ast != NULL);
+	cr_expect(exec_start(ast, &vshdata, pipes) == FUNCT_SUCCESS);
+	cr_expect_str_eq(env_getvalue("dit", vshdata.envlst), "dat");
+	line = ft_strdup("echo $dit \"${hier}\"\n");
+	cr_assert(line != NULL);
+	cr_expect(lexer(&line, &token_lst) == FUNCT_SUCCESS);
+	cr_assert(token_lst != NULL);
+	cr_expect(parser_start(&token_lst, &ast) == FUNCT_SUCCESS);
+	cr_assert(ast != NULL);
+	cr_expect(exec_start(ast, &vshdata, pipes) == FUNCT_SUCCESS);
+	cr_expect_stdout_eq_str("dat daar\n");
 }

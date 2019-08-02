@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/01 13:27:45 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/02 12:14:50 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -473,7 +473,7 @@ void			lexer_state_ionum(t_scanner *scanner);
 
 int				alias_expansion(t_vshdata *vhsdata, t_tokenlst **tokenlst, char **expanded_aliases);
 int				alias_replace(t_vshdata *vshdata, t_tokenlst *probe, char *alias, char **expanded_aliases);
-int				alias_error(char **expanded);
+int				alias_error(char **line, t_tokenlst **tokenlst, char **expanded);
 int				alias_read_file(t_vshdata *vshdata);
 char			**alias_add_expanded(char **expanded, char *alias, char *alias_equal);
 
