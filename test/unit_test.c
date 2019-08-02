@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/02 12:42:02 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/02 16:52:23 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -497,7 +497,7 @@ Test(history_check, history_to_file)
 	char		*str1 = ft_strdup("check1\n");
 	char		*str2 = ft_strdup("check2\n");
 	char		*str3 = ft_strdup("check3\n");
-
+	char		temp[23] = { 'c', 'h', 'e', 'c', 'k', '1', -1, 'c', 'h', 'e', 'c', 'k', '2', -1, 'c', 'h', 'e', 'c', 'k', '3', -1, '\0'};
 	i = 0;
 	vshdata.history_file = ft_strdup("/tmp/.vsh_history1");
 	vshdata.history = (t_history **)ft_memalloc(sizeof(t_history *) * HISTORY_MAX);
@@ -516,7 +516,7 @@ Test(history_check, history_to_file)
 	ft_bzero(buf, 22);
 	ret = read(fd, buf, 22);
 	cr_expect(ret == 21);
-	cr_expect(ft_strcmp(buf, "check1\ncheck2\ncheck3\n") == 0);
+	cr_expect(ft_strcmp(buf, temp)== 0);
 	remove(vshdata.history_file);
 }
 

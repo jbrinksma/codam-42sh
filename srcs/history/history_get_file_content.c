@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/30 13:49:22 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/31 14:50:47 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/02 16:02:40 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int		get_line_in_history(int fd, t_vshdata *vshdata, int i)
 	char	*line;
 
 	line = NULL;
-	ret = ft_get_next_line(fd, &line);
+	ret = ft_get_next_line_delim(fd, &line, HIST_SEPARATE);
 	if (ret == -1)
 		return (FUNCT_ERROR);
 	vshdata->history[i] = (t_history*)ft_memalloc(sizeof(t_history));

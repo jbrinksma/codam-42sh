@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 15:25:10 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/31 16:40:02 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/02 16:02:48 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ static void	history_print_to_fd(int fd, t_history **history)
 	i = start;
 	while (i < HISTORY_MAX && history[i]->str != NULL)
 	{
-		ft_dprintf(fd, "%s%c", history[i]->str, '\n');
+		ft_dprintf(fd, "%s%c", history[i]->str, HIST_SEPARATE);
 		i++;
 	}
 	i = 0;
 	while (start != 0 && i < start && history[i]->str != NULL)
 	{
-		ft_dprintf(fd, "%s%c", history[i]->str, '\n');
+		ft_dprintf(fd, "%s%c", history[i]->str, HIST_SEPARATE);
 		i++;
 	}
 }
