@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/29 12:42:44 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/29 15:29:11 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/02 09:48:06 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,5 @@ int		shell_init_vshdata(t_vshdata *vshdata)
 		ft_eprintf("vsh: failed to allocate enough memory for shell start\n");
 		return (FUNCT_ERROR);
 	}
-	
 	return (FUNCT_SUCCESS);
 }

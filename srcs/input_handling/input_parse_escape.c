@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:36:25 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/07/15 15:53:31 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/02 10:03:20 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ int	input_parse_escape(t_inputdata *data)
 		data->input_state = INPUT_ESC;
 	else if (data->input_state == INPUT_ESC && data->c == '\e')
 		data->input_state = INPUT_D_ESC;
-	else if ((data->input_state == INPUT_ESC || data->input_state == INPUT_D_ESC)
-			&& data->c == '[')
+	else if ((data->input_state == INPUT_ESC
+			|| data->input_state == INPUT_D_ESC) && data->c == '[')
 		(data->input_state)++;
-	else if ((data->input_state == INPUT_BRACE || data->input_state == INPUT_D_BRACE)
-			&& data->c == '3')
+	else if ((data->input_state == INPUT_BRACE
+			|| data->input_state == INPUT_D_BRACE) && data->c == '3')
 		(data->input_state)++;
 	else
 		return (FUNCT_FAILURE);

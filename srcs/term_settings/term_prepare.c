@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 10:10:56 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/29 14:44:25 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/08/02 09:48:42 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static t_term	*term_return(t_term *term_p, int return_value)
 	return (term_p);
 }
 
-t_term	*term_prepare(t_envlst *envlst)
+t_term			*term_prepare(t_envlst *envlst)
 {
 	t_term	*term_p;
 

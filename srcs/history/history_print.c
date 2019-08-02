@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/30 20:47:41 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/26 17:13:39 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/02 09:49:13 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	find_start(t_history **history, int *smallest, int *start)
 	}
 }
 
-void	history_print(t_history **history)
+void		history_print(t_history **history)
 {
 	int i;
 	int	smallest;

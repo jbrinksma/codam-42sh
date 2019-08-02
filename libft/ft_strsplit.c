@@ -6,7 +6,7 @@
 /*   By: rkuijper <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 14:21:43 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/05/04 13:55:18 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/02 09:47:27 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	ft_word_length(const char *s, char c)
 	return (l);
 }
 
-static char		**clean_memory(char **new)
+static char	**clean_memory(char **new)
 {
 	int i;
 

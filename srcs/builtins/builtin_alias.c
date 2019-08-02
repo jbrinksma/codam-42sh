@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/24 13:36:44 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/30 10:26:00 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/02 10:01:03 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 /*
 **	alias [-p] [name[=value] ...]
-**	
+**
 **	The name cannot contain any special shell characters
 **	When -p is set, alias prints all aliases and still handles arguments
-*/ 
-
+*/
 
 static int	builtin_alias_print(char *arg, t_aliaslst *aliaslst)
 {
@@ -133,5 +132,5 @@ void		builtin_alias(char **args, t_aliaslst **aliaslst)
 			g_state->exit_code = EXIT_FAILURE;
 		else
 			g_state->exit_code = EXIT_SUCCESS;
-	}	
+	}
 }
