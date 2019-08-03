@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/02 13:50:51 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/02 18:31:30 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/03 11:12:33 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@
 
 #include "vsh.h"
 
+static int	return_error(int ret, int error)
+{
+	if (error == E_ALLOC)
+		ft_eprintf("vsh: failed to allocate enough memory\n");
+	return (ret);
+}
+
 static int	add_home_to_value(t_ast *node, int *i, char *home)
 {
 	char	*new_value;
@@ -25,7 +32,7 @@ static int	add_home_to_value(t_ast *node, int *i, char *home)
 	len_home = ft_strlen(home);
 	new_value = ft_strnew(len_home + ft_strlen(node->value));
 	if (new_value == NULL)
-		return (FUNCT_ERROR);
+		return (return_error(FUNCT_ERROR, E_ALLOC));
 	if (node->type == ASSIGN)
 		ft_strncpy(new_value, node->value,
 		ft_strchr(node->value, '=') - node->value + 1);

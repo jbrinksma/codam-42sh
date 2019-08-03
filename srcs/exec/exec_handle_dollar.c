@@ -6,11 +6,18 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/14 01:05:00 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/31 17:51:26 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/03 11:15:18 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+
+static int	return_error(int ret, int error)
+{
+	if (error == E_ALLOC)
+		ft_eprintf("vsh: failed to allocate enough memory\n");
+	return (ret);
+}
 
 /*
 **	Goal of the function is to take the expansion sequence and
@@ -29,7 +36,7 @@ static int	repl_regular_var(char **value, char *replace_str,
 		val_len = 0;
 	new = ft_strnew(ft_strlen(*value) - len + val_len);
 	if (new == NULL)
-		return (FUNCT_ERROR);
+		return (return_error(FUNCT_ERROR, E_ALLOC));
 	ft_strncpy(new, *value, start);
 	if (replace_str != NULL)
 		ft_strcat(new, replace_str);
@@ -60,7 +67,7 @@ int			exec_handle_dollar(char **value, int *i, t_envlst *envlst)
 		return (FUNCT_FAILURE);
 	identifier = ft_strndup(&(*value)[i_dollar + 1], *i - (i_dollar + 1));
 	if (identifier == NULL)
-		return (FUNCT_ERROR);
+		return (return_error(FUNCT_ERROR, E_ALLOC));
 	replace_str = env_getvalue(identifier, envlst);
 	ft_strdel(&identifier);
 	if (repl_regular_var(value, replace_str, i_dollar, *i - i_dollar)

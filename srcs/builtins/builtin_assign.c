@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 09:09:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/30 17:33:41 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/03 10:52:32 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int			builtin_assign(char *arg, t_envlst *envlst, int env_type)
 	{
 		if (builtin_assign_addnew(envlst, var, env_type) != FUNCT_SUCCESS)
 		{
-			ft_printf("assign: failed to allocate enough memory\n");
+			ft_printf("vsh: assign: failed to allocate enough memory\n");
 			g_state->exit_code = EXIT_FAILURE;
 			return (FUNCT_ERROR);
 		}

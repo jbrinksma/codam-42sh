@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/07 20:54:47 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/02 16:10:33 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/03 11:10:34 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	scan_value(t_ast *node, t_envlst *envlst)
 		else if ((*value)[i] == '$' && quote != '\'')
 		{
 			if (exec_handle_dollar(value, &i, envlst) == FUNCT_ERROR)
-				return (error_return(FUNCT_ERROR, E_ALLOC, NULL));
+				return (FUNCT_ERROR);
 		}
 		else
 			i++;
