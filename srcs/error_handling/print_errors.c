@@ -6,14 +6,14 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/22 11:14:25 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/01 17:02:47 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/04 16:24:27 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <unistd.h>
 
-int	error_return(int ret, int error, char *opt_str)
+int		error_return(int ret, int error, char *opt_str)
 {
 	if (error == E_BADFD)
 		ft_eprintf("vsh: %s: bad file descriptor\n", opt_str);
@@ -29,4 +29,19 @@ int	error_return(int ret, int error, char *opt_str)
 		ft_eprintf("vsh: failed to allocate enough memory\n");
 	g_state->exit_code = EXIT_FAILURE;
 	return (ret);
+}
+
+int		err_ret_exit(char *str, int exitcode)
+{
+	g_state->exit_code = exitcode;
+	if (str != NULL)
+		ft_eprintf("%s", str);
+	return (FUNCT_ERROR);
+}
+
+void	err_void_exit(char *str, int exitcode)
+{
+	g_state->exit_code = exitcode;
+	if (str != NULL)
+		ft_eprintf("%s", str);
 }

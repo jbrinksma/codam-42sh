@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/03 10:51:25 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/03 17:43:06 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int				exec_complete_command(t_ast *node, t_vshdata *vshdata,
 		return (FUNCT_ERROR);
 	exec_quote_remove(node);
 	if (redir_handle_pipe(pipes) == FUNCT_ERROR)
-		return (return_and_reset_fds(FUNCT_ERROR, vshdata)); 
+		return (return_and_reset_fds(FUNCT_ERROR, vshdata));
 	if (node->type == WORD)
 	{
 		if (node->sibling &&

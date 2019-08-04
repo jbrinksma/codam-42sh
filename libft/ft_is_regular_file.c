@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exec_cmd.c                                         :+:    :+:            */
+/*   ft_is_regular_file.c                               :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: omulder <omulder@student.codam.nl>           +#+                     */
+/*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/05/29 17:17:48 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/03 15:02:13 by mavan-he      ########   odam.nl         */
+/*   Created: 2019/08/04 12:11:41 by mavan-he       #+#    #+#                */
+/*   Updated: 2019/08/04 13:06:44 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vsh.h"
+#include <sys/stat.h>
 
-void		exec_cmd(char **args, t_vshdata *vshdata)
+int		ft_is_regular_file(const char *path)
 {
-	if (exec_builtin(args, vshdata) == false)
-		exec_external(args, vshdata);
-	ft_strarrdel(&args);
-	env_remove_tmp(vshdata->envlst);
+    struct stat stat_path;
+
+    if (stat(path, &stat_path) == -1)
+		return (-1);
+    return (S_ISREG(stat_path.st_mode));
 }

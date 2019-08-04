@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/08/02 15:12:53 by mavan-he      ########   odam.nl          #
+#    Updated: 2019/08/03 17:32:46 by mavan-he      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ history_to_file history_get_file_content history_line_to_array history_print \
 history_change_line history_index_change \
 exec_builtin exec_cmd exec_external exec_start exec_find_binary \
 exec_quote_remove exec_handle_variables exec_handle_dollar \
-exec_handle_bracketed_var exec_tilde_expansion \
+exec_handle_bracketed_var exec_tilde_expansion exec_validate_binary \
 redir_pipe redir redir_tools redir_tools2 \
 print_errors
 TESTS = unit_test builtin_assign_test

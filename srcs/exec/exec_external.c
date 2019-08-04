@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/08/01 11:00:05 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/04 16:26:06 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,25 @@ void			signal_print_newline(int signum)
 	ft_putchar('\n');
 }
 
-static bool		exec_bin(char *binary, char **args, char **vshenviron)
+static void		exec_bin(char *binary, char **args, char **vshenviron)
 {
 	pid_t	pid;
 	int		status;
 
+	if (exec_validate_binary(binary) == FUNCT_ERROR)
+		return ;
 	term_flags_init();
 	pid = fork();
 	if (pid < 0)
-		return (false);
+		return (err_void_exit(E_FORK_STR, EXIT_FAILURE));
 	if (pid > 0)
 		signal(SIGINT, signal_print_newline);
 	else
+	{
 		execve(binary, args, vshenviron);
+		ft_eprintf("vsh: failed to execute %s\n", binary);
+		exit(EXIT_FAILURE);
+	}
 	waitpid(pid, &status, WUNTRACED);
 	if (WIFEXITED(status))
 		g_state->exit_code = WEXITSTATUS(status);
@@ -54,34 +60,32 @@ static bool		exec_bin(char *binary, char **args, char **vshenviron)
 		g_state->exit_code = EXIT_FATAL + WTERMSIG(status);
 	signal(SIGINT, SIG_DFL);
 	term_flags_destroy();
-	free(vshenviron);
-	ft_strdel(&binary);
-	return (true);
 }
 
-bool			exec_external(char **args, t_vshdata *vshdata)
+void			exec_external(char **args, t_vshdata *vshdata)
 {
 	char	**vshenviron;
 	char	*binary;
 
 	binary = ft_strdup(args[0]);
-	if (binary == NULL)
-		return (false);
+	vshenviron = env_lsttoarr(vshdata->envlst, ENV_EXTERN);
+	if (binary == NULL || vshenviron == NULL)
+	{
+		ft_strdel(&binary);
+		free(vshenviron);
+		ft_eprintf("vsh: failed to allocate enough memory!\n");
+		g_state->exit_code = EXIT_FAILURE;
+		return ;
+	}
 	if (args[0][0] != '/' && ft_strnequ(args[0], "./", 2) == 0 &&
 		ft_strnequ(args[0], "../", 3) == 0)
 	{
 		ft_strdel(&binary);
-		binary = exec_find_binary(args[0], vshdata);
-		if (binary == NULL)
-			return (false);
+		if (exec_find_binary(args[0], vshdata, &binary) == FUNCT_SUCCESS)
+			exec_bin(binary, args, vshenviron);
 	}
-	vshenviron = env_lsttoarr(vshdata->envlst, ENV_EXTERN);
-	if (vshenviron == NULL)
-	{
-		ft_printf("vsh: failed to allocate enough memory!\n");
-		g_state->exit_code = EXIT_FAILURE;
-		ft_strdel(&binary);
-		return (false);
-	}
-	return (exec_bin(binary, args, vshenviron));
+	else
+		exec_bin(binary, args, vshenviron);
+	free(vshenviron);
+	ft_strdel(&binary);
 }
