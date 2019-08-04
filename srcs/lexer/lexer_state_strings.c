@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 12:12:00 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/31 10:49:35 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/04 12:59:56 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ void	lexer_state_word(t_scanner *scanner)
 {
 	if (tool_is_special(CURRENT_CHAR) == true)
 		scanner->flags |= T_FLAG_HASSPECIAL;
-	if (CURRENT_CHAR == '=' &&
-		(scanner->flags & T_FLAG_HASSPECIAL) == false)
-		scanner->flags |= T_FLAG_HASEQUAL;
+	if (CURRENT_CHAR == '=' && scanner->str[0] != '='
+		&& (scanner->flags & T_FLAG_HASSPECIAL) == false)
+		scanner->flags |= T_FLAG_ISASSIGN;
 	if (CURRENT_CHAR == '"' && (scanner->flags & T_STATE_SQUOTE) == false)
 		scanner->flags ^= T_STATE_DQUOTE;
 	if (CURRENT_CHAR == '\'' && (scanner->flags & T_STATE_DQUOTE) == false)
@@ -47,7 +47,7 @@ void	lexer_state_word(t_scanner *scanner)
 	else if ((scanner->flags & T_STATE_DQUOTE ||
 			scanner->flags & T_STATE_SQUOTE) && CURRENT_CHAR != '\0')
 		lexer_change_state(scanner, &lexer_state_word);
-	else if (scanner->flags & T_FLAG_HASEQUAL)
+	else if (scanner->flags & T_FLAG_ISASSIGN)
 		scanner->tk_type = ASSIGN;
 	else
 		scanner->tk_type = WORD;
