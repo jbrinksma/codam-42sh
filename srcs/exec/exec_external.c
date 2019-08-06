@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/08/04 16:26:06 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/05 15:21:55 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void			exec_external(char **args, t_vshdata *vshdata)
 	char	*binary;
 
 	binary = ft_strdup(args[0]);
-	vshenviron = env_lsttoarr(vshdata->envlst, ENV_EXTERN);
+	vshenviron = env_lsttoarr(vshdata->envlst);
 	if (binary == NULL || vshenviron == NULL)
 	{
 		ft_strdel(&binary);
