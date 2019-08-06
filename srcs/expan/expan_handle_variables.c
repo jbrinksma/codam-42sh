@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/07 20:54:47 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/06 10:54:08 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/06 12:20:34 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ int			expan_handle_variables(t_ast *node, t_envlst *envlst)
 {
 	if (node == NULL)
 		return (FUNCT_FAILURE);
-	if (expan_handle_variables(node->sibling, envlst) == FUNCT_ERROR)
+	if (expan_handle_variables(node->right, envlst) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
-	if (expan_handle_variables(node->child, envlst) == FUNCT_ERROR)
+	if (expan_handle_variables(node->left, envlst) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	if ((node->type == WORD || node->type == ASSIGN) &&
 		node->flags & T_FLAG_HASSPECIAL)

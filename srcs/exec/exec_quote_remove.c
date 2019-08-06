@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/13 11:20:18 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/23 15:08:38 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/05 13:21:34 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,10 @@ void		exec_quote_remove(t_ast *node)
 {
 	char *str;
 
-	if (node->child != NULL)
-		exec_quote_remove(node->child);
-	if (node->sibling != NULL)
-		exec_quote_remove(node->sibling);
+	if (node->left != NULL)
+		exec_quote_remove(node->left);
+	if (node->right != NULL)
+		exec_quote_remove(node->right);
 	if (node->type == WORD || node->type == ASSIGN)
 	{
 		str = node->value;

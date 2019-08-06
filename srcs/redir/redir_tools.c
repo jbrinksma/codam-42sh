@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/22 09:18:19 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/30 16:44:21 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/05 13:21:34 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,19 @@ int			redir_create_heredoc_fd(char *right_side)
 }
 
 /*
-**	If node->sibling->child != NULL, it means that the left side
+**	If node->right->left != NULL, it means that the left side
 **	of the redirection is explicitly given, and such the right side
-**	of the redirection is then 'node->sibling->child' != NULL instead
-**	of 'node->sibling'.
+**	of the redirection is then 'node->right->left' != NULL instead
+**	of 'node->right'.
 */
 
 void		redir_change_if_leftside(t_ast *node, int *left_side_fd,
 char **right_side)
 {
-	if (node->sibling->child != NULL)
+	if (node->right->left != NULL)
 	{
-		*left_side_fd = ft_atoi(node->sibling->value);
-		*right_side = node->sibling->child->value;
+		*left_side_fd = ft_atoi(node->right->value);
+		*right_side = node->right->left->value;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/21 19:54:55 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/16 16:06:41 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/06 11:10:48 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ bool	parser_io_redirect(t_tokenlst **token_lst, t_ast **ast)
 	if ((TK_TYPE != WORD && TK_TYPE != ASSIGN) ||
 		parser_add_astnode(token_lst, &redir) == false)
 		return (parser_return_del(ast));
-	if ((*ast)->child == NULL)
-		(*ast)->child = redir;
+	if ((*ast)->left == NULL)
+		(*ast)->left = redir;
 	else
-		(*ast)->child->child = redir;
-	(*ast)->sibling = (*ast)->child;
-	(*ast)->child = NULL;
+		(*ast)->left->left = redir;
+	(*ast)->right = (*ast)->left;
+	(*ast)->left = NULL;
 	return (true);
 }
 
@@ -51,20 +51,20 @@ t_ast	*parser_new_node(t_tokenlst *token)
 	}
 	else
 		node->value = NULL;
-	node->child = NULL;
-	node->sibling = NULL;
+	node->left = NULL;
+	node->right = NULL;
 	return (node);
 }
 
-bool	parser_add_sibling(t_tokenlst **token_lst, t_ast **ast,
+bool	parser_add_right(t_tokenlst **token_lst, t_ast **ast,
 		bool (*parse_priority_x)(t_tokenlst **, t_ast **))
 {
-	t_ast *sibling;
+	t_ast *right;
 
-	sibling = NULL;
-	if (parse_priority_x(token_lst, &sibling) != true)
+	right = NULL;
+	if (parse_priority_x(token_lst, &right) != true)
 		return (parser_return_del(ast));
-	(*ast)->sibling = sibling;
+	(*ast)->right = right;
 	return (true);
 }
 
@@ -78,8 +78,8 @@ bool	parser_add_astnode(t_tokenlst **token_lst, t_ast **ast)
 		(*token_lst)->flags |= T_MALLOC_ERROR;
 		return (false);
 	}
-	new_node->child = *ast;
-	new_node->sibling = NULL;
+	new_node->left = *ast;
+	new_node->right = NULL;
 	*ast = new_node;
 	*token_lst = (*token_lst)->next;
 	return (true);

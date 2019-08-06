@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/01 13:02:18 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/04 16:13:28 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,11 @@ int		shell_start(t_vshdata *vshdata)
 	char		*line;
 	t_tokenlst	*token_lst;
 	t_ast		*ast;
-	t_pipes		pipes;
 
 	status = 1;
 	line = NULL;
 	token_lst = NULL;
 	ast = NULL;
-	pipes = redir_init_pipestruct();
 	env_add_extern_value(vshdata->envlst, "OLDPWD", "");
 	while (status != CTRLD)
 	{
@@ -84,7 +82,7 @@ int		shell_start(t_vshdata *vshdata)
 		ft_putstr("\n\n\nTREE:\n\n");
 		print_tree(ast);
 		#endif
-		exec_start(ast, vshdata, pipes);
+		exec_complete_command(ast, vshdata);
 	}
 	return (FUNCT_SUCCESS);
 }

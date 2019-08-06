@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/25 19:13:12 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/23 15:08:26 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/05 13:21:34 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ bool		parser_cmd_suffix(t_tokenlst **token_lst, t_ast **cmd,
 	{
 		if (parser_io_redirect(token_lst, &new_ast) == false)
 			return (false);
-		if ((*cmd)->sibling == NULL)
-			(*cmd)->sibling = new_ast;
+		if ((*cmd)->right == NULL)
+			(*cmd)->right = new_ast;
 		else
-			(*last_prefix)->child = new_ast;
+			(*last_prefix)->left = new_ast;
 		*last_prefix = new_ast;
 		if (parser_cmd_suffix(token_lst, cmd, last_cmd_arg, last_prefix)
 			== false)
@@ -49,9 +49,9 @@ bool		parser_cmd_param(t_tokenlst **token_lst, t_ast **cmd,
 	if (parser_add_astnode(token_lst, &new_ast) == false)
 		return (false);
 	if (*last_cmd_arg == NULL)
-		(*cmd)->child = new_ast;
+		(*cmd)->left = new_ast;
 	else
-		(*last_cmd_arg)->child = new_ast;
+		(*last_cmd_arg)->left = new_ast;
 	*last_cmd_arg = new_ast;
 	if (parser_cmd_suffix(token_lst, cmd, last_cmd_arg, last_prefix)
 		== false)
@@ -78,7 +78,7 @@ static bool	parser_cmd_prefix(t_tokenlst **token_lst, t_ast **prefix,
 		if (*prefix == NULL)
 			*prefix = new_prefix;
 		else
-			(*last_prefix)->child = new_prefix;
+			(*last_prefix)->left = new_prefix;
 		*last_prefix = new_prefix;
 		if (parser_cmd_prefix(token_lst, prefix, last_prefix) == false)
 			return (false);
@@ -93,7 +93,7 @@ static bool	parser_cmd_word(t_tokenlst **token_lst, t_ast **cmd,
 	{
 		if (parser_add_astnode(token_lst, cmd) == false)
 			return (false);
-		(*cmd)->sibling = *prefix;
+		(*cmd)->right = *prefix;
 		return (true);
 	}
 	else if (*prefix != NULL)

@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/21 21:13:37 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/25 13:32:51 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/05 13:21:34 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@
 			(*lines)[depth] = ft_strjoin((*lines)[depth], parser_return_token_str(root->type));
 	}
 
-	if (root->sibling)
+	if (root->right)
 	{
 		(*lines)[depth] = ft_strjoin((*lines)[depth], " -- ");
-		tree_print_rec(root->sibling, depth, width + 1, false, lines);
+		tree_print_rec(root->right, depth, width + 1, false, lines);
 	}
 
-	if (root->child)
+	if (root->left)
 	{
 		depth++;
 		(*lines)[depth] = ft_strjoin("|   ", (*lines)[depth]);
-		tree_print_rec(root->child, depth + 1, width, true, lines);
+		tree_print_rec(root->left, depth + 1, width, true, lines);
 	}
 }
 
@@ -78,8 +78,8 @@ void			print_tree(t_ast *root)
 // 		return (0);
 // 	if (root->type != END)
 // 	{
-// 		lh = get_tree_height(root->child);
-// 		rh = get_tree_height(root->sibling);
+// 		lh = get_tree_height(root->left);
+// 		rh = get_tree_height(root->right);
 // 		return (1 + ((lh > rh) ? lh : rh));
 // 	}
 // 	else
@@ -97,10 +97,10 @@ static void		get_tree_width(t_ast *root, int *l_width)
 		width = ft_strlen(root->value);
 		width > *l_width ? *l_width = width : 0;
 	}
-	if (root->child != NULL)
-		get_tree_width(root->child, l_width);
-	if (root->sibling != NULL)
-		get_tree_width(root->sibling, l_width);
+	if (root->left != NULL)
+		get_tree_width(root->left, l_width);
+	if (root->right != NULL)
+		get_tree_width(root->right, l_width);
 }
 
 static void		print_color(int color)
@@ -128,8 +128,8 @@ static void		tree_print_rec(t_ast *root, int depth, int space, int width)
 	if (!root)
 		return ;
 	space += width;
-	if (root->sibling != NULL)
-		tree_print_rec(root->sibling, depth + 1, space, width);
+	if (root->right != NULL)
+		tree_print_rec(root->right, depth + 1, space, width);
 	i = width;
 	while (i < space)
 	{
@@ -141,8 +141,8 @@ static void		tree_print_rec(t_ast *root, int depth, int space, int width)
 		printf("%s\e[0m\n", root->value);
 	else
 		printf("%s\e[0m\n", parser_return_token_str(root->type));
-	if (root->child != NULL)
-		tree_print_rec(root->child, depth + 1, space, width);
+	if (root->left != NULL)
+		tree_print_rec(root->left, depth + 1, space, width);
 }
 
 void			print_tree(t_ast *root)

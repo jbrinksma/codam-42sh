@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 19:58:40 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/30 13:24:52 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/06 11:10:48 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static bool	parser_pipe_sequence(t_tokenlst **token_lst, t_ast **ast)
 		{
 			if (parser_add_astnode(token_lst, ast) == false)
 				return (parser_return_del(ast));
-			if (parser_add_sibling(token_lst, ast, &parser_command) != true)
+			if (parser_add_right(token_lst, ast, &parser_command) != true)
 				return (false);
 		}
 		return (true);
@@ -41,7 +41,7 @@ static bool	parser_and_or(t_tokenlst **token_lst, t_ast **ast)
 		{
 			if (parser_add_astnode(token_lst, ast) == false)
 				return (parser_return_del(ast));
-			if (parser_add_sibling(token_lst, ast, &parser_pipe_sequence)
+			if (parser_add_right(token_lst, ast, &parser_pipe_sequence)
 				!= true)
 				return (false);
 		}
@@ -61,7 +61,7 @@ static bool	parser_list(t_tokenlst **token_lst, t_ast **ast)
 				return (parser_return_del(ast));
 			if (TK_TYPE != NEWLINE)
 			{
-				if (parser_add_sibling(token_lst, ast, &parser_list) == false)
+				if (parser_add_right(token_lst, ast, &parser_list) == false)
 					return (false);
 			}
 		}

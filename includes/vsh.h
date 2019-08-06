@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/06 10:55:34 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/06 12:20:52 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,8 @@
 # define PIPE_UNINIT	-42
 # define PIPE_START		0
 # define PIPE_EXTEND	1
+# define PIPE_READ		0
+# define PIPE_WRITE		1
 
 /*
 **----------------------------------history-------------------------------------
@@ -345,8 +347,8 @@ typedef struct	s_ast
 	t_tokens		type;
 	char			flags;
 	char			*value;
-	struct s_ast	*child;
-	struct s_ast	*sibling;
+	struct s_ast	*left;
+	struct s_ast	*right;
 }				t_ast;
 
 /*
@@ -501,7 +503,7 @@ char			**alias_add_expanded(char **expanded, char *alias, char *alias_equal);
 */
 int				parser_start(t_tokenlst **token_lst, t_ast **ast);
 bool			parser_add_astnode(t_tokenlst **token_lst, t_ast **ast);
-bool			parser_add_sibling(t_tokenlst **token_lst, t_ast **ast,
+bool			parser_add_right(t_tokenlst **token_lst, t_ast **ast,
 				bool (*parse_priority_x)(t_tokenlst **, t_ast **));
 t_ast			*parser_new_node(t_tokenlst *token);
 bool			parser_command(t_tokenlst **token_lst, t_ast **ast);
@@ -567,10 +569,14 @@ bool			tool_check_for_whitespace(char *str);
 **----------------------------------execution-----------------------------------
 */
 
-int				exec_start(t_ast *ast, t_vshdata *vshdata, t_pipes pipes);
+int				exec_complete_command(t_ast *ast, t_vshdata *vshdata);
+int				exec_list(t_ast *ast, t_vshdata *vshdata);
+int				exec_and_or(t_ast *ast, t_vshdata *vshdata);
+int				exec_pipe_sequence(t_ast *ast, t_vshdata *vshdata, t_pipes pipes);
+int				exec_command(t_ast *ast, t_vshdata *vshdata, t_pipes pipes);
+
+
 void			exec_cmd(char **args, t_vshdata *vshdata);
-int				exec_complete_command(t_ast *node, t_vshdata *vshdata,
-					t_pipes pipes);
 bool			exec_builtin(char **args, t_vshdata *vshdata);
 void			exec_external(char **args, t_vshdata *vshdata);
 int				exec_find_binary(char *filename, t_vshdata *vshdata, char **binary);

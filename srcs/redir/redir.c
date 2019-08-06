@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/21 15:14:08 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/30 11:00:01 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/05 13:21:34 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int			redir_input(t_ast *node)
 	int		right_side_fd;
 
 	left_side_fd = STDIN_FILENO;
-	right_side = node->sibling->value;
+	right_side = node->right->value;
 	right_side_fd = FD_UNINIT;
 	redir_change_if_leftside(node, &left_side_fd, &right_side);
 	if (node->type == SLESS)
@@ -66,7 +66,7 @@ int			redir_output(t_ast *node)
 	int		right_side_fd;
 
 	left_side_fd = STDOUT_FILENO;
-	right_side = node->sibling->value;
+	right_side = node->right->value;
 	right_side_fd = FD_UNINIT;
 	redir_change_if_leftside(node, &left_side_fd, &right_side);
 	if (node->type == SGREAT)
