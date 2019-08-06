@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/05 15:22:53 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/06 11:09:29 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@
 # define E_STAT_STR "vsh: could not get stat info of file\n"
 # define E_ALLOC_STR "vsh: failed to allocate enough memory\n"
 # define E_FORK_STR "vsh: Fork Failed\n"
+# define E_HOME_NOTSET_STR "vsh: Environment value HOME not set\n"
+# define E_HIST_READ_STR "vsh: Failed to read history file\n"
+# define E_HIST_OPEN_STR "vsh: Failed to open / create history file\n"
+# define E_ALIAS_OPEN_STR "vsh: Failed to open alias file\n"
+# define E_ALIAS_READ_STR "vsh: Failed to read alias file\n"
 # define E_ALLOC 420
 # define E_DUP 100
 # define E_OPEN 101
@@ -621,6 +626,7 @@ int				history_index_change_up(t_inputdata *data);
 int				error_return(int ret, int error, char *opt_str);
 int				err_ret_exit(char *str, int exitcode);
 void			err_void_exit(char *str, int exitcode);
+int				err_ret(char *str);
 
 /*
 **----------------------------------debugging-----------------------------------
