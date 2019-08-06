@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exec_tilde_expansion.c                             :+:    :+:            */
+/*   expan_tilde_expansion.c                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
@@ -44,7 +44,7 @@ static int	add_home_to_value(t_ast *node, int *i, char *home)
 	return (FUNCT_SUCCESS);
 }
 
-int			exec_tilde_expansion(t_ast *node, int *i)
+int			expan_tilde_expansion(t_ast *node, int *i)
 {
 	char	*home;
 

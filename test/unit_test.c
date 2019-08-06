@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/03 17:02:11 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/06 10:53:34 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1099,11 +1099,11 @@ Test(tilde_expansion, basic_test)
 	ast.flags = T_FLAG_HASSPECIAL;
 	ast.type = WORD;
 	ast.value = ft_strdup("~/");
-	cr_expect(exec_handle_variables(&ast, vshdata.envlst) == FUNCT_SUCCESS);
+	cr_expect(expan_handle_variables(&ast, vshdata.envlst) == FUNCT_SUCCESS);
 	cr_expect_str_eq(ast.value, ft_strjoin(home, "/"));
 	ast.flags = T_FLAG_HASSPECIAL;
 	ast.type = ASSIGN;
 	ast.value = ft_strdup("dit=~");
-	cr_expect(exec_handle_variables(&ast, vshdata.envlst) == FUNCT_SUCCESS);
+	cr_expect(expan_handle_variables(&ast, vshdata.envlst) == FUNCT_SUCCESS);
 	cr_expect_str_eq(ast.value, ft_strjoin("dit=", home));
 }

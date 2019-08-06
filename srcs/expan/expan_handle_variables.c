@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exec_handle_variables.c                            :+:    :+:            */
+/*   expan_handle_variables.c                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/07 20:54:47 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/03 11:10:34 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/06 10:54:08 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	scan_value(t_ast *node, t_envlst *envlst)
 	value = &node->value;
 	i = 0;
 	quote = '\0';
-	if (exec_tilde_expansion(node, &i) == FUNCT_ERROR)
+	if (expan_tilde_expansion(node, &i) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	while ((*value)[i] != '\0')
 	{
@@ -51,7 +51,7 @@ static int	scan_value(t_ast *node, t_envlst *envlst)
 			update_quote_status((*value)[i], &i, &quote);
 		else if ((*value)[i] == '$' && quote != '\'')
 		{
-			if (exec_handle_dollar(value, &i, envlst) == FUNCT_ERROR)
+			if (expan_handle_dollar(value, &i, envlst) == FUNCT_ERROR)
 				return (FUNCT_ERROR);
 		}
 		else
@@ -60,13 +60,13 @@ static int	scan_value(t_ast *node, t_envlst *envlst)
 	return (FUNCT_SUCCESS);
 }
 
-int			exec_handle_variables(t_ast *node, t_envlst *envlst)
+int			expan_handle_variables(t_ast *node, t_envlst *envlst)
 {
 	if (node == NULL)
 		return (FUNCT_FAILURE);
-	if (exec_handle_variables(node->sibling, envlst) == FUNCT_ERROR)
+	if (expan_handle_variables(node->sibling, envlst) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
-	if (exec_handle_variables(node->child, envlst) == FUNCT_ERROR)
+	if (expan_handle_variables(node->child, envlst) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	if ((node->type == WORD || node->type == ASSIGN) &&
 		node->flags & T_FLAG_HASSPECIAL)

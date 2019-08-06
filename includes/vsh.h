@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/06 11:09:29 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/08/06 10:55:34 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -574,14 +574,20 @@ int				exec_complete_command(t_ast *node, t_vshdata *vshdata,
 bool			exec_builtin(char **args, t_vshdata *vshdata);
 void			exec_external(char **args, t_vshdata *vshdata);
 int				exec_find_binary(char *filename, t_vshdata *vshdata, char **binary);
-int				exec_handle_variables(t_ast *node, t_envlst *envlst);
-int				exec_handle_bracketed_var(char **value, int *i, t_envlst *envlst);
-int				exec_handle_dollar(char **value, int *i, t_envlst *envlst);
 void			exec_quote_remove(t_ast *node);
-int				exec_tilde_expansion(t_ast *node, int *i);
 int				exec_validate_binary(char *binary);
 
 void			signal_print_newline(int signum);
+
+/*
+**------------------------------------expan-------------------------------------
+*/
+
+int				expan_handle_variables(t_ast *node, t_envlst *envlst);
+int				expan_handle_bracketed_var(char **value, int *i, t_envlst *envlst);
+int				expan_handle_dollar(char **value, int *i, t_envlst *envlst);
+int				expan_tilde_expansion(t_ast *node, int *i);
+int				expan_var_error_print(char *str, int len);
 
 /*
 **------------------------------------redir-------------------------------------

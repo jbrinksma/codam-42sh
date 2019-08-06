@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exec_handle_dollar.c                               :+:    :+:            */
+/*   expan_handle_dollar.c                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/14 01:05:00 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/03 11:15:18 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/06 10:53:34 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-static int	return_error(int ret, int error)
+static int	return_error(int ret, int error) // deze error func kan straks weg
 {
+	g_state->exit_code = EXIT_FAILURE;
 	if (error == E_ALLOC)
 		ft_eprintf("vsh: failed to allocate enough memory\n");
 	return (ret);
@@ -51,14 +52,12 @@ static int	repl_regular_var(char **value, char *replace_str,
 **	and get its value (or nothing if it doesn't exist)
 */
 
-int			exec_handle_dollar(char **value, int *i, t_envlst *envlst)
+static int	expan_handle_var(char **value, int *i, t_envlst *envlst)
 {
 	int		i_dollar;
 	char	*replace_str;
 	char	*identifier;
 
-	if ((*value)[*i + 1] == '{')
-		return (exec_handle_bracketed_var(value, i, envlst));
 	i_dollar = *i;
 	(*i)++;
 	while (tools_isidentifierchar((*value)[*i]) == true)
@@ -77,4 +76,43 @@ int			exec_handle_dollar(char **value, int *i, t_envlst *envlst)
 		i_dollar += ft_strlen(replace_str);
 	*i = i_dollar;
 	return (FUNCT_SUCCESS);
+}
+
+static int	expan_questionmark(char **value, int *i)
+{
+	int		i_dollar;
+	char	*exit_str;
+
+	i_dollar = *i;
+	(*i)++;
+	if ((*value)[*i] == '{')
+	{
+		(*i) += 2;
+		if ((*value)[*i] != '}')
+			return (expan_var_error_print(&(*value)[i_dollar],
+			(*i - i_dollar) + 1));
+	}
+	(*i)++;
+	exit_str = ft_itoa(g_state->exit_code);
+	if (exit_str == NULL)
+		return (return_error(FUNCT_ERROR, E_ALLOC));
+	if (repl_regular_var(value, exit_str, i_dollar, *i - i_dollar)
+		== FUNCT_ERROR)
+		return (FUNCT_ERROR);
+	*i = i_dollar + ft_strlen(exit_str);
+	return (FUNCT_SUCCESS);
+}
+
+int			expan_handle_dollar(char **value, int *i, t_envlst *envlst)
+{
+	if ((*value)[*i + 1] == '{')
+	{
+		if ((*value)[*i + 2] == '?')
+			return (expan_questionmark(value, i));
+		return (expan_handle_bracketed_var(value, i, envlst));
+	}
+	else if ((*value)[*i + 1] == '?')
+		return (expan_questionmark(value, i));
+	else
+		return (expan_handle_var(value, i, envlst));
 }
