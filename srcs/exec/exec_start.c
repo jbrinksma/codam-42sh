@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/06 16:16:18 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/06 20:58:05 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,27 +59,24 @@ static char		**create_args(t_ast *ast)
 **	complete_command
 */
 
-static int		exec_redirs_or_assigns(t_ast *node, t_vshdata *vshdata,
+static int		exec_redirs_or_assigns(t_ast *ast, t_vshdata *vshdata,
 	int env_type)
 {
-	t_ast	*probe;
-
-	probe = node;
-	while (probe != NULL)
+	if (ast == NULL)
+		return (FUNCT_FAILURE);
+	if (tool_is_redirect_tk(ast->type) == true)
 	{
-		if (tool_is_redirect_tk(node->type) == true)
-		{
-			if (redir(probe) == FUNCT_ERROR)
-				return (FUNCT_ERROR);
-		}
-		else if (probe->type == ASSIGN)
-		{
-			if (builtin_assign(node->value, vshdata->envlst, env_type)
-			== FUNCT_ERROR)
-				return (FUNCT_ERROR);
-		}
-		probe = probe->left;
+		if (redir(ast) == FUNCT_ERROR)
+			return (FUNCT_ERROR);
 	}
+	else if (ast->type == ASSIGN)
+	{
+		if (builtin_assign(ast->value, vshdata->envlst, env_type)
+		== FUNCT_ERROR)
+			return (FUNCT_ERROR);
+	}
+	if (exec_redirs_or_assigns(ast->left, vshdata, env_type) == FUNCT_ERROR)
+		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
 
