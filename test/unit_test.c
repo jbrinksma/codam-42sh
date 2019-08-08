@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/06 12:21:03 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/07 13:42:59 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -672,7 +672,7 @@ Test(exec_find_bin, basic)
 	vshdata.envlst->type = ENV_EXTERN;
 	vshdata.envlst->next = NULL;
 	str = ft_strdup("vsh");
-	exec_find_binary(str, &vshdata, &bin);
+	exec_find_binary(str, vshdata.envlst, &bin);
 	cr_expect_str_eq(bin, ".//vsh");
 	ft_strdel(&bin);
 	ft_strdel(&str);
@@ -690,7 +690,7 @@ Test(exec_find_bin, basic2)
 	vshdata.envlst->next = NULL;
 	bin = NULL;
 	str = ft_strdup("ls");
-	exec_find_binary(str, &vshdata, &bin);
+	exec_find_binary(str, vshdata.envlst, &bin);
 	cr_expect_str_eq(bin, "/bin/ls");
 	ft_strdel(&bin);
 	ft_strdel(&str);
@@ -708,7 +708,7 @@ Test(exec_find_bin, advanced)
 	vshdata.envlst->next = NULL;
 	bin = NULL;
 	str = ft_strdup("ls");
-	exec_find_binary(str, &vshdata, &bin);
+	exec_find_binary(str, vshdata.envlst, &bin);
 	cr_expect_str_eq(bin, "/bin/ls");
 	ft_strdel(&bin);
 	ft_strdel(&str);
@@ -728,7 +728,7 @@ Test(exec_find_bin, nopath, .init=redirect_all_stdout)
 	vshdata.envlst->next = NULL;
 	bin = NULL;
 	str = ft_strdup("ls");
-	exec_find_binary(str, &vshdata, &bin);
+	exec_find_binary(str, vshdata.envlst, &bin);
 	cr_expect(bin == NULL);
 	ft_strdel(&bin);
 	ft_strdel(&str);

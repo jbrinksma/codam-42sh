@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/06 16:17:58 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/08 10:00:51 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -496,6 +496,7 @@ int				alias_replace(t_vshdata *vshdata, t_tokenlst *probe, char *alias, char **
 int				alias_error(char **line, t_tokenlst **tokenlst, char ***expanded);
 int				alias_read_file(t_vshdata *vshdata);
 char			**alias_add_expanded(char **expanded, char *alias, char *alias_equal);
+char			*alias_getvalue(char *var_key, t_aliaslst *aliaslst);
 
 
 /*
@@ -537,6 +538,7 @@ int				builtin_alias_set(char *arg, t_aliaslst **aliaslst);
 void			builtin_alias_delnode(t_aliaslst **node);
 void			builtin_alias_lstdel(t_aliaslst **lst);
 void			builtin_unalias(char **args, t_aliaslst **aliaslst);
+void			builtin_type(char **args, t_envlst *envlst, t_aliaslst *aliaslst);
 int				builtin_cd(char **args, t_envlst *envlst);
 void			builtin_cd_create_newpath(char **newpath, char *argpath);
 int				builtin_cd_change_dir(char *argpath, t_envlst *envlst,
@@ -579,7 +581,8 @@ int				exec_command(t_ast *ast, t_vshdata *vshdata, t_pipes pipes);
 void			exec_cmd(char **args, t_vshdata *vshdata);
 bool			exec_builtin(char **args, t_vshdata *vshdata);
 void			exec_external(char **args, t_vshdata *vshdata);
-int				exec_find_binary(char *filename, t_vshdata *vshdata, char **binary);
+int				exec_find_binary(char *filename, t_envlst *envlst, char **binary);
+int				find_binary(char *filename, t_envlst *envlst, char **binary);
 void			exec_quote_remove(t_ast *node);
 int				exec_validate_binary(char *binary);
 int    			exec_create_files(t_ast *ast);
