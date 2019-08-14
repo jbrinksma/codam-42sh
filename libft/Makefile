@@ -6,7 +6,7 @@
 #    By: jbrinksm <jbrinksm@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/01/09 11:10:43 by omulder        #+#    #+#                 #
-#    Updated: 2019/08/04 13:06:03 by mavan-he      ########   odam.nl          #
+#    Updated: 2019/08/12 10:30:59 by tde-jong      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ ft_joinstrcstr_free_s2.c ft_joinstrcstr_free_all.c \
 ft_get_next_line.c \
 ft_strjoinfree_s1.c ft_strjoinfree_s2.c ft_strjoinfree_all.c \
 ft_strclen.c ft_isalpha.c ft_isalnum.c ft_free_return.c ft_is_regular_file.c \
-ft_isdir.c 
+ft_isdir.c ft_aisint.c
 OBJECTS = $(FILES:.c=.o)
 
 all: $(OBJECTS) $(NAME)

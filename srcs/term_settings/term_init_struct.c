@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:04:22 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/05/31 14:51:50 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/08/13 15:02:21 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ t_term	*term_init_struct(void)
 	if (term_p == NULL)
 		return (NULL);
 	term_p->old_termios_p = \
-	(struct termios*)ft_memalloc(sizeof(struct termios));
+	(t_termios*)ft_memalloc(sizeof(t_termios));
 	if (term_p->old_termios_p == NULL)
 	{
 		free(term_p);
 		return (NULL);
 	}
-	term_p->termios_p = (struct termios*)ft_memalloc(sizeof(struct termios));
+	term_p->termios_p = (t_termios*)ft_memalloc(sizeof(t_termios));
 	if (term_p->termios_p == NULL)
 	{
 		free(term_p->old_termios_p);

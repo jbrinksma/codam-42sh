@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/08/06 13:19:21 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/08/13 15:01:04 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,16 @@
 #include <termios.h>
 #include <signal.h>
 
-static void		term_flags_init(void)
+static void		term_flags_init(t_termios *termios_p)
 {
-	g_state->termios_p->c_lflag |= (ECHO | ICANON | ISIG);
-	tcsetattr(STDIN_FILENO, TCSANOW, g_state->termios_p);
+	termios_p->c_lflag |= (ECHO | ICANON | ISIG);
+	tcsetattr(STDIN_FILENO, TCSANOW, termios_p);
 }
 
-static void		term_flags_destroy(void)
+static void		term_flags_destroy(t_termios *termios_p)
 {
-	g_state->termios_p->c_lflag &= ~(ECHO | ICANON | ISIG);
-	tcsetattr(STDIN_FILENO, TCSANOW, g_state->termios_p);
+	termios_p->c_lflag &= ~(ECHO | ICANON | ISIG);
+	tcsetattr(STDIN_FILENO, TCSANOW, termios_p);
 }
 
 void			signal_print_newline(int signum)
@@ -34,14 +34,14 @@ void			signal_print_newline(int signum)
 	ft_putchar('\n');
 }
 
-static void		exec_bin(char *binary, char **args, char **vshenviron)
+static void		exec_bin(char *binary, char **args, char **vshenviron, t_termios *termios_p)
 {
 	pid_t	pid;
 	int		status;
 
 	if (exec_validate_binary(binary) == FUNCT_ERROR)
 		return ;
-	term_flags_init();
+	term_flags_init(termios_p);
 	pid = fork();
 	if (pid < 0)
 		return (err_void_exit(E_FORK_STR, EXIT_FAILURE));
@@ -59,7 +59,7 @@ static void		exec_bin(char *binary, char **args, char **vshenviron)
 	else if (WIFSIGNALED(status))
 		g_state->exit_code = EXIT_FATAL + WTERMSIG(status);
 	signal(SIGINT, SIG_DFL);
-	term_flags_destroy();
+	term_flags_destroy(termios_p);
 }
 
 void			exec_external(char **args, t_vshdata *vshdata)
@@ -82,10 +82,10 @@ void			exec_external(char **args, t_vshdata *vshdata)
 	{
 		ft_strdel(&binary);
 		if (exec_find_binary(args[0], vshdata->envlst, &binary) == FUNCT_SUCCESS)
-			exec_bin(binary, args, vshenviron);
+			exec_bin(binary, args, vshenviron, vshdata->term->termios_p);
 	}
 	else
-		exec_bin(binary, args, vshenviron);
+		exec_bin(binary, args, vshenviron, vshdata->term->termios_p);
 	free(vshenviron);
 	ft_strdel(&binary);
 }
