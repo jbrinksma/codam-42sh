@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 09:09:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/03 10:52:32 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/17 16:32:00 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ int			builtin_assign_addexist(t_envlst *envlst, char *var, int env_type)
 		if (ft_strnequ(var, probe->var, varlen) == true &&
 		probe->var[varlen] == '=')
 		{
+			if (env_type & ENV_TEMP)
+			{
+				probe->type |= ENV_TMP_OVERWRITE;
+				return (FUNCT_FAILURE);
+			}
 			ft_strdel(&probe->var);
 			probe->type = env_type;
 			probe->var = var;

@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/18 12:14:39 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/20 18:45:13 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/17 16:39:22 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void		env_remove_tmp(t_envlst *env)
 
 	if (env == NULL || env->next == NULL)
 		return ;
+	if (env->next->type & ENV_TMP_OVERWRITE)
+		env->next->type &= ~ENV_TMP_OVERWRITE;
 	if (env->next->type == ENV_TEMP)
 	{
 		tmp = env->next;
