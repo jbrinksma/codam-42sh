@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 09:09:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/17 16:32:00 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/19 11:44:06 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ int			builtin_assign_addnew(t_envlst *envlst, char *var, int env_type)
 	return (FUNCT_SUCCESS);
 }
 
-int			builtin_assign(char *arg, t_envlst *envlst, int env_type)
+int			builtin_assign(char *arg, t_vshdata *vshdata, int env_type)
 {
 	char		*var;
 
 	g_state->exit_code = EXIT_FAILURE;
-	if (envlst == NULL || arg == NULL)
+	if (vshdata->envlst == NULL || arg == NULL)
 		return (FUNCT_ERROR);
 	var = ft_strdup(arg);
 	if (var == NULL)
@@ -71,14 +71,16 @@ int			builtin_assign(char *arg, t_envlst *envlst, int env_type)
 	else
 		env_type &= ~ENV_SPECIAL;
 	g_state->exit_code = EXIT_SUCCESS;
-	if (builtin_assign_addexist(envlst, var, env_type) != FUNCT_SUCCESS)
+	if (builtin_assign_addexist(vshdata->envlst, var, env_type) == FUNCT_FAILURE)
 	{
-		if (builtin_assign_addnew(envlst, var, env_type) != FUNCT_SUCCESS)
+		if (builtin_assign_addnew(vshdata->envlst, var, env_type) == FUNCT_ERROR)
 		{
-			ft_printf("vsh: assign: failed to allocate enough memory\n");
+			ft_eprintf("vsh: assign: failed to allocate enough memory\n");
 			g_state->exit_code = EXIT_FAILURE;
 			return (FUNCT_ERROR);
 		}
 	}
+	if (ft_strnequ(var, "PATH", 4) == true && var[4] == '=')
+		hash_reset(vshdata);
 	return (FUNCT_SUCCESS);
 }

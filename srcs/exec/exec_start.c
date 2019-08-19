@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/06 20:58:05 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/19 11:05:14 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static int		exec_redirs_or_assigns(t_ast *ast, t_vshdata *vshdata,
 	}
 	else if (ast->type == ASSIGN)
 	{
-		if (builtin_assign(ast->value, vshdata->envlst, env_type)
+		if (builtin_assign(ast->value, vshdata, env_type)
 		== FUNCT_ERROR)
 			return (FUNCT_ERROR);
 	}

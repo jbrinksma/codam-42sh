@@ -6,7 +6,7 @@
 /*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/06 13:09:18 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/08/08 11:52:46 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/08/18 14:40:58 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,7 @@
 
 static bool	is_builtin(char *name)
 {
-	if (ft_strequ(name, "echo") || ft_strequ(name, "exit") ||
-		ft_strequ(name, "cd") || ft_strequ(name, "export") ||
-		ft_strequ(name, "set") || ft_strequ(name, "unset") ||
-		ft_strequ(name, "history") || ft_strequ(name, "type") ||
-		ft_strequ(name, "alias") || ft_strequ(name, "unalias"))
+	if (tools_is_builtin(name) == true)
 	{
 		ft_printf("%s is a shell builtin\n", name);
 		return (true);

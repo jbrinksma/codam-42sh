@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 10:33:08 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/25 16:30:38 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/19 11:00:26 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@
 
 #include "vsh.h"
 
-static void	builtin_export_arg(char *arg, t_envlst *envlst, int type)
+static void	builtin_export_arg(char *arg, t_vshdata *vshdata, int type)
 {
 	t_envlst	*probe;
 	int			arglen;
 
-	probe = envlst;
+	probe = vshdata->envlst;
 	arglen = ft_strlen(arg);
 	if (ft_strchr(arg, '=') == NULL)
 	{
@@ -47,10 +47,10 @@ static void	builtin_export_arg(char *arg, t_envlst *envlst, int type)
 			}
 			probe = probe->next;
 		}
-		builtin_assign(arg, envlst, type);
+		builtin_assign(arg, vshdata, type);
 	}
 	else
-		builtin_assign(arg, envlst, type);
+		builtin_assign(arg, vshdata, type);
 }
 
 int			builtin_export_readflags(char *arg, int *flags)
@@ -103,7 +103,7 @@ int			builtin_export_getflags(char **args, int *flags, int *argc)
 	return (FUNCT_SUCCESS);
 }
 
-void		builtin_export_args(char **args, t_envlst *envlst, int flags)
+void		builtin_export_args(char **args, t_vshdata *vshdata, int flags)
 {
 	int i;
 	int	type;
@@ -115,7 +115,7 @@ void		builtin_export_args(char **args, t_envlst *envlst, int flags)
 	while (args[i] != NULL)
 	{
 		if (tools_is_valid_identifier(args[i]) == true)
-			builtin_export_arg(args[i], envlst, type);
+			builtin_export_arg(args[i], vshdata, type);
 		else
 		{
 			g_state->exit_code = EXIT_WRONG_USE;
@@ -125,7 +125,7 @@ void		builtin_export_args(char **args, t_envlst *envlst, int flags)
 	}
 }
 
-void		builtin_export(char **args, t_envlst *envlst)
+void		builtin_export(char **args, t_vshdata *vshdata)
 {
 	int	i;
 	int	flags;
@@ -139,7 +139,7 @@ void		builtin_export(char **args, t_envlst *envlst)
 		return ;
 	g_state->exit_code = EXIT_SUCCESS;
 	if (args[i] == NULL)
-		builtin_export_print(envlst, flags);
+		builtin_export_print(vshdata->envlst, flags);
 	else
-		builtin_export_args(&args[i], envlst, flags);
+		builtin_export_args(&args[i], vshdata, flags);
 }
