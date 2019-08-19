@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 12:12:00 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/04 12:59:56 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/19 15:10:43 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	lexer_state_word(t_scanner *scanner)
 	if (CURRENT_CHAR == '\\' && (scanner->flags & T_STATE_SQUOTE) == false)
 		lexer_change_state(scanner, &lexer_state_word_esc);
 	else if (lexer_is_shellspec(CURRENT_CHAR) == false &&
-			ft_isspace(CURRENT_CHAR) == false && CURRENT_CHAR != '\0')
+			ft_isblank(CURRENT_CHAR) == false && CURRENT_CHAR != '\0')
 		lexer_change_state(scanner, &lexer_state_word);
 	else if ((scanner->flags & T_STATE_DQUOTE ||
 			scanner->flags & T_STATE_SQUOTE) && CURRENT_CHAR != '\0')
