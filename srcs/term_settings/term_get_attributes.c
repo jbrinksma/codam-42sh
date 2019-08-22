@@ -13,11 +13,14 @@
 #include "vsh.h"
 #include <termios.h>
 
+/*
+**	Insert: check if it is a valid terminal file_d
+*/
+
 int		term_get_attributes(int fd, t_term *term_p)
 {
 	int	ret;
 
-	/* Insert: check if it is a valid terminal file_d */
 	if (term_p == NULL)
 		return (FUNCT_FAILURE);
 	ret = tcgetattr(fd, term_p->termios_p);

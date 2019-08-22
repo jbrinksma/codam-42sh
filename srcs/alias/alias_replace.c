@@ -65,6 +65,10 @@ static void	alias_combine_tokenlsts(t_tokenlst *probe, t_tokenlst *new_tokenlst)
 	probe->next = new_tokenlst;
 }
 
+/*
+**	int status had the comment: This may or may not need to get fixed
+*/
+
 int			alias_error(char **line, t_tokenlst **tokenlst, char ***expanded)
 {
 	ft_eprintf(E_N_ALLOC_STR, "alias");
@@ -84,7 +88,7 @@ int			alias_replace(t_vshdata *vshdata, t_tokenlst *probe, char *alias,
 	char		*alias_equal;
 	char		**new_expanded;
 	t_tokenlst	*new_tokenlst;
-	int			status; // This may or may not need to get fixed
+	int			status;
 
 	status = 1;
 	alias_equal = ft_strchr(alias, '=');

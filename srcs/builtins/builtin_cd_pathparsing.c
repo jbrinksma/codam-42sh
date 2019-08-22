@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/02 14:51:29 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/02 17:45:21 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/19 18:14:40 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,5 @@ char		*builtin_cd_create_newpath_wrap(char *currpath, char *argpath)
 	else
 		ft_strcpy(newpath, currpath);
 	builtin_cd_create_newpath(&newpath, argpath);
-	#ifdef DEBUG
-	ft_printf("FINAL:\t\t%s\n", newpath);
-	#endif
 	return (newpath);
 }

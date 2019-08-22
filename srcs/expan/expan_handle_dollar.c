@@ -12,7 +12,11 @@
 
 #include "vsh.h"
 
-static int	return_error(int ret, int error) // deze error func kan straks weg
+/*
+**	deze error func kan straks weg
+*/
+
+static int	return_error(int ret, int error)
 {
 	g_state->exit_code = EXIT_FAILURE;
 	if (error == E_ALLOC)

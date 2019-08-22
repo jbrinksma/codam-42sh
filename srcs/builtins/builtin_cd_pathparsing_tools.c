@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/02 14:58:14 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/02 17:48:18 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/19 18:15:27 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,6 @@ void		builtin_cd_create_newpath(char **newpath, char *argpath)
 	{
 		while (argpath[i] == '/')
 			i++;
-		#ifdef DEBUG
-		ft_printf("CURRENT:\t%s\nTO HANDLE:\t%s\n\n", *newpath, &argpath[i]);
-		#endif
 		if (argpath[i] != '\0')
 		{
 			if (ft_strequ(&argpath[i], ".") || ft_strnequ(&argpath[i], "./", 2))

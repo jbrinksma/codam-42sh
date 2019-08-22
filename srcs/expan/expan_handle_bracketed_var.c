@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   expan_handle_bracketed_var.c                        :+:    :+:            */
+/*   expan_handle_bracketed_var.c                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/07/14 01:02:46 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/05 16:43:37 by mavan-he      ########   odam.nl         */
+/*   Created: 2019/08/19 18:18:19 by omulder        #+#    #+#                */
+/*   Updated: 2019/08/19 18:18:52 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int			expan_handle_bracketed_var(char **value, int *i, t_envlst *envlst)
 	while (tools_isidentifierchar((*value)[*i]) == true)
 		(*i)++;
 	if ((*value)[*i] != '}' || *i == i_dollar + 2)
-		return (expan_var_error_print(&(*value)[i_dollar], (*i - i_dollar) + 1));
+		return (expan_var_error_print(&(*value)[i_dollar], *i - i_dollar + 1));
 	identifier = ft_strndup(&(*value)[i_dollar + 2], *i - (i_dollar + 2));
 	if (identifier == NULL)
 		return (FUNCT_ERROR);

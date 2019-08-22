@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/19 10:57:09 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/19 18:31:38 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,35 +54,25 @@ int		shell_start(t_vshdata *vshdata)
 		ft_strdel(&line);
 		parser_astdel(&ast);
 		lexer_tokenlstdel(&token_lst);
-		shell_display_prompt(vshdata->envlst);
-		if (input_read(vshdata, &line, &status) == FUNCT_ERROR)
-			continue;
-		if (shell_close_quote_and_esc(vshdata, &line, &status) == FUNCT_ERROR)
-			continue ;
-		ft_putchar('\n');
-		if (history_line_to_array(vshdata->history, &line) == FUNCT_ERROR)
-			continue ;
-		#ifdef DEBUG
-		ft_printf("\n>>>> LINE <<<<\n%s\n\n>>>> TOKEN_LST <<<<\n", line);
-		#endif
-		if (lexer(&line, &token_lst) != FUNCT_SUCCESS)
-			continue ;
-		if (shell_dless_input(vshdata, &token_lst) != FUNCT_SUCCESS)
-			continue ;
-		if (alias_expansion(vshdata, &token_lst, NULL) != FUNCT_SUCCESS)
-			continue ;
-		#ifdef DEBUG
- 		lexer_tokenlstiter(token_lst, print_node);
-		#endif
-		if ((token_lst->next)->type == NEWLINE)
-			continue ;
-		if (parser_start(&token_lst, &ast) != FUNCT_SUCCESS)
-			continue ;
-		#ifdef DEBUG
-		ft_putstr("\n\n\nTREE:\n\n");
-		print_tree(ast);
-		#endif
-		exec_complete_command(ast, vshdata);
+	shell_display_prompt(vshdata->envlst);
+	if (input_read(vshdata, &line, &status) == FUNCT_ERROR)
+		continue;
+	if (shell_close_quote_and_esc(vshdata, &line, &status) == FUNCT_ERROR)
+		continue ;
+	ft_putchar('\n');
+	if (history_line_to_array(vshdata->history, &line) == FUNCT_ERROR)
+		continue ;
+	if (lexer(&line, &token_lst) != FUNCT_SUCCESS)
+		continue ;
+	if (shell_dless_input(vshdata, &token_lst) != FUNCT_SUCCESS)
+		continue ;
+	if (alias_expansion(vshdata, &token_lst, NULL) != FUNCT_SUCCESS)
+		continue ;
+	if ((token_lst->next)->type == NEWLINE)
+		continue ;
+	if (parser_start(&token_lst, &ast) != FUNCT_SUCCESS)
+		continue ;
+	exec_complete_command(ast, vshdata);
 	}
 	return (FUNCT_SUCCESS);
 }

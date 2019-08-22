@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 10:10:56 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/13 15:01:46 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/08/19 18:31:04 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,15 @@ static t_term	*term_return(t_term *term_p, int return_value)
 	return (term_p);
 }
 
+/*
+**	TODO: Add specific alloc error for term_p
+*/
+
 t_term			*term_prepare(t_envlst *envlst)
 {
 	t_term	*term_p;
 
 	term_p = term_init_struct();
-	/* Add specific alloc error here */
 	if (term_p == NULL)
 		return (term_return(NULL, FUNCT_FAILURE));
 	if (term_is_valid(envlst) == FUNCT_FAILURE)

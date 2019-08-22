@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/02 15:03:51 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/19 11:02:32 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/19 18:32:08 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ t_vshdata *vshdata, char cd_flag)
 		return (cd_alloc_error());
 	if (env_add_extern_value(vshdata, "OLDPWD", currpath) == FUNCT_ERROR)
 		return (cd_alloc_error());
-
 	if (cd_flag == BUILTIN_CD_UP)
 	{
 		ft_strdel(&newpath);

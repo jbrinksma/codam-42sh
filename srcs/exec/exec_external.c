@@ -34,7 +34,8 @@ void			signal_print_newline(int signum)
 	ft_putchar('\n');
 }
 
-static void		exec_bin(char *binary, char **args, char **vshenviron, t_termios *termios_p)
+static void		exec_bin(char *binary, char **args, char **vshenviron,
+t_termios *termios_p)
 {
 	pid_t	pid;
 	int		status;
