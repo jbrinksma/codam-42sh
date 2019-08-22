@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/24 14:41:55 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/25 15:44:12 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/22 11:15:07 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	builtin_unalias_args(char **args, int i, t_aliaslst **aliaslst)
 		if (*aliaslst == NULL || builtin_unalias_find_and_del(args[i],
 			arg_len, aliaslst) == FUNCT_FAILURE)
 		{
-			ft_eprintf("vsh: unalias: %s: not found\n", args[i]);
+			ft_eprintf(E_N_P_NOT_FOUND, "unalias", args[i]);
 			g_state->exit_code = EXIT_FAILURE;
 		}
 		i++;
@@ -71,8 +71,8 @@ static int	builtin_unalias_flag(char **args, int *flag, int *i)
 		{
 			if (args[*i][j] != 'a')
 			{
-				ft_eprintf("vsh: unalias: -%c: invalid option\n", args[*i][j]);
-				ft_eprintf("unalias: usage: unalias [-a] name [name ...]\n");
+				ft_eprintf(E_N_P_INV_OPT, "unalias", args[*i][j]);
+				ft_eprintf(U_UNALIAS);
 				return (FUNCT_FAILURE);
 			}
 			(*flag) |= UNALIAS_FLAG_LA;
@@ -93,7 +93,7 @@ void		builtin_unalias(char **args, t_aliaslst **aliaslst)
 	g_state->exit_code = EXIT_FAILURE;
 	if (args[1] == NULL)
 	{
-		ft_eprintf("unalias: usage: unalias [-a] name [name ...]\n");
+		ft_eprintf(U_UNALIAS);
 		return ;
 	}
 	if (builtin_unalias_flag(args, &flag, &i) == FUNCT_FAILURE)

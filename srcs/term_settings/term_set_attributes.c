@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:11:05 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/31 13:24:54 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/22 11:41:12 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		term_set_attributes(t_term *term_p)
 	ret = tcsetattr(STDIN_FILENO, TCSANOW, term_p->termios_p);
 	if (ret == -1)
 	{
-		ft_eprintf("Couldn't set terminal attributes.\n");
+		ft_eprintf(E_TERM_CNT_GET);
 		return (FUNCT_FAILURE);
 	}
 	return (FUNCT_SUCCESS);

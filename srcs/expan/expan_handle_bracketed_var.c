@@ -19,7 +19,7 @@
 
 int			expan_var_error_print(char *str, int len)
 {
-	ft_eprintf("vsh: %.*s: bad substitution\n", len, str);
+	ft_eprintf(E_P_BAD_SUBS, len, str);
 	g_state->exit_code = EXIT_WRONG_USE;
 	return (FUNCT_ERROR);
 }

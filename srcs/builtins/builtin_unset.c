@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/19 18:45:24 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/23 11:37:23 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/08/22 11:55:30 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void		builtin_unset(char **args, t_envlst *envlst)
 	{
 		if (tools_is_valid_identifier(*args) == false)
 		{
-			ft_printf("vsh: unset: '%s': not a valid identifier\n", *args);
+			ft_eprintf(E_N_P_NOT_VAL_ID, "unset", *args);
 			g_state->exit_code = EXIT_FAILURE;
 		}
 		else

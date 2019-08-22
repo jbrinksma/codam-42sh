@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/18 13:09:06 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/19 11:44:15 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/22 11:56:49 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ static int	set_flag(char *arg, int *flags)
 		else
 		{
 			g_state->exit_code = EXIT_WRONG_USE;
-			ft_eprintf("vsh: hash: -%c: invalid option\n", arg[i]);
-			ft_eprintf("hash: usage: hash [-r] [utility ...]\n");
+			ft_eprintf(E_N_P_INV_OPT, "hash", arg[i]);
+			ft_eprintf(U_HASH);
 			return (FUNCT_FAILURE);
 		}
 		i++;
@@ -62,7 +62,7 @@ static int	add_to_ht(char *cmd, t_vshdata *vshdata)
 		return (FUNCT_ERROR);
 	if (ret == FUNCT_FAILURE)
 	{
-		ft_eprintf("vsh: hash: %s: not found\n", cmd);
+		ft_eprintf(E_N_P_NOT_FOUND, "hash", cmd);
 		return (FUNCT_FAILURE);
 	}
 	if (hash_ht_insert(vshdata, cmd, bin_path, HASH_NO_HIT) == FUNCT_ERROR)

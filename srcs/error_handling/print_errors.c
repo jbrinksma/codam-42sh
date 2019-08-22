@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/22 11:14:25 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/05 15:30:53 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/22 11:19:59 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,17 @@
 int		error_return(int ret, int error, char *opt_str)
 {
 	if (error == E_BADFD)
-		ft_eprintf("vsh: %s: bad file descriptor\n", opt_str);
+		ft_eprintf(E_P_BAD_FD, opt_str);
 	else if (error == E_DUP)
-		ft_eprintf("vsh: failed to duplicate file descriptor\n");
+		ft_eprintf(E_FAIL_DUP_FD);
 	else if (error == E_OPEN)
-		ft_eprintf("vsh: no perm / no such file or directory\n");
+		ft_eprintf(E_NO_PERM_NO_SUCH);
 	else if (error == E_BADRED)
-		ft_eprintf("vsh: %s: bad redirect\n", opt_str);
+		ft_eprintf(E_P_BAD_REDIR, opt_str);
 	else if (error == E_CLOSE)
-		ft_eprintf("vsh: failed to close file descriptor\n");
+		ft_eprintf(E_FD_CLOSE);
 	else if (error == E_ALLOC)
-		ft_eprintf("vsh: failed to allocate enough memory\n");
+		ft_eprintf(E_ALLOC_STR);
 	g_state->exit_code = EXIT_FAILURE;
 	return (ret);
 }

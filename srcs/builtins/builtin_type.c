@@ -6,7 +6,7 @@
 /*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/06 13:09:18 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/08/18 14:40:58 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/22 11:12:41 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static bool	is_executable(char *name)
 	currpath = getcwd(NULL, 0);
 	if (currpath == NULL)
 	{
-		ft_eprintf("vsh: cannot get current working directory\n");
+		ft_eprintf(E_NOT_CUR_DIR);
 		return (false);
 	}
 	ret = builtin_cd_create_newpath_wrap(currpath, name);
@@ -86,7 +86,7 @@ void		builtin_type(char **args, t_envlst *envlst, t_aliaslst *aliaslst)
 			is_executable(args[i]) == false)
 		{
 			g_state->exit_code = EXIT_FAILURE;
-			ft_eprintf("vsh: type: %s: not found\n", args[i]);
+			ft_eprintf(E_N_P_NOT_FOUND, "type", args[i]);
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/24 13:36:44 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/02 10:01:03 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/08/22 11:06:56 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	builtin_alias_print(char *arg, t_aliaslst *aliaslst)
 		}
 		aliaslst = aliaslst->next;
 	}
-	ft_eprintf("vsh: alias: %s: not found\n", arg);
+	ft_eprintf(E_N_P_NOT_FOUND, "alias", arg);
 	return (FUNCT_FAILURE);
 }
 
@@ -56,7 +56,7 @@ static int	builtin_alias_args(char **args, int i, t_aliaslst **aliaslst)
 			(ft_strnequ(args[i], "alias", 5) && args[i][5] == '=') ||
 			(ft_strnequ(args[i], "unalias", 7) && args[i][7] == '='))
 			{
-				ft_eprintf("vsh: alias: `%.*s': invalid alias name\n",
+				ft_eprintf(E_ALIAS_INV_NAME,
 				str_equal - args[i], args[i]);
 				ret = FUNCT_FAILURE;
 			}
@@ -96,8 +96,8 @@ static int	builtin_alias_flag(char **args, int *flag, int *i)
 		{
 			if (args[*i][j] != 'p')
 			{
-				ft_eprintf("vsh: alias: -%c: invalid option\n", args[*i][j]);
-				ft_eprintf("alias: usage: alias [-p] [name[=value] ... ]\n");
+				ft_eprintf(E_N_P_INV_OPT, "alias", args[*i][j]);
+				ft_eprintf(U_ALIAS);
 				return (FUNCT_FAILURE);
 			}
 			(*flag) |= ALIAS_FLAG_LP;

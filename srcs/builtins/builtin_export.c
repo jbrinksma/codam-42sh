@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 10:33:08 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/19 11:00:26 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/22 11:08:34 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,8 @@ int			builtin_export_readflags(char *arg, int *flags)
 			*flags |= EXP_FLAG_LP;
 		else
 		{
-			ft_printf("vsh: export: -%c: invalid option\n", arg[i]);
-			ft_putendl("export: usage: export");
-			ft_putendl(" [-n] [name[=value] ...] or export -p");
+			ft_eprintf(E_N_P_INV_OPT, "export", arg[i]);
+			ft_eprintf(U_EXPORT);
 			return (FUNCT_FAILURE);
 		}
 		i++;
@@ -119,7 +118,7 @@ void		builtin_export_args(char **args, t_vshdata *vshdata, int flags)
 		else
 		{
 			g_state->exit_code = EXIT_WRONG_USE;
-			ft_eprintf("vsh: export: '%s': not a valid identifier\n", args[i]);
+			ft_eprintf(E_N_P_NOT_VAL_ID, "export", args[i]);
 		}
 		i++;
 	}

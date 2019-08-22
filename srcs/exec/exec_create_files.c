@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/06 16:16:21 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/06 20:21:53 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/08/22 11:23:37 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	find_files(t_ast *ast)
 		fd = open(file, O_RDONLY | O_CREAT, REG_PERM);
 		if (fd == -1)
 		{
-			ft_eprintf("vsh: Failed to open/create %s\n", file);
+			ft_eprintf(E_FAIL_OPEN_P, file);
 			g_state->exit_code = EXIT_FAILURE;
 			return (FUNCT_ERROR);
 		}

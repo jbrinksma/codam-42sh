@@ -20,7 +20,7 @@
 static int	return_error(int ret, int error)
 {
 	if (error == E_ALLOC)
-		ft_eprintf("vsh: failed to allocate enough memory\n");
+		ft_eprintf(E_ALLOC_STR);
 	return (ret);
 }
 
@@ -56,7 +56,7 @@ int			expan_tilde_expansion(t_ast *node, int *i)
 	home = getenv("HOME");
 	if (home == NULL)
 	{
-		ft_eprintf("vsh: tilde: failed to get home directory\n");
+		ft_eprintf(E_N_FAIL_HOME, "tilde");
 		return (FUNCT_ERROR);
 	}
 	return (add_home_to_value(node, i, home));

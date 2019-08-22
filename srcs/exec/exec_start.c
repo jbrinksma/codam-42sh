@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/19 11:05:14 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/22 11:26:26 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int				exec_pipe_sequence(t_ast *ast, t_vshdata *vshdata, t_pipes pipes)
 	/* create pipe so that childs are properly linked */
 	if (pipe(pipes.currentpipe) == -1)
 	{
-		ft_eprintf("vsh: unable to create pipe");
+		ft_eprintf(E_NO_PIPE);
 		return (FUNCT_ERROR);
 	}
 	/* Create files if they don't exist yet */

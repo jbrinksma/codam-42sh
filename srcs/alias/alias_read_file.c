@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/29 13:27:43 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/05 15:58:45 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/22 12:04:23 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int			alias_read_file(t_vshdata *vshdata)
 		return (FUNCT_FAILURE);
 	if (access(vshdata->alias_file, R_OK) != 0)
 	{
-		ft_eprintf("vsh: %s: Permission denied\n", vshdata->alias_file);
+		ft_eprintf(E_N_PER_DEN_P, "alias", vshdata->alias_file);
 		return (FUNCT_FAILURE);
 	}
 	fd = open(vshdata->alias_file, O_RDONLY);

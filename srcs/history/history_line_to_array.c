@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/30 18:55:25 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/28 18:46:05 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/22 11:34:41 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int			history_line_to_array(t_history **history, char **line)
 	if (history[i]->str == NULL)
 	{
 		ft_strdel(line);
-		ft_eprintf("vsh: history: Error allocating memory\n");
+		ft_eprintf(E_N_ALLOC_STR, "history");
 		return (FUNCT_ERROR);
 	}
 	return (FUNCT_SUCCESS);

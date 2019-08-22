@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/26 20:29:50 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/02 15:13:39 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/22 10:46:24 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	alias_combine_tokenlsts(t_tokenlst *probe, t_tokenlst *new_tokenlst)
 
 int			alias_error(char **line, t_tokenlst **tokenlst, char ***expanded)
 {
-	ft_eprintf("vsh: alias: failed to allocate enough memory\n");
+	ft_eprintf(E_N_ALLOC_STR, "alias");
 	if (expanded != NULL && *expanded != NULL)
 		ft_strarrdel(expanded);
 	if (tokenlst != NULL && *tokenlst != NULL)

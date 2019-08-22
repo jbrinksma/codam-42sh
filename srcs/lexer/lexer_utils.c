@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 10:23:43 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/30 13:26:24 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/22 12:01:07 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	lexer_tokenlstdel(t_tokenlst **token_lst)
 int		lexer_error(char **line)
 {
 	ft_strdel(line);
-	ft_putstr_fd("vsh: lexer: malloc error\n", STDERR_FILENO);
+	ft_eprintf(E_N_ALLOC_STR, "lexer");
 	return (FUNCT_ERROR);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 15:16:46 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/08/19 12:38:13 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/08/22 11:30:40 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int			exec_find_binary(char *filename, t_vshdata *vshdata, char **binary)
 		return (FUNCT_ERROR);
 	if (ret == FUNCT_FAILURE)
 	{
-		ft_eprintf("vsh: %s: Command not found.\n", filename);
+		ft_eprintf(E_P_CMD_NOT_FOUND, filename);
 		return (err_ret_exit(NULL, EXIT_NOTFOUND));
 	}
 	bin_dup = ft_strdup(*binary);
