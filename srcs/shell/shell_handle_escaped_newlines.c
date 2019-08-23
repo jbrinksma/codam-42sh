@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/31 14:18:35 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/31 15:26:31 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/23 12:58:58 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ int			shell_handle_escaped_newlines(t_vshdata *vshdata, char **line,
 	while (ret != false)
 	{
 		ft_putstr("\nlinecont> ");
-		input_read(vshdata, &extra_line, status);
+		if (input_read(vshdata, &extra_line, status) == FUNCT_ERROR)
+			return (ft_free_return(extra_line, FUNCT_ERROR));
 		*line = ft_strjoinfree_all(*line, extra_line);
 		ret = remove_last_escaped_newline(*line);
 	}
