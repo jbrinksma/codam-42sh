@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/22 13:09:02 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/26 14:52:20 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -601,7 +601,7 @@ Test(history_check, print_history, .init=redirect_all_stdout)
 	cr_expect(history_get_file_content(&vshdata) == FUNCT_SUCCESS);
 	fflush(NULL);
 	history_print(vshdata.history);
-	cr_expect_stdout_eq_str("    1  check1\n    2  check2\n    3  check3\n");
+	cr_expect_stdout_eq_str("1\tcheck1\n2\tcheck2\n3\tcheck3\n");
 	remove(vshdata.history_file);
 }
 
