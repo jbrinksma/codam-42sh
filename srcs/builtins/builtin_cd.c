@@ -65,7 +65,7 @@ static int	cd_parse_flags(char **args, char *cd_flag, int *countflags)
 	return (FUNCT_SUCCESS);
 }
 
-static int	cd_parse_dash(char *newpath, t_vshdata *vshdata, char cd_flag,
+static int	cd_parse_dash(char *newpath, t_vshdata *data, char cd_flag,
 				char *var)
 {
 	if (newpath == NULL || *newpath == '\0')
@@ -73,11 +73,11 @@ static int	cd_parse_dash(char *newpath, t_vshdata *vshdata, char cd_flag,
 		ft_eprintf(E_CD_P_NOT_SET, var);
 		return (FUNCT_ERROR);
 	}
-	return (builtin_cd_change_dir(newpath, vshdata, cd_flag,
+	return (builtin_cd_change_dir(newpath, data, cd_flag,
 		(ft_strequ(var, "HOME") == 1) ? false : true));
 }
 
-int			builtin_cd(char **args, t_vshdata *vshdata)
+int			builtin_cd(char **args, t_vshdata *data)
 {
 	char	cd_flag;
 	char	*newpath;
@@ -89,13 +89,13 @@ int			builtin_cd(char **args, t_vshdata *vshdata)
 		return (FUNCT_ERROR);
 	if (args[1 + flags] == NULL || ft_strequ(args[1 + flags], "--") == 1)
 	{
-		newpath = env_getvalue("HOME", vshdata->envlst);
-		return (cd_parse_dash(newpath, vshdata, cd_flag, "HOME"));
+		newpath = env_getvalue("HOME", data->envlst);
+		return (cd_parse_dash(newpath, data, cd_flag, "HOME"));
 	}
 	if (ft_strequ(args[1 + flags], "-") == 1)
 	{
-		newpath = env_getvalue("OLDPWD", vshdata->envlst);
-		return (cd_parse_dash(newpath, vshdata, cd_flag, "OLDPWD"));
+		newpath = env_getvalue("OLDPWD", data->envlst);
+		return (cd_parse_dash(newpath, data, cd_flag, "OLDPWD"));
 	}
-	return (builtin_cd_change_dir(args[1 + flags], vshdata, cd_flag, false));
+	return (builtin_cd_change_dir(args[1 + flags], data, cd_flag, false));
 }

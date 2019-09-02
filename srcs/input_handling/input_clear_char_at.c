@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   term_free_struct.c                                 :+:    :+:            */
+/*   input_clear_char_at.c                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/18 18:18:53 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/27 11:41:39 by omulder       ########   odam.nl         */
+/*   Created: 2019/08/30 10:30:47 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/08/30 10:38:06 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-void	term_free_struct(t_vshdataterm **term_p)
+void		input_clear_char_at(char **line, unsigned index)
 {
-	if (term_p != NULL && *term_p != NULL)
+	unsigned i;
+
+	i = index;
+	while ((*line)[i])
 	{
-		if ((*term_p)->old_termios_p)
-			free((*term_p)->old_termios_p);
-		if ((*term_p)->termios_p)
-			free((*term_p)->termios_p);
-		free(*term_p);
-		*term_p = NULL;
+		(*line)[i] = (*line)[i + 1];
+		i++;
 	}
 }

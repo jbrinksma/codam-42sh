@@ -12,50 +12,50 @@
 
 #include "vsh.h"
 
-int		redir_save_stdfds(t_vshdata *vshdata)
+int		redir_save_stdfds(t_vshdata *data)
 {
-	vshdata->stdfds[STDIN_FILENO] = dup(STDIN_FILENO);
-	if (vshdata->stdfds[STDIN_FILENO] == -1)
+	data->stdfds[STDIN_FILENO] = dup(STDIN_FILENO);
+	if (data->stdfds[STDIN_FILENO] == -1)
 		return (FUNCT_ERROR);
-	vshdata->stdfds[STDOUT_FILENO] = dup(STDOUT_FILENO);
-	if (vshdata->stdfds[STDOUT_FILENO] == -1)
+	data->stdfds[STDOUT_FILENO] = dup(STDOUT_FILENO);
+	if (data->stdfds[STDOUT_FILENO] == -1)
 		return (FUNCT_ERROR);
-	vshdata->stdfds[STDERR_FILENO] = dup(STDERR_FILENO);
-	if (vshdata->stdfds[STDERR_FILENO] == -1)
+	data->stdfds[STDERR_FILENO] = dup(STDERR_FILENO);
+	if (data->stdfds[STDERR_FILENO] == -1)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
 
-int		return_and_reset_fds(int retval, t_vshdata *vshdata)
+int		return_and_reset_fds(int retval, t_vshdata *data)
 {
-	if (redir_reset_stdfds(vshdata) == FUNCT_ERROR)
+	if (redir_reset_stdfds(data) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	return (retval);
 }
 
-int		redir_reset_stdfds(t_vshdata *vshdata)
+int		redir_reset_stdfds(t_vshdata *data)
 {
 	int ret;
 
-	ret = dup2(vshdata->stdfds[STDIN_FILENO], STDIN_FILENO);
+	ret = dup2(data->stdfds[STDIN_FILENO], STDIN_FILENO);
 	if (ret == -1)
 		return (FUNCT_ERROR);
-	ret = dup2(vshdata->stdfds[STDOUT_FILENO], STDOUT_FILENO);
+	ret = dup2(data->stdfds[STDOUT_FILENO], STDOUT_FILENO);
 	if (ret == -1)
 		return (FUNCT_ERROR);
-	ret = dup2(vshdata->stdfds[STDERR_FILENO], STDERR_FILENO);
+	ret = dup2(data->stdfds[STDERR_FILENO], STDERR_FILENO);
 	if (ret == -1)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
 
-int		redir_close_saved_stdfds(t_vshdata *vshdata)
+int		redir_close_saved_stdfds(t_vshdata *data)
 {
-	if (close(vshdata->stdfds[0]) == -1)
+	if (close(data->stdfds[0]) == -1)
 		return (FUNCT_ERROR);
-	else if (close(vshdata->stdfds[1]) == -1)
+	else if (close(data->stdfds[1]) == -1)
 		return (FUNCT_ERROR);
-	else if (close(vshdata->stdfds[2]) == -1)
+	else if (close(data->stdfds[2]) == -1)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }

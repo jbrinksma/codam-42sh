@@ -6,48 +6,77 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 15:03:17 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/07/31 13:30:15 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/30 16:57:27 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-#include <sys/ioctl.h>
-#include <unistd.h>
 
-static void	parse_ctrl_line_up(unsigned *index)
+/*
+**	Moves the cursor (and index) up or sets it at home if it would otherwise
+**	collide with the prompt.
+*/
+
+static unsigned	get_cur_line_index(t_vshdata *data)
 {
-	struct winsize	ws;
+	int i;
 
-	ioctl(STDIN_FILENO, TIOCGWINSZ, &ws);
-	if (*index >= ws.ws_col)
+	i = data->line->index - 1;
+	while (i > 0)
 	{
-		ft_printf("\e[A");
-		*index -= ws.ws_col;
+		if (data->line->line[i] == '\n')
+			return (data->line->index - i - 1);
+		i--;
 	}
-	else
-	{
-		if (*index > 0)
-			ft_printf("\e[%dD", *index);
-		*index = 0;
-	}
+	return (data->line->index);
 }
 
-int			input_parse_ctrl_up(t_inputdata *data, char **line)
+static void		move_up_handle_newline(t_vshdata *data)
 {
-	(void)line;
-	if (((data->input_state == INPUT_BRACE
-	|| data->input_state == INPUT_D_BRACE) && data->c == 'A') ||
-	(data->input_state == INPUT_ESC && data->c == 10))
+	unsigned	i;
+	int			j;
+	unsigned	l;
+
+	i = data->line->index;
+	j = -1;
+	l = get_cur_line_index(data);
+	#ifdef DEBUG
+	ft_eprintf("Line index: %d\n", l);
+	#endif
+	while (i > 0)
 	{
-		if (data->input_state == INPUT_BRACE)
+		if (data->line->line[i] == '\n')
 		{
-			if (history_change_line(data, line, ARROW_UP) == FUNCT_ERROR)
-				return (FUNCT_ERROR);
+			if (j == -1)
+				j = 0;
+			else
+			{
+				j = 1;
+				break ;
+			}
 		}
-		else
-			parse_ctrl_line_up(&data->index);
-		data->input_state = INPUT_NONE;
-		return (FUNCT_SUCCESS);
+		i--;
 	}
-	return (FUNCT_FAILURE);
+	if (j != -1)
+		i += l + (j == 1 ? 1 : 0);
+	curs_move_n_left(data, data->line->index - i);
+}
+
+void			curs_move_up(t_vshdata *data)
+{
+	char			*newline_str;
+
+	if (data->line->index == 0)
+		return ;
+	newline_str = ft_strrnchr(data->line->line, '\n', data->line->index);
+	if (newline_str != NULL)
+		move_up_handle_newline(data);
+	else if (data->line->index < (unsigned)data->curs->cur_ws_col)
+		curs_go_home(data);
+	else
+	{
+		ft_printf(CURS_UP);
+		data->line->index -= data->curs->cur_ws_col;
+		data->curs->coords.y--;
+	}
 }

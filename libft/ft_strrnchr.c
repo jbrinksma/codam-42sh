@@ -1,26 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   hash_init.c                                        :+:    :+:            */
+/*   ft_strrnchr.c                                      :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
+/*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/08/19 11:23:37 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/26 18:40:20 by jbrinksm      ########   odam.nl         */
+/*   Created: 2019/08/23 15:38:14 by rkuijper       #+#    #+#                */
+/*   Updated: 2019/08/26 10:29:19 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vsh.h"
+#include "libft.h"
 
-void	hash_init(t_vshdata *data)
+char	*ft_strrnchr(const char *s, int c, int n)
 {
-	int i;
+	char *res;
 
-	i = 0;
-	while (i < HT_SIZE)
+	res = NULL;
+	if (s == NULL || n == 0)
+		return (res);
+	while (*s && n)
 	{
-		data->hashtable->ht[i] = NULL;
-		i++;
+		if (*s == (char)c)
+			res = (char*)s;
+		s++;
+		n--;
 	}
-	data->hashtable->ht_flag = HT_EMPTY;
+	if (c == 0)
+		return ((char*)s);
+	return (res);
 }

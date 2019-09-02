@@ -95,17 +95,17 @@ int			find_binary(char *filename, t_envlst *envlst, char **binary)
 	return (FUNCT_SUCCESS);
 }
 
-int			exec_find_binary(char *filename, t_vshdata *vshdata, char **binary)
+int			exec_find_binary(char *filename, t_vshdata *data, char **binary)
 {
 	int		ret;
 	char	*bin_dup;
 
-	ret = hash_check(vshdata, filename, binary);
+	ret = hash_check(data, filename, binary);
 	if (ret == FUNCT_SUCCESS)
 		return (FUNCT_SUCCESS);
 	if (ret == FUNCT_ERROR)
 		return (FUNCT_ERROR);
-	ret = find_binary(filename, vshdata->envlst, binary);
+	ret = find_binary(filename, data->envlst, binary);
 	if (ret == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	if (ret == FUNCT_FAILURE)
@@ -116,7 +116,7 @@ int			exec_find_binary(char *filename, t_vshdata *vshdata, char **binary)
 	bin_dup = ft_strdup(*binary);
 	if (bin_dup == NULL)
 		return (err_ret_exit(E_ALLOC_STR, EXIT_FAILURE));
-	if (hash_ht_insert(vshdata, filename, bin_dup, HASH_HIT) == FUNCT_ERROR)
+	if (hash_ht_insert(data, filename, bin_dup, HASH_HIT) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }

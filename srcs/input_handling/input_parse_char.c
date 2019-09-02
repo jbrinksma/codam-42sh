@@ -6,11 +6,12 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:33:54 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/07/28 18:43:03 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/30 16:53:50 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <termcap.h>
 
 /*
 **	This function makes sure that when you are inserting a char
@@ -23,8 +24,7 @@ static void	create_char_gap(char *line, int len, int gap_index)
 {
 	int	i;
 
-	i = len;
-	i--;
+	i = len - 1;
 	while (i >= gap_index)
 	{
 		line[i + 1] = line[i];
@@ -38,29 +38,29 @@ static void	create_char_gap(char *line, int len, int gap_index)
 **	of memory allocated for `*line` is doubled first.
 */
 
-static int	add_char_at(char **line, int index, char c, int *len_max)
+static int	add_char_at(t_vshdata *data, char **line)
 {
-	char		*tmp;
-	int			len;
+	char	*tmp;
 
-	len = ft_strlen(*line);
-	if (len < *len_max)
+	if (data->line->len_cur < data->line->len_max)
 	{
-		create_char_gap(*line, len, index);
-		(*line)[index] = c;
+		create_char_gap(*line, data->line->len_cur, data->line->index);
+		(*line)[data->line->index] = data->input->c;
 	}
 	else
 	{
-		*len_max *= 2;
-		tmp = ft_strnew(*len_max);
+		while (data->line->len_cur >= data->line->len_max)
+			data->line->len_max *= 2;
+		tmp = ft_strnew(data->line->len_max);
 		if (tmp == NULL)
 			return (FUNCT_ERROR);
 		ft_strcpy(tmp, *line);
 		ft_strdel(line);
-		create_char_gap(tmp, len, index);
-		tmp[index] = c;
+		create_char_gap(tmp, data->line->len_cur, data->line->index);
+		tmp[data->line->index] = data->input->c;
 		*line = tmp;
 	}
+	data->line->len_cur++;
 	return (FUNCT_SUCCESS);
 }
 
@@ -71,46 +71,43 @@ static int	add_char_at(char **line, int index, char c, int *len_max)
 **	by 1 byte first.
 */
 
-static int	add_newline(char **line, int *len_max)
+static int	add_newline(t_vshdata *data, char **line)
 {
-	char		*tmp;
-	int			len;
+	char	*tmp;
 
-	len = ft_strlen(*line);
-	if (len < *len_max)
-		(*line)[len] = '\n';
+	if (data->line->len_cur < data->line->len_max)
+		(*line)[data->line->len_cur] = '\n';
 	else
 	{
-		*len_max += 1;
-		tmp = ft_strnew(*len_max);
+		data->line->len_max += 1;
+		tmp = ft_strnew(data->line->len_max);
 		if (tmp == NULL)
 			return (FUNCT_ERROR);
 		ft_strcpy(tmp, *line);
 		ft_strdel(line);
-		tmp[len] = '\n';
+		tmp[data->line->len_cur] = '\n';
 		*line = tmp;
 	}
+	data->line->len_cur++;
 	return (FUNCT_SUCCESS);
 }
 
-int			input_parse_char(t_inputdata *data, char **line)
+int			input_parse_char(t_vshdata *data)
 {
-	unsigned len;
+	int	old_index;
 
-	if (ft_isprint(data->c))
+	if (ft_isprint(data->input->c))
 	{
-		if (add_char_at(line, data->index, data->c, &(data->len_max))
-		== FUNCT_ERROR)
+		if (add_char_at(data, &data->line->line) == FUNCT_ERROR)
 			return (FUNCT_ERROR);
-		len = ft_strlen(*line + data->index);
-		ft_printf("%s", *line + data->index);
-		if (len - 1 > 0)
-			ft_printf("\e[%dD", len - 1);
-		data->index += 1;
+		old_index = data->line->index;
+		input_print_str(data, data->line->line + data->line->index);
+		data->line->index = data->line->len_cur;
+		curs_move_n_left(data, data->line->index - old_index - 1);
 	}
-	else if (data->c == '\n')
+	else if (data->input->c == '\n')
 	{
-		if (add_newline(line, &(data->len_max)) == FUNCT_ERROR)
+		if (add_newline(data, &data->line->line) == FUNCT_ERROR)
 			return (FUNCT_ERROR);
 	}
 	return (FUNCT_SUCCESS);

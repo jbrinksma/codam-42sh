@@ -12,10 +12,10 @@
 
 #include "vsh.h"
 
-void		exec_cmd(char **args, t_vshdata *vshdata)
+void		exec_cmd(char **args, t_vshdata *data)
 {
-	if (exec_builtin(args, vshdata) == false)
-		exec_external(args, vshdata);
+	if (exec_builtin(args, data) == false)
+		exec_external(args, data);
 	ft_strarrdel(&args);
-	env_remove_tmp(vshdata->envlst);
+	env_remove_tmp(data->envlst);
 }

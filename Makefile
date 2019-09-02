@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/08/19 12:19:11 by mavan-he      ########   odam.nl          #
+#    Updated: 2019/08/30 14:05:53 by rkuijper      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,17 +28,20 @@ VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
 SRCS = shell_start shell_prompt shell_quote_checker shell_dless_input \
 shell_init_files shell_init_vshdata shell_getcurrentdir \
 shell_handle_escaped_newlines \
-input_read input_parse_char input_parse_escape input_parse_home \
+input_read input_parse_char input_parse_home \
 input_parse_end input_parse_prev input_parse_next input_parse_backspace \
 input_parse_delete input_parse_ctrl_c input_parse_ctrl_d input_parse_ctrl_k \
-input_parse_ctrl_up input_parse_ctrl_down input_is_word_start \
+input_parse_ctrl_up input_parse_ctrl_down input_print_str \
+input_parse_ctrl_u input_parse_ctrl_y input_resize_window_check \
+input_clear_char_at input_read_ansi input_parse_special \
+curs_move_n_left_hasnewlines curs_move_n_right_hasnewlines \
 term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct \
 env_getvalue env_getlst env_lsttoarr env_lstnew env_lstaddback env_lstdel \
 env_remove_tmp env_sort env_lstadd_to_sortlst env_addvalue \
 tools_is_char_escaped tool_is_redirect_tk tools_is_valid_identifier \
 tools_is_builtin tool_is_special tool_check_for_special tools_is_fdnumstr \
-tools_isidentifierchar tool_check_for_whitespace \
+tools_isidentifierchar tool_check_for_whitespace tools_isprintnotblank \
 builtin_echo builtin_echo_set_flags builtin_exit builtin_assign \
 builtin_export builtin_export_print builtin_set builtin_unset \
 builtin_alias builtin_alias_set builtin_alias_lstdel builtin_unalias \

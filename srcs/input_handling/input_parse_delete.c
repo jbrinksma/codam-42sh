@@ -6,26 +6,35 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:44:53 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/07/31 16:12:01 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/29 12:04:14 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <term.h>
 
-int	input_parse_delete(t_inputdata *data, char **line)
+/*
+**	Real line gets updated, then the cursor position is saved
+**	Lines will be cleared and everything will be reprinted
+*/
+
+void		input_handle_delete(t_vshdata *data)
 {
-	if (data->input_state == INPUT_THREE && data->c == '~')
+	unsigned	saved_index;
+	t_point		saved_coord;
+
+	if (data->line->index < data->line->len_cur)
 	{
-		if (data->index < ft_strlen(*line))
-		{
-			input_clear_char_at(line, data->index);
-			ft_printf("%s ", *line + data->index);
-			ft_printf("\e[%dD", ft_strlen(*line + data->index) + 1);
-		}
-		else
-			ft_putchar('\a');
-		data->input_state = INPUT_NONE;
-		return (FUNCT_SUCCESS);
+		ft_memcpy(&saved_coord, &data->curs->coords, sizeof(t_point));
+		input_clear_char_at(&data->line->line, data->line->index);
+		ft_putstr("\e[s");
+		saved_index = data->line->index;
+		curs_go_home(data);
+		tputs(data->termcaps->tc_clear_lines_str, 1, &ft_tputchar);
+		input_print_str(data, data->line->line);
+		ft_putstr("\e[u");
+		data->line->index = saved_index;
+		data->line->len_cur--;
+		ft_memcpy(&data->curs->coords, &saved_coord, sizeof(t_point));
 	}
-	return (FUNCT_FAILURE);
 }

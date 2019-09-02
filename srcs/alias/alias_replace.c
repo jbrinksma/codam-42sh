@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/26 20:29:50 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/22 10:46:24 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/23 13:41:40 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,29 +81,26 @@ int			alias_error(char **line, t_tokenlst **tokenlst, char ***expanded)
 	return (FUNCT_ERROR);
 }
 
-int			alias_replace(t_vshdata *vshdata, t_tokenlst *probe, char *alias,
+int			alias_replace(t_vshdata *data, t_tokenlst *probe, char *alias,
 			char **expanded)
 {
-	char		*new_line;
 	char		*alias_equal;
 	char		**new_expanded;
 	t_tokenlst	*new_tokenlst;
-	int			status;
 
-	status = 1;
 	alias_equal = ft_strchr(alias, '=');
-	new_line = ft_strjoin(alias_equal + 1, "\n");
+	ft_strdel(&data->line->line);
+	data->line->line = ft_strjoin(alias_equal + 1, "\n");
 	new_tokenlst = NULL;
-	if (new_line == NULL || shell_close_quote_and_esc(vshdata, &new_line,
-		&status) == FUNCT_ERROR
-		|| lexer(&new_line, &new_tokenlst) == FUNCT_ERROR
-		|| shell_dless_input(vshdata, &new_tokenlst) == FUNCT_ERROR)
-		return (alias_error(&new_line, &new_tokenlst, NULL));
+	if (data->line->line == NULL || shell_close_quote_and_esc(data) == FUNCT_ERROR
+		|| lexer(&data->line->line, &new_tokenlst) == FUNCT_ERROR
+		|| shell_dless_input(data, &new_tokenlst) == FUNCT_ERROR)
+		return (alias_error(&data->line->line, &new_tokenlst, NULL));
 	new_expanded = alias_add_expanded(expanded, alias, alias_equal);
 	if (new_expanded == NULL)
-		return (alias_error(&new_line, &new_tokenlst, &new_expanded));
-	if (alias_expansion(vshdata, &new_tokenlst, new_expanded) == FUNCT_ERROR)
-		return (alias_error(&new_line, &new_tokenlst, &new_expanded));
+		return (alias_error(&data->line->line, &new_tokenlst, &new_expanded));
+	if (alias_expansion(data, &new_tokenlst, new_expanded) == FUNCT_ERROR)
+		return (alias_error(&data->line->line, &new_tokenlst, &new_expanded));
 	ft_strarrdel(&new_expanded);
 	alias_combine_tokenlsts(probe, new_tokenlst);
 	return (FUNCT_SUCCESS);

@@ -12,7 +12,7 @@
 
 #include "vsh.h"
 
-int		env_add_extern_value(t_vshdata *vshdata, char *name, char *value)
+int		env_add_extern_value(t_vshdata *data, char *name, char *value)
 {
 	char		*var;
 	int			ret;
@@ -20,7 +20,7 @@ int		env_add_extern_value(t_vshdata *vshdata, char *name, char *value)
 	var = ft_strjoinfree_s2(name, ft_strjoin("=", value));
 	if (var == NULL)
 		return (FUNCT_ERROR);
-	ret = builtin_assign(var, vshdata, ENV_EXTERN);
+	ret = builtin_assign(var, data, ENV_EXTERN);
 	ft_strdel(&var);
 	return (ret);
 }

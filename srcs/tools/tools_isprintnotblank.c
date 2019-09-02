@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   term_free_struct.c                                 :+:    :+:            */
+/*   tools_isprintnotblank.c                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/04/18 18:18:53 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/27 11:41:39 by omulder       ########   odam.nl         */
+/*   Created: 2019/08/08 15:25:53 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/08/08 15:25:59 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-void	term_free_struct(t_vshdataterm **term_p)
+int			tools_isprintnotblank(int i)
 {
-	if (term_p != NULL && *term_p != NULL)
-	{
-		if ((*term_p)->old_termios_p)
-			free((*term_p)->old_termios_p);
-		if ((*term_p)->termios_p)
-			free((*term_p)->termios_p);
-		free(*term_p);
-		*term_p = NULL;
-	}
+	if (ft_isprint(i) == true && ft_isblank(i) == false)
+		return (true);
+	return (false);
 }

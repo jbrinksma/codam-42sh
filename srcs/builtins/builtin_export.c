@@ -27,12 +27,12 @@
 
 #include "vsh.h"
 
-static void	builtin_export_arg(char *arg, t_vshdata *vshdata, int type)
+static void	builtin_export_arg(char *arg, t_vshdata *data, int type)
 {
 	t_envlst	*probe;
 	int			arglen;
 
-	probe = vshdata->envlst;
+	probe = data->envlst;
 	arglen = ft_strlen(arg);
 	if (ft_strchr(arg, '=') == NULL)
 	{
@@ -47,10 +47,10 @@ static void	builtin_export_arg(char *arg, t_vshdata *vshdata, int type)
 			}
 			probe = probe->next;
 		}
-		builtin_assign(arg, vshdata, type);
+		builtin_assign(arg, data, type);
 	}
 	else
-		builtin_assign(arg, vshdata, type);
+		builtin_assign(arg, data, type);
 }
 
 int			builtin_export_readflags(char *arg, int *flags)
@@ -102,7 +102,7 @@ int			builtin_export_getflags(char **args, int *flags, int *argc)
 	return (FUNCT_SUCCESS);
 }
 
-void		builtin_export_args(char **args, t_vshdata *vshdata, int flags)
+void		builtin_export_args(char **args, t_vshdata *data, int flags)
 {
 	int i;
 	int	type;
@@ -114,7 +114,7 @@ void		builtin_export_args(char **args, t_vshdata *vshdata, int flags)
 	while (args[i] != NULL)
 	{
 		if (tools_is_valid_identifier(args[i]) == true)
-			builtin_export_arg(args[i], vshdata, type);
+			builtin_export_arg(args[i], data, type);
 		else
 		{
 			g_state->exit_code = EXIT_WRONG_USE;
@@ -124,7 +124,7 @@ void		builtin_export_args(char **args, t_vshdata *vshdata, int flags)
 	}
 }
 
-void		builtin_export(char **args, t_vshdata *vshdata)
+void		builtin_export(char **args, t_vshdata *data)
 {
 	int	i;
 	int	flags;
@@ -138,7 +138,7 @@ void		builtin_export(char **args, t_vshdata *vshdata)
 		return ;
 	g_state->exit_code = EXIT_SUCCESS;
 	if (args[i] == NULL)
-		builtin_export_print(vshdata->envlst, flags);
+		builtin_export_print(data->envlst, flags);
 	else
-		builtin_export_args(&args[i], vshdata, flags);
+		builtin_export_args(&args[i], data, flags);
 }

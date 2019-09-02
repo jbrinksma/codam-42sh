@@ -12,25 +12,25 @@
 
 #include "vsh.h"
 
-static void	reset_exit(int exit_code, t_term *term_p)
+static void	reset_exit(int exit_code, t_vshdataterm*term_p)
 {
 	if (term_reset(term_p) == FUNCT_FAILURE)
 		ft_eprintf(E_NOT_RESET);
 	exit(exit_code);
 }
 
-void		builtin_exit(char **args, t_vshdata *vshdata)
+void		builtin_exit(char **args, t_vshdata *data)
 {
 	ft_eprintf("exit\n");
-	history_to_file(vshdata);
+	history_to_file(data);
 	if (args == NULL)
-		reset_exit(g_state->exit_code, vshdata->term);
+		reset_exit(g_state->exit_code, data->term);
 	if (args[1] != NULL && args[2] == NULL)
 	{
 		if (ft_aisint(args[1]) == true)
-			reset_exit(ft_atoi(args[1]), vshdata->term);
+			reset_exit(ft_atoi(args[1]), data->term);
 		ft_eprintf(E_N_P_NUM_REQ, "exit", args[1]);
-		reset_exit(EXIT_WRONG_USE, vshdata->term);
+		reset_exit(EXIT_WRONG_USE, data->term);
 	}
 	else if (args[1] != NULL && args[2] != NULL)
 	{
@@ -38,5 +38,5 @@ void		builtin_exit(char **args, t_vshdata *vshdata)
 		g_state->exit_code = EXIT_WRONG_USE;
 		return ;
 	}
-	reset_exit(g_state->exit_code, vshdata->term);
+	reset_exit(g_state->exit_code, data->term);
 }

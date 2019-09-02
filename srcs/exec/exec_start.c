@@ -59,7 +59,7 @@ static char		**create_args(t_ast *ast)
 **	complete_command
 */
 
-static int		exec_redirs_or_assigns(t_ast *ast, t_vshdata *vshdata,
+static int		exec_redirs_or_assigns(t_ast *ast, t_vshdata *data,
 	int env_type)
 {
 	if (ast == NULL)
@@ -71,40 +71,40 @@ static int		exec_redirs_or_assigns(t_ast *ast, t_vshdata *vshdata,
 	}
 	else if (ast->type == ASSIGN)
 	{
-		if (builtin_assign(ast->value, vshdata, env_type)
+		if (builtin_assign(ast->value, data, env_type)
 		== FUNCT_ERROR)
 			return (FUNCT_ERROR);
 	}
-	if (exec_redirs_or_assigns(ast->left, vshdata, env_type) == FUNCT_ERROR)
+	if (exec_redirs_or_assigns(ast->left, data, env_type) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
 
-int				exec_command(t_ast *ast, t_vshdata *vshdata, t_pipes pipes)
+int				exec_command(t_ast *ast, t_vshdata *data, t_pipes pipes)
 {
 	char	**command;
 
-	if (expan_handle_variables(ast, vshdata->envlst) == FUNCT_ERROR)
+	if (expan_handle_variables(ast, data->envlst) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	exec_quote_remove(ast);
 	if (redir_handle_pipe(pipes) == FUNCT_ERROR)
-		return (return_and_reset_fds(FUNCT_ERROR, vshdata));
+		return (return_and_reset_fds(FUNCT_ERROR, data));
 	if (ast->type == WORD)
 	{
 		if (ast->right &&
-		exec_redirs_or_assigns(ast->right, vshdata, ENV_TEMP) == FUNCT_ERROR)
-			return (return_and_reset_fds(FUNCT_ERROR, vshdata));
+		exec_redirs_or_assigns(ast->right, data, ENV_TEMP) == FUNCT_ERROR)
+			return (return_and_reset_fds(FUNCT_ERROR, data));
 		command = create_args(ast);
 		if (command == NULL)
-			return (return_and_reset_fds(FUNCT_ERROR, vshdata));
-		exec_cmd(command, vshdata);
+			return (return_and_reset_fds(FUNCT_ERROR, data));
+		exec_cmd(command, data);
 	}
 	else if (ast->type == ASSIGN || tool_is_redirect_tk(ast->type) == true)
 	{
-		if (exec_redirs_or_assigns(ast, vshdata, ENV_LOCAL) == FUNCT_ERROR)
-			return (return_and_reset_fds(FUNCT_ERROR, vshdata));
+		if (exec_redirs_or_assigns(ast, data, ENV_LOCAL) == FUNCT_ERROR)
+			return (return_and_reset_fds(FUNCT_ERROR, data));
 	}
-	return (return_and_reset_fds(FUNCT_SUCCESS, vshdata));
+	return (return_and_reset_fds(FUNCT_SUCCESS, data));
 }
 
 /*
@@ -116,13 +116,13 @@ int				exec_command(t_ast *ast, t_vshdata *vshdata, t_pipes pipes)
 **	be siblings of pipenodes, and will thus be PIPE_EXTEND.
 */
 
-int				exec_pipe_sequence(t_ast *ast, t_vshdata *vshdata, t_pipes pipes)
+int				exec_pipe_sequence(t_ast *ast, t_vshdata *data, t_pipes pipes)
 {
 	t_pipes	childpipes;
 
 	/* Skip this phase if there is no `pipe_sequence` node */
 	if (ast->type != PIPE)
-		return (exec_command(ast, vshdata, pipes));
+		return (exec_command(ast, data, pipes));
 
 	/* create pipe so that childs are properly linked */
 	if (pipe(pipes.currentpipe) == -1)
@@ -139,7 +139,7 @@ int				exec_pipe_sequence(t_ast *ast, t_vshdata *vshdata, t_pipes pipes)
 		childpipes = pipes;
 		childpipes.parentpipe[PIPE_READ] = pipes.currentpipe[PIPE_READ];
 		childpipes.parentpipe[PIPE_WRITE] = pipes.currentpipe[PIPE_WRITE];
-		if (exec_pipe_sequence(ast->left, vshdata, childpipes) == FUNCT_ERROR)
+		if (exec_pipe_sequence(ast->left, data, childpipes) == FUNCT_ERROR)
 			return (FUNCT_ERROR);
 	}
 
@@ -147,7 +147,7 @@ int				exec_pipe_sequence(t_ast *ast, t_vshdata *vshdata, t_pipes pipes)
 	if (ast->left->type != PIPE)
 	{
 		pipes.pipeside = PIPE_START;
-		if (exec_command(ast->left, vshdata, pipes) == FUNCT_ERROR)
+		if (exec_command(ast->left, data, pipes) == FUNCT_ERROR)
 			return (FUNCT_ERROR);
 	}
 
@@ -156,7 +156,7 @@ int				exec_pipe_sequence(t_ast *ast, t_vshdata *vshdata, t_pipes pipes)
 
 	/* these are the nodes to be piped towards (and potentially from) */
 	pipes.pipeside = PIPE_EXTEND;
-	if (exec_command(ast->right, vshdata, pipes) == FUNCT_ERROR)
+	if (exec_command(ast->right, data, pipes) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 
 	/* always attempt to close the read end of pipe */
@@ -164,7 +164,7 @@ int				exec_pipe_sequence(t_ast *ast, t_vshdata *vshdata, t_pipes pipes)
 	return (FUNCT_SUCCESS);
 }
 
-int				exec_and_or(t_ast *ast, t_vshdata *vshdata)
+int				exec_and_or(t_ast *ast, t_vshdata *data)
 {
 	t_pipes pipes;
 
@@ -173,10 +173,10 @@ int				exec_and_or(t_ast *ast, t_vshdata *vshdata)
 
 	/* Skip this phase if no `and_or` node is present */
 	if (ast->type != AND_IF && ast->type != OR_IF)
-		return (exec_pipe_sequence(ast, vshdata, pipes));
+		return (exec_pipe_sequence(ast, data, pipes));
 
 	/* Execute the leftside of `and_or / or_if` node */
-	if (exec_and_or(ast->left, vshdata) == FUNCT_ERROR)
+	if (exec_and_or(ast->left, data) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 
 	/* Depending on EXIT status return or continue */
@@ -186,39 +186,39 @@ int				exec_and_or(t_ast *ast, t_vshdata *vshdata)
 		return (FUNCT_FAILURE);
 
 	/* Execute the rightside of `and_or / or_if` node  */
-	if (exec_and_or(ast->right, vshdata) == FUNCT_ERROR)
+	if (exec_and_or(ast->right, data) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
 
-int				exec_list(t_ast *ast, t_vshdata *vshdata)
+int				exec_list(t_ast *ast, t_vshdata *data)
 {
 	/* Skip this phase if no `list` node is present */
 	if (ast->type != BG && ast->type != SEMICOL)
-		return (exec_and_or(ast, vshdata));
+		return (exec_and_or(ast, data));
 
 	/* if background token: do optional BG shenanigans */
 
 	/* Execute first list */
-	if (exec_and_or(ast->left, vshdata) == FUNCT_ERROR)
+	if (exec_and_or(ast->left, data) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 
 	/* If there are more lists */
 	if (ast->right != NULL)
 	{
-		if (exec_list(ast->right, vshdata) == FUNCT_ERROR)
+		if (exec_list(ast->right, data) == FUNCT_ERROR)
 			return (FUNCT_ERROR);
 	}
 	return (FUNCT_SUCCESS);
 }
 
-int				exec_complete_command(t_ast *ast, t_vshdata *vshdata)
+int				exec_complete_command(t_ast *ast, t_vshdata *data)
 {
 	if (ast == NULL)
 		return (FUNCT_ERROR);
 
 	/* run list */
-	if (exec_list(ast, vshdata) == FUNCT_ERROR)
+	if (exec_list(ast, data) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	
 	return (FUNCT_SUCCESS);

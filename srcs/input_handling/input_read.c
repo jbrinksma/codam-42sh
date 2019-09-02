@@ -6,30 +6,18 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/17 14:03:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/01 14:59:52 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/09/02 13:58:55 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <unistd.h>
 
-void		input_clear_char_at(char **line, unsigned index)
-{
-	unsigned i;
-
-	i = index;
-	while ((*line)[i])
-	{
-		(*line)[i] = (*line)[i + 1];
-		i++;
-	}
-}
-
 static int	find_start(t_history **history)
 {
 	int i;
-	int largest;
 	int start;
+	int largest;
 
 	i = 0;
 	start = 0;
@@ -46,58 +34,64 @@ static int	find_start(t_history **history)
 	return (start + 1);
 }
 
-t_inputdata	*init_inputdata(t_vshdata *vshdata)
+static int	reset_input_read_return(t_vshdata *data, int ret)
 {
-	t_inputdata	*new;
-
-	new = (t_inputdata*)ft_memalloc(sizeof(t_inputdata));
-	if (new == NULL)
-		return (NULL);
-	new->c = 0;
-	new->index = 0;
-	new->input_state = 0;
-	new->hist_index = find_start(vshdata->history);
-	new->hist_start = new->hist_index - 1;
-	new->hist_first = true;
-	new->history = vshdata->history;
-	new->len_max = 64;
-	return (new);
+	data->input->c = '\0';
+	data->line->index = 0;
+	data->line->len_max = 64;
+	data->line->len_cur = 0;
+	data->curs->coords.x = data->prompt->prompt_len + 1;
+	data->curs->coords.y = 1;
+	data->history->hist_index = find_start(data->history->history);
+	data->history->hist_start = data->history->hist_index - 1;
+	data->history->hist_first = true;
+	return (ret);
 }
 
-int			input_read(t_vshdata *vshdata, char **line, int *status)
+static int	input_parse(t_vshdata *data)
 {
-	t_inputdata	*data;
-	int			local_status;
+	int		ret;
 
-	data = init_inputdata(vshdata);
+	if (input_parse_ctrl_c(data) == FUNCT_SUCCESS)
+		return (reset_input_read_return(data, NEW_PROMPT));
+	ret = input_parse_ctrl_d(data);
+	if (ret == NEW_PROMPT)
+		return (reset_input_read_return(data, NEW_PROMPT));
+	else if (ret == FUNCT_SUCCESS)
+		return (FUNCT_SUCCESS);
+	else if (input_read_ansi(data) == FUNCT_FAILURE)
+	{
+		if (input_parse_special(data) == FUNCT_FAILURE)
+		{
+			if (input_parse_char(data) == FUNCT_ERROR)
+				return (reset_input_read_return(data, FUNCT_ERROR));
+		}
+	}
+	return (FUNCT_SUCCESS);
+}
+
+int			input_read(t_vshdata *data)
+{
 	if (data == NULL)
 		return (FUNCT_ERROR);
-	*line = ft_strnew(data->len_max);
-	if (*line == NULL)
-		return (ft_free_return(data, FUNCT_ERROR));
-	while (read(STDIN_FILENO, &data->c, 1) > 0)
+	data->line->line = ft_strnew(data->line->len_max);
+	if (data->line->line == NULL)
+		return (reset_input_read_return(data, FUNCT_ERROR));
+	reset_input_read_return(data, 0);
+	while (true)
 	{
-		local_status = 0;
-		local_status |= input_parse_escape(data);
-		local_status |= input_parse_home(data);
-		local_status |= input_parse_end(data, line);
-		local_status |= input_parse_prev(data, line);
-		local_status |= input_parse_next(data, line);
-		local_status |= input_parse_delete(data, line);
-		local_status |= input_parse_ctrl_up(data, line);
-		local_status |= input_parse_ctrl_down(data, line);
-		if (local_status == 0)
-			data->input_state = 0;
-		local_status |= input_parse_backspace(data, line);
-		if (input_parse_ctrl_c(data) == FUNCT_SUCCESS)
-			return (ft_free_return(data, NEW_PROMPT));
-		local_status |= input_parse_ctrl_d(data, vshdata, line);
-		local_status |= input_parse_ctrl_k(data, line);
-		if (local_status == 0 && input_parse_char(data, line) == FUNCT_ERROR)
-			return (ft_free_return(data, FUNCT_ERROR));
-		if (data->c == '\n')
+		if (input_resize_window_check(data) == FUNCT_ERROR)
+			return (reset_input_read_return(data, FUNCT_ERROR));
+		if (read(STDIN_FILENO, &data->input->c, 1) == -1)
+			return (reset_input_read_return(data, FUNCT_ERROR));
+		if (input_parse(data) == NEW_PROMPT)
+			return (NEW_PROMPT);
+		if (data->input->c == '\n')
+		{
+			curs_go_end(data);
 			break ;
+		}
+		data->input->c = '\0';
 	}
-	*status = local_status;
-	return (ft_free_return(data, FUNCT_SUCCESS));
+	return (reset_input_read_return(data, FUNCT_SUCCESS));
 }

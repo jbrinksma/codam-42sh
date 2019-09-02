@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/19 18:31:38 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/29 10:56:08 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,59 +20,55 @@ void	lexer_tokenlstiter(t_tokenlst *lst, void (*f)(t_tokenlst *elem))
 	lexer_tokenlstiter(lst->next, f);
 }
 
-int		shell_close_quote_and_esc(t_vshdata *vshdata, char **line,
-				int *status)
+int		shell_close_quote_and_esc(t_vshdata *data)
 {
 	int ret;
 
 	ret = FUNCT_SUCCESS;
 	while (ret == FUNCT_SUCCESS)
 	{
-		if (shell_close_unclosed_quotes(vshdata, line, status) == FUNCT_ERROR)
+		if (shell_close_unclosed_quotes(data) == FUNCT_ERROR)
 			return (FUNCT_ERROR);
-		ret = shell_handle_escaped_newlines(vshdata, line, status);
+		ret = shell_handle_escaped_newlines(data);
 		if (ret == FUNCT_ERROR)
 			return (FUNCT_ERROR);
 	}
 	return (FUNCT_SUCCESS);
 }
 
-int		shell_start(t_vshdata *vshdata)
+int		shell_start(t_vshdata *data)
 {
-	int			status;
-	char		*line;
 	t_tokenlst	*token_lst;
 	t_ast		*ast;
 
-	status = 1;
-	line = NULL;
 	token_lst = NULL;
 	ast = NULL;
-	env_add_extern_value(vshdata, "OLDPWD", "");
-	while (status != CTRLD)
+	env_add_extern_value(data, "OLDPWD", "");
+	input_resize_window_check(data);
+	while (true)
 	{
-		ft_strdel(&line);
+		ft_strdel(&data->line->line);
 		parser_astdel(&ast);
 		lexer_tokenlstdel(&token_lst);
-	shell_display_prompt(vshdata->envlst);
-	if (input_read(vshdata, &line, &status) == FUNCT_ERROR)
-		continue;
-	if (shell_close_quote_and_esc(vshdata, &line, &status) == FUNCT_ERROR)
-		continue ;
-	ft_putchar('\n');
-	if (history_line_to_array(vshdata->history, &line) == FUNCT_ERROR)
-		continue ;
-	if (lexer(&line, &token_lst) != FUNCT_SUCCESS)
-		continue ;
-	if (shell_dless_input(vshdata, &token_lst) != FUNCT_SUCCESS)
-		continue ;
-	if (alias_expansion(vshdata, &token_lst, NULL) != FUNCT_SUCCESS)
-		continue ;
-	if ((token_lst->next)->type == NEWLINE)
-		continue ;
-	if (parser_start(&token_lst, &ast) != FUNCT_SUCCESS)
-		continue ;
-	exec_complete_command(ast, vshdata);
+		shell_display_prompt(data, REGULAR_PROMPT);
+		if (input_read(data) == FUNCT_ERROR)
+			continue;
+		if (shell_close_quote_and_esc(data) == FUNCT_ERROR)
+			continue ;
+		ft_putchar('\n');
+		if (history_line_to_array(data->history->history, &data->line->line) == FUNCT_ERROR)
+			continue ;
+		if (lexer(&data->line->line, &token_lst) != FUNCT_SUCCESS)
+			continue ;
+		if (shell_dless_input(data, &token_lst) != FUNCT_SUCCESS)
+			continue ;
+		if (alias_expansion(data, &token_lst, NULL) != FUNCT_SUCCESS)
+			continue ;
+		if ((token_lst->next)->type == NEWLINE)
+			continue ;
+		if (parser_start(&token_lst, &ast) != FUNCT_SUCCESS)
+			continue ;
+		exec_complete_command(ast, data);
 	}
 	return (FUNCT_SUCCESS);
 }

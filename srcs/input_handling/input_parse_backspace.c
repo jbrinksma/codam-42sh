@@ -6,28 +6,34 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:43:07 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/07/15 16:32:09 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/29 11:28:22 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <term.h>
 
-int		input_parse_backspace(t_inputdata *data, char **line)
+/*
+**	Backspaces are handled saving the cursor position and then clearing the
+**	screen and then reprinting the edited line and then going back to the old
+**	cursor position.
+*/
+
+void	input_handle_backspace(t_vshdata *data)
 {
-	unsigned len;
+	int			len_left;
+	int			saved_index;
 
-	if (data->c == INPUT_BACKSPACE)
+	if (data->line->index > 0)
 	{
-		if (data->index > 0)
-		{
-			input_clear_char_at(line, data->index - 1);
-			ft_printf("\e[D%s \e[D", *line + data->index - 1);
-			len = ft_strlen(&(*line)[data->index - 1]);
-			if (len > 1)
-				ft_printf("\e[%dD", len);
-			(data->index)--;
-		}
-		return (FUNCT_SUCCESS);
+		saved_index = data->line->index;
+		len_left = data->line->len_cur - data->line->index;
+		data->line->len_cur--;
+		curs_go_home(data);
+		input_clear_char_at(&data->line->line, saved_index - 1);
+		tputs(data->termcaps->tc_clear_lines_str, 1, &ft_tputchar);
+		input_print_str(data, data->line->line);
+		data->line->index = data->line->len_cur;
+		curs_move_n_left(data, len_left);
 	}
-	return (FUNCT_FAILURE);
 }

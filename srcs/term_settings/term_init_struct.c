@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:04:22 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/13 15:02:21 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/08/26 18:39:00 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@
 **	and a NULL pointer is returned.
 */
 
-t_term	*term_init_struct(void)
+t_vshdataterm	*term_init_struct(void)
 {
-	t_term	*term_p;
+	t_vshdataterm	*term_p;
 
-	term_p = (t_term*)ft_memalloc(sizeof(t_term));
+	term_p = (t_vshdataterm*)ft_memalloc(sizeof(t_vshdataterm));
 	if (term_p == NULL)
 		return (NULL);
 	term_p->old_termios_p = \

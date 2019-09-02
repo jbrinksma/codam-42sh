@@ -63,13 +63,13 @@ t_termios *termios_p)
 	term_flags_destroy(termios_p);
 }
 
-void			exec_external(char **args, t_vshdata *vshdata)
+void			exec_external(char **args, t_vshdata *data)
 {
 	char	**vshenviron;
 	char	*binary;
 
 	binary = ft_strdup(args[0]);
-	vshenviron = env_lsttoarr(vshdata->envlst);
+	vshenviron = env_lsttoarr(data->envlst);
 	if (binary == NULL || vshenviron == NULL)
 	{
 		ft_strdel(&binary);
@@ -82,11 +82,11 @@ void			exec_external(char **args, t_vshdata *vshdata)
 		ft_strnequ(args[0], "../", 3) == 0)
 	{
 		ft_strdel(&binary);
-		if (exec_find_binary(args[0], vshdata, &binary) == FUNCT_SUCCESS)
-			exec_bin(binary, args, vshenviron, vshdata->term->termios_p);
+		if (exec_find_binary(args[0], data, &binary) == FUNCT_SUCCESS)
+			exec_bin(binary, args, vshenviron, data->term->termios_p);
 	}
 	else
-		exec_bin(binary, args, vshenviron, vshdata->term->termios_p);
+		exec_bin(binary, args, vshenviron, data->term->termios_p);
 	free(vshenviron);
 	ft_strdel(&binary);
 }

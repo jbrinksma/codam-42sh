@@ -56,12 +56,12 @@ int			builtin_assign_addnew(t_envlst *envlst, char *var, int env_type)
 	return (FUNCT_SUCCESS);
 }
 
-int			builtin_assign(char *arg, t_vshdata *vshdata, int env_type)
+int			builtin_assign(char *arg, t_vshdata *data, int env_type)
 {
 	char		*var;
 
 	g_state->exit_code = EXIT_FAILURE;
-	if (vshdata->envlst == NULL || arg == NULL)
+	if (data->envlst == NULL || arg == NULL)
 		return (FUNCT_ERROR);
 	var = ft_strdup(arg);
 	if (var == NULL)
@@ -71,9 +71,9 @@ int			builtin_assign(char *arg, t_vshdata *vshdata, int env_type)
 	else
 		env_type &= ~ENV_SPECIAL;
 	g_state->exit_code = EXIT_SUCCESS;
-	if (builtin_assign_addexist(vshdata->envlst, var, env_type) == FUNCT_FAILURE)
+	if (builtin_assign_addexist(data->envlst, var, env_type) == FUNCT_FAILURE)
 	{
-		if (builtin_assign_addnew(vshdata->envlst, var, env_type) == FUNCT_ERROR)
+		if (builtin_assign_addnew(data->envlst, var, env_type) == FUNCT_ERROR)
 		{
 			ft_eprintf(E_N_ALLOC_STR, "assign");
 			g_state->exit_code = EXIT_FAILURE;
@@ -81,6 +81,6 @@ int			builtin_assign(char *arg, t_vshdata *vshdata, int env_type)
 		}
 	}
 	if (ft_strnequ(var, "PATH", 4) == true && var[4] == '=')
-		hash_reset(vshdata);
+		hash_reset(data);
 	return (FUNCT_SUCCESS);
 }

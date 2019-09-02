@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:19:47 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/23 14:38:01 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/08/27 11:44:59 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 **	We will need to implement errno return values for this function.
 */
 
-int		term_reset(t_term *term_p)
+int		term_reset(t_vshdataterm *term_p)
 {
 	int	ret;
 

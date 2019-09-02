@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/18 13:09:06 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/22 11:56:49 by omulder       ########   odam.nl         */
+/*   Updated: 2019/08/26 18:40:20 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ static int	check_flag(char **args, int *flag, int *argc)
 	return (FUNCT_SUCCESS);
 }
 
-static int	add_to_ht(char *cmd, t_vshdata *vshdata)
+static int	add_to_ht(char *cmd, t_vshdata *data)
 {
 	int		ret;
 	char	*bin_path;
 
 	bin_path = NULL;
-	ret = find_binary(cmd, vshdata->envlst, &bin_path);
+	ret = find_binary(cmd, data->envlst, &bin_path);
 	if (ret == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	if (ret == FUNCT_FAILURE)
@@ -65,12 +65,12 @@ static int	add_to_ht(char *cmd, t_vshdata *vshdata)
 		ft_eprintf(E_N_P_NOT_FOUND, "hash", cmd);
 		return (FUNCT_FAILURE);
 	}
-	if (hash_ht_insert(vshdata, cmd, bin_path, HASH_NO_HIT) == FUNCT_ERROR)
+	if (hash_ht_insert(data, cmd, bin_path, HASH_NO_HIT) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
 
-void		builtin_hash(char **args, t_vshdata *vshdata)
+void		builtin_hash(char **args, t_vshdata *data)
 {
 	int		flag;
 	int		argc;
@@ -79,19 +79,19 @@ void		builtin_hash(char **args, t_vshdata *vshdata)
 	argc = 1;
 	if (args[argc] == NULL)
 	{
-		if (vshdata->ht_flag == HT_EMPTY)
+		if (data->hashtable->ht_flag == HT_EMPTY)
 			ft_printf("hash: hash table empty\n");
 		else
-			hash_print(vshdata->ht);
+			hash_print(data->hashtable->ht);
 		return ;
 	}
 	if (check_flag(args, &flag, &argc) != FUNCT_SUCCESS)
 		return ;
 	if (flag & HASH_LR)
-		hash_reset(vshdata);
+		hash_reset(data);
 	while (args[argc] != NULL)
 	{
-		if (add_to_ht(args[argc], vshdata) == FUNCT_ERROR)
+		if (add_to_ht(args[argc], data) == FUNCT_ERROR)
 			return ;
 		argc++;
 	}

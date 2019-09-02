@@ -6,28 +6,33 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:46:55 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/07/31 13:00:06 by omulder       ########   odam.nl         */
+/*   Updated: 2019/09/02 13:59:52 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int	input_parse_ctrl_d(t_inputdata *data, t_vshdata *vshdata, char **line)
-{
-	unsigned	len;
+/*
+**	Simply exits when line is empty, otherwise functions as `delete`.
+*/
 
-	if (data->c == '\4')
+int		input_parse_ctrl_d(t_vshdata *data)
+{
+	if (data->input->c == INPUT_CTRL_D)
 	{
-		len = ft_strlen(*line);
-		if (len == 0)
-			builtin_exit(NULL, vshdata);
-		if (data->index < len)
+		if (data->line->len_cur == 0
+			&& data->prompt->cur_prompt_type != REGULAR_PROMPT)
 		{
-			input_clear_char_at(line, data->index);
-			ft_printf("%s ", *line + data->index);
-			ft_printf("\e[%dD", ft_strlen(*line + data->index) + 1);
+			ft_putchar('\n');
+			ft_eprintf(E_SYNTAX_P, "EOF");
+			return (NEW_PROMPT);
 		}
-		return (FUNCT_SUCCESS);
+		else if (data->line->len_cur == 0)
+			builtin_exit(NULL, data);
+		else
+			input_handle_delete(data);
 	}
-	return (FUNCT_FAILURE);
+	else
+		return (FUNCT_FAILURE);
+	return (FUNCT_SUCCESS);
 }

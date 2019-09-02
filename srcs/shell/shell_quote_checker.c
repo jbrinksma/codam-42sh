@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 07:47:19 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/23 14:09:54 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/08/30 13:56:54 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,28 +44,33 @@ char	shell_quote_checker_find_quote(char *line)
 **	some termcaps shit.
 */
 
-int		shell_close_unclosed_quotes(t_vshdata *vshdata, char **line,
-			int *status)
+int		shell_close_unclosed_quotes(t_vshdata *data)
 {
 	char	quote;
-	char	*extra_line;
+	char	*line_tmp;
 
-	quote = shell_quote_checker_find_quote(*line);
+	quote = shell_quote_checker_find_quote(data->line->line);
 	while (quote != '\0')
 	{
+		line_tmp = data->line->line;
+		data->line->line = NULL;
+		ft_putchar('\n');
 		if (quote == '\'')
-			ft_printf("\nquote> ");
+			shell_display_prompt(data, QUOTE_PROMPT);
 		else if (quote == '"')
-			ft_printf("\ndquote> ");
-		if (input_read(vshdata, &extra_line, status) == FUNCT_ERROR)
-			return (ft_free_return(extra_line, FUNCT_ERROR));
-		*line = ft_strjoinfree_all(*line, extra_line);
-		if (*line == NULL)
+			shell_display_prompt(data, DQUOTE_PROMPT);
+		if (input_read(data) == FUNCT_ERROR)
+		{
+			ft_strdel(&line_tmp);
+			return (FUNCT_ERROR);
+		}
+		data->line->line = ft_strjoinfree_all(line_tmp, data->line->line);
+		if (data->line->line == NULL)
 		{
 			ft_eprintf(E_ALLOC_STR);
 			return (FUNCT_ERROR);
 		}
-		quote = shell_quote_checker_find_quote(*line);
+		quote = shell_quote_checker_find_quote(data->line->line);
 	}
 	return (FUNCT_SUCCESS);
 }
