@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 11:10:09 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/29 14:53:45 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/29 14:56:38 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void				ft_putstr_fd(char const *s, int fd);
 void				ft_putendl_fd(char const *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 int					ft_lstlen(t_list *lst);
-char				**ft_lsttoarray(t_list *lst);
 void				ft_lstadd(t_list **alst, t_list *new);
 void				ft_lstaddback(t_list *alst, t_list *new);
 t_list				*ft_lstnew(void *content, size_t content_size);
