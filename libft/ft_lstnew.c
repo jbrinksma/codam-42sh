@@ -6,7 +6,7 @@
 /*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/16 11:29:39 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/04/29 18:02:19 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/08/29 14:52:43 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ t_list	*ft_lstnew(void *content, size_t content_size)
 	{
 		newlist->content = (void*)ft_memalloc(content_size);
 		if (newlist->content == NULL)
+		{
+			free(newlist);
 			return (NULL);
+		}
 		ft_memcpy(newlist->content, content, content_size);
 		newlist->content_size = content_size;
 	}
