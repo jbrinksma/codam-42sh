@@ -1,22 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_is_regular_file.c                               :+:    :+:            */
+/*   tool_get_paths.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/08/04 12:11:41 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/16 19:18:09 by mavan-he      ########   odam.nl         */
+/*   Created: 2019/08/10 13:04:04 by mavan-he       #+#    #+#                */
+/*   Updated: 2019/08/10 13:05:15 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/stat.h>
+#include "vsh.h"
 
-int		ft_is_regular_file(const char *path)
+int		tool_get_paths(t_envlst *envlst, char ***paths)
 {
-    struct stat stat_path;
+	char *path_value;
 
-    if (lstat(path, &stat_path) == -1)
-		return (-1);
-    return (S_ISREG(stat_path.st_mode));
+	path_value = env_getvalue("PATH", envlst);
+	if (path_value == NULL || *path_value == '\0')
+		return (FUNCT_FAILURE);
+	*paths = ft_strsplit(path_value, ':');
+	if (*paths == NULL)
+		return (err_ret_exit(E_ALLOC_STR, EXIT_FAILURE));
+	return (FUNCT_SUCCESS);
 }

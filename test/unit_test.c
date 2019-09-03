@@ -1016,7 +1016,6 @@ Test(alias, basic_test)
 
 Test(alias, multi_line_test)
 {
-	char		*line;
 	char		*args[3];
 	t_vshdata	*data;
 	t_tokenlst	*token_lst;
@@ -1042,10 +1041,10 @@ Test(alias, multi_line_test)
 	args[2] = NULL;
 	builtin_alias(args, &data->alias->aliaslst);
 	cr_assert(g_state->exit_code == EXIT_SUCCESS);
-	line = ft_strdup("echo\n");
-	cr_assert(line != NULL);
+	data->line->line = ft_strdup("echo\n");
+	cr_assert(&data->line->line != NULL);
 	token_lst = NULL;
-	cr_expect(lexer(&line, &token_lst) == FUNCT_SUCCESS);
+	cr_expect(lexer(&data->line->line, &token_lst) == FUNCT_SUCCESS);
 	cr_assert(token_lst != NULL);
 	cr_expect(alias_expansion(data, &token_lst, NULL) == FUNCT_SUCCESS);
 	cr_expect_str_eq(token_lst->next->next->value, "hoi");

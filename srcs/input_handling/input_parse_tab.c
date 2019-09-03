@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   tools_isidentifierchar.c                           :+:    :+:            */
+/*   input_parse_tab.c                                  :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/07/13 19:50:31 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/03 12:39:35 by mavan-he      ########   odam.nl         */
+/*   Created: 2019/08/15 13:57:43 by omulder        #+#    #+#                */
+/*   Updated: 2019/08/31 18:09:48 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-bool	tools_isidentifierchar(char c)
+void	input_parse_tab(t_vshdata *data)
 {
-	return (ft_isalnum(c) == true || c == '_' || c == '-');
+	auto_start(data);
 }

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/03 12:59:03 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/09/02 17:15:09 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@
 # define E_STAT_STR			SHELL ": could not get stat info of file\n"
 # define E_STAT_P			SHELL ": could not get stat info of %s\n"
 # define E_ALLOC_STR		SHELL ": failed to allocate enough memory\n"
+# define E_READ_STR			SHELL ": failed to read input\n"
 # define E_FORK_STR			SHELL ": fork failed\n"
 # define E_HOME_NOTSET_STR 	SHELL ": environment value HOME not set\n"
 # define E_HIST_READ_STR 	SHELL ": failed to read history file\n"
@@ -126,6 +127,14 @@
 
 # define EXP_FLAG_LN	(1 << 0)
 # define EXP_FLAG_LP	(1 << 1)
+
+/*
+**-----------------------------------export-------------------------------------
+*/
+
+# define STATE_CMD	(1 << 0)
+# define STATE_VAR	(1 << 1)
+# define STATE_FILE	(1 << 2)
 
 /*
 **-----------------------------------alias--------------------------------------
@@ -238,6 +247,11 @@
 # define ARROW_DOWN	    2
 # define HISTFILENAME	".vsh_history"
 # define HIST_SEPARATE	-1
+
+
+#define AUTO_NO_MATCHES		(1 << 2)
+#define AUTO_ADDED_MATCH	(1 << 3)
+
 
 /*
 **===============================personal headers===============================
@@ -505,6 +519,23 @@ typedef struct	s_ast
 }				t_ast;
 
 /*
+**----------------------------------autocomplete--------------------------------
+*/
+
+typedef struct	s_print
+{
+	int	row;
+	int	length;
+	int	coli;
+	int	total;
+	int	printed;
+	int	extra;
+	int	col;
+	int	left;
+
+}				t_print;
+
+/*
 **----------------------------------pipes---------------------------------------
 */
 
@@ -573,6 +604,7 @@ void			term_free_struct(t_vshdataterm**term_p);
 # define INPUT_CTRL_D '\4'
 # define INPUT_CTRL_E '\5'
 # define INPUT_CTRL_K '\v'
+# define INPUT_TAB '\t'
 # define INPUT_CTRL_U 21
 # define INPUT_CTRL_Y 25
 # define TC_MAXRESPONSESIZE 50
@@ -614,7 +646,7 @@ int				input_parse_ctrl_d(t_vshdata *data);
 void			input_parse_ctrl_k(t_vshdata *data);
 void			input_parse_ctrl_u(t_vshdata *data);
 void			input_parse_ctrl_y(t_vshdata *data);
-
+void			input_parse_tab(t_vshdata *data);
 
 int				input_resize_window_check(t_vshdata *data);
 
@@ -768,6 +800,7 @@ bool			tools_is_fdnumstr(char *str);
 bool			tool_is_special(char c);
 bool			tool_check_for_special(char *str);
 bool			tool_check_for_whitespace(char *str);
+int				tool_get_paths(t_envlst *envlst, char ***paths);
 
 /*
 **----------------------------------execution-----------------------------------
@@ -857,6 +890,31 @@ int				error_return(int ret, int error, char *opt_str);
 int				err_ret_exit(char *str, int exitcode);
 void			err_void_exit(char *str, int exitcode);
 int				err_ret(char *str);
+
+/*
+**--------------------------------autocomplete----------------------------------
+*/
+
+int				auto_get_cmdlst(char *match, t_envlst *envlst, t_list **matchlst);
+int				auto_add_tolst(t_list **matchlst, char *filename);
+int				auto_match_builtins(char *match, t_list **matchlst, int match_len);
+int				auto_get_filelst(char *match, char *path, t_list **matchlst);
+int				auto_get_varlst(char *match, int match_len, t_envlst *envlst, t_list **matchlst);
+int				auto_find_state(char *line, ssize_t i);
+void			auto_start(t_vshdata *data);
+int				auto_add_match_toline(char *match, char *to_add, t_vshdata *data);
+int				auto_find_matches(t_vshdata *data, char **match, t_list **matchlst, int state);
+void			auto_lstdel(void *str, size_t size);
+int				auto_handle_matchlst(t_vshdata *data, char *match, t_list **matchlst);
+int				auto_small_lst(char *match, t_list **matchlst, t_vshdata *data);
+void			auto_lst_print(t_list **matchlst, int lst_len);
+int				auto_big_lst(t_list **matchlst, int lst_len);
+int				auto_lenname(t_list *matchlst, int length);
+int				auto_lst_count(t_list *lst);
+void			auto_sort_n(t_list **matchlst);
+void			auto_swap_lstitem(t_list **flst, t_list *smal, t_list *prev);
+bool			auto_check_dups(t_list *matchlst, char *filename);
+
 
 /*
 **----------------------------------debugging-----------------------------------

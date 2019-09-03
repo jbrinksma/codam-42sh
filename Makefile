@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/08/30 14:05:53 by rkuijper      ########   odam.nl          #
+#    Updated: 2019/09/02 17:15:18 by mavan-he      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
 ./srcs/term_settings ./srcs/environment_handling ./srcs/shell \
 ./srcs/tools ./srcs/alias ./test/parser ./test/tools ./test/builtins \
 ./test/environment_handling ./srcs/lexer ./srcs/parser ./srcs/history \
-./srcs/expan ./srcs/hashtable \
+./srcs/expan ./srcs/autocomplete ./srcs/hashtable \
 ./srcs/exec ./srcs/redir ./srcs/error_handling ./srcs/exec ./includes
 SRCS = shell_start shell_prompt shell_quote_checker shell_dless_input \
 shell_init_files shell_init_vshdata shell_getcurrentdir \
@@ -34,6 +34,7 @@ input_parse_delete input_parse_ctrl_c input_parse_ctrl_d input_parse_ctrl_k \
 input_parse_ctrl_up input_parse_ctrl_down input_print_str \
 input_parse_ctrl_u input_parse_ctrl_y input_resize_window_check \
 input_clear_char_at input_read_ansi input_parse_special \
+input_parse_tab \
 curs_move_n_left_hasnewlines curs_move_n_right_hasnewlines \
 term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct \
@@ -41,7 +42,8 @@ env_getvalue env_getlst env_lsttoarr env_lstnew env_lstaddback env_lstdel \
 env_remove_tmp env_sort env_lstadd_to_sortlst env_addvalue \
 tools_is_char_escaped tool_is_redirect_tk tools_is_valid_identifier \
 tools_is_builtin tool_is_special tool_check_for_special tools_is_fdnumstr \
-tools_isidentifierchar tool_check_for_whitespace tools_isprintnotblank \
+tools_isidentifierchar tool_check_for_whitespace tool_get_paths \
+tools_isprintnotblank \
 builtin_echo builtin_echo_set_flags builtin_exit builtin_assign \
 builtin_export builtin_export_print builtin_set builtin_unset \
 builtin_alias builtin_alias_set builtin_alias_lstdel builtin_unalias \
@@ -62,7 +64,11 @@ exec_create_files \
 expan_handle_bracketed_var expan_tilde_expansion exec_validate_binary \
 redir_pipe redir redir_tools redir_tools2 \
 hash_ht_insert hash_print hash_reset hash_init hash_check \
-print_errors
+print_errors \
+auto_get_cmdlst auto_match_builtins auto_get_filelst auto_get_varlst \
+auto_find_state auto_start auto_add_match_toline auto_find_matches \
+auto_handle_matchlst auto_small_lst auto_big_lst auto_lst_print \
+auto_lst_print_helpers auto_check_dups
 TESTS = unit_test builtin_assign_test
 OBJECTS := $(SRCS:%=%.o)
 TESTOBJECTS := $(TESTS:%=%.o)
