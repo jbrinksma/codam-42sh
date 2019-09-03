@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/02 13:57:59 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/09/03 12:59:03 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -568,8 +568,10 @@ void			term_free_struct(t_vshdataterm**term_p);
 # define CURS_RIGHT "\e[C"
 # define CURS_UP "\e[A"
 # define CURS_DOWN "\e[B"
+# define INPUT_CTRL_A '\1'
 # define INPUT_CTRL_C '\3'
 # define INPUT_CTRL_D '\4'
+# define INPUT_CTRL_E '\5'
 # define INPUT_CTRL_K '\v'
 # define INPUT_CTRL_U 21
 # define INPUT_CTRL_Y 25
