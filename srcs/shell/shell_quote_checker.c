@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 07:47:19 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/30 13:56:54 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/09/03 17:38:14 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,7 @@ int		shell_close_unclosed_quotes(t_vshdata *data)
 		}
 		data->line->line = ft_strjoinfree_all(line_tmp, data->line->line);
 		if (data->line->line == NULL)
-		{
-			ft_eprintf(E_ALLOC_STR);
-			return (FUNCT_ERROR);
-		}
+			return (err_ret(E_ALLOC_STR));
 		quote = shell_quote_checker_find_quote(data->line->line);
 	}
 	return (FUNCT_SUCCESS);

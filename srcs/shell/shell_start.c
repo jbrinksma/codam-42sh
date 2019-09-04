@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/29 10:56:08 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/09/04 10:46:04 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,30 +43,22 @@ int		shell_start(t_vshdata *data)
 
 	token_lst = NULL;
 	ast = NULL;
-	env_add_extern_value(data, "OLDPWD", "");
-	input_resize_window_check(data);
 	while (true)
 	{
 		ft_strdel(&data->line->line);
 		parser_astdel(&ast);
 		lexer_tokenlstdel(&token_lst);
 		shell_display_prompt(data, REGULAR_PROMPT);
-		if (input_read(data) == FUNCT_ERROR)
-			continue;
-		if (shell_close_quote_and_esc(data) == FUNCT_ERROR)
+		if (input_read(data) == FUNCT_ERROR ||
+			shell_close_quote_and_esc(data) == FUNCT_ERROR)
 			continue ;
 		ft_putchar('\n');
-		if (history_line_to_array(data->history->history, &data->line->line) == FUNCT_ERROR)
-			continue ;
-		if (lexer(&data->line->line, &token_lst) != FUNCT_SUCCESS)
-			continue ;
-		if (shell_dless_input(data, &token_lst) != FUNCT_SUCCESS)
-			continue ;
-		if (alias_expansion(data, &token_lst, NULL) != FUNCT_SUCCESS)
-			continue ;
-		if ((token_lst->next)->type == NEWLINE)
-			continue ;
-		if (parser_start(&token_lst, &ast) != FUNCT_SUCCESS)
+		if (history_line_to_array(data->history->history, &data->line->line)
+			== FUNCT_ERROR || lexer(&data->line->line, &token_lst) !=
+			FUNCT_SUCCESS || shell_dless_input(data, &token_lst) !=
+			FUNCT_SUCCESS || alias_expansion(data, &token_lst, NULL) !=
+			FUNCT_SUCCESS || token_lst->next->type == NEWLINE ||
+			parser_start(&token_lst, &ast) != FUNCT_SUCCESS)
 			continue ;
 		exec_complete_command(ast, data);
 	}

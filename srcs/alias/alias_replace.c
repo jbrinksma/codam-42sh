@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/26 20:29:50 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/23 13:41:40 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/09/03 17:31:00 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,10 @@ int			alias_replace(t_vshdata *data, t_tokenlst *probe, char *alias,
 	ft_strdel(&data->line->line);
 	data->line->line = ft_strjoin(alias_equal + 1, "\n");
 	new_tokenlst = NULL;
-	if (data->line->line == NULL || shell_close_quote_and_esc(data) == FUNCT_ERROR
-		|| lexer(&data->line->line, &new_tokenlst) == FUNCT_ERROR
-		|| shell_dless_input(data, &new_tokenlst) == FUNCT_ERROR)
+	if (data->line->line == NULL || shell_close_quote_and_esc(data)
+		== FUNCT_ERROR || lexer(&data->line->line, &new_tokenlst)
+		== FUNCT_ERROR || shell_dless_input(data, &new_tokenlst)
+		== FUNCT_ERROR)
 		return (alias_error(&data->line->line, &new_tokenlst, NULL));
 	new_expanded = alias_add_expanded(expanded, alias, alias_equal);
 	if (new_expanded == NULL)

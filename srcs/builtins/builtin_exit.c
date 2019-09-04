@@ -6,13 +6,13 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 20:15:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/22 11:53:15 by omulder       ########   odam.nl         */
+/*   Updated: 2019/09/03 17:34:28 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-static void	reset_exit(int exit_code, t_vshdataterm*term_p)
+static void	reset_exit(int exit_code, t_vshdataterm *term_p)
 {
 	if (term_reset(term_p) == FUNCT_FAILURE)
 		ft_eprintf(E_NOT_RESET);

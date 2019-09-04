@@ -6,13 +6,13 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/02 15:03:51 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/19 18:32:08 by omulder       ########   odam.nl         */
+/*   Updated: 2019/09/04 10:08:00 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-static int	return_and_free(int ret, char **newpath, char **currpath)
+static int		return_and_free(int ret, char **newpath, char **currpath)
 {
 	ft_strdel(currpath);
 	ft_strdel(newpath);
@@ -53,8 +53,8 @@ t_vshdata *data, char cd_flag)
 **	Afterwards, PWD and OLDPWD are set appropriately.
 */
 
-int			builtin_cd_change_dir(char *argpath, t_vshdata *data, char cd_flag,
-				int print)
+int				builtin_cd_change_dir(char *argpath, t_vshdata *data,
+				char cd_flag, int print)
 {
 	char		*pwd;
 	char		*currpath;

@@ -6,13 +6,12 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/02 17:15:09 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/04 11:47:23 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VSH_H
 # define VSH_H
-// # define DEBUG
 # include <sys/stat.h>
 # include <fcntl.h>
 
@@ -32,7 +31,7 @@
 # define NEW_PROMPT FUNCT_ERROR
 # define U_ALIAS			"alias: usage: alias [-p] [name[=value] ... ]\n"
 # define U_CD				"cd: usage: cd [-L|-P] [dir]\n"
-# define U_EXPORT			"export: usage: export [-n] [name[=value] ...] or export -p"
+# define U_EXPORT "export: usage: export [-n] [name[=value] ...] or export -p\n"
 # define U_HASH				"hash: usage: hash [-r] [utility ...]\n"
 # define U_UNALIAS			"unalias: usage: unalias [-a] name [name ...]\n"
 # define U_SET				"set: usage: set\n"
@@ -74,7 +73,7 @@
 # define E_ALIAS_OPEN_STR 	SHELL ": failed to open alias file\n"
 # define E_ALIAS_READ_STR	SHELL ": failed to read alias file\n"
 # define E_ALIAS_INV_NAME	SHELL ": alias: '%.*s': invalid alias name\n"
-# define E_CD_CNG_DIR		SHELL ": cd: could not get current working directory parsing: %s\n"
+# define E_CD_CNG_DIR SHELL ": cd: cannot get current working directory: %s\n"
 # define E_CD_NO_SUCH		SHELL ": cd: no such file or directory: %s\n"
 # define E_CD_NOT_DIR		SHELL ": cd: not a directory: %s\n"
 # define E_CD_P_NOT_SET		SHELL ": cd: %s: not set\n"
@@ -92,6 +91,7 @@
 # define E_BADRED 104
 # define CTRLD -1
 # define CR 0
+# define UNINIT -1
 
 /*
 **=================================exit codes===================================
@@ -129,12 +129,14 @@
 # define EXP_FLAG_LP	(1 << 1)
 
 /*
-**-----------------------------------export-------------------------------------
+**-----------------------------------autocomplete-------------------------------
 */
 
-# define STATE_CMD	(1 << 0)
-# define STATE_VAR	(1 << 1)
-# define STATE_FILE	(1 << 2)
+# define STATE_CMD			(1 << 0)
+# define STATE_VAR			(1 << 1)
+# define STATE_FILE			(1 << 2)
+# define AUTO_NO_MATCHES	(1 << 2)
+# define AUTO_ADDED_MATCH	(1 << 3)
 
 /*
 **-----------------------------------alias--------------------------------------
@@ -144,7 +146,6 @@
 # define UNALIAS_FLAG_LA	(2 << 0)
 # define ALIASFILENAME		".vsh_alias"
 # define ALIAS_MAX	500
-
 
 /*
 **-----------------------------------hash--------------------------------------
@@ -195,11 +196,9 @@
 # define SGREAT_OPEN_FLAGS		O_WRONLY | O_CREAT | O_TRUNC
 # define DGREAT_OPEN_FLAGS		O_WRONLY | O_CREAT | O_APPEND
 
-
 /*
 **---------------------------------environment----------------------------------
 */
-
 
 # define ENV_MASK 0xF8
 # define ENV_TMP_OVERWRITE (1 << 4)
@@ -219,14 +218,33 @@
 **-----------------------------------input--------------------------------------
 */
 
-# define INPUT_NONE			0
-# define INPUT_ESC			1
-# define INPUT_BRACE		2
-# define INPUT_THREE		3
-# define INPUT_D_ESC		4
-# define INPUT_D_BRACE		5
-# define INPUT_D_THREE		6
 # define INPUT_BACKSPACE	127
+# define TERMCAPBUFFSIZE 12
+# define TC_UP_ARROW "\e[A"
+# define TC_CTRL_UP_ARROW "\e[1;5A"
+# define TC_DOWN_ARROW "\e[B"
+# define TC_CTRL_DOWN_ARROW "\e[1;5B"
+# define TC_LEFT_ARROW "\e[D"
+# define TC_CTRL_LEFT_ARROW "\e[1;5D"
+# define TC_RIGHT_ARROW "\e[C"
+# define TC_CTRL_RIGHT_ARROW "\e[1;5C"
+# define TC_GETCURSORPOS "\e[6n"
+# define TC_HOME "\e[H"
+# define TC_END "\e[F"
+# define TC_DELETE "\e[3~"
+# define CURS_LEFT "\e[D"
+# define CURS_RIGHT "\e[C"
+# define CURS_UP "\e[A"
+# define CURS_DOWN "\e[B"
+# define INPUT_CTRL_A '\1'
+# define INPUT_CTRL_C '\3'
+# define INPUT_CTRL_D '\4'
+# define INPUT_CTRL_E '\5'
+# define INPUT_CTRL_K '\v'
+# define INPUT_TAB '\t'
+# define INPUT_CTRL_U 21
+# define INPUT_CTRL_Y 25
+# define TC_MAXRESPONSESIZE 50
 
 /*
 **=================================pipe defines=================================
@@ -248,11 +266,6 @@
 # define HISTFILENAME	".vsh_history"
 # define HIST_SEPARATE	-1
 
-
-#define AUTO_NO_MATCHES		(1 << 2)
-#define AUTO_ADDED_MATCH	(1 << 3)
-
-
 /*
 **===============================personal headers===============================
 */
@@ -266,31 +279,12 @@
 # include <stdbool.h>
 
 /*
-**	malloc, free, close, fork, execve, exit | getenv
-**	access, write, read, getcwd, chdir | isatty ttyname ttyslot write close
-**	open
-**	opendir readdir closedir
-**	stat lstat fstat
-**	wait, wait3, wait4, waitpid
-**	signal kill
-**	****************************************************************************
-**	ioctl
-**	tcsetattr tcgetattr
-**
-**	tgetent tgetflag tgetnum tgetstr tgoto tputs
-**	open
-**
-**	read
-**	signal
-*/
-
-/*
 **=================================typedefs====================================
 */
 
 typedef struct	s_state
 {
-	int				exit_code;
+	int			exit_code;
 }				t_state;
 
 t_state *g_state;
@@ -358,7 +352,7 @@ typedef struct	s_vshdatatermcaps
 {
 	char	*tc_clear_lines_str;
 	char	*tc_scroll_down_str;
-}				t_vshdatatermcaps;
+}				t_datatermcaps;
 
 typedef struct	s_vshdataterm
 {
@@ -371,7 +365,7 @@ typedef struct	s_vshdatacurs
 	t_point	coords;
 	int		cur_ws_col;
 	int		cur_ws_row;
-}				t_vshdatacurs;
+}				t_datacurs;
 
 typedef struct	s_vshdatahistory
 {
@@ -380,7 +374,7 @@ typedef struct	s_vshdatahistory
 	int			hist_index;
 	int			hist_start;
 	int			hist_first;
-}				t_vshdatahistory;
+}				t_datahistory;
 
 typedef struct	s_vshdataline
 {
@@ -389,7 +383,7 @@ typedef struct	s_vshdataline
 	unsigned	index;
 	unsigned	len_max;
 	unsigned	len_cur;
-}				t_vshdataline;
+}				t_dataline;
 
 typedef struct	s_vshdataprompt
 {
@@ -398,41 +392,38 @@ typedef struct	s_vshdataprompt
 	char	*prompt_addition;
 	int		prompt_len;
 	int		cur_prompt_type;
-
-}				t_vshdataprompt;
+}				t_dataprompt;
 
 typedef struct	s_vshdatainput
 {
 	char				c;
-}				t_vshdatainput;
+}				t_datainput;
 
 typedef struct	s_vshdatahashtable
 {
 	t_ht	*ht[HT_SIZE];
 	char	ht_flag;
-}				t_vshdatahashtable;
+}				t_datahashtable;
 
 typedef	struct	s_vshdataalias
 {
 	t_aliaslst	*aliaslst;
 	char		*alias_file;
-}				t_vshdataalias;
-
-#define UNINIT -1
+}				t_dataalias;
 
 typedef struct	s_vshdata
 {
-	t_envlst			*envlst;
-	int					stdfds[3];
-	t_vshdataterm		*term;
-	t_vshdatacurs		*curs;
-	t_vshdatahistory	*history;
-	t_vshdataline		*line;
-	t_vshdataprompt		*prompt;
-	t_vshdatainput		*input;
-	t_vshdatahashtable	*hashtable;
-	t_vshdataalias		*alias;
-	t_vshdatatermcaps	*termcaps;
+	t_envlst		*envlst;
+	int				stdfds[3];
+	t_vshdataterm	*term;
+	t_datacurs		*curs;
+	t_datahistory	*history;
+	t_dataline		*line;
+	t_dataprompt	*prompt;
+	t_datainput		*input;
+	t_datahashtable	*hashtable;
+	t_dataalias		*alias;
+	t_datatermcaps	*termcaps;
 }				t_vshdata;
 
 typedef enum	e_prompt_type
@@ -532,7 +523,6 @@ typedef struct	s_print
 	int	extra;
 	int	col;
 	int	left;
-
 }				t_print;
 
 /*
@@ -552,26 +542,24 @@ typedef struct	s_pipes
 
 char			*env_getvalue(char *var_key, t_envlst *envlst);
 char			**env_free_and_return_null(char ***vshenviron);
-
-/* environment branch -jorn */
-t_envlst	*env_getlst(void);
-void		env_lstaddback(t_envlst **lst, t_envlst *new);
-t_envlst	*env_lstnew(char *var, unsigned char type);
-char		**env_lsttoarr(t_envlst *lst);
-int			env_lstlen(t_envlst *lst);
-void		env_lstdel(t_envlst **envlst);
-void   		env_remove_tmp(t_envlst *env);
-void		env_sort(t_envlst *head);
-void		env_lstadd_to_sortlst(t_envlst *envlst, t_envlst *new);
-int			env_add_extern_value(t_vshdata *data, char *name, char *value);
+t_envlst		*env_getlst(void);
+void			env_lstaddback(t_envlst **lst, t_envlst *new);
+t_envlst		*env_lstnew(char *var, unsigned char type);
+char			**env_lsttoarr(t_envlst *lst);
+int				env_lstlen(t_envlst *lst);
+void			env_lstdel(t_envlst **envlst);
+void			env_remove_tmp(t_envlst *env);
+void			env_sort(t_envlst *head);
+void			env_lstadd_to_sortlst(t_envlst *envlst, t_envlst *new);
+int				env_add_extern_value(t_vshdata *data, char *name, char *value);
 
 /*
 **----------------------------------terminal------------------------------------
 */
 
-t_vshdataterm			*term_prepare(t_envlst *lst);
+t_vshdataterm	*term_prepare(t_envlst *lst);
 int				term_is_valid(t_envlst *envlst);
-t_vshdataterm			*term_init_struct(void);
+t_vshdataterm	*term_init_struct(void);
 int				term_get_attributes(int fd, t_vshdataterm*term_p);
 int				term_set_attributes(t_vshdataterm*term_p);
 int				term_reset(t_vshdataterm*term_p);
@@ -581,34 +569,6 @@ void			term_free_struct(t_vshdataterm**term_p);
 **-----------------------------------input--------------------------------------
 */
 
-# define TERMCAPBUFFSIZE 12
-# define TC_UP_ARROW "\e[A"
-# define TC_CTRL_UP_ARROW "\e[1;5A"
-# define TC_DOWN_ARROW "\e[B"
-# define TC_CTRL_DOWN_ARROW "\e[1;5B"
-# define TC_LEFT_ARROW "\e[D"
-# define TC_CTRL_LEFT_ARROW "\e[1;5D"
-# define TC_RIGHT_ARROW "\e[C"
-# define TC_CTRL_RIGHT_ARROW "\e[1;5C"
-
-# define TC_GETCURSORPOS "\e[6n"
-# define TC_HOME "\e[H"
-# define TC_END "\e[F"
-# define TC_DELETE "\e[3~"
-# define CURS_LEFT "\e[D"
-# define CURS_RIGHT "\e[C"
-# define CURS_UP "\e[A"
-# define CURS_DOWN "\e[B"
-# define INPUT_CTRL_A '\1'
-# define INPUT_CTRL_C '\3'
-# define INPUT_CTRL_D '\4'
-# define INPUT_CTRL_E '\5'
-# define INPUT_CTRL_K '\v'
-# define INPUT_TAB '\t'
-# define INPUT_CTRL_U 21
-# define INPUT_CTRL_Y 25
-# define TC_MAXRESPONSESIZE 50
-
 int				input_read(t_vshdata *data);
 int				input_read_ansi(t_vshdata *data);
 int				input_parse_special(t_vshdata *data);
@@ -616,40 +576,30 @@ int				input_is_word_start(char *str, int i1, int i2);
 void			input_clear_char_at(char **line, unsigned index);
 int				input_parse_char(t_vshdata *data);
 void			input_print_str(t_vshdata *data, char *str);
-
 int				ft_tputchar(int c);
 int				tools_isprintnotblank(int i);
-
 void			input_handle_backspace(t_vshdata *data);
 void			input_handle_delete(t_vshdata *data);
-
 void			curs_move_left(t_vshdata *data);
 void			curs_move_n_left(t_vshdata *data, size_t n);
 void			curs_move_n_left_hasnewlines(t_vshdata *data, size_t n);
-
 void			curs_move_right(t_vshdata *data);
 void			curs_move_n_right(t_vshdata *data, size_t n);
 void			curs_move_n_right_hasnewlines(t_vshdata *data, size_t n);
 void			curs_move_right_at_colmax(t_vshdata *data, int colmax);
-
 void			curs_move_up(t_vshdata *data);
 void			curs_move_down(t_vshdata *data);
-
 void			curs_go_home(t_vshdata *data);
 void			curs_go_end(t_vshdata *data);
-
 void			curs_move_next_word(t_vshdata *data);
 void			curs_move_prev_word(t_vshdata *data);
-
 int				input_parse_ctrl_c(t_vshdata *data);
 int				input_parse_ctrl_d(t_vshdata *data);
 void			input_parse_ctrl_k(t_vshdata *data);
 void			input_parse_ctrl_u(t_vshdata *data);
 void			input_parse_ctrl_y(t_vshdata *data);
 void			input_parse_tab(t_vshdata *data);
-
 int				input_resize_window_check(t_vshdata *data);
-
 int				get_curs_row(t_vshdata *data);
 
 /*
@@ -672,14 +622,14 @@ char			shell_quote_checker_find_quote(char *line);
 int				shell_handle_escaped_newlines(t_vshdata *data);
 void			shell_get_valid_prompt(t_vshdata *data, int prompt_type);
 
-t_vshdatatermcaps	*shell_init_vshdatatermcaps(void);
-t_vshdataalias		*shell_init_vshdataalias(void);
-t_vshdatahistory	*shell_init_vshdatahistory(void);
-t_vshdatahashtable	*shell_init_vshdatahashtable(void);
-t_vshdatainput		*shell_init_vshdatainput(void);
-t_vshdataprompt		*shell_init_vshdataprompt(void);
-t_vshdataline		*shell_init_vshdataline(void);
-t_vshdatacurs		*shell_init_vshdatacurs(void);
+t_datatermcaps	*shell_init_vshdatatermcaps(void);
+t_dataalias		*shell_init_vshdataalias(void);
+t_datahistory	*shell_init_vshdatahistory(void);
+t_datahashtable	*shell_init_vshdatahashtable(void);
+t_datainput		*shell_init_vshdatainput(void);
+t_dataprompt	*shell_init_vshdataprompt(void);
+t_dataline		*shell_init_vshdataline(void);
+t_datacurs		*shell_init_vshdatacurs(void);
 
 /*
 **----------------------------------lexer---------------------------------------
@@ -724,13 +674,16 @@ void			lexer_state_ionum(t_scanner *scanner);
 **----------------------------------alias---------------------------------------
 */
 
-int				alias_expansion(t_vshdata *data, t_tokenlst **tokenlst, char **expanded_aliases);
-int				alias_replace(t_vshdata *data, t_tokenlst *probe, char *alias, char **expanded_aliases);
-int				alias_error(char **line, t_tokenlst **tokenlst, char ***expanded);
+int				alias_expansion(t_vshdata *data, t_tokenlst **tokenlst,
+				char **expanded_aliases);
+int				alias_replace(t_vshdata *data, t_tokenlst *probe, char *alias,
+				char **expanded_aliases);
+int				alias_error(char **line, t_tokenlst **tokenlst,
+				char ***expanded);
 int				alias_read_file(t_vshdata *data);
-char			**alias_add_expanded(char **expanded, char *alias, char *alias_equal);
+char			**alias_add_expanded(char **expanded, char *alias,
+				char *alias_equal);
 char			*alias_getvalue(char *var_key, t_aliaslst *aliaslst);
-
 
 /*
 **----------------------------------parser--------------------------------------
@@ -759,12 +712,15 @@ void			builtin_exit(char **args, t_vshdata *data);
 void			builtin_echo(char **args);
 char			builtin_echo_set_flags(char **args, int *arg_i);
 void			builtin_export(char **args, t_vshdata *data);
-void			builtin_export_var_to_type(char *varname, t_envlst *envlst, int type);
+void			builtin_export_var_to_type(char *varname,
+				t_envlst *envlst, int type);
 void			builtin_export_print(t_envlst *envlst, int flags);
 void			builtin_export_args(char **args, t_vshdata *data, int i);
 int				builtin_assign(char *arg, t_vshdata *data, int env_type);
-int				builtin_assign_addexist(t_envlst *envlst, char *var, int env_type);
-int				builtin_assign_addnew(t_envlst *envlst, char *var, int env_type);
+int				builtin_assign_addexist(t_envlst *envlst,
+				char *var, int env_type);
+int				builtin_assign_addnew(t_envlst *envlst,
+				char *var, int env_type);
 void			builtin_set(char **args, t_envlst *envlst);
 void			builtin_unset(char **args, t_envlst *envlst);
 void			builtin_alias(char **args, t_aliaslst **aliaslst);
@@ -772,7 +728,8 @@ int				builtin_alias_set(char *arg, t_aliaslst **aliaslst);
 void			builtin_alias_delnode(t_aliaslst **node);
 void			builtin_alias_lstdel(t_aliaslst **lst);
 void			builtin_unalias(char **args, t_aliaslst **aliaslst);
-void			builtin_type(char **args, t_envlst *envlst, t_aliaslst *aliaslst);
+void			builtin_type(char **args, t_envlst *envlst,
+				t_aliaslst *aliaslst);
 int				builtin_cd(char **args, t_vshdata *data);
 void			builtin_cd_create_newpath(char **newpath, char *argpath);
 int				builtin_cd_change_dir(char *argpath, t_vshdata *data,
@@ -811,17 +768,15 @@ int				exec_list(t_ast *ast, t_vshdata *data);
 int				exec_and_or(t_ast *ast, t_vshdata *data);
 int				exec_pipe_sequence(t_ast *ast, t_vshdata *data, t_pipes pipes);
 int				exec_command(t_ast *ast, t_vshdata *data, t_pipes pipes);
-
-
 void			exec_cmd(char **args, t_vshdata *data);
 bool			exec_builtin(char **args, t_vshdata *data);
 void			exec_external(char **args, t_vshdata *data);
-int				exec_find_binary(char *filename, t_vshdata *data, char **binary);
+int				exec_find_binary(char *filename, t_vshdata *data,
+				char **binary);
 int				find_binary(char *filename, t_envlst *envlst, char **binary);
 void			exec_quote_remove(t_ast *node);
 int				exec_validate_binary(char *binary);
-int    			exec_create_files(t_ast *ast);
-
+int				exec_create_files(t_ast *ast);
 void			signal_print_newline(int signum);
 
 /*
@@ -829,7 +784,8 @@ void			signal_print_newline(int signum);
 */
 
 int				expan_handle_variables(t_ast *node, t_envlst *envlst);
-int				expan_handle_bracketed_var(char **value, int *i, t_envlst *envlst);
+int				expan_handle_bracketed_var(char **value, int *i,
+				t_envlst *envlst);
 int				expan_handle_dollar(char **value, int *i, t_envlst *envlst);
 int				expan_tilde_expansion(t_ast *node, int *i);
 int				expan_var_error_print(char *str, int len);
@@ -865,7 +821,7 @@ int				redir_close_saved_stdfds(t_vshdata *data);
 int				history_to_file(t_vshdata *data);
 int				history_get_file_content(t_vshdata *data);
 int				history_line_to_array(t_history **history, char **line);
-void	        history_print(t_history **history);
+void			history_print(t_history **history);
 int				history_change_line(t_vshdata *data,
 					char arrow);
 int				history_index_change_down(t_vshdata *data);
@@ -875,7 +831,8 @@ int				history_index_change_up(t_vshdata *data);
 **--------------------------------hashtable-------------------------------------
 */
 
-int				hash_ht_insert(t_vshdata *data, char *key, char *path, int count);
+int				hash_ht_insert(t_vshdata *data, char *key, char *path,
+				int count);
 void			hash_print(t_ht **ht);
 void			hash_reset(t_vshdata *data);
 void			hash_init(t_vshdata *data);
@@ -895,18 +852,25 @@ int				err_ret(char *str);
 **--------------------------------autocomplete----------------------------------
 */
 
-int				auto_get_cmdlst(char *match, t_envlst *envlst, t_list **matchlst);
+int				auto_get_cmdlst(char *match, t_envlst *envlst,
+				t_list **matchlst);
 int				auto_add_tolst(t_list **matchlst, char *filename);
-int				auto_match_builtins(char *match, t_list **matchlst, int match_len);
+int				auto_match_builtins(char *match, t_list **matchlst,
+				int match_len);
 int				auto_get_filelst(char *match, char *path, t_list **matchlst);
-int				auto_get_varlst(char *match, int match_len, t_envlst *envlst, t_list **matchlst);
+int				auto_get_varlst(char *match, int match_len, t_envlst *envlst,
+				t_list **matchlst);
 int				auto_find_state(char *line, ssize_t i);
 void			auto_start(t_vshdata *data);
-int				auto_add_match_toline(char *match, char *to_add, t_vshdata *data);
-int				auto_find_matches(t_vshdata *data, char **match, t_list **matchlst, int state);
+int				auto_add_match_toline(char *match, char *to_add,
+				t_vshdata *data);
+int				auto_find_matches(t_vshdata *data, char **match,
+				t_list **matchlst, int state);
 void			auto_lstdel(void *str, size_t size);
-int				auto_handle_matchlst(t_vshdata *data, char *match, t_list **matchlst);
-int				auto_small_lst(char *match, t_list **matchlst, t_vshdata *data);
+int				auto_handle_matchlst(t_vshdata *data, char *match,
+				t_list **matchlst);
+int				auto_small_lst(char *match, t_list **matchlst,
+				t_vshdata *data);
 void			auto_lst_print(t_list **matchlst, int lst_len);
 int				auto_big_lst(t_list **matchlst, int lst_len);
 int				auto_lenname(t_list *matchlst, int length);
@@ -914,7 +878,6 @@ int				auto_lst_count(t_list *lst);
 void			auto_sort_n(t_list **matchlst);
 void			auto_swap_lstitem(t_list **flst, t_list *smal, t_list *prev);
 bool			auto_check_dups(t_list *matchlst, char *filename);
-
 
 /*
 **----------------------------------debugging-----------------------------------

@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/04 12:51:00 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/04 13:07:06 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/04 11:14:37 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int		ft_isdir(const char *path)
 {
-    struct stat stat_path;
+	struct stat stat_path;
 
-    if (stat(path, &stat_path) == -1)
+	if (stat(path, &stat_path) == -1)
 		return (-1);
-    return (S_ISDIR(stat_path.st_mode));
+	return (S_ISDIR(stat_path.st_mode));
 }

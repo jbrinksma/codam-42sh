@@ -6,28 +6,31 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/21 21:13:37 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/05 13:21:34 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/04 10:32:39 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <stdio.h>
 
-/* static void		tree_print_rec(t_ast *root, int depth, int width, int is_child, char ***lines)
+/* static void		tree_print_rec(t_ast *root, int depth, int width,
+					int is_child, char ***lines)
 {
 	if (is_child == true)
 	{
 		if (root->type == WORD || root->type == ASSIGN)
 			(*lines)[depth] = ft_strjoin(root->value, (*lines)[depth]);
 		else
-			(*lines)[depth] = ft_strjoin(parser_return_token_str(root->type), (*lines)[depth]);
+			(*lines)[depth] = ft_strjoin(parser_return_token_str(root->type),
+				(*lines)[depth]);
 	}
 	else
 	{
 		if (root->type == WORD || root->type == ASSIGN)
 			(*lines)[depth] = ft_strjoin((*lines)[depth], root->value);
 		else
-			(*lines)[depth] = ft_strjoin((*lines)[depth], parser_return_token_str(root->type));
+			(*lines)[depth] = ft_strjoin((*lines)[depth],
+				parser_return_token_str(root->type));
 	}
 
 	if (root->right)

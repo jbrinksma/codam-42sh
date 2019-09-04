@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/09/02 17:15:18 by mavan-he      ########   odam.nl          #
+#    Updated: 2019/09/04 10:25:39 by rkuijper      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
 ./srcs/exec ./srcs/redir ./srcs/error_handling ./srcs/exec ./includes
 SRCS = shell_start shell_prompt shell_quote_checker shell_dless_input \
 shell_init_files shell_init_vshdata shell_getcurrentdir \
-shell_handle_escaped_newlines \
+shell_handle_escaped_newlines shell_init_input shell_init_features \
 input_read input_parse_char input_parse_home \
 input_parse_end input_parse_prev input_parse_next input_parse_backspace \
 input_parse_delete input_parse_ctrl_c input_parse_ctrl_d input_parse_ctrl_k \
@@ -60,7 +60,7 @@ history_to_file history_get_file_content history_line_to_array history_print \
 history_change_line history_index_change \
 exec_builtin exec_cmd exec_external exec_start exec_find_binary \
 exec_quote_remove expan_handle_variables expan_handle_dollar \
-exec_create_files \
+exec_create_files exec_command \
 expan_handle_bracketed_var expan_tilde_expansion exec_validate_binary \
 redir_pipe redir redir_tools redir_tools2 \
 hash_ht_insert hash_print hash_reset hash_init hash_check \

@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/25 17:24:39 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/29 13:26:15 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/09/03 17:33:30 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,17 @@ static char	*alias_find_value(char *key, t_aliaslst *aliaslst, char **expanded)
 }
 
 int			alias_expansion_checker(t_vshdata *data, t_tokenlst *probe,
-			char **expanded)
+			char **expan)
 {
 	t_tokenlst	*new_probe;
 	char		*alias;
 
-	alias = alias_find_value(probe->next->value, data->alias->aliaslst, expanded);
+	alias = alias_find_value(probe->next->value, data->alias->aliaslst, expan);
 	if (alias != NULL)
 	{
 		if (alias_space_check(alias) == true)
 		{
-			if (alias_expansion(data, &probe->next, expanded) == FUNCT_ERROR)
+			if (alias_expansion(data, &probe->next, expan) == FUNCT_ERROR)
 				return (FUNCT_ERROR);
 		}
 		else
@@ -72,10 +72,10 @@ int			alias_expansion_checker(t_vshdata *data, t_tokenlst *probe,
 			while (new_probe->next->type != END &&
 				is_cmd_seperator(new_probe->next->type) == false)
 				new_probe = new_probe->next;
-			if (alias_expansion(data, &new_probe, expanded) == FUNCT_ERROR)
+			if (alias_expansion(data, &new_probe, expan) == FUNCT_ERROR)
 				return (FUNCT_ERROR);
 		}
-		if (alias_replace(data, probe, alias, expanded) == FUNCT_ERROR)
+		if (alias_replace(data, probe, alias, expan) == FUNCT_ERROR)
 			return (FUNCT_ERROR);
 		return (FUNCT_SUCCESS);
 	}

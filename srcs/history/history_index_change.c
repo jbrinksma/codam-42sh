@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/31 15:58:58 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/29 14:36:00 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/09/03 17:35:03 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ int			history_index_change_up(t_vshdata *data)
 	else
 	{
 		if ((data->history->hist_index) - 1 == data->history->hist_start ||
-		(data->history->hist_index == 0 && data->history->hist_start == HISTORY_MAX - 1))
+			(data->history->hist_index == 0 && data->history->hist_start
+			== HISTORY_MAX - 1))
 			return (FUNCT_FAILURE);
 		else if (data->history->hist_index > 0)
 			data->history->hist_index -= 1;
