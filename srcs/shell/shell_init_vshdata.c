@@ -50,7 +50,7 @@ t_vshdata	*shell_init_vshdata(void)
 	if (shell_init_files(data) == FUNCT_ERROR
 		|| history_get_file_content(data) == FUNCT_ERROR
 		|| alias_read_file(data) == FUNCT_ERROR
-		|| env_add_extern_value(data, "OLDPWD", ""))
+		|| env_add_extern_value(data, "OLDPWD", "") == FUNCT_ERROR)
 		return (NULL);
 	return (data);
 }
