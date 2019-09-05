@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/12 14:09:10 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/02 12:16:49 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/05 15:04:27 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*auto_get_file_str(char *line, ssize_t i)
 	while (i >= 0)
 	{
 		if (tools_isidentifierchar(line[i]) == false &&
-			line[i] != '/' && line[i] != '.')
+			line[i] != '/' && line[i] != '.' && line[i] != '~')
 			break ;
 		i--;
 	}

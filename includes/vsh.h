@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/04 11:47:23 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/05 14:55:57 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -857,7 +857,7 @@ int				auto_get_cmdlst(char *match, t_envlst *envlst,
 int				auto_add_tolst(t_list **matchlst, char *filename);
 int				auto_match_builtins(char *match, t_list **matchlst,
 				int match_len);
-int				auto_get_filelst(char *match, char *path, t_list **matchlst);
+int				auto_get_filelst(char *match, char **path, t_list **matchlst);
 int				auto_get_varlst(char *match, int match_len, t_envlst *envlst,
 				t_list **matchlst);
 int				auto_find_state(char *line, ssize_t i);

@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/11 12:28:38 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/02 17:17:27 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/05 15:18:11 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,21 @@ static int	is_dir(char *path, int l)
 	else if (stat(path, &buf) == -1)
 		return (0);
 	return (S_ISDIR(buf.st_mode));
+}
+
+static int	auto_tilde_expan(char **path)
+{
+	char *home;
+
+	home = getenv("HOME");
+	if (home == NULL)
+		return (err_ret(E_N_FAIL_HOME));
+	home = ft_strjoin(home, *path + 1);
+	if (home == NULL)
+		return (err_ret(E_ALLOC_STR));
+	ft_strdel(path);
+	*path = home;
+	return (FUNCT_SUCCESS);
 }
 
 static int	check_and_add_match(t_list **matchlst, char *match, char *name,
@@ -79,14 +94,17 @@ static int	check_dir(DIR *d, char *match, t_list **matchlst, char *path)
 	return (FUNCT_SUCCESS);
 }
 
-int			auto_get_filelst(char *match, char *path, t_list **matchlst)
+int			auto_get_filelst(char *match, char **path, t_list **matchlst)
 {
 	DIR				*dir;
 
-	dir = opendir(path);
+	if ((*path)[0] == '~' && (*path)[1] == '/' &&
+		auto_tilde_expan(path) == FUNCT_ERROR)
+		return (FUNCT_ERROR);
+	dir = opendir(*path);
 	if (dir != NULL)
 	{
-		if (check_dir(dir, match, matchlst, path) == FUNCT_ERROR)
+		if (check_dir(dir, match, matchlst, *path) == FUNCT_ERROR)
 		{
 			closedir(dir);
 			return (FUNCT_ERROR);

@@ -6,11 +6,16 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/12 17:12:17 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/31 17:16:33 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/05 13:13:44 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+
+/*
+**	Auto find state loops back from index to find the state
+**	The state can be a command, variable or file path
+*/
 
 static bool	is_cmd_seperator(char c)
 {
