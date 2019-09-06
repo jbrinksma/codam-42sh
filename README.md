@@ -41,6 +41,7 @@ Because we want to make sure we have a good experience working on this project t
 - After succesfully merging a branch, delete it (after pressing the merge button, a delete button will appear).
 - Travis will run a lot! Please wait for it to finish before merging to master.
 - Commit messages have to be in English, they should also make sense. Especially while merging.
+- Trigger github action
 
 Naming conventions
 ===
