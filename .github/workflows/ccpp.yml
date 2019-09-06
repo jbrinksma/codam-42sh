@@ -15,6 +15,5 @@ jobs:
     - name: run tests
       run: |
         HOMEBREW_NO_AUTO_UPDATE=1 brew install snaipe/soft/criterion
-        make test_norm
         make test_coverage
         bash <(curl -s https://codecov.io/bash)
