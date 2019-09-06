@@ -12,9 +12,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: configure
-      run: ./configure
-    - name: make
+    - name: run tests
       run: |
         HOMEBREW_NO_AUTO_UPDATE=1 brew install snaipe/soft/criterion
         make test_norm
