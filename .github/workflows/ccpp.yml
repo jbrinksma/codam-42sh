@@ -1,0 +1,21 @@
+name: C/C++ CI
+
+on:
+  push:
+    - master
+
+jobs:
+  build:
+
+    runs-on: macOS-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: configure
+      run: ./configure
+    - name: make
+      run: |
+      	HOMEBREW_NO_AUTO_UPDATE=1 brew install snaipe/soft/criterion
+	      make test_norm
+	      make test_coverage
+	      bash <(curl -s https://codecov.io/bash)
