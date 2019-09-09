@@ -77,5 +77,6 @@ void			curs_move_down(t_vshdata *data)
 		ft_printf(CURS_DOWN);
 		data->line->index += data->curs->cur_ws_col;
 		data->curs->coords.y++;
+		data->curs->cur_relative_y++;
 	}
 }

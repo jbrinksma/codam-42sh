@@ -26,6 +26,7 @@ static void	move_right_parse_newline(t_vshdata *data)
 		ft_printf("\e[%iD", len);
 	data->curs->coords.x = 1;
 	data->curs->coords.y++;
+	data->curs->cur_relative_y++;
 }
 
 void		curs_move_right_at_colmax(t_vshdata *data, int colmax)
@@ -34,6 +35,7 @@ void		curs_move_right_at_colmax(t_vshdata *data, int colmax)
 	{
 		data->curs->coords.x = 1;
 		data->curs->coords.y++;
+		data->curs->cur_relative_y++;
 		ft_printf("\e[B\e[%iD", colmax);
 	}
 	else

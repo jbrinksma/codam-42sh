@@ -72,6 +72,7 @@ void		curs_move_n_left(t_vshdata *data, size_t n)
 			ft_printf("\e[%iD", x_offset * -1);
 		data->line->index -= n;
 		data->curs->coords.y -= up;
+		data->curs->cur_relative_y -= up;
 		data->curs->coords.x += x_offset;
 	}
 	else

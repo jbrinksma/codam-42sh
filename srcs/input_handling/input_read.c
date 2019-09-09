@@ -13,6 +13,35 @@
 #include "vsh.h"
 #include <unistd.h>
 
+void		input_reset_cursor_pos(void)
+{
+	size_t		i;
+	int			output;
+	size_t		answer_len;
+	char		answer[TC_MAXRESPONSESIZE];
+
+	answer_len = 0;
+	write(STDIN_FILENO, TC_GETCURSORPOS, 4);
+	while (answer_len < sizeof(answer) - 1 &&
+		read(1, answer + answer_len, 1) == 1)
+	{
+		if (answer[answer_len] == 'R')
+			break ;
+		answer_len++;
+	}
+	answer[answer_len] = '\0';
+	i = 1;
+	while (i < answer_len && answer[i] != ';')
+		i++;
+	if (answer[i] != '\0')
+	{
+		i++;
+		output = ft_atoi(&answer[i]);
+		if (output > 1)
+			ft_putstr("\n");
+	}
+}
+
 static int	find_start(t_history **history)
 {
 	int i;
@@ -41,7 +70,8 @@ static int	reset_input_read_return(t_vshdata *data, int ret)
 	data->line->len_max = 64;
 	data->line->len_cur = 0;
 	data->curs->coords.x = data->prompt->prompt_len + 1;
-	data->curs->coords.y = 1;
+	data->curs->coords.y = get_curs_row(data);
+	data->curs->cur_relative_y = 1;
 	data->history->hist_index = find_start(data->history->history);
 	data->history->hist_start = data->history->hist_index - 1;
 	data->history->hist_first = true;

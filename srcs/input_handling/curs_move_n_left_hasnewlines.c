@@ -26,7 +26,8 @@ static void	move_left_parse_newline(t_vshdata *data)
 		ft_printf("\e[%iC", len - 1);
 	data->curs->coords.x = len;
 	data->curs->coords.y--;
-	if (data->curs->coords.y == 1)
+	data->curs->cur_relative_y--;
+	if (data->curs->cur_relative_y == 1)
 	{
 		ft_printf("\e[%iC", data->prompt->prompt_len + 1);
 		data->curs->coords.x += data->prompt->prompt_len + 1;
@@ -39,6 +40,7 @@ static void	move_left_to_colmax(t_vshdata *data, int colmax)
 	{
 		data->curs->coords.x = colmax;
 		data->curs->coords.y--;
+		data->curs->cur_relative_y--;
 		ft_printf("\e[A\e[%iC", data->curs->coords.x);
 	}
 	else

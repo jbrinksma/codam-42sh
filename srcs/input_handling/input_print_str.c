@@ -89,16 +89,19 @@ void		input_print_str(t_vshdata *data, char *str)
 		{
 			data->curs->coords.x = 1;
 			data->curs->coords.y++;
+			data->curs->cur_relative_y++;
 		}
 		i++;
 		data->curs->coords.x++;
 		if (data->curs->coords.x > data->curs->cur_ws_col)
 		{
-			if (get_curs_row(data) == data->curs->cur_ws_row)
+			if (data->curs->coords.y == data->curs->cur_ws_row)
 				scroll_down_terminal(data);
+			else
+				data->curs->coords.y++;
 			ft_printf("\e[B\e[%iD", data->curs->cur_ws_col);
 			data->curs->coords.x = 1;
-			data->curs->coords.y++;
+			data->curs->cur_relative_y++;
 		}
 	}
 }

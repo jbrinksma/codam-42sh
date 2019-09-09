@@ -21,7 +21,7 @@ static void	input_resize_window(t_vshdata *data, struct winsize new)
 	int				extra;
 
 	saved_index = data->line->index;
-	newlines = data->curs->coords.y - 1;
+	newlines = data->curs->cur_relative_y - 1;
 	extra = 0;
 	if (data->curs->cur_ws_col % new.ws_col > 0)
 		extra = 1;
