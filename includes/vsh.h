@@ -426,6 +426,7 @@ typedef struct	s_vshdata
 	t_dataalias		*alias;
 	t_datatermcaps	*termcaps;
 }				t_vshdata;
+t_vshdata		*g_data;
 
 typedef enum	e_prompt_type
 {
@@ -600,9 +601,9 @@ void			input_parse_ctrl_k(t_vshdata *data);
 void			input_parse_ctrl_u(t_vshdata *data);
 void			input_parse_ctrl_y(t_vshdata *data);
 void			input_parse_tab(t_vshdata *data);
-int				input_resize_window_check(t_vshdata *data);
-int				get_curs_row(t_vshdata *data);
+int				get_curs_row();
 void			input_reset_cursor_pos();
+void			resize_window_check(int sig);
 
 /*
 **----------------------------------shell---------------------------------------

@@ -41,6 +41,7 @@ t_vshdata	*shell_init_vshdata(void)
 		ft_eprintf(E_ALLOC_STR);
 		return (NULL);
 	}
+	g_data = data;
 	data->envlst = env_getlst();
 	if (data->envlst == NULL || shell_init_data(data) == FUNCT_FAILURE)
 	{

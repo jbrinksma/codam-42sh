@@ -37,7 +37,7 @@ t_dataline		*shell_init_vshdataline(void)
 	return (line);
 }
 
-t_dataprompt		*shell_init_vshdataprompt(void)
+t_dataprompt	*shell_init_vshdataprompt(void)
 {
 	t_dataprompt	*prompt;
 

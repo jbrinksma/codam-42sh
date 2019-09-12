@@ -14,49 +14,19 @@
 #include <termios.h>
 #include <term.h>
 
-static int	get_curs_row_return(t_vshdata *data, char **buf, char *error_str,
-	int ret)
+int			get_curs_row()
 {
-	ft_strdel(buf);
-	if (error_str != NULL)
-		ft_eprintf(error_str);
-	data->term->termios_p->c_cc[VMIN] = 0;
-	data->term->termios_p->c_cc[VTIME] = 2;
-	if (tcsetattr(STDIN_FILENO, TCSANOW, data->term->termios_p) == -1)
-	{
-		ft_eprintf(E_TERM_CNT_SET);
-		return (FUNCT_ERROR);
-	}
-	return (ret);
-}
-
-static int	prepare_term_settings(t_vshdata *data)
-{
-	int		ret;
-
-	data->term->termios_p->c_cc[VMIN] = 5;
-	data->term->termios_p->c_cc[VTIME] = 0;
-	ret = tcsetattr(STDIN_FILENO, TCSANOW, data->term->termios_p);
-	if (ret == -1)
-		return (get_curs_row_return(data, NULL, E_TERM_CNT_SET, FUNCT_ERROR));
-	return (FUNCT_SUCCESS);
-}
-
-int			get_curs_row(t_vshdata *data)
-{
-	char	*buf;
 	int		i;
 	int		row;
+	char	*buf;
 
 	i = 0;
-	if (prepare_term_settings(data) == FUNCT_ERROR)
-		return (FUNCT_ERROR);
 	buf = ft_strnew(TC_MAXRESPONSESIZE);
 	if (buf == NULL)
-		return (get_curs_row_return(data, &buf, E_ALLOC_STR, FUNCT_ERROR));
+		return (err_ret(E_ALLOC_STR));
 	ft_putstr("\e[6n");
 	if (read(STDIN_FILENO, buf, TC_MAXRESPONSESIZE) == -1)
-		return (get_curs_row_return(data, &buf, NULL, FUNCT_ERROR));
+		return (FUNCT_ERROR);
 	while (buf[i] != '[' && buf[i] != '\0')
 		i++;
 	if (buf[i] == '[')
@@ -65,9 +35,9 @@ int			get_curs_row(t_vshdata *data)
 	ft_eprintf("curs: <%s>\n", &buf[1]);
 	#endif
 	if (ft_isdigit(buf[i]) == false)
-		return (get_curs_row_return(data, &buf, NULL, FUNCT_ERROR));
+		return (FUNCT_ERROR);
 	row = ft_atoi(&buf[i]);
-	return (get_curs_row_return(data, &buf, NULL, row));
+	return (row);
 }
 
 static void	scroll_down_terminal(t_vshdata *data)
