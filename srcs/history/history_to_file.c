@@ -14,6 +14,7 @@
 #include "libft.h"
 #include <fcntl.h>
 #include <unistd.h>
+#include <limits.h>
 
 /*
 ** Write the history to file
@@ -24,7 +25,7 @@ static void	find_start(t_history **history, int *smallest, int *start)
 	int i;
 
 	i = 0;
-	*smallest = HISTORY_MAX + 1;
+	*smallest = INT_MAX;
 	while (i < HISTORY_MAX && history[i]->str != NULL)
 	{
 		if (history[i]->number < *smallest)

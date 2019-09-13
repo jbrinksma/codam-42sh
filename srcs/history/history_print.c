@@ -12,6 +12,7 @@
 
 #include "vsh.h"
 #include "libft.h"
+#include <limits.h>
 
 /*
 ** Print the history
@@ -68,7 +69,7 @@ static void	find_start(t_history **history, int *start)
 	int		smallest;
 
 	i = 0;
-	smallest = HISTORY_MAX + 1;
+	smallest = INT_MAX;
 	while (i < HISTORY_MAX && history[i]->str != NULL)
 	{
 		if (history[i]->number < smallest)
