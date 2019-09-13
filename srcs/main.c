@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "vsh.h"
-#include <signal.h>
 
 /*
 **	ft_printf alloc error handling
@@ -35,7 +34,6 @@ int		main(void)
 		return (EXIT_FAILURE);
 	if (redir_save_stdfds(data) == FUNCT_ERROR)
 		return (EXIT_FAILURE);
-	resize_window_check(SIGWINCH);
 	shell_start(data);
 	return (EXIT_SUCCESS);
 }

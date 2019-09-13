@@ -12,6 +12,7 @@
 
 #include "vsh.h"
 #include <unistd.h>
+#include <signal.h>
 
 void		input_reset_cursor_pos(void)
 {
@@ -75,6 +76,7 @@ static int	reset_input_read_return(t_vshdata *data, int ret)
 	data->history->hist_index = find_start(data->history->history);
 	data->history->hist_start = data->history->hist_index - 1;
 	data->history->hist_first = true;
+	signal(SIGWINCH, SIG_DFL);
 	return (ret);
 }
 
@@ -108,6 +110,7 @@ int			input_read(t_vshdata *data)
 	if (data->line->line == NULL)
 		return (reset_input_read_return(data, FUNCT_ERROR));
 	reset_input_read_return(data, 0);
+	resize_window_check(SIGWINCH);
 	while (true)
 	{
 		if (read(STDIN_FILENO, &data->input->c, 1) == -1)
