@@ -12,17 +12,22 @@
 
 #include "vsh.h"
 #include <term.h>
+#include <sys/ioctl.h>
 
 t_datacurs		*shell_init_vshdatacurs(void)
 {
-	t_datacurs	*curs;
+	struct winsize	ws;
+	t_datacurs		*curs;
 
 	curs = ft_memalloc(sizeof(t_datacurs));
 	if (curs == NULL)
 		return (NULL);
 	curs->coords = (t_point){ 1, 1 };
-	curs->cur_ws_col = UNINIT;
-	curs->cur_ws_row = UNINIT;
+	if (ioctl(STDIN_FILENO, TIOCGWINSZ, &ws) != -1)
+	{
+		curs->cur_ws_col = ws.ws_col;
+		curs->cur_ws_row = ws.ws_row;		
+	}
 	return (curs);
 }
 

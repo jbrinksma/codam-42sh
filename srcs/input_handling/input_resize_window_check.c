@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/29 10:40:21 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/11 18:36:25 by anonymous     ########   odam.nl         */
+/*   Updated: 2019/09/11 18:36:25 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,6 @@ void		resize_window_check(int sig)
 			g_data->curs->cur_ws_col = ws.ws_col;
 		else if (g_data->curs->cur_ws_col != ws.ws_col)
 			input_resize_window(g_data, ws);
+		signal(SIGWINCH, resize_window_check);
 	}
-	signal(SIGWINCH, resize_window_check);
 }
