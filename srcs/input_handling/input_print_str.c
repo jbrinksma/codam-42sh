@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/23 11:54:27 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/08/30 16:56:16 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/09/12 17:44:10 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int			get_curs_row()
 		return (err_ret(E_ALLOC_STR));
 	ft_putstr("\e[6n");
 	if (read(STDIN_FILENO, buf, TC_MAXRESPONSESIZE) == -1)
-		return (FUNCT_ERROR);
+		ft_free_return(buf, FUNCT_ERROR);
 	while (buf[i] != '[' && buf[i] != '\0')
 		i++;
 	if (buf[i] == '[')
@@ -35,8 +35,9 @@ int			get_curs_row()
 	ft_eprintf("curs: <%s>\n", &buf[1]);
 	#endif
 	if (ft_isdigit(buf[i]) == false)
-		return (FUNCT_ERROR);
+		return (ft_free_return(buf, FUNCT_ERROR));
 	row = ft_atoi(&buf[i]);
+	ft_strdel(&buf);
 	return (row);
 }
 
