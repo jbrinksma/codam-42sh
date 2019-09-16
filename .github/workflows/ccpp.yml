@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: 42SH Tests and Coverage
 
 on: [push]
 
@@ -20,7 +20,7 @@ jobs:
       run: make test_coverage
     - name: send coverage
       if: matrix.os == 'macOS-latest'
-      run: bash <(curl -s https://codecov.io/bash)
+      run: bash <(curl -s https://codecov.io/bash) -t a725e35c-a6da-400e-a56f-ae7b630fc3b2
     - name: install criterion linux
       if: matrix.os == 'ubuntu-latest'
       run: |
