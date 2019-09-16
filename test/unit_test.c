@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/30 16:42:42 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/09/16 17:23:08 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,34 +91,34 @@ Test(term_free_struct, basic)
 **------------------------------------------------------------------------------
 */
 
-TestSuite(term_get_attributes);
+// TestSuite(term_get_attributes);
 
-Test(term_get_attributes, basic)
-{
-	t_vshdataterm	*term_p;
+// Test(term_get_attributes, basic)
+// {
+// 	t_vshdataterm	*term_p;
 
-	term_p = term_init_struct();
+// 	term_p = term_init_struct();
 
-	/* not sure how to have this as prerequisite as test any other way */
-	cr_assert(term_p != NULL, "prerequisite failed: term_init_struct");
+// 	/* not sure how to have this as prerequisite as test any other way */
+// 	cr_assert(term_p != NULL, "prerequisite failed: term_init_struct");
 
-	// cr_expect_eq(term_get_attributes(STDIN_FILENO, term_p), FUNCT_SUCCESS);
-	cr_expect_eq(term_get_attributes(STDOUT_FILENO, term_p), FUNCT_SUCCESS);
-	cr_expect_eq(term_get_attributes(STDERR_FILENO, term_p), FUNCT_SUCCESS);
-}
+// 	// cr_expect_eq(term_get_attributes(STDIN_FILENO, term_p), FUNCT_SUCCESS);
+// 	cr_expect_eq(term_get_attributes(STDOUT_FILENO, term_p), FUNCT_SUCCESS);
+// 	cr_expect_eq(term_get_attributes(STDERR_FILENO, term_p), FUNCT_SUCCESS);
+// }
 
-Test(term_get_attributes, invalid_fd, .init=redirect_all_stdout)
-{
-	t_vshdataterm	*term_p;
+// Test(term_get_attributes, invalid_fd, .init=redirect_all_stdout)
+// {
+// 	t_vshdataterm	*term_p;
 
-	cr_expect_eq(term_get_attributes(STDIN_FILENO, NULL), FUNCT_FAILURE);
-	term_p = term_init_struct();
+// 	cr_expect_eq(term_get_attributes(STDIN_FILENO, NULL), FUNCT_FAILURE);
+// 	term_p = term_init_struct();
 
-	/* not sure how to have this as prerequisite as test any other way */
-	cr_assert(term_p != NULL, "prerequisite failed: term_init_struct");
+// 	/* not sure how to have this as prerequisite as test any other way */
+// 	cr_assert(term_p != NULL, "prerequisite failed: term_init_struct");
 
-	cr_expect_eq(term_get_attributes(10101, term_p), FUNCT_FAILURE);
-}
+// 	cr_expect_eq(term_get_attributes(10101, term_p), FUNCT_FAILURE);
+// }
 
 /*
 **------------------------------------------------------------------------------
