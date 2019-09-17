@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/09/16 17:23:08 by omulder       ########   odam.nl         */
+/*   Updated: 2019/09/16 18:41:36 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
-#define INIT_VSHDATA data = ft_memalloc(sizeof(t_vshdata)); data->envlst = env_getlst(); data->curs = shell_init_vshdatacurs();	data->history = shell_init_vshdatahistory(); data->line = shell_init_vshdataline();	data->prompt = shell_init_vshdataprompt(); data->input = shell_init_vshdatainput();	data->hashtable = shell_init_vshdatahashtable(); data->alias = shell_init_vshdataalias(); data->termcaps = shell_init_vshdatatermcaps();
+#define INIT_VSHDATA data = ft_memalloc(sizeof(t_vshdata)); data->envlst = env_getlst(); data->curs = shell_init_vshdatacurs();	data->history = shell_init_vshdatahistory(); data->line = shell_init_vshdataline();	data->prompt = shell_init_vshdataprompt(); data->input = shell_init_vshdatainput();	data->hashtable = shell_init_vshdatahashtable(); data->alias = shell_init_vshdataalias(); data->term = term_init_struct(); data->termcaps = shell_init_vshdatatermcaps();
 
 void redirect_all_stdout(void)
 {
@@ -1005,6 +1005,7 @@ Test(alias, basic_test)
 	cr_expect(exec_complete_command(ast, data) == FUNCT_SUCCESS);
 	cr_expect_str_eq(data->alias->aliaslst->var, "dit=dat");
 	line = ft_strdup("echo\n");
+	lexer_tokenlstdel(&token_lst);
 	cr_assert(line != NULL);
 	cr_expect(lexer(&line, &token_lst) == FUNCT_SUCCESS);
 	cr_assert(token_lst != NULL);
@@ -1107,6 +1108,7 @@ Test(replace_var, basic_test, .init=redirect_all_stdout)
 	cr_expect_str_eq(env_getvalue("dit", data->envlst), "dat");
 	line = ft_strdup("echo $dit \"${hier}\"\n");
 	cr_assert(line != NULL);
+	lexer_tokenlstdel(&token_lst);
 	cr_expect(lexer(&line, &token_lst) == FUNCT_SUCCESS);
 	cr_assert(token_lst != NULL);
 	cr_expect(parser_start(&token_lst, &ast) == FUNCT_SUCCESS);

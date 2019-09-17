@@ -6,7 +6,7 @@
 /*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 15:16:46 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/08/22 11:30:40 by omulder       ########   odam.nl         */
+/*   Updated: 2019/09/15 16:08:17 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,8 @@ int			exec_find_binary(char *filename, t_vshdata *data, char **binary)
 	char	*bin_dup;
 
 	ret = hash_check(data, filename, binary);
-	if (ret == FUNCT_SUCCESS)
-		return (FUNCT_SUCCESS);
-	if (ret == FUNCT_ERROR)
-		return (FUNCT_ERROR);
+	if (ret == FUNCT_SUCCESS || ret == FUNCT_ERROR)
+		return (ret);
 	ret = find_binary(filename, data->envlst, binary);
 	if (ret == FUNCT_ERROR)
 		return (FUNCT_ERROR);

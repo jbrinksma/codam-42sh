@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/29 12:42:44 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/04 10:40:32 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/16 18:18:07 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static int	shell_init_data(t_vshdata *data)
 {
-	data->term = term_prepare(data->envlst);
 	data->curs = shell_init_vshdatacurs();
 	data->history = shell_init_vshdatahistory();
 	data->line = shell_init_vshdataline();
@@ -22,12 +21,25 @@ static int	shell_init_data(t_vshdata *data)
 	data->input = shell_init_vshdatainput();
 	data->hashtable = shell_init_vshdatahashtable();
 	data->alias = shell_init_vshdataalias();
-	data->termcaps = shell_init_vshdatatermcaps();
-	if (data->term == NULL || data->curs == NULL
-		|| data->history == NULL || data->line == NULL || data->prompt == NULL
-		|| data->input == NULL || data->hashtable == NULL || data->alias == NULL
-		|| data->termcaps == NULL)
+	data->term = term_init_struct();
+
+	if (data->curs == NULL || data->history == NULL || data->line == NULL ||
+		data->prompt == NULL || data->input == NULL || data->hashtable == NULL
+		|| data->alias == NULL || data->term == NULL)
 		return (FUNCT_FAILURE);
+	return (FUNCT_SUCCESS);
+}
+
+int 		shell_init_term(t_vshdata *data)
+{
+	free(data->term);
+	data->term = term_prepare(data->envlst);
+	data->termcaps = shell_init_vshdatatermcaps();
+	if (data->term == NULL || data->termcaps == NULL)
+	{
+		ft_eprintf(E_TERM_INIT);
+		return (FUNCT_ERROR);
+	}
 	return (FUNCT_SUCCESS);
 }
 

@@ -6,25 +6,16 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/11 18:32:11 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/09/16 16:02:27 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-/*
-**	ft_printf alloc error handling
-*/
-
-int		main(void)
+int		main(int argc, char **argv)
 {
 	t_vshdata	*data;
 
-	if (isatty(STDIN_FILENO) != 1)
-	{
-		ft_eprintf(E_STDIN_NOT_TTY);
-		return (EXIT_FAILURE);
-	}
 	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 	if (g_state == NULL)
 		return (EXIT_FAILURE);
@@ -34,6 +25,18 @@ int		main(void)
 		return (EXIT_FAILURE);
 	if (redir_save_stdfds(data) == FUNCT_ERROR)
 		return (EXIT_FAILURE);
+	if (argc > 1)
+	{
+		shell_args(data, argv[1]);
+		return (g_state->exit_code);
+	}
+	if (isatty(STDIN_FILENO) != 1)
+	{
+		shell_stdin(data);
+		return (g_state->exit_code);
+	}
+	if (shell_init_term(data) == FUNCT_ERROR)
+		return (EXIT_FAILURE);
 	shell_start(data);
-	return (EXIT_SUCCESS);
+	return (g_state->exit_code);
 }

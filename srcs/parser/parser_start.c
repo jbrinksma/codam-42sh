@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 19:58:40 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/22 12:02:12 by omulder       ########   odam.nl         */
+/*   Updated: 2019/09/16 12:40:30 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ static bool	parser_and_or(t_tokenlst **token_lst, t_ast **ast)
 {
 	if (parser_pipe_sequence(token_lst, ast) == true)
 	{
-		while (TK_TYPE == AND_IF ||
-			TK_TYPE == OR_IF)
+		while (TK_TYPE == AND_IF || TK_TYPE == OR_IF)
 		{
 			if (parser_add_astnode(token_lst, ast) == false)
 				return (parser_return_del(ast));
@@ -96,6 +95,5 @@ int			parser_start(t_tokenlst **token_lst, t_ast **ast)
 			parser_return_token_str((tmp)->type));
 		return (ret);
 	}
-	lexer_tokenlstdel(token_lst);
 	return (FUNCT_SUCCESS);
 }

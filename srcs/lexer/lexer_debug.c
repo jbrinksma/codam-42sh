@@ -6,13 +6,14 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 16:06:49 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/19 18:23:30 by omulder       ########   odam.nl         */
+/*   Updated: 2019/09/17 13:11:55 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
 #ifdef DEBUG
+
 
 void	print_node(t_tokenlst *node)
 {
@@ -67,4 +68,11 @@ void	print_token(t_scanner *scanner)
 	ft_strdel(&lexeme);
 }
 
+void	print_token_list(t_tokenlst *node)
+{
+	if (node == NULL)
+		return ;
+	print_node(node);
+	print_token_list(node->next);
+}
 #endif

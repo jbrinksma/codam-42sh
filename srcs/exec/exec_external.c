@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/08/22 11:25:02 by omulder       ########   odam.nl         */
+/*   Updated: 2019/09/16 17:00:05 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ t_termios *termios_p)
 
 	if (exec_validate_binary(binary) == FUNCT_ERROR)
 		return ;
-	term_flags_init(termios_p);
+	if (termios_p != NULL)
+		term_flags_init(termios_p);
 	pid = fork();
 	if (pid < 0)
 		return (err_void_exit(E_FORK_STR, EXIT_FAILURE));
