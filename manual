@@ -24,6 +24,26 @@ Set a environment variable 'name' to 'value'. If no 'value' is specified, 'name'
 Unset environment variable 'name'.
 .SS vela
 Display our mighty vela logo in ascii art, and continue with business as usual.
+.RS 0
+.po 0
+.SH REDIRECTION
+The following section explains how we handle redirections.
+.RS 3
+.po 4
+.SS Here-document
+The redirection operator `<<` allows redirection of lines contained in a shell input file, known as a here-document, to the standard input of a command.
+
+The here-document is treated as a single word that begins after the next newline character (if there are unescaped quotes) and continues until there is a line containing only the delimiter, with no trailing blank characters. Then the next here-document starts, if there is one.
+
+
+ command<<word
+    here-document
+ delimiter
+
+
+If any character in word is quoted, the delimiter is formed by performing quote removal on word, and the here-document lines will not be expanded. Otherwise, the delimiter is the word itself. 
+
+If no characters in word are quoted, all lines of the here-document will be expanded for parameter expansion. In this case, the backslash in the input will behave as the backslash inside double-quotes. However, the double-quote character (") will not be treated specially within a here-document, except when the double-quote appears within ` ` or ${ }. 
 
 .po 0
 .SH BUGS
