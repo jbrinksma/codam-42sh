@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/29 12:42:44 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/16 18:18:07 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/19 16:17:30 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static int	shell_init_data(t_vshdata *data)
 
 int 		shell_init_term(t_vshdata *data)
 {
+	free(data->term->old_termios_p);
+	free(data->term->termios_p);
 	free(data->term);
 	data->term = term_prepare(data->envlst);
 	data->termcaps = shell_init_vshdatatermcaps();
