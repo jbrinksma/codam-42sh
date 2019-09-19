@@ -11,11 +11,14 @@
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <signal.h>
 
 int		main(int argc, char **argv)
 {
 	t_vshdata	*data;
 
+	signal(SIGCHLD, signal_handle_child_death);
+	signal(SIGINT, SIG_IGN);
 	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 	if (g_state == NULL)
 		return (EXIT_FAILURE);

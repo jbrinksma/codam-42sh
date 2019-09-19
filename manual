@@ -1,6 +1,6 @@
 .TH man 1 "03 April 2019" "1.0" "vsh man page"
 .SH NAME
-vsh \- Vela SHell
+vsh
 .SH SYNOPSIS
 minishell
 .SH DESCRIPTION
@@ -11,17 +11,29 @@ vsh does not take any options.
 .RE 0
 .RS 3
 .po 4
-vsh supports a total of 7 builtin commands. One of them, 'vela', is bonus.
+vsh supports a total of 7 builtin commands.
 .SS echo [-neE] [arg ...]
 Output the args, seperated by spaces, followed by a newline. If -n is specified, the trailing newline is not printed. The -e option will enable interpretation of these escape characters: \\a \\b \\E \\e \\f \\n \\r \\t \\v \\. Option -E disables interpretation of escape characters.
 .SS cd [dir]
 Change the current directory to 'dir'. The variable environment variable HOME is default to 'dir'.
 .SS env [REFRESH]
 Display the current environment. If supplied with argument 'REFRESH', it will refresh your whole environment.
-.SS setenv [name] [value]
+.SS set [name] [value]
 Set a environment variable 'name' to 'value'. If no 'value' is specified, 'name' will be set to NULL. If no 'name' is specified, setenv will behave like the env builtin.
-.SS unsetenv [name]
+.SS unset [name]
 Unset environment variable 'name'.
+.SS exit
+Exits the current running shell (same as ctrl+d input).
+.SS export
+??
+.SS history
+Displays all current history entries.
+.SS alias
+??
+.SS unalias
+??
+.SS type
+??
 .SS vela
 Display our mighty vela logo in ascii art, and continue with business as usual.
 .RS 0
@@ -46,7 +58,7 @@ If any character in word is quoted, the delimiter is formed by performing quote 
 If no characters in word are quoted, all lines of the here-document will be expanded for parameter expansion. In this case, the backslash in the input will behave as the backslash inside double-quotes. However, the double-quote character (") will not be treated specially within a here-document, except when the double-quote appears within ` ` or ${ }. 
 
 .po 0
-.SH BUGS
-Probably a lot...
+.SH KNOWN BUGS
+None.
 .SH AUTHOR
-Jorn Brinksma (jbrinksm@student.codam.nl)
+Jorn Brinksma, Marijn van Heesewijk, Oscar Mulder, Thijs de Jong, Rob Kuijper

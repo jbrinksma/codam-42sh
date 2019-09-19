@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 18:11:05 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/11 18:21:56 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/09/17 16:52:45 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int		term_set_attributes(t_vshdataterm *term_p)
 {
 	int	ret;
 
-	term_p->termios_p->c_lflag &= ~(ECHO | ICANON | ISIG);
+	term_p->termios_p->c_lflag &= ~(ECHO | ICANON);
 	term_p->termios_p->c_cc[VMIN] = 1;
 	term_p->termios_p->c_cc[VTIME] = 0;
 	ret = tcsetattr(STDIN_FILENO, TCSANOW, term_p->termios_p);

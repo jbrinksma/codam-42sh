@@ -25,11 +25,12 @@
 # define PROMPT_SEPERATOR	SEPERATOR " "
 # define FUNCT_FAILURE 0
 # define FUNCT_SUCCESS 1
+# define NEW_PROMPT 2
 # define FUNCT_ERROR -1
 # define PROG_FAILURE 1
 # define PROG_SUCCESS 0
+# define IR_EOF 3
 # define SHELL_BUF			42
-# define NEW_PROMPT FUNCT_ERROR
 # define U_ALIAS			"alias: usage: alias [-p] [name[=value] ... ]\n"
 # define U_CD				"cd: usage: cd [-L|-P] [dir]\n"
 # define U_EXPORT "export: usage: export [-n] [name[=value] ...] or export -p\n"
@@ -430,6 +431,18 @@ typedef	struct	s_dataalias
 	char		*alias_file;
 }				t_dataalias;
 
+typedef struct	s_pipeseqlist
+{
+	pid_t					pid;
+	struct s_pipeseqlist	*next;
+}				t_pipeseqlist;
+
+# define EXEC_ISPIPED (1 << 0)
+# define EXEC_WAIT (1 << 1)
+# define PID_STATE_EXIT		0
+# define PID_STATE_RUNNING	1
+# define PID_STATE_SUSPEND	2
+
 typedef struct	s_vshdata
 {
 	t_envlst		*envlst;
@@ -443,14 +456,20 @@ typedef struct	s_vshdata
 	t_datahashtable	*hashtable;
 	t_dataalias		*alias;
 	t_datatermcaps	*termcaps;
+	t_pipeseqlist	*pipeseq;
+	short			exec_flags;
 }				t_vshdata;
+t_vshdata		*g_data;
+
 t_vshdata		*g_data;
 
 typedef enum	e_prompt_type
 {
 	REGULAR_PROMPT,
+	LINECONT_PROMPT,
 	QUOTE_PROMPT,
-	DQUOTE_PROMPT
+	DQUOTE_PROMPT,
+	DLESS_PROMPT
 }				t_prompt_type;
 
 /*
@@ -584,6 +603,8 @@ int				term_get_attributes(int fd, t_vshdataterm*term_p);
 int				term_set_attributes(t_vshdataterm*term_p);
 int				term_reset(t_vshdataterm*term_p);
 void			term_free_struct(t_vshdataterm**term_p);
+void			term_enable_isig(t_termios *termios_p);
+void			term_disable_isig(t_termios *termios_p);
 
 /*
 **-----------------------------------input--------------------------------------
@@ -786,6 +807,7 @@ bool			tool_is_special(char c);
 bool			tool_check_for_special(char *str);
 bool			tool_check_for_whitespace(char *str);
 int				tool_get_paths(t_envlst *envlst, char ***paths);
+int				tools_get_pid_state(pid_t pid);
 
 /*
 **----------------------------------execution-----------------------------------
@@ -796,7 +818,7 @@ int				exec_list(t_ast *ast, t_vshdata *data);
 int				exec_and_or(t_ast *ast, t_vshdata *data);
 int				exec_pipe_sequence(t_ast *ast, t_vshdata *data, t_pipes pipes);
 int				exec_command(t_ast *ast, t_vshdata *data, t_pipes pipes);
-void			exec_cmd(char **args, t_vshdata *data);
+void			exec_cmd(char **args, t_vshdata *data, t_pipes pipes);
 bool			exec_builtin(char **args, t_vshdata *data);
 void			exec_external(char **args, t_vshdata *data);
 int				exec_find_binary(char *filename, t_vshdata *data,
@@ -805,7 +827,13 @@ int				find_binary(char *filename, t_envlst *envlst, char **binary);
 void			exec_quote_remove(t_ast *node);
 int				exec_validate_binary(char *binary);
 int				exec_create_files(t_ast *ast);
-void			signal_print_newline(int signum);
+void			exec_add_pid_to_pipeseqlist(t_vshdata *data, pid_t pid);
+
+/*
+**-----------------------------------signals------------------------------------
+*/
+
+void			signal_handle_child_death(int signum);
 
 /*
 **------------------------------------expan-------------------------------------

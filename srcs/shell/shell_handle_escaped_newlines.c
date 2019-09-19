@@ -37,19 +37,21 @@ int			shell_handle_escaped_newlines(t_vshdata *data)
 	ret = remove_last_escaped_newline(data->line->line);
 	if (ret == false)
 		return (FUNCT_FAILURE);
-	while (ret != false)
+	while (true)
 	{
-		ft_putstr("\nlinecont> ");
+		ft_putchar('\n');
 		line_tmp = data->line->line;
-		data->line->line = NULL;
-		input_read(data);
+		shell_display_prompt(data, LINECONT_PROMPT);
+		ret = input_read(data);
+		if (ret == NEW_PROMPT)
+			return (ft_free_return(line_tmp, NEW_PROMPT));
 		data->line->line = ft_strjoinfree_all(line_tmp, data->line->line);
+		if (ret == IR_EOF)
+			data->line->line = ft_strjoinfree_s1(data->line->line, "\n");
 		if (data->line->line == NULL)
-		{
-			ft_eprintf(E_ALLOC_STR);
-			return (FUNCT_ERROR);
-		}
-		ret = remove_last_escaped_newline(data->line->line);
+			return (err_ret(E_ALLOC_STR));
+		if (remove_last_escaped_newline(data->line->line) == false)
+			break ;
 	}
-	return (FUNCT_SUCCESS);
+	return (ret);
 }

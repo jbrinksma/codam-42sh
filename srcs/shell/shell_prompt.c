@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 20:16:38 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/02 13:19:53 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/09/16 18:06:46 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ void	shell_get_valid_prompt(t_vshdata *data, int prompt_type)
 		data->prompt->prompt_name = "quote";
 	else if (prompt_type == DQUOTE_PROMPT)
 		data->prompt->prompt_name = "dquote";
+	else if (prompt_type == LINECONT_PROMPT)
+		data->prompt->prompt_name = "linecont";
+	else if (prompt_type == DLESS_PROMPT)
+		data->prompt->prompt_name = "";
 	else
 		data->prompt->prompt_name = PROMPT_NAME;
 	data->prompt->prompt_seperator = PROMPT_SEPERATOR;
@@ -38,9 +42,9 @@ void	shell_display_prompt(t_vshdata *data, int prompt_type)
 	data->prompt->prompt_addition = shell_getcurrentdir(cwd);
 	shell_get_valid_prompt(data, prompt_type);
 	data->prompt->cur_prompt_type = prompt_type;
+	input_reset_cursor_pos();
 	if (prompt_type == REGULAR_PROMPT)
 		ft_printf(RED);
-	input_reset_cursor_pos();
 	input_print_str(data, data->prompt->prompt_name);
 	if (data->prompt->prompt_addition != NULL && prompt_type == REGULAR_PROMPT)
 	{

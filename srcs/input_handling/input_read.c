@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/17 14:03:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/11 18:34:52 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/09/17 16:03:50 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void		input_reset_cursor_pos(void)
 		i++;
 		output = ft_atoi(&answer[i]);
 		if (output > 1)
-			ft_putstr("\n");
+			ft_putstr("\e[47;30m%\e[0m\n");
 	}
 }
 
@@ -87,8 +87,8 @@ static int	input_parse(t_vshdata *data)
 	if (input_parse_ctrl_c(data) == FUNCT_SUCCESS)
 		return (reset_input_read_return(data, NEW_PROMPT));
 	ret = input_parse_ctrl_d(data);
-	if (ret == NEW_PROMPT)
-		return (reset_input_read_return(data, NEW_PROMPT));
+	if (ret == IR_EOF)
+		return (IR_EOF);
 	else if (ret == FUNCT_SUCCESS)
 		return (FUNCT_SUCCESS);
 	else if (input_read_ansi(data) == FUNCT_FAILURE)
@@ -104,6 +104,8 @@ static int	input_parse(t_vshdata *data)
 
 int			input_read(t_vshdata *data)
 {
+	int		ret;
+
 	if (data == NULL)
 		return (FUNCT_ERROR);
 	data->line->line = ft_strnew(data->line->len_max);
@@ -111,17 +113,20 @@ int			input_read(t_vshdata *data)
 		return (reset_input_read_return(data, FUNCT_ERROR));
 	reset_input_read_return(data, 0);
 	resize_window_check(SIGWINCH);
+	term_disable_isig(data->term->termios_p);
 	while (true)
 	{
 		if (read(STDIN_FILENO, &data->input->c, 1) == -1)
 			return (reset_input_read_return(data, FUNCT_ERROR));
-		if (input_parse(data) == NEW_PROMPT)
-			return (NEW_PROMPT);
+		ret = input_parse(data);
+		if (ret == NEW_PROMPT || ret == FUNCT_ERROR || ret == IR_EOF)
+			return (ret);
 		if (data->input->c == '\n')
 		{
 			curs_go_end(data);
 			break ;
 		}
 	}
+	term_enable_isig(data->term->termios_p);
 	return (reset_input_read_return(data, FUNCT_SUCCESS));
 }

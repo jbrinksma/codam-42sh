@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:46:55 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/09/02 13:59:52 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/09/16 14:48:03 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ int		input_parse_ctrl_d(t_vshdata *data)
 			&& data->prompt->cur_prompt_type != REGULAR_PROMPT)
 		{
 			ft_putchar('\n');
-			ft_eprintf(E_SYNTAX_P, "EOF");
-			return (NEW_PROMPT);
+			return (IR_EOF);
 		}
 		else if (data->line->len_cur == 0)
 			builtin_exit(NULL, data);

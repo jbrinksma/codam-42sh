@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/04 10:16:26 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/09/04 10:17:27 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/16 09:55:33 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int				exec_command(t_ast *ast, t_vshdata *data, t_pipes pipes)
 		command = create_args(ast);
 		if (command == NULL)
 			return (return_and_reset_fds(FUNCT_ERROR, data));
-		exec_cmd(command, data);
+		exec_cmd(command, data, pipes);
 	}
 	else if (ast->type == ASSIGN || tool_is_redirect_tk(ast->type) == true)
 	{
