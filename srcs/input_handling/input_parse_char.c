@@ -87,7 +87,6 @@ static int	add_newline(t_vshdata *data, char **line)
 		tmp[data->line->len_cur] = '\n';
 		*line = tmp;
 	}
-	data->line->len_cur++;
 	return (FUNCT_SUCCESS);
 }
 
@@ -111,11 +110,32 @@ static int	add_newline(t_vshdata *data, char **line)
 **	from the buffer (n - 1).
 */
 
-static int	empty_input_buffer(t_vshdata *data, int n)
+static int	input_filter_buffer(char *str)
 {
-	char			c;
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (str[i] != '\0')
+	{
+		if (ft_isprint(str[i]) == true || str[i] == '\n')
+		{
+			str[j] = str[i];
+			j++;
+		}
+		i++;
+	}
+	str[j] = '\0';
+	return (j);
+}
+
+int		input_empty_buffer(t_vshdata *data, int n)
+{
 	fd_set			readfds;
 	struct timeval	timeout;
+	int				bytes_read;
+	char			buf[INPUT_BUF_READ_SIZE + 1];
 
 	FD_ZERO(&readfds);
 	timeout.tv_sec = 0;
@@ -123,13 +143,12 @@ static int	empty_input_buffer(t_vshdata *data, int n)
 	FD_SET(STDIN_FILENO, &readfds);
 	if (select(1, &readfds, NULL, NULL, &timeout) != 0)
 	{
-		read(STDIN_FILENO, &c, 1);
-		if (c == '\t')
-			c = ' ';
-		if (add_char_at(data, data->line->index + n, c,
-			&data->line->line) == FUNCT_ERROR)
-			return (0);
-		return (empty_input_buffer(data, n + 1));
+		bytes_read = read(STDIN_FILENO, buf, INPUT_BUF_READ_SIZE);
+		buf[bytes_read] = '\0';
+		bytes_read = input_filter_buffer(buf);
+		input_add_chunk(data, buf, bytes_read, n);
+		data->line->len_cur += bytes_read;
+		return (input_empty_buffer(data, n + bytes_read));
 	}
 	return (n - 1);
 }
@@ -143,7 +162,7 @@ int			input_parse_char(t_vshdata *data)
 		if (add_char_at(data, data->line->index, data->input->c,
 			&data->line->line) == FUNCT_ERROR)
 			return (FUNCT_ERROR);
-		old_index = data->line->index + empty_input_buffer(data, 1);
+		old_index = data->line->index + input_empty_buffer(data, 1);
 		input_print_str(data, data->line->line + data->line->index);
 		data->line->index = data->line->len_cur;
 		curs_move_n_left(data, data->line->index - old_index - 1);
