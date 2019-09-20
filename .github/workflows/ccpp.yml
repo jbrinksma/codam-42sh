@@ -3,9 +3,8 @@ name: 42SH Tests and Coverage
 on: [push]
 
 jobs:
-  timeout-minutes: 5
   build:
-
+    timeout-minutes: 5
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
