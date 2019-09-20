@@ -30,8 +30,8 @@ int			input_add_chunk(t_vshdata *data, char *chunk, int chunk_len,
 {
 	char *tmp;
 
-	if (data->line->len_cur + chunk_len > data->line->len_max)
-		data->line->len_max += chunk_len;
+	while (data->line->len_cur + chunk_len > data->line->len_max)
+		data->line->len_max *= 2;
 	tmp = ft_strnew(data->line->len_max);
 	if (tmp == NULL)
 		return (FUNCT_ERROR);
