@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/30 13:49:22 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/06 11:09:15 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/09/19 19:37:06 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,20 @@ static int		allocate_leftover_history(t_vshdata *data, int i)
 	return (FUNCT_SUCCESS);
 }
 
+static void		empty_gnl(int fd)
+{
+	int		ret;
+	char	*line;
+
+	line = NULL;
+	ret = ft_get_next_line_delim(fd, &line, HIST_SEPARATE);
+	while (ret != 0 && ret != -1)
+	{
+		ft_strdel(&line);
+		ret = ft_get_next_line_delim(fd, &line, HIST_SEPARATE);
+	}
+}
+
 int				history_get_file_content(t_vshdata *data)
 {
 	int		fd;
@@ -71,9 +85,8 @@ int				history_get_file_content(t_vshdata *data)
 			return (FUNCT_ERROR);
 		i++;
 	}
+	empty_gnl(fd);
 	close(fd);
 	ret = allocate_leftover_history(data, i);
-	if (ret == FUNCT_ERROR)
-		return (FUNCT_ERROR);
-	return (FUNCT_SUCCESS);
+	return (ret);
 }

@@ -6,18 +6,14 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/01/09 11:10:09 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/29 14:56:38 by omulder       ########   odam.nl         */
+/*   Updated: 2019/09/19 19:37:48 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-/*
-**	MUCH PROBLEM IF YOU CHANGE BUFFSIZE TO > 1
-*/
-
-# define BUFF_SIZE 1
+# define BUFF_SIZE 1024
 # include "ft_printf.h"
 # include <stdbool.h>
 
