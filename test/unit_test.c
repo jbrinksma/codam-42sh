@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/09/16 18:41:36 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/22 12:25:29 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -501,7 +501,7 @@ Test(history_check, history_to_file)
 	data->history->history_file = ft_strdup("/tmp/.vsh_history1");
 	i = 0;
 	data->history->history = (t_history**)ft_memalloc(sizeof(t_history *) * HISTORY_MAX);
-	while (i < HISTORY_MAX - 1)
+	while (i < HISTORY_MAX)
 	{
 		data->history->history[i] = (t_history*)ft_memalloc(sizeof(t_history));
 		i++;
@@ -554,6 +554,7 @@ Test(history_overfivehundred, basic)
 	t_vshdata	*data;
 	int			i;
 	char		*str = ft_strdup("echo codam\n");
+	char		*str2 = ft_strdup("echo hoi\n");
 
 	i = 0;
 	
@@ -568,10 +569,13 @@ Test(history_overfivehundred, basic)
 	i = 0;
 	while (i < 510)
 	{
-		history_line_to_array(data->history->history, &str);
+		if (i % 2)
+			history_line_to_array(data->history->history, &str);
+		else
+			history_line_to_array(data->history->history, &str2);
 		i++;
 	}
-	cr_expect_str_eq(data->history->history[0]->str, "echo codam");
+	cr_expect_str_eq(data->history->history[0]->str, "echo hoi");
 	cr_expect_str_eq(data->history->history[499]->str, "echo codam");
 	cr_expect(data->history->history[0]->number == 501);
 	cr_expect(data->history->history[9]->number == 510);

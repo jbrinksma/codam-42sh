@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/30 18:55:25 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/22 11:34:41 by omulder       ########   odam.nl         */
+/*   Updated: 2019/09/22 12:16:17 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,23 +46,40 @@ static void	history_find_start(t_history **history, int *number, int *start)
 	}
 }
 
+static int	is_same_cmd(t_history **history, char *line, int index, int line_len)
+{
+	int prev;
+
+	if (index > 0)
+		prev = index - 1;
+	else
+		prev = HISTORY_MAX - 1;
+	if (history[prev]->str == NULL)
+		return (false);
+	if (ft_strnequ(history[prev]->str, line, line_len - 1) == true)
+		return (true);
+	return (false);
+}
+
 int			history_line_to_array(t_history **history, char **line)
 {
 	int start;
 	int number;
-	int i;
+	int line_len;
 
-	if (ft_strlen(*line) <= 1)
+	line_len = ft_strlen(*line);
+	if (line_len <= 1)
 		return (FUNCT_SUCCESS);
 	number = -1;
 	start = 0;
 	history_find_start(history, &number, &start);
-	i = start;
-	if (history[i]->str != NULL)
-		ft_strdel(&history[i]->str);
-	history[i]->number = number + 1;
-	history[i]->str = ft_strsub(*line, 0, ft_strlen(*line) - 1);
-	if (history[i]->str == NULL)
+	if (is_same_cmd(history, *line, start, line_len) == true)
+		return (FUNCT_SUCCESS);
+	if (history[start]->str != NULL)
+		ft_strdel(&history[start]->str);
+	history[start]->number = number + 1;
+	history[start]->str = ft_strsub(*line, 0, line_len - 1);
+	if (history[start]->str == NULL)
 	{
 		ft_strdel(line);
 		ft_eprintf(E_N_ALLOC_STR, "history");
