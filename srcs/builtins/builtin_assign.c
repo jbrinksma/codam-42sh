@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 09:09:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/15 20:35:59 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/22 13:34:15 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ int			builtin_assign(char *arg, t_vshdata *data, int env_type)
 	else
 		env_type &= ~ENV_SPECIAL;
 	g_state->exit_code = EXIT_SUCCESS;
+	if (ft_strnequ(var, "PATH", 4) == true && var[4] == '=')
+		hash_reset(data);
 	if (builtin_assign_addexist(data->envlst, var, env_type) == FUNCT_FAILURE)
 	{
 		if (builtin_assign_addnew(data->envlst, var, env_type) == FUNCT_ERROR)
@@ -80,7 +82,5 @@ int			builtin_assign(char *arg, t_vshdata *data, int env_type)
 			return (FUNCT_ERROR);
 		}
 	}
-	if (ft_strnequ(var, "PATH", 4) == true && var[4] == '=')
-		hash_reset(data);
 	return (FUNCT_SUCCESS);
 }
