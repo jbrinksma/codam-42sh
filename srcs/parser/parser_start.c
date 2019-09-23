@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 19:58:40 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/16 12:40:30 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/23 15:29:45 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static bool	parser_list(t_tokenlst **token_lst, t_ast **ast)
 		{
 			if (parser_add_astnode(token_lst, ast) == false)
 				return (parser_return_del(ast));
-			if (TK_TYPE != NEWLINE)
+			if (TK_TYPE != NEWLINE && TK_TYPE != END)
 			{
 				if (parser_add_right(token_lst, ast, &parser_list) == false)
 					return (false);
@@ -71,7 +71,8 @@ static bool	parser_list(t_tokenlst **token_lst, t_ast **ast)
 
 static bool	parser_complete_command(t_tokenlst **token_lst, t_ast **ast)
 {
-	if (parser_list(token_lst, ast) == true && TK_TYPE == NEWLINE)
+	if (parser_list(token_lst, ast) == true && (TK_TYPE == NEWLINE
+		|| TK_TYPE == END))
 		return (true);
 	return (parser_return_del(ast));
 }

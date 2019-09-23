@@ -46,8 +46,6 @@ int			shell_handle_escaped_newlines(t_vshdata *data)
 		if (ret == NEW_PROMPT)
 			return (ft_free_return(line_tmp, NEW_PROMPT));
 		data->line->line = ft_strjoinfree_all(line_tmp, data->line->line);
-		if (ret == IR_EOF)
-			data->line->line = ft_strjoinfree_s1(data->line->line, "\n");
 		if (data->line->line == NULL)
 			return (err_ret(E_ALLOC_STR));
 		if (remove_last_escaped_newline(data->line->line) == false)

@@ -94,7 +94,7 @@ void	shell_start(t_vshdata *data)
 			FUNCT_SUCCESS || alias_expansion(data, &token_lst, NULL) !=
 			FUNCT_SUCCESS)
 			continue ;
-		if (token_lst->next->type == NEWLINE
+		if (token_lst->next->type == NEWLINE || token_lst->next->type == END
 			|| parser_start(&token_lst, &ast) != FUNCT_SUCCESS)
 			continue ;
 		exec_complete_command(ast, data);

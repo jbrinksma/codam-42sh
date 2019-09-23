@@ -6,17 +6,11 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/25 17:24:39 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/03 17:33:30 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/23 17:50:18 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-
-static bool	is_cmd_seperator(t_tokens type)
-{
-	return (type == PIPE || type == AND_IF || type == OR_IF || type == BG ||
-		type == SEMICOL || type == NEWLINE);
-}
 
 static bool	alias_space_check(char *alias)
 {
@@ -52,6 +46,18 @@ static char	*alias_find_value(char *key, t_aliaslst *aliaslst, char **expanded)
 	return (NULL);
 }
 
+int			alias_error(char **line, t_tokenlst **tokenlst, char ***expanded)
+{
+	ft_eprintf(E_N_ALLOC_STR, "alias");
+	if (expanded != NULL && *expanded != NULL)
+		ft_strarrdel(expanded);
+	if (tokenlst != NULL && *tokenlst != NULL)
+		lexer_tokenlstdel(tokenlst);
+	if (line != NULL && *line != NULL)
+		ft_strdel(line);
+	return (FUNCT_ERROR);
+}
+
 int			alias_expansion_checker(t_vshdata *data, t_tokenlst *probe,
 			char **expan)
 {
@@ -70,7 +76,7 @@ int			alias_expansion_checker(t_vshdata *data, t_tokenlst *probe,
 		{
 			new_probe = probe;
 			while (new_probe->next->type != END &&
-				is_cmd_seperator(new_probe->next->type) == false)
+				tools_is_cmd_seperator(new_probe->next->type) == false)
 				new_probe = new_probe->next;
 			if (alias_expansion(data, &new_probe, expan) == FUNCT_ERROR)
 				return (FUNCT_ERROR);
@@ -99,7 +105,7 @@ int			alias_expansion(t_vshdata *data, t_tokenlst **tokenlst,
 				return (ret);
 		}
 		while (probe->next->type != END &&
-			is_cmd_seperator(probe->next->type) == false)
+			tools_is_cmd_seperator(probe->next->type) == false)
 			probe = probe->next;
 		probe = probe->next;
 	}

@@ -868,6 +868,7 @@ int				tool_get_paths(t_envlst *envlst, char ***paths);
 void			tools_remove_quotes_etc(char *str, bool is_heredoc);
 int				tools_get_pid_state(pid_t pid);
 bool			tools_contains_quoted_chars(char *str);
+bool			tools_is_cmd_seperator(t_tokens type);
 
 /*
 **----------------------------------execution-----------------------------------
