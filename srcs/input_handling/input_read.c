@@ -80,7 +80,7 @@ static int	reset_input_read_return(t_vshdata *data, int ret)
 	data->curs->cur_relative_y = 1;
 	data->history->hist_index = find_start(data->history->history);
 	data->history->hist_start = data->history->hist_index - 1;
-	data->history->hist_first = true;
+	data->history->hist_isfirst = true;
 	signal(SIGWINCH, SIG_DFL);
 	return (ret);
 }

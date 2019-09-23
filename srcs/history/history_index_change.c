@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/31 15:58:58 by omulder        #+#    #+#                */
-/*   Updated: 2019/09/03 17:35:03 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/11 13:44:22 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	index_history_first(t_vshdata *data)
 {
 	if (data->history->history[data->history->hist_index - 1]->str != NULL)
 	{
-		data->history->hist_first = false;
+		data->history->hist_isfirst = false;
 		data->history->hist_index -= 1;
 		return (FUNCT_SUCCESS);
 	}
@@ -25,7 +25,7 @@ static int	index_history_first(t_vshdata *data)
 
 int			history_index_change_up(t_vshdata *data)
 {
-	if (data->history->hist_first)
+	if (data->history->hist_isfirst)
 		return (index_history_first(data));
 	if (data->history->history[HISTORY_MAX - 1]->number == -1)
 	{
@@ -53,13 +53,13 @@ int			history_index_change_up(t_vshdata *data)
 int			history_index_change_down(t_vshdata *data)
 {
 	#ifdef DEBUG
-	ft_eprintf("%i %i %i\n", data->history->hist_first, data->history->hist_index, data->history->hist_start);
+	ft_eprintf("%i %i %i\n", data->history->hist_isfirst, data->history->hist_index, data->history->hist_start);
 	#endif
-	if (data->history->hist_first)
+	if (data->history->hist_isfirst)
 		return (FUNCT_FAILURE);
 	if (data->history->hist_index == data->history->hist_start)
 	{
-		data->history->hist_first = true;
+		data->history->hist_isfirst = true;
 		data->history->hist_index += 1;
 		return (FUNCT_FAILURE);
 	}

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/23 15:50:06 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/09/23 16:23:06 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,34 @@
 # define HASH_LR			(1 << 0)
 # define HASH_HIT			1
 # define HASH_NO_HIT		0
+
+/*
+**-----------------------------------fc-----------------------------------------
+*/
+
+# define DEF_FCEDIT			"ed"
+# define FC_OPT_E			(1 << 0)
+# define FC_OPT_L			(1 << 1)
+# define FC_OPT_N			(1 << 2)
+# define FC_OPT_R			(1 << 3)
+# define FC_OPT_S			(1 << 4)
+# define FC_FIRST_NEG		(1 << 5)
+# define FC_LAST_NEG		(1 << 6)
+# define U_FC 				"fc: usage: fc [-e ename] [-nlr] [first] [last] or"\
+							"fc -s [pat=rep] [cmd]\n"
+# define E_FC_REQARG		SHELL "fc: %s: option requires an argument\n"
+# define E_FC_INV_OPT		SHELL ": fc: -%c: invalid option\n"
+# define E_FC_OUT_RANGE		SHELL ": fc: history specification out of range\n"
+
+typedef struct	s_fcdata
+{
+	char	options;
+	char	*first;
+	char	*last;
+	char	*editor;
+	char	*replace;
+	char	*match;
+}				t_fcdata;
 
 /*
 **-----------------------------------builtin------------------------------------
@@ -396,7 +424,7 @@ typedef struct	s_datahistory
 	char		*history_file;
 	int			hist_index;
 	int			hist_start;
-	int			hist_first;
+	bool		hist_isfirst;
 }				t_datahistory;
 
 typedef struct	s_dataline
@@ -797,6 +825,30 @@ int				cd_alloc_error(void);
 int				cd_invalid_option(char c);
 
 /*
+**----------------------------------builtin-fc----------------------------------
+*/
+
+void			builtin_fc(char **args, t_vshdata *data);
+void			fc_init_fcdata(t_fcdata **fc);
+void			fc_set_default_editor(t_vshdata *data, t_fcdata *fc);
+int				fc_set_options(char **args, t_fcdata *fc);
+int				fc_option_editor(int i, char **args, t_fcdata *fc);
+void			fc_option_list(t_fcdata *fc);
+int				fc_option_substitute(int i, char **args, t_fcdata *fc);
+void			fc_option_suppress(t_fcdata *fc);
+void			fc_option_reverse(t_fcdata *fc);
+void			fc_list(t_datahistory *history, t_fcdata *fc);
+int				fc_list_print_line(t_history *history, t_fcdata *fc);
+void			fc_print_regular(int start, int end, t_history **history,
+				t_fcdata *fc);
+void			fc_print_reverse(int start, int end, t_history **history,
+				t_fcdata *fc);
+int				fc_find_index(t_datahistory *history, t_fcdata *fc,
+				char *str, int *index);
+int				fc_substitute(t_vshdata *data, t_datahistory *history,
+				t_fcdata *fc);
+
+/*
 **---------------------------------tools----------------------------------------
 */
 
@@ -897,7 +949,7 @@ char			*history_match_line(t_datahistory *history,
 int				history_insert_into_line(char **line,
 				char *hist_line, size_t i);
 size_t			history_get_match_len(char *line, size_t i);
-
+int				history_replace_last(t_history **history, char **line);
 /*
 **--------------------------------hashtable-------------------------------------
 */
@@ -918,6 +970,8 @@ int				error_return(int ret, int error, char *opt_str);
 int				err_ret_exit(char *str, int exitcode);
 void			err_void_exit(char *str, int exitcode);
 int				err_ret(char *str);
+int				err_ret_exitcode(char *str, int exitcode);
+void			err_void_prog_exit(char *error, char *prog, int exitcode);
 
 /*
 **--------------------------------autocomplete----------------------------------

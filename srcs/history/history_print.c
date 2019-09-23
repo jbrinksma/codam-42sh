@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/30 20:47:41 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/26 15:33:31 by omulder       ########   odam.nl         */
+/*   Updated: 2019/09/23 16:15:58 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	add_tabs_after_newlines(char *str, char **new)
 	}
 	*new = ft_strnew(i + tab_count);
 	if (*new == NULL)
-		return (false);
+		return (err_ret_exit(E_ALLOC_STR, EXIT_FAILURE));
 	return (add_tabs(str, *new));
 }
 
@@ -81,15 +81,18 @@ static void	find_start(t_history **history, int *start)
 	}
 }
 
-void		print_history_line(t_history *history)
+int			print_history_line(t_history *history)
 {
 	int		ret;
 	char	*tmp;
 
 	ret = add_tabs_after_newlines(history->str, &tmp);
+	if (ret == FUNCT_ERROR)
+		return (FUNCT_FAILURE);
 	ft_printf("%d\t%s\n", history->number, tmp);
 	if (ret == true)
 		ft_strdel(&tmp);
+	return (FUNCT_SUCCESS);
 }
 
 void		history_print(t_history **history)
@@ -101,13 +104,15 @@ void		history_print(t_history **history)
 	i = start;
 	while (i < HISTORY_MAX && history[i]->str != NULL)
 	{
-		print_history_line(history[i]);
+		if (print_history_line(history[i]) == FUNCT_ERROR)
+			return ;
 		i++;
 	}
 	i = 0;
 	while (start != 0 && i < start && history[i]->str != NULL)
 	{
-		print_history_line(history[i]);
+		if (print_history_line(history[i]) == FUNCT_ERROR)
+			return ;
 		i++;
 	}
 }
