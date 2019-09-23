@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/02 13:23:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/17 16:49:28 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/09/23 15:49:31 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ int			shell_dless_read_till_stop(char **heredoc, char *heredoc_delim,
 		ret = input_read(data);
 		if (ret == FUNCT_ERROR || ret == NEW_PROMPT)
 			return (ret);
+		if (ret != IR_EOF)
+			ft_putchar('\n');
 		if (ft_strequ(data->line->line, heredoc_delim) == true || ret == IR_EOF)
 			break ;
-		ft_putchar('\n');
 		if (*heredoc == NULL)
 			*heredoc = ft_strdup(data->line->line);
 		else
@@ -66,12 +67,15 @@ int			shell_dless_set_tk_val(t_tokenlst *probe, char **heredoc,
 	}
 	if (probe->value == NULL || ret == NEW_PROMPT || ret == FUNCT_ERROR)
 	{
-		if (probe->value == NULL)
+		if (probe->value == NULL && ret != NEW_PROMPT)
 			ft_eprintf(E_ALLOC_STR, "heredoc");
 		ft_strdel(heredoc);
 		ft_strdel(&heredoc_delim);
 		return (ret);
 	}
+	probe->flags |= T_FLAG_ISHEREDOC;
+	if (tool_check_for_special(probe->value) == true)
+		probe->flags |= T_FLAG_HASSPECIAL;
 	return (FUNCT_SUCCESS);
 }
 
@@ -89,6 +93,11 @@ static bool	is_valid_heredoc_delim(t_tokenlst *token)
 		ft_eprintf(E_P_NOT_VAL_HERE,
 			token->value);
 		return (false);
+	}
+	if (tools_contains_quoted_chars(token->value) == true)
+	{
+		tools_remove_quotes_etc(token->value, false);
+		token->flags |= T_FLAG_HEREDOC_NOEXP;
 	}
 	g_state->exit_code = EXIT_SUCCESS;
 	return (true);

@@ -68,8 +68,9 @@ int			expan_handle_variables(t_ast *node, t_envlst *envlst)
 		return (FUNCT_ERROR);
 	if (expan_handle_variables(node->left, envlst) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
-	if ((node->type == WORD || node->type == ASSIGN) &&
-		node->flags & T_FLAG_HASSPECIAL)
+	if ((node->type == WORD || node->type == ASSIGN)
+		&& node->flags & T_FLAG_HASSPECIAL
+		&& (node->flags & T_FLAG_HEREDOC_NOEXP) == false)
 	{
 		if (scan_value(node, envlst) == FUNCT_ERROR)
 			return (FUNCT_ERROR);
