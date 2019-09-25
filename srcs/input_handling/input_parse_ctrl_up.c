@@ -17,18 +17,18 @@
 **	collide with the prompt.
 */
 
-static unsigned	get_cur_line_index(t_vshdata *data)
+static unsigned	get_line_index_from(t_vshdata *data, int index)
 {
 	int i;
 
-	i = data->line->index - 1;
+	i = index - 1;
 	while (i > 0)
 	{
 		if (data->line->line[i] == '\n')
-			return (data->line->index - i - 1);
+			return (index - i - 1);
 		i--;
 	}
-	return (data->line->index);
+	return (index);
 }
 
 static void		move_up_handle_newline(t_vshdata *data)
@@ -37,29 +37,27 @@ static void		move_up_handle_newline(t_vshdata *data)
 	int			j;
 	unsigned	l;
 
-	i = data->line->index;
+	i = data->line->index - 1;
 	j = -1;
-	l = get_cur_line_index(data);
-	#ifdef DEBUG
-	ft_eprintf("Line index: %d\n", l);
-	#endif
+	l = get_line_index_from(data, data->line->index);
 	while (i > 0)
 	{
 		if (data->line->line[i] == '\n')
 		{
 			if (j == -1)
-				j = 0;
+				j = get_line_index_from(data, i);
 			else
-			{
-				j = 1;
 				break ;
-			}
+		}
+		else if (j != -1)
+		{
+			if (j <= (int)l)
+				break ;
+			j--;
 		}
 		i--;
 	}
-	if (j != -1)
-		i += l + (j == 1 ? 1 : 0);
-	curs_move_n_left(data, data->line->index - i);
+	curs_move_n_left(data, data->line->index - i - 1);
 }
 
 void			curs_move_up(t_vshdata *data)
@@ -68,7 +66,7 @@ void			curs_move_up(t_vshdata *data)
 
 	if (data->line->index == 0)
 		return ;
-	newline_str = ft_strrnchr(data->line->line, '\n', data->line->index);
+	newline_str = ft_strrnchr(data->line->line, '\n', data->line->index - 1);
 	if (newline_str != NULL)
 		move_up_handle_newline(data);
 	else if (data->line->index < (unsigned)data->curs->cur_ws_col)
