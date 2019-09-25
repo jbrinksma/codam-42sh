@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/09/17 13:27:00 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/24 14:44:22 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	lexer_tokenlstiter(t_tokenlst *lst, void (*f)(t_tokenlst *elem))
 
 int		shell_close_quote_and_esc(t_vshdata *data)
 {
-	int 	ret;
+	int		ret;
 	bool	ctrl_d;
 
 	ret = FUNCT_SUCCESS;

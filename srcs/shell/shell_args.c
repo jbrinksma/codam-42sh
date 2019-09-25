@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/15 14:41:31 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/16 17:38:22 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/25 12:04:41 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,29 @@ static int	shell_check_file(char *filepath)
 	return (ret);
 }
 
+/*
+**	shell_args gets called when argc > 1
+**	shell_check_file will check if arg 1 is a valid file
+**	shell_init_line will read the input from file into line
+**	shell_line_splitter will split the line into cmd lines
+**	shell_lines_exec will execute each line until end or
+**	until syntac error
+*/
+
 void		shell_args(t_vshdata *data, char *filepath)
 {
+	char **lines;
+
 	if (shell_get_path(data, &filepath) == FUNCT_ERROR)
 		return ;
 	if (shell_check_file(filepath) != FUNCT_SUCCESS)
 		return ;
-	if (shell_init_line(data, filepath) == FUNCT_FAILURE)
+	if (shell_init_line(data, filepath) == FUNCT_ERROR)
 		return ;
 	ft_strdel(&filepath);
-	shell_one_line(data);
-	return ;
+	lines = shell_line_splitter(data);
+	if (lines == NULL)
+		return ;
+	shell_lines_exec(data, lines);
+	ft_strarrdel(&lines); 
 }

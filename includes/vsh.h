@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/23 16:23:06 by omulder       ########   odam.nl         */
+/*   Updated: 2019/09/24 16:30:10 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,10 +124,8 @@
 **------------------------------------shell-------------------------------------
 */
 
-
-# define SHELL_STDIN		1
-# define SHELL_STANDARD		2
-# define SHELL_ARG			3
+# define SHELL_NON_INTERACT	0
+# define SHELL_INTERACT		1
 
 /*
 **------------------------------------echo--------------------------------------
@@ -335,6 +333,7 @@ typedef struct	s_fcdata
 typedef struct	s_state
 {
 	int			exit_code;
+	int			shell_type;
 }				t_state;
 
 t_state *g_state;
@@ -701,9 +700,13 @@ int 			shell_init_term(t_vshdata *data);
 void			shell_args(t_vshdata *data, char *filepath);
 int				shell_get_path(t_vshdata *data, char **filepath);
 int				shell_init_line(t_vshdata *data, char *filepath);
-void			shell_one_line(t_vshdata *data);
+int				shell_one_line(t_vshdata *data, char *line);
 void			shell_stdin(t_vshdata *data);
-void			shell_clear_input_data(char **line, t_ast **ast, t_tokenlst **token_lst);
+void			shell_clear_input_data(char **line, t_ast **ast,
+				t_tokenlst **token_lst);
+char			**shell_line_splitter(t_vshdata *data);
+void			shell_lines_exec(t_vshdata *data, char **lines);
+int				shell_split_line(char *line, char **lines);
 
 t_datatermcaps	*shell_init_vshdatatermcaps(void);
 t_dataalias		*shell_init_vshdataalias(void);

@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/15 20:37:03 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/17 13:09:42 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/24 14:39:04 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	shell_add_cwd_to_env(t_vshdata *data)
 	cwd = ft_strjoinfree_s2("PATH=", new_path);
 	if (cwd == NULL)
 		return (err_ret_exit(E_ALLOC_STR, EXIT_FAILURE));
-	new_path = ft_strjoinfree_s1(cwd, path);	
+	new_path = ft_strjoinfree_s1(cwd, path);
 	if (new_path == NULL)
 		return (err_ret_exit(E_ALLOC_STR, EXIT_FAILURE));
 	if (builtin_assign(new_path, data, ENV_LOCAL) == FUNCT_ERROR)
@@ -75,7 +75,7 @@ int			shell_get_path(t_vshdata *data, char **filepath)
 	{
 		*filepath = ft_strdup(*filepath);
 		if (*filepath == NULL)
-			return(err_ret_exit(E_ALLOC_STR, EXIT_FAILURE));
+			return (err_ret_exit(E_ALLOC_STR, EXIT_FAILURE));
 	}
 	return (FUNCT_SUCCESS);
 }

@@ -6,34 +6,38 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/15 21:53:03 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/17 13:27:00 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/24 14:39:51 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
 /*
-** This will be replaced by a cmd line splitter
-** Currently we only handle one line and stop at the first newline
+**	shell_one_line takes a line through history_expansion,
+**	lexer, alias_expansion, parser and executor
 */
 
-void	shell_one_line(t_vshdata *data)
+int		shell_one_line(t_vshdata *data, char *line)
 {
 	t_tokenlst	*token_lst;
 	t_ast		*ast;
+	int			ret;
 
 	token_lst = NULL;
 	ast = NULL;
-	if (history_expansion(data) != FUNCT_SUCCESS ||
+	ret = FUNCT_SUCCESS;
+	data->line->line = ft_strdup(line);
+	if (data->line->line == NULL || history_expansion(data) != FUNCT_SUCCESS ||
 		lexer(&data->line->line, &token_lst) != FUNCT_SUCCESS ||
-		alias_expansion(data, &token_lst, NULL) != FUNCT_SUCCESS ||
-		token_lst->next->type == NEWLINE ||
-		parser_start(&token_lst, &ast) != FUNCT_SUCCESS)
-	{
+		alias_expansion(data, &token_lst, NULL) != FUNCT_SUCCESS)
+		ret = FUNCT_ERROR;
+	else if (token_lst->next->type == NEWLINE || token_lst->next->type == END)
+		ret = FUNCT_SUCCESS;
+	else if (parser_start(&token_lst, &ast) != FUNCT_SUCCESS ||
+		exec_complete_command(ast, data) == FUNCT_ERROR)
+		ret = FUNCT_ERROR;
+	if (ret == FUNCT_ERROR && g_state->exit_code == EXIT_SUCCESS)
 		g_state->exit_code = EXIT_FAILURE;
-		return ;
-	}
-	exec_complete_command(ast, data);
 	shell_clear_input_data(&data->line->line, &ast, &token_lst);
-	return ;
+	return (ret);
 }

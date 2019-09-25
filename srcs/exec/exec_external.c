@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/09/16 17:00:05 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/24 16:12:09 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,16 @@
 
 static void		term_flags_init(t_termios *termios_p)
 {
+	if (g_state->shell_type == SHELL_NON_INTERACT)
+		return ;
 	termios_p->c_lflag |= (ECHO | ICANON | ISIG);
 	tcsetattr(STDIN_FILENO, TCSANOW, termios_p);
 }
 
 static void		term_flags_destroy(t_termios *termios_p)
 {
+	if (g_state->shell_type == SHELL_NON_INTERACT)
+		return ;
 	termios_p->c_lflag &= ~(ECHO | ICANON | ISIG);
 	tcsetattr(STDIN_FILENO, TCSANOW, termios_p);
 }

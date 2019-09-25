@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/29 12:42:44 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/19 16:17:30 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/24 14:43:55 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static int	shell_init_data(t_vshdata *data)
 	data->hashtable = shell_init_vshdatahashtable();
 	data->alias = shell_init_vshdataalias();
 	data->term = term_init_struct();
-
 	if (data->curs == NULL || data->history == NULL || data->line == NULL ||
 		data->prompt == NULL || data->input == NULL || data->hashtable == NULL
 		|| data->alias == NULL || data->term == NULL)
@@ -30,7 +29,7 @@ static int	shell_init_data(t_vshdata *data)
 	return (FUNCT_SUCCESS);
 }
 
-int 		shell_init_term(t_vshdata *data)
+int			shell_init_term(t_vshdata *data)
 {
 	free(data->term->old_termios_p);
 	free(data->term->termios_p);

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 20:15:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/03 17:34:28 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/24 16:10:57 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static void	reset_exit(int exit_code, t_vshdataterm *term_p)
 {
-	if (term_reset(term_p) == FUNCT_FAILURE)
+	if (g_state->shell_type == SHELL_INTERACT &&
+		term_reset(term_p) == FUNCT_FAILURE)
 		ft_eprintf(E_NOT_RESET);
 	exit(exit_code);
 }
