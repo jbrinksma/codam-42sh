@@ -42,6 +42,7 @@ void	shell_display_prompt(t_vshdata *data, int prompt_type)
 	data->prompt->prompt_addition = shell_getcurrentdir(cwd);
 	shell_get_valid_prompt(data, prompt_type);
 	data->prompt->cur_prompt_type = prompt_type;
+	input_empty_buffer(data, 0);
 	input_reset_cursor_pos();
 	if (prompt_type == REGULAR_PROMPT)
 		ft_printf(RED);

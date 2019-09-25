@@ -430,6 +430,8 @@ typedef struct	s_dataline
 {
 	char		*line;
 	char		*line_copy;
+	char		*buffer;
+	unsigned	buffer_i;
 	unsigned	index;
 	unsigned	len_max;
 	unsigned	len_cur;
@@ -674,8 +676,9 @@ int				get_curs_row();
 void			input_reset_cursor_pos();
 void			resize_window_check(int sig);
 int				input_add_chunk(t_vshdata *data, char *chunk,
-				int chunk_len, int index);
+				int chunk_len);
 int				input_empty_buffer(t_vshdata *data, int n);
+int				input_read_from_buffer(t_vshdata *data);
 
 /*
 **----------------------------------shell---------------------------------------

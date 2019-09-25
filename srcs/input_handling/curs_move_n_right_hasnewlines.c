@@ -51,9 +51,7 @@ void		curs_move_n_right_hasnewlines(t_vshdata *data, size_t n)
 	{
 		if (data->line->line[data->line->index] == '\n'
 			&& data->line->index != data->line->len_cur - 1)
-		{
 			move_right_parse_newline(data);
-		}
 		else
 			curs_move_right_at_colmax(data, data->curs->cur_ws_col);
 		n--;

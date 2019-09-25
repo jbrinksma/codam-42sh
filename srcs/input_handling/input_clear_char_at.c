@@ -12,46 +12,56 @@
 
 #include "vsh.h"
 
-static void	remove_tabulations(char *str)
+int			input_read_from_buffer(t_vshdata *data)
 {
-	int i;
-
-	i = 0;
-	while (str[i] != '\0')
+	if (data->line->buffer != NULL)
 	{
-		if (str[i] == '\t')
-			str[i] = ' ';
-		i++;
+		if (data->line->buffer[data->line->buffer_i] != '\0')
+		{
+			data->input->c = data->line->buffer[data->line->buffer_i];
+			data->line->buffer_i++;
+		}
+		else
+		{
+			ft_strdel(&data->line->buffer);
+			data->line->buffer = NULL;
+			data->line->buffer_i = 0;
+			return (FUNCT_FAILURE);
+		}
+		return (FUNCT_SUCCESS);
 	}
+	return (FUNCT_FAILURE);
 }
 
-int			input_add_chunk(t_vshdata *data, char *chunk, int chunk_len,
-	int index)
+int			input_add_chunk(t_vshdata *data, char *chunk, int chunk_len)
 {
-	char *tmp;
+	char	*tmp;
 
-	while (data->line->len_cur + chunk_len > data->line->len_max)
-		data->line->len_max *= 2;
-	tmp = ft_strnew(data->line->len_max);
-	if (tmp == NULL)
-		return (FUNCT_ERROR);
-	remove_tabulations(chunk);
-	ft_strncpy(tmp, data->line->line, data->line->index + index);
-	ft_strcat(tmp, chunk);
-	ft_strcat(tmp, &data->line->line[data->line->index + index]);
-	ft_strdel(&data->line->line);
-	data->line->line = tmp;
+	if (data->line->buffer == NULL)
+	{
+		data->line->buffer = ft_strdup(chunk);
+		if (data->line->buffer == NULL)
+			return (FUNCT_ERROR);
+		return (FUNCT_SUCCESS);
+	}
+	else
+	{
+		tmp = ft_strnew(ft_strlen(data->line->buffer) + chunk_len);
+		if (tmp == NULL)
+			return (FUNCT_ERROR);
+		ft_strcpy(tmp, data->line->buffer);
+		ft_strcat(tmp, chunk);
+		ft_strdel(&data->line->buffer);
+		data->line->buffer = tmp;
+	}
 	return (FUNCT_SUCCESS);
 }
 
 void		input_clear_char_at(char **line, unsigned index)
 {
-	unsigned i;
-
-	i = index;
-	while ((*line)[i])
+	while ((*line)[index])
 	{
-		(*line)[i] = (*line)[i + 1];
-		i++;
+		(*line)[index] = (*line)[index + 1];
+		index++;
 	}
 }
