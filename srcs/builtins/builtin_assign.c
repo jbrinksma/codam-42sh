@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 09:09:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/22 13:34:15 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/26 14:58:02 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int			builtin_assign_addnew(t_envlst *envlst, char *var, int env_type)
 {
 	t_envlst	*newitem;
 
+	if (ft_strchr(var, '=') == NULL)
+		return (ft_free_return(var, FUNCT_FAILURE));
 	newitem = env_lstnew(var, env_type);
 	ft_strdel(&var);
 	if (newitem == NULL)
