@@ -734,7 +734,6 @@ bool			lexer_is_shellspec(char c);
 
 int				lexer(char **line, t_tokenlst **token_lst);
 int				lexer_error(char **line);
-void			lexer_evaluator(t_tokenlst *token_lst);
 int				lexer_scanner(char *line, t_tokenlst *token_lst);
 
 void			lexer_change_state(t_scanner *scanner,
