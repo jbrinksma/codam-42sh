@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 11:12:49 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/19 15:11:43 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/27 14:52:45 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,8 @@
 
 static void	init_scanner(char *str, t_scanner *scanner)
 {
+	ft_bzero(scanner, sizeof(t_scanner));
 	scanner->str = str;
-	scanner->str_index = 0;
-	scanner->flags = 0;
-	scanner->tk_len = 0;
-	scanner->tk_type = ERROR;
 }
 
 static void	reset_scanner(t_scanner *scanner)

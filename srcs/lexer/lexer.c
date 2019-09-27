@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/14 15:14:31 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/27 13:26:49 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/09/27 13:49:45 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ t_tokenlst	*lexer_tokenlstnew(t_tokens type, char *value, int flags)
 	new->type = type;
 	new->value = value;
 	new->flags = flags;
-	new->next = NULL;
 	return (new);
 }
 
