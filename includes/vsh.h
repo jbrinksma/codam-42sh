@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/27 10:49:15 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/09/27 14:09:41 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,7 @@ typedef struct	s_fcdata
 **------------------------------------lexer-------------------------------------
 */
 
+# define NO_FLAGS 0
 # define CURRENT_CHAR (scanner->str)[scanner->str_index]
 # define SCANNER_CHAR scanner.str[scanner.str_index]
 # define T_FLAG_HASSPECIAL (1 << 0)
