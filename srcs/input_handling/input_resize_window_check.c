@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/29 10:40:21 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/11 18:36:25 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/09/27 12:53:07 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static void	input_resize_window(t_vshdata *data, struct winsize new)
 		ft_printf("\e[%iA", newlines);
 	tputs(data->termcaps->tc_clear_lines_str, 1, &ft_tputchar);
 	data->curs->coords = (t_point){1, 1};
+	data->curs->cur_relative_y = 1;
 	data->curs->cur_ws_col = new.ws_col;
 	shell_display_prompt(data, data->prompt->cur_prompt_type);
 	data->line->index = data->line->len_cur;
