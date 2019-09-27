@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/25 11:59:28 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/27 10:49:51 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ void	init_g_state(void)
 {
 	g_state = (t_state*)ft_memalloc(sizeof(t_state));
 	if (g_state == NULL)
+	{
+		ft_eprintf(E_ALLOC_STR);
 		exit(EXIT_FAILURE);
+	}
 	g_state->shell_type = SHELL_INTERACT;
 }
 

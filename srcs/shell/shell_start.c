@@ -6,13 +6,13 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/09/24 14:44:22 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/09/27 10:41:01 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-void	lexer_tokenlstiter(t_tokenlst *lst, void (*f)(t_tokenlst *elem))
+void		lexer_tokenlstiter(t_tokenlst *lst, void (*f)(t_tokenlst *elem))
 {
 	if (lst == NULL || f == NULL)
 		return ;
@@ -20,7 +20,7 @@ void	lexer_tokenlstiter(t_tokenlst *lst, void (*f)(t_tokenlst *elem))
 	lexer_tokenlstiter(lst->next, f);
 }
 
-int		shell_close_quote_and_esc(t_vshdata *data)
+int			shell_close_quote_and_esc(t_vshdata *data)
 {
 	int		ret;
 	bool	ctrl_d;
@@ -45,20 +45,26 @@ int		shell_close_quote_and_esc(t_vshdata *data)
 	return (FUNCT_SUCCESS);
 }
 
-void	shell_clear_input_data(char **line, t_ast **ast, t_tokenlst **token_lst)
+void		shell_clear_input_data(char **line, t_ast **ast,
+				t_tokenlst **token_lst)
 {
 	ft_strdel(line);
 	parser_astdel(ast);
 	lexer_tokenlstdel(token_lst);
 }
 
-int		pre_lexer_reading(t_vshdata *data)
+static int	pre_lexer_reading(t_vshdata *data)
 {
 	int			ret;
 	bool		ctrl_d;
 
 	ctrl_d = false;
 	ret = input_read(data);
+	if (ret == FUNCT_ERROR)
+	{
+		ft_eprintf(E_READ_STR);
+		exit(EXIT_FAILURE);
+	}
 	if (ret == IR_EOF)
 		ctrl_d = true;
 	if (ret != FUNCT_ERROR && ret != NEW_PROMPT)
@@ -74,7 +80,7 @@ int		pre_lexer_reading(t_vshdata *data)
 	return (ret);
 }
 
-void	shell_start(t_vshdata *data)
+void		shell_start(t_vshdata *data)
 {
 	t_tokenlst	*token_lst;
 	t_ast		*ast;
