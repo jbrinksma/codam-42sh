@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 10:23:43 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/22 12:01:07 by omulder       ########   odam.nl         */
+/*   Updated: 2019/09/27 13:26:43 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int		lexer_error(char **line)
 void	lexer_change_state(t_scanner *scanner,
 		void (*lexer_state_x)(t_scanner *scanner))
 {
-	(scanner->str_index)++;
-	(scanner->tk_len)++;
+	scanner->str_index++;
+	scanner->tk_len++;
 	lexer_state_x(scanner);
 }
 
