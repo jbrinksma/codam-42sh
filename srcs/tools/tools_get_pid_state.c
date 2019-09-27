@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/16 10:04:00 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/16 16:38:31 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/09/26 15:39:46 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int		tools_get_pid_state(pid_t pid)
 	int		status;
 	pid_t	result;
 
+	status = 0;
 	result = waitpid(pid, &status, WNOHANG);
 	if (WIFSTOPPED(status))
 		return (PID_STATE_SUSPEND);
