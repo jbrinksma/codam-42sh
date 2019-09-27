@@ -22,9 +22,9 @@
 
 %start      complete_command
 %%
-complete_command    ::=    list separator?
+complete_command    ::=    list
 
-list                ::=    and_or [[seperator and_or]*  
+list                ::=    and_or [separator_op and_or]* separator_op?
 
 and_or              ::=    pipe_sequence [[AND_IF | OR_IF] pipe_sequence]*
 
