@@ -13,6 +13,8 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
+    - name: run norminette+
+      run: make test_norm
     - name: install criterion macOS
       if: matrix.os == 'macOS-10.14'
       run: HOMEBREW_NO_AUTO_UPDATE=1 brew install snaipe/soft/criterion

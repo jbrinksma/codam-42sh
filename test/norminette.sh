@@ -1,6 +1,6 @@
 #!/bin/sh
-python ~/norminette+/run.py --version
-output=$(python ~/norminette+/run.py $TRAVIS_BUILD_DIR/makefile $TRAVIS_BUILD_DIR/includes $TRAVIS_BUILD_DIR/srcs | grep -E '^Error' -B 1)
+python $HOME/norminette+/run.py --version
+output=$(python $HOME/norminette+/run.py $GITHUB_WORKSPACE/includes $GITHUB_WORKSPACE/libft $GITHUB_WORKSPACE/srcs | grep -E '^Error' -B 1)
 if [ "$output" = "" ]
 then
     exit 0

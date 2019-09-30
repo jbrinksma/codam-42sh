@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/09/27 13:29:54 by tde-jong      ########   odam.nl          #
+#    Updated: 2019/09/30 12:17:32 by tde-jong      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -116,9 +116,10 @@ run_valgrind_vsh: all
 
 test_norm: fclean
 	@echo "[ + ] cloning norminette+"
-	@git clone https://github.com/thijsdejong/codam-norminette-plus ~/norminette+
+	@git clone \
+	https://github.com/thijsdejong/codam-norminette-plus ${HOME}/norminette+
 	@echo "[...] running norminette+"
-	@sh ${TRAVIS_BUILD_DIR}/test/norminette.sh
+	@sh ${GITHUB_WORKSPACE}/test/norminette.sh
 
 $(TESTOBJECTS): $(TESTS)
 	@$(CC) $(FLAGS) $^ $(INCLUDES) $(CRITERIONINCLUDES) -c
