@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/17 14:03:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/27 14:49:19 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/01 12:14:36 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void		input_reset_cursor_pos(void)
 		i++;
 		output = ft_atoi(&answer[i]);
 		if (output > 1)
-			ft_putstr(WHITE_BG BLACK "%" RESET "\n");
+			ft_putstr(WHITE_BG_BLACK "%" RESET "\n");
 	}
 	g_data->curs->coords.x = 1;
 }

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/27 14:55:39 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/01 12:29:59 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,13 +115,13 @@
 **================================shell colors==================================
 */
 
-# define RESET		"\e[0m"
-# define RED		"\e[1;31m"
-# define YEL		"\e[1;33m"
-# define BLU		"\e[1;36m"
-# define WHITE_BG	"\e[47m"
-# define BLACK		"\e[30m"
-
+# define RESET			"\e[0m"
+# define RED			"\e[1;31m"
+# define YEL			"\e[1;33m"
+# define BLU			"\e[1;36m"
+# define WHITE_BG		"\e[47m"
+# define BLACK			"\e[30m"
+# define WHITE_BG_BLACK	"\e[47;30m"
 
 /*
 **------------------------------------shell-------------------------------------
