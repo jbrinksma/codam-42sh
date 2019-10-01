@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 09:09:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/26 14:58:02 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/10/01 16:34:58 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int			builtin_assign_addexist(t_envlst *envlst, char *var, int env_type)
 
 	probe = envlst;
 	varlen = ft_strclen(var, '=');
+	if (var[varlen] == '\0')
+		return (FUNCT_FAILURE);
 	while (probe != NULL)
 	{
 		if (ft_strnequ(var, probe->var, varlen) == true &&
