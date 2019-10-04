@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:17:48 by omulder        #+#    #+#                */
-/*   Updated: 2019/09/16 09:54:40 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/01 17:00:37 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void		exec_cmd(char **args, t_vshdata *data, t_pipes pipes)
 {
-	if (exec_builtin(args, data) == false)
+	if (args[0][0] != '\0' && exec_builtin(args, data) == false)
 	{
 		if (pipes.currentpipe[0] == PIPE_UNINIT
 		&& pipes.currentpipe[1] == PIPE_UNINIT
