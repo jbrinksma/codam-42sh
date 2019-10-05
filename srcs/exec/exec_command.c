@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/04 10:16:26 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/09/16 09:55:33 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/05 09:59:56 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,18 @@ static int		exec_redirs_or_assigns(t_ast *ast, t_vshdata *data,
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
+
+/*
+**	Exec_command gets executed in this order:
+**
+**	parameter expansion
+**	quote removal
+**	set input and output to proper pipes if applicable
+**	handle redirects and assignments
+**	(if command word):
+**		create arguments
+**		run command
+*/
 
 int				exec_command(t_ast *ast, t_vshdata *data, t_pipes pipes)
 {

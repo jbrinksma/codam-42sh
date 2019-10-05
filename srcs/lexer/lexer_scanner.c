@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 11:12:49 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/27 14:52:45 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/10/03 17:00:38 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ static void	reset_scanner(t_scanner *scanner)
 	scanner->flags = 0;
 	scanner->tk_type = ERROR;
 }
+
+/*
+**	Token-related scanner values are read and used to generate the token.
+**	The token is then added to token_lst.
+*/
 
 static int	scan_to_lst(t_tokenlst *token_lst, t_scanner *scanner)
 {
@@ -48,6 +53,20 @@ static int	scan_to_lst(t_tokenlst *token_lst, t_scanner *scanner)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
+
+/*
+**	A scanner struct is used to go over the command line. The scanner keeps
+**	track of the index on line, as well as a pointer to line itself. The scanner
+**	struct also keeps track of the current token length, the current
+**	token type, and its optional flags.
+**
+**	When the scanner comes to the end of a specific token, its values
+**	are used to generate and save the token. The token-specific values of the
+**	scanner are then reset.
+**
+**	This process is repeated until the whole line has been lexed, or an
+**	error occurs.
+*/
 
 int			lexer_scanner(char *line, t_tokenlst *token_lst)
 {

@@ -32,6 +32,11 @@ int		lexer_error(char **line)
 	return (FUNCT_ERROR);
 }
 
+/*
+**	Moves to the next character in the command line, and calls the next state
+**	that has been provided as an argument.
+*/
+
 void	lexer_change_state(t_scanner *scanner,
 		void (*lexer_state_x)(t_scanner *scanner))
 {

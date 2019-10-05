@@ -30,6 +30,11 @@ t_tokenlst	*lexer_tokenlstnew(t_tokens type, char *value, int flags)
 	return (new);
 }
 
+/*
+**	Adds token to the end of the token_lst if it already has list items, and
+**	creates the first list item if it has no items yet.
+*/
+
 int			lexer_tokenlstaddback(t_tokenlst **token_lst, t_tokens type,
 			char *value, int flags)
 {
@@ -50,6 +55,11 @@ int			lexer_tokenlstaddback(t_tokenlst **token_lst, t_tokens type,
 	else
 		return (lexer_tokenlstaddback(&(*token_lst)->next, type, value, flags));
 }
+
+/*
+**	The token_lst that is made through lexer_scanner is started off with
+**	a START token, and finished off with an END token.
+*/
 
 int			lexer(char **line, t_tokenlst **token_lst)
 {

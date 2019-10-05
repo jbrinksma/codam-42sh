@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/09/04 10:23:58 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/05 14:41:06 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,16 @@ static int		exec_post_pipe_sequence(t_ast *ast, t_vshdata *data,
 }
 
 /*
-**	Recursively runs commands of the whole pipesequence, and
-**	redirects their input and output according to the pipesequence.
+**	Runs the pipeline from left to right. The first `PIPE` node in the AST is
+**	the farmost right `simple_command` in the `pipe sequence`(see GRAMMAR).
 **
-**	The left of the last pipenode in the pipesequence is the first
-**	command in the pipesequence PIPE_START. All other commands will
-**	be siblings of pipenodes, and will thus be PIPE_EXTEND.
+**	Because of this, we will create all the pipes recursively starting at the
+**	top node and working our way down the AST towards the first `simple_command`
+**	in the pipe sequence. When we reach this first simple_command, the whole
+**	pipeline will have been laid down. Consequently, when we work our way back
+**	up in the AST (returning the recursion), we can properly manage the I/O of
+**	each simple command in the pipeline before execution (because the pipe fds
+**	will already be available in each `t_pipes pipes` struct).
 */
 
 int				exec_pipe_sequence(t_ast *ast, t_vshdata *data, t_pipes pipes)

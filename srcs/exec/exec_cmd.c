@@ -6,11 +6,21 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:17:48 by omulder        #+#    #+#                */
-/*   Updated: 2019/10/01 17:00:37 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/10/05 09:51:17 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+
+/*
+**	The `pipes` struct contains the file descriptors of the pipe leading up to
+**	the simple_command (see GRAMMAR), and the file descriptors of the pipe which
+**	the simple_command will output into.
+**
+**	If the `cmd` is not part of a pipeline, or the `cmd` is the last command
+**	in the pipeline, we run it in the foreground. Otherwise, it gets
+**	executed in the background.
+*/
 
 void		exec_cmd(char **args, t_vshdata *data, t_pipes pipes)
 {
