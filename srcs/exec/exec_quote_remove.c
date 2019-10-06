@@ -43,7 +43,7 @@ static void	remove_heredoc_backslash(char *str, int *i, int *i_new)
 static void	remove_double_quote(char *str, int *i, int *i_new)
 {
 	(*i)++;
-	while (str[*i] != '"')
+	while (str[*i] != '"' && str[*i] != '\0')
 	{
 		if (str[*i] == '\\' && ft_strchr("\"\\$", str[(*i) + 1]))
 			remove_backslash(str, i, i_new);
@@ -60,7 +60,7 @@ static void	remove_double_quote(char *str, int *i, int *i_new)
 static void	remove_single_quote(char *str, int *i, int *i_new)
 {
 	(*i)++;
-	while (str[*i] != '\'')
+	while (str[*i] != '\'' && str[*i] != '\0')
 	{
 		str[*i_new] = str[*i];
 		(*i_new)++;
