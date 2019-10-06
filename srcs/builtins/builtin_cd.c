@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/30 12:41:21 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/22 11:01:50 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/04 14:08:31 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,25 +77,31 @@ static int	cd_parse_dash(char *newpath, t_vshdata *data, char cd_flag,
 		(ft_strequ(var, "HOME") == 1) ? false : true));
 }
 
-int			builtin_cd(char **args, t_vshdata *data)
+void		builtin_cd(char **args, t_vshdata *data)
 {
 	char	cd_flag;
 	char	*newpath;
 	int		flags;
 
+	g_state->exit_code = EXIT_SUCCESS;
 	cd_flag = BUILTIN_CD_UL;
 	flags = 0;
 	if (cd_parse_flags(args, &cd_flag, &flags) == 0)
-		return (FUNCT_ERROR);
-	if (args[1 + flags] == NULL || ft_strequ(args[1 + flags], "--") == 1)
+		g_state->exit_code = EXIT_FAILURE;
+	else if (args[1 + flags] == NULL || ft_strequ(args[1 + flags], "--") == 1)
 	{
 		newpath = env_getvalue("HOME", data->envlst);
-		return (cd_parse_dash(newpath, data, cd_flag, "HOME"));
+		if (cd_parse_dash(newpath, data, cd_flag, "HOME") == FUNCT_FAILURE)
+			g_state->exit_code = EXIT_FAILURE;
 	}
-	if (ft_strequ(args[1 + flags], "-") == 1)
+	else if (ft_strequ(args[1 + flags], "-") == 1)
 	{
 		newpath = env_getvalue("OLDPWD", data->envlst);
-		return (cd_parse_dash(newpath, data, cd_flag, "OLDPWD"));
+		if (cd_parse_dash(newpath, data, cd_flag, "OLDPWD") == FUNCT_FAILURE)
+			g_state->exit_code = EXIT_FAILURE;
 	}
-	return (builtin_cd_change_dir(args[1 + flags], data, cd_flag, false));
+	else if (builtin_cd_change_dir(args[1 + flags], data, cd_flag, false)
+		== FUNCT_FAILURE)
+		g_state->exit_code = EXIT_FAILURE;
+	return ;
 }
