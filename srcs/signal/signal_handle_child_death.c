@@ -6,12 +6,18 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/16 09:51:07 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/16 11:36:28 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/06 12:31:18 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <signal.h>
+
+/*
+**	When a child process has died, we will check the pipeseqlist to see
+**	if a child process has exited in the pipe sequence. If we find it, any
+**	processes in the sequence that are running before it will be killed.
+*/
 
 void		signal_handle_child_death(int signum)
 {
