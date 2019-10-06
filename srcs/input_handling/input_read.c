@@ -6,42 +6,13 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/17 14:03:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/01 12:14:36 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/10/05 16:50:58 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <unistd.h>
 #include <signal.h>
-
-void		input_reset_cursor_pos(void)
-{
-	size_t		i;
-	size_t		len;
-	int			output;
-	char		answer[TC_MAXRESPONSESIZE];
-
-	len = 0;
-	write(STDIN_FILENO, TC_GETCURSORPOS, 4);
-	while (len < TC_MAXRESPONSESIZE - 1 && read(1, answer + len, 1) == 1)
-	{
-		if (answer[len] == 'R')
-			break ;
-		len++;
-	}
-	answer[len] = '\0';
-	i = 1;
-	while (i < len && answer[i] != ';')
-		i++;
-	if (answer[i] != '\0')
-	{
-		i++;
-		output = ft_atoi(&answer[i]);
-		if (output > 1)
-			ft_putstr(WHITE_BG_BLACK "%" RESET "\n");
-	}
-	g_data->curs->coords.x = 1;
-}
 
 static int	find_start(t_history **history)
 {
@@ -71,7 +42,7 @@ static int	reset_input_read_return(t_vshdata *data, int ret)
 	data->line->len_max = 64;
 	data->line->len_cur = 0;
 	if (ret == 0)
-		data->curs->coords.y = get_curs_row();
+		data->curs->coords.y = input_get_curs_row();
 	data->curs->cur_relative_y = 1;
 	data->history->hist_index = find_start(data->history->history);
 	data->history->hist_start = data->history->hist_index - 1;

@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/09/30 12:17:32 by tde-jong      ########   odam.nl          #
+#    Updated: 2019/10/05 16:51:51 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ input_parse_delete input_parse_ctrl_c input_parse_ctrl_d input_parse_ctrl_k \
 input_parse_ctrl_up input_parse_ctrl_down input_print_str \
 input_parse_ctrl_u input_parse_ctrl_y input_resize_window_check \
 input_clear_char_at input_read_ansi input_parse_special \
-input_parse_tab \
+input_parse_tab input_reset_cursor_pos input_get_curs_row \
 curs_move_n_left_hasnewlines curs_move_n_right_hasnewlines \
 term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct \
