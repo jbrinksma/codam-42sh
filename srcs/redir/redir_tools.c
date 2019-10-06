@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/22 09:18:19 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/05 13:21:34 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/06 12:15:52 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /*
 **	Creates a pipe in which the heredoc can be written to
-**	and returns its READ fd.
+**	and returns its READ-side fd.
 */
 
 int			redir_create_heredoc_fd(char *right_side)
@@ -37,9 +37,9 @@ int			redir_create_heredoc_fd(char *right_side)
 
 /*
 **	If node->right->left != NULL, it means that the left side
-**	of the redirection is explicitly given, and such the right side
-**	of the redirection is then 'node->right->left' != NULL instead
-**	of 'node->right'.
+**	of the redirection is explicitly given, and thus (because of our
+**	AST structure) the right side of the redirection is then
+**	the content of 'node->right->left' instead of 'node->right'.
 */
 
 void		redir_change_if_leftside(t_ast *node, int *left_side_fd,

@@ -6,13 +6,17 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/21 15:14:08 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/05 13:21:34 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/06 11:28:35 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <unistd.h>
 #include <fcntl.h>
+
+/*
+**	Check if the IO_NUM is a valid file descriptor.
+*/
 
 static int	getvalidfd(int *right_side_fd, char *right_side)
 {
@@ -87,7 +91,7 @@ int			redir_output(t_ast *node)
 }
 
 /*
-**	Changes file table based on the redirect given as input.
+**	Changes file descriptor table based on the redirect node given as input.
 */
 
 int			redir(t_ast *node)

@@ -6,11 +6,15 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/30 10:46:14 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/30 10:49:56 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/06 12:18:54 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+
+/*
+**	Save a duplicate of the terminal pointers.
+*/
 
 int		redir_save_stdfds(t_vshdata *data)
 {
@@ -32,6 +36,10 @@ int		return_and_reset_fds(int retval, t_vshdata *data)
 		return (FUNCT_ERROR);
 	return (retval);
 }
+
+/*
+**	Reset the standard file descriptors to the terminal pointers.
+*/
 
 int		redir_reset_stdfds(t_vshdata *data)
 {
