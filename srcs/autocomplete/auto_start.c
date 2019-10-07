@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/12 14:09:10 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/05 15:04:27 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/07 11:43:09 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,16 @@ void	auto_print_line(t_vshdata *data)
 	data->line->index = data->line->len_cur;
 	curs_move_n_left(data, data->line->index - old_index);
 }
+
+/*
+**	Autocomplete is called when a tab is pressed in an interactive shell
+**	Autocomplete has different states depending on
+**	where the cursor is positioned in line
+**	The state is determined in auto_find_state
+**	Depending on the state, we look for the string to match
+**	We then create a list of options that match our match string
+**	This list gets handled in auto_handle_matchlst
+*/
 
 void	auto_start(t_vshdata *data)
 {

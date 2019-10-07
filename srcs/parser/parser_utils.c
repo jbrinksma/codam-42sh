@@ -6,11 +6,20 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/21 19:54:55 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/06 11:10:48 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/06 17:17:11 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+
+/*
+**	parser_io_redirect gets an IO_NUM or redir token
+**	after IO_NUM there has to be a redir token
+**	after the redir token there has to be a WORD or ASSIGN
+**	the redir token will be the head token
+**	the optional IO_NUM and WORD or ASSIGN will be on the right
+**	left will be empty
+*/
 
 bool	parser_io_redirect(t_tokenlst **token_lst, t_ast **ast)
 {
@@ -56,6 +65,11 @@ t_ast	*parser_new_node(t_tokenlst *token)
 	return (node);
 }
 
+/*
+**	parser_add_right executes a parser function with an empty ast
+**	It adds this new ast to the right side of the current ast
+*/
+
 bool	parser_add_right(t_tokenlst **token_lst, t_ast **ast,
 		bool (*parse_priority_x)(t_tokenlst **, t_ast **))
 {
@@ -67,6 +81,11 @@ bool	parser_add_right(t_tokenlst **token_lst, t_ast **ast,
 	(*ast)->right = right;
 	return (true);
 }
+
+/*
+**	parser_add_astnode creates a new ast node with current token
+**	it adds the existing ast to the left of the new node
+*/
 
 bool	parser_add_astnode(t_tokenlst **token_lst, t_ast **ast)
 {

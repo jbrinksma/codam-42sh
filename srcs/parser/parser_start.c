@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 19:58:40 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/23 15:29:45 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/06 13:48:08 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,15 @@
 
 /*
 **	Function names in this file refer to the vsh grammer.
+*/
+
+/*
+**	After parser_command, we can have a PIPE token 
+**	In that case the PIPE token is added to the ast
+**	We then add a parser command to the left of this node
+**	in case of another PIPE we add the previous ast to the left
+**	and another parser_commmand to the right
+**	If the current token is not a AND_IF or OR_IF token we return
 */
 
 static bool	parser_pipe_sequence(t_tokenlst **token_lst, t_ast **ast)
@@ -32,6 +41,14 @@ static bool	parser_pipe_sequence(t_tokenlst **token_lst, t_ast **ast)
 	return (false);
 }
 
+/*
+**	After parser_pipe_sequence, we can have an AND_IF or OR_IF token 
+**	In that case the current token is added to the ast
+**	We then expect another pipe sequence or another and_or
+**	which is added to the right of the AND_IF or OR_IF node
+**	If the current token is not a AND_IF or OR_IF token we return
+*/
+
 static bool	parser_and_or(t_tokenlst **token_lst, t_ast **ast)
 {
 	if (parser_pipe_sequence(token_lst, ast) == true)
@@ -48,6 +65,13 @@ static bool	parser_and_or(t_tokenlst **token_lst, t_ast **ast)
 	}
 	return (false);
 }
+
+/*
+**	After parser_and_or is done, we expect an END, NEWLINE, SEMICOL or BG token 
+**	In a case of a SEMICOL or BG token the token is added to the ast
+**	We then continue with another parser_list if there is no END or NEWLINE
+**	If the current token is an END or NEWLINE token we return
+*/
 
 static bool	parser_list(t_tokenlst **token_lst, t_ast **ast)
 {
@@ -69,6 +93,11 @@ static bool	parser_list(t_tokenlst **token_lst, t_ast **ast)
 	return (false);
 }
 
+/*
+**	After parser list is done, we expect an END or NEWLINE token
+**	If the current token is neither of these we return syntax error
+*/
+
 static bool	parser_complete_command(t_tokenlst **token_lst, t_ast **ast)
 {
 	if (parser_list(token_lst, ast) == true && (TK_TYPE == NEWLINE
@@ -76,6 +105,13 @@ static bool	parser_complete_command(t_tokenlst **token_lst, t_ast **ast)
 		return (true);
 	return (parser_return_del(ast));
 }
+
+/*
+**	The parser creates the abstract syntax tree (ast)
+**	We skip the first node (start node) in token_lst
+**	We then start with parser_complete_command
+**	If the token order is wrong we return syntax error
+*/
 
 int			parser_start(t_tokenlst **token_lst, t_ast **ast)
 {

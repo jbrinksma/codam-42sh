@@ -6,11 +6,17 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/12 20:55:01 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/02 15:43:26 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/10/07 11:38:49 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+
+/*
+**	This function inserts the found match into line
+**	to_add is the part that has to be added at the cursor position
+**	New line = everything before the cursor + to_add + anything after the cursor
+*/
 
 int		auto_add_match_toline(char *match, char *to_add, t_vshdata *data)
 {

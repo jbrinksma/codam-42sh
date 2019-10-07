@@ -6,11 +6,15 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/11 15:38:10 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/13 20:30:04 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/05 15:56:44 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+
+/*
+**	auto_get_varlst finds all matches for match in envlst
+*/
 
 int		auto_get_varlst(char *match, int match_len, t_envlst *envlst,
 		t_list **matchlst)

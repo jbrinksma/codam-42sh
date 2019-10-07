@@ -6,11 +6,19 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/13 11:00:12 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/31 18:08:32 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/05 17:28:11 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+
+/*
+**	If no matches have been found, an error sound occurs
+**	We return NO_MATCHES so that there is no newline printed
+**	When there is only one match it is added to line
+**	When there are less than 100 matches we display them
+**	otherwise we give a 'yes or no' prompt whether to print the lst or not
+*/
 
 int		auto_handle_matchlst(t_vshdata *data, char *match, t_list **matchlst)
 {

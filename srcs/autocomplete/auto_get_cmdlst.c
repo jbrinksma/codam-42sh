@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/10 12:53:34 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/02 17:12:26 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/07 11:40:27 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,13 @@ static int	match_files(char *match, char **paths, t_list **matchlst)
 	}
 	return (FUNCT_SUCCESS);
 }
+
+/*
+**	auto_get_cmdlst creates a list of matching cmd's with match
+**	It first retrieves all directories from the PATH variable
+**	It then opens all directories and tries to find matches with match
+**	After that it also checks if any builtins match with match
+*/
 
 int			auto_get_cmdlst(char *match, t_envlst *envlst, t_list **matchlst)
 {
