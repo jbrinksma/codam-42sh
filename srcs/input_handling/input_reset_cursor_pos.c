@@ -6,11 +6,19 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/05 16:46:40 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/05 16:47:30 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/07 12:19:43 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+
+/*
+**	This function will move the cursor to the bottom left of a new line,
+**	and will make sure to mark its old location with a zsh-like `%` character.
+**	This character is printed so that you are aware that the newline was not
+**	natural. This is used, for example, before a new prompt is printed, so that
+**	it always looks neat.
+*/
 
 void		input_reset_cursor_pos(void)
 {

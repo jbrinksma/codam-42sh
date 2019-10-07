@@ -6,12 +6,17 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/23 12:15:47 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/08/29 14:20:13 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/06 10:09:01 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <term.h>
+
+/*
+**	Cuts the whole left side of the cursor (excluding the cursor itself) and
+**	copies it into internal memory for potential insertion through CTRL+Y.
+*/
 
 void		input_parse_ctrl_u(t_vshdata *data)
 {

@@ -6,14 +6,21 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:46:55 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/09/16 14:48:03 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/06 10:10:27 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
 /*
-**	Simply exits when line is empty, otherwise functions as `delete`.
+**	CTRL+D can behave in one of three ways:
+**	1.	If the line is empty and the current prompt is not the regular one
+**		(perhaps `quote>`):
+**			Return `IR_EOF` to indicate an EOT character was given.
+**	2.	If the line is empty and the current prompt is the regular one:
+**			Call builtin_exit.
+**	3.	If the line is not empty.
+**			Delete the character that the cursor is on at that moment.
 */
 
 int		input_parse_ctrl_d(t_vshdata *data)

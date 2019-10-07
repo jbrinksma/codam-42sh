@@ -6,11 +6,17 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/05 16:51:25 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/05 16:51:31 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/07 12:19:09 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+
+/*
+**	Sends a request to the terminal to retrieve the cursor's row position as it
+**	is currently displayed on the terminal, and returns this value as an
+**	integer.
+*/
 
 int			input_get_curs_row(void)
 {

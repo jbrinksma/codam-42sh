@@ -6,16 +6,11 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 15:03:17 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/08/30 16:57:27 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/06 10:19:47 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-
-/*
-**	Moves the cursor (and index) up or sets it at home if it would otherwise
-**	collide with the prompt.
-*/
 
 static unsigned	get_line_index_from(t_vshdata *data, int index)
 {
@@ -59,6 +54,11 @@ static void		move_up_handle_newline(t_vshdata *data)
 	}
 	curs_move_n_left(data, data->line->index - i - 1);
 }
+
+/*
+**	Moves the cursor (and index) up or sets it at home if it would otherwise
+**	collide with the prompt.
+*/
 
 void			curs_move_up(t_vshdata *data)
 {

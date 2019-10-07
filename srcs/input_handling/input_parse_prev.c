@@ -6,15 +6,15 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:39:59 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/08/30 14:09:48 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/05 17:35:39 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
 /*
-**	Algorithm that moves the cursor (and index) to the beginning of a previous
-**	word (or beginning of the line if there is none).
+**	Small algorithm that moves the cursor (and index) to the beginning of a
+**	previous word (or beginning of the line if there is none).
 */
 
 void		curs_move_prev_word(t_vshdata *data)
@@ -44,9 +44,14 @@ void		curs_move_prev_word(t_vshdata *data)
 }
 
 /*
-**	Calculates the end position once if there are no newlines in the part
-**	of the string the cursor will traverse. If there is a newline, it will
-**	call a function with a slower method to reposition the cursor.
+**	Calculates the column and row position that the cursor will move to
+**	when it is told to move `n` times to the left. It will also decrement the
+**	internal index of the command line by n.
+**
+**	However, if a part of the line that will be traversed contains any
+**	newlines, special measures wil be taken by calling a function
+**	that is slower, but will accurately move the cursor when traversing
+**	newlines.
 */
 
 void		curs_move_n_left(t_vshdata *data, size_t n)
@@ -81,12 +86,6 @@ void		curs_move_n_left(t_vshdata *data, size_t n)
 	ft_eprintf("New cursor coordinates: [%d:%d]\n", data->curs->coords.x, data->curs->coords.y);
 	#endif
 }
-
-/*
-**	Moves the cursor (and index) one to the left (or up if necessary)
-**	If used after some weird screen clearing, make sure to compensate
-**	for the automatic `index` change if necessar
-*/
 
 void		curs_move_left(t_vshdata *data)
 {

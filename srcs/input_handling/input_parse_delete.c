@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:44:53 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/08/29 12:04:14 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/05 17:44:00 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,12 @@
 #include <term.h>
 
 /*
-**	Real line gets updated, then the cursor position is saved
-**	Lines will be cleared and everything will be reprinted
+**	If the cursor is anywhere but the end of the line, it will remove the
+**	current character in `data->line->line` where the cursor (and thus
+**	`data->line->index`) is pointing to.
+**	Afterwards, it will save the current cursor position, clear the whole line,
+**	reprint the new line without the removed char, and then reset the cursor to
+**	the old position.
 */
 
 void		input_handle_delete(t_vshdata *data)

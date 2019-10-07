@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/23 11:54:27 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/05 16:52:09 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/07 12:19:27 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 #include <termios.h>
 #include <term.h>
 
+/*
+**	Scrolls the terminal (and the cursor) down one line.
+*/
+
 static void	scroll_down_terminal(t_vshdata *data)
 {
-	ft_printf("\e[%iD", data->curs->coords.x - 1);
-	tputs(data->termcaps->tc_scroll_down_str, 1, &ft_tputchar);
 	ft_printf("\e[%iC", data->curs->coords.x - 1);
 }
 
@@ -26,6 +28,13 @@ static void	update_newline_coords(t_vshdata *data)
 	data->curs->coords.x = 1;
 	data->curs->cur_relative_y++;
 }
+
+/*
+**	A special version of `ft_putstr` which makes sure that whenever the
+**	cursor is about to walk off the right of the terminal, it is placed
+**	a row down. If the cursor is already on the last row, the terminal will
+**	be scrolled down one line to make room for it.
+*/
 
 void		input_print_str(t_vshdata *data, char *str)
 {

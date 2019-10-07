@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/23 13:05:41 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/08/29 14:32:43 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/06 10:07:17 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ static int	line_insert_copy(t_vshdata *data,
 	data->line->len_cur += copy_len;
 	return (FUNCT_SUCCESS);
 }
+
+/*
+**	Paste the internally saved string from either CTRL+K or CTRL+U at the
+**	current cursor position.
+*/
 
 void		input_parse_ctrl_y(t_vshdata *data)
 {

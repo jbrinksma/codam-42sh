@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/29 13:54:20 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/08/29 12:07:06 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/06 10:21:23 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <term.h>
 
 /*
-**	Moves past the commandline and then displays a new prompt.
+**	Moves to the end of the command line and then prints a newline.
 */
 
 int		input_parse_ctrl_c(t_vshdata *data)
