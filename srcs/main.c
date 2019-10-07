@@ -6,12 +6,16 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/27 10:49:51 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/10/06 10:50:47 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <signal.h>	
+
+/*
+**	This structure is used to save the exit code and shell type.
+*/
 
 void	init_g_state(void)
 {
