@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/10 12:53:34 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/07 11:40:27 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/08 10:52:04 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@ static int	file_exec_check(char *path, char *filename)
 		return (err_ret(E_ALLOC_STR));
 	file_status = ft_is_regular_file(bin_path);
 	if (file_status == -1)
-	{
-		ft_strdel(&bin_path);
-		return (err_ret_exit(E_STAT_STR, EXIT_FAILURE));
-	}
+		file_status = false;
 	ret = FUNCT_SUCCESS;
 	if (file_status == false)
 		ret = FUNCT_FAILURE;
