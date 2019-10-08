@@ -6,7 +6,7 @@
 /*   By: tde-jong <tde-jong@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/06 13:09:18 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/08/22 11:12:41 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/08 11:09:23 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,7 @@ static bool	is_executable(char *name)
 	char	*ret;
 	char	*currpath;
 
-	if (ft_strnequ(name, "./", 2) == false &&
-		ft_strnequ(name, "../", 3) == false)
+	if (ft_strchr(name, '/') == NULL)
 		return (false);
 	currpath = getcwd(NULL, 0);
 	if (currpath == NULL)
