@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 20:16:38 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/16 18:06:46 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/08 22:09:06 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	shell_display_prompt(t_vshdata *data, int prompt_type)
 {
 	char	*cwd;
 
-	cwd = env_getvalue("PWD", data->envlst);
+	cwd = getcwd(NULL, 0);
 	data->prompt->prompt_addition = shell_getcurrentdir(cwd);
 	shell_get_valid_prompt(data, prompt_type);
 	data->prompt->cur_prompt_type = prompt_type;
@@ -59,4 +59,5 @@ void	shell_display_prompt(t_vshdata *data, int prompt_type)
 		ft_printf(RED);
 	input_print_str(data, data->prompt->prompt_seperator);
 	ft_printf(RESET);
+	ft_strdel(&cwd);
 }
