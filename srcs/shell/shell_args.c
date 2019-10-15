@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/15 14:41:31 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/25 12:04:41 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/01 12:03:45 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,19 @@ static int	shell_check_file(char *filepath)
 
 void		shell_args(t_vshdata *data, char *filepath)
 {
-	char **lines;
+	char	**lines;
+	char	*path;
 
-	if (shell_get_path(data, &filepath) == FUNCT_ERROR)
+	if (shell_get_path(data, filepath, &path) == FUNCT_ERROR)
 		return ;
-	if (shell_check_file(filepath) != FUNCT_SUCCESS)
+	if (shell_check_file(path) != FUNCT_SUCCESS)
 		return ;
-	if (shell_init_line(data, filepath) == FUNCT_ERROR)
+	if (shell_init_line(data, path) == FUNCT_ERROR)
 		return ;
-	ft_strdel(&filepath);
+	ft_strdel(&path);
 	lines = shell_line_splitter(data);
 	if (lines == NULL)
 		return ;
 	shell_lines_exec(data, lines);
-	ft_strarrdel(&lines); 
+	ft_strarrdel(&lines);
 }

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/11 12:45:01 by omulder        #+#    #+#                */
-/*   Updated: 2019/09/21 18:33:24 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/14 14:03:17 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	fc_arg_error(char c)
 static void	fc_handle_first_last(int i, char **args, t_fcdata *fc)
 {
 	if (args[i] == NULL || (args[i][0] == '-' &&
-	ft_isdigit(args[i][1]) == false))
+	ft_isdigit(args[i][1]) == false && args[i][1] != '\0'))
 		return ;
 	fc->first = args[i];
 	i++;
@@ -58,7 +58,7 @@ int			fc_set_options(char **args, t_fcdata *fc)
 
 	i = 1;
 	while (args[i] != NULL && ft_strequ(args[i], "--") == false &&
-	args[i][0] == '-' && ft_isdigit(args[i][1]) == false)
+	args[i][0] == '-' && ft_isdigit(args[i][1]) == false && args[i][1] != '\0')
 	{
 		j = 1;
 		new_i = i;
@@ -79,10 +79,10 @@ int			fc_set_options(char **args, t_fcdata *fc)
 void		fc_set_default_editor(t_vshdata *data, t_fcdata *fc)
 {
 	fc->editor = env_getvalue("FCEDIT", data->envlst);
-	if (fc->editor == NULL)
+	if (fc->editor == NULL || fc->editor[0] == '\0')
 	{
 		fc->editor = env_getvalue("EDITOR", data->envlst);
-		if (fc->editor == NULL)
+		if (fc->editor == NULL || fc->editor[0] == '\0')
 			fc->editor = DEF_FCEDIT;
 	}
 }

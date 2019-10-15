@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/15 21:53:03 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/24 14:39:51 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/01 12:51:15 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@ int		shell_one_line(t_vshdata *data, char *line)
 	ret = FUNCT_SUCCESS;
 	data->line->line = ft_strdup(line);
 	if (data->line->line == NULL || history_expansion(data) != FUNCT_SUCCESS ||
-		lexer(&data->line->line, &token_lst) != FUNCT_SUCCESS ||
-		alias_expansion(data, &token_lst, NULL) != FUNCT_SUCCESS)
+		(data->fc_flags & ~FC_SET_HIST &&
+		history_line_to_array(data->history->history, &data->line->line)
+		== FUNCT_ERROR) || lexer(&data->line->line, &token_lst)
+		!= FUNCT_SUCCESS || alias_expansion(data, &token_lst, NULL)
+		!= FUNCT_SUCCESS)
 		ret = FUNCT_ERROR;
 	else if (token_lst->next->type == NEWLINE || token_lst->next->type == END)
 		ret = FUNCT_SUCCESS;

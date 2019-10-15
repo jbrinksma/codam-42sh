@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/11 12:54:36 by omulder        #+#    #+#                */
-/*   Updated: 2019/09/23 16:55:15 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/14 13:55:38 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,37 @@
 **  So it's not magic, I just want 16 items.
 */
 
-static void	find_start_end_no_param(t_datahistory *history, int *start,
-int *end)
+void	fc_find_start_end_no_param(t_datahistory *history, t_fcdata *fc,
+int *start, int *end)
 {
-	*end = history->hist_start;
-	*start = *end - 15;
-	if (*start < 0 && history->history[0]->number != 1)
-		*start = HISTORY_MAX + *start;
-	else if (*start < 0)
-		*start = 0;
+	if (fc->options & FC_OPT_L)
+	{
+		*end = history->hist_start;
+		if (HISTORY_MAX > 15)
+			*start = *end - 15;
+		else
+			*start = *end - (HISTORY_MAX - 2);
+		if (*start < 0 && history->history[0]->number != 1)
+			*start = HISTORY_MAX + *start;
+		if (*start < 0)
+			*start = 0;
+	}
+	else
+	{
+		*end = history->hist_start;
+		*start = history->hist_start;
+	}
 }
 
-static int	find_start_end(t_datahistory *history, t_fcdata *fc, int *start,
+int		fc_find_start_end(t_datahistory *history, t_fcdata *fc, int *start,
 int *end)
 {
 	if (fc_find_index(history, fc, fc->first, start) == FUNCT_FAILURE)
 		return (FUNCT_FAILURE);
-	if (fc->last == NULL)
+	if (fc->last == NULL && fc->options & FC_OPT_L)
 		*end = history->hist_start;
+	else if (fc->last == NULL)
+		*end = *start;
 	else
 	{
 		if (fc_find_index(history, fc, fc->last, end) == FUNCT_FAILURE)
@@ -43,18 +56,22 @@ int *end)
 	return (FUNCT_SUCCESS);
 }
 
-void		fc_list(t_datahistory *history, t_fcdata *fc)
+int		fc_get_indexes(t_datahistory *history, t_fcdata *fc, int *start,
+int *end)
 {
-	int start;
-	int end;
-
 	if (fc->first == NULL)
-		find_start_end_no_param(history, &start, &end);
+		fc_find_start_end_no_param(history, fc, start, end);
 	else
 	{
-		if (find_start_end(history, fc, &start, &end) == FUNCT_FAILURE)
-			return ;
+		if (fc_find_start_end(history, fc, start, end) == FUNCT_FAILURE)
+			return (FUNCT_FAILURE);
 	}
+	return (FUNCT_SUCCESS);
+}
+
+void	fc_print(t_datahistory *history, t_fcdata *fc, int start,
+int end)
+{
 	if (fc->options & FC_OPT_R && fc->last == NULL)
 		fc_print_reverse(start, end, history->history, fc);
 	else if (history->history[start]->number > history->history[end]->number
@@ -62,4 +79,15 @@ void		fc_list(t_datahistory *history, t_fcdata *fc)
 		fc_print_reverse(end, start, history->history, fc);
 	else
 		fc_print_regular(start, end, history->history, fc);
+}
+
+void	fc_list(t_datahistory *history, t_fcdata *fc)
+{
+	int start;
+	int end;
+
+	if (fc_get_indexes(history, fc, &start, &end) == FUNCT_FAILURE)
+		return ;
+	fc_print(history, fc, start, end);
+	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/07 12:19:59 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/11 14:33:43 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,12 +189,15 @@
 # define FC_OPT_S			(1 << 4)
 # define FC_FIRST_NEG		(1 << 5)
 # define FC_LAST_NEG		(1 << 6)
-# define U_FC 				"fc: usage: fc [-e ename] [-nlr] [first] [last] or"\
-							"fc -s [pat=rep] [cmd]\n"
+# define FC_PRINT_CMD		(1 << 0)
+# define FC_SET_HIST		(1 << 1)
+# define FC_TMP_FILE		"/tmp/vsh-fc-tmp"
+# define U_FC_2				"[-nlr] [first] [last] or fc -s [pat=rep] [cmd]\n"
+# define U_FC 				"fc: usage: fc [-e ename] " U_FC_2
 # define E_FC_REQARG		SHELL "fc: %s: option requires an argument\n"
 # define E_FC_INV_OPT		SHELL ": fc: -%c: invalid option\n"
 # define E_FC_OUT_RANGE		SHELL ": fc: history specification out of range\n"
-
+# define E_FC_F_OPEN		SHELL ": fc: failed to open temporary file\n"
 typedef struct	s_fcdata
 {
 	char	options;
@@ -202,7 +205,8 @@ typedef struct	s_fcdata
 	char	*last;
 	char	*editor;
 	char	*replace;
-	char	*match;
+	char	*tmpfile;
+	int		fd;
 }				t_fcdata;
 
 /*
@@ -493,7 +497,8 @@ typedef struct	s_vshdata
 	t_dataalias		*alias;
 	t_datatermcaps	*termcaps;
 	t_pipeseqlist	*pipeseq;
-	short			exec_flags;
+	int				fc_flags;
+	int				exec_flags;
 }				t_vshdata;
 
 t_vshdata		*g_data;
@@ -704,7 +709,7 @@ int				shell_handle_escaped_newlines(t_vshdata *data);
 void			shell_get_valid_prompt(t_vshdata *data, int prompt_type);
 int 			shell_init_term(t_vshdata *data);
 void			shell_args(t_vshdata *data, char *filepath);
-int				shell_get_path(t_vshdata *data, char **filepath);
+int				shell_get_path(t_vshdata *data, char *filepath, char **path);
 int				shell_init_line(t_vshdata *data, char *filepath);
 int				shell_one_line(t_vshdata *data, char *line);
 void			shell_stdin(t_vshdata *data);
@@ -853,8 +858,17 @@ void			fc_print_reverse(int start, int end, t_history **history,
 				t_fcdata *fc);
 int				fc_find_index(t_datahistory *history, t_fcdata *fc,
 				char *str, int *index);
-int				fc_substitute(t_vshdata *data, t_datahistory *history,
+void			fc_substitute(t_vshdata *data, t_datahistory *history,
 				t_fcdata *fc);
+void			fc_find_start_end_no_param(t_datahistory *history, t_fcdata *fc,
+				int *start, int *end);
+int				fc_find_start_end(t_datahistory *history, t_fcdata *fc,
+				int *start, int *end);
+int				fc_get_indexes(t_datahistory *history, t_fcdata *fc, int *start,
+				int *end);
+void			fc_print(t_datahistory *history, t_fcdata *fc, int start,
+				int end);
+void			fc_edit(t_vshdata *data, t_datahistory *history, t_fcdata *fc);
 
 /*
 **---------------------------------tools----------------------------------------
@@ -959,6 +973,8 @@ int				history_insert_into_line(char **line,
 				char *hist_line, size_t i);
 size_t			history_get_match_len(char *line, size_t i);
 int				history_replace_last(t_history **history, char **line);
+void			history_reset_last(t_history **history);
+
 /*
 **--------------------------------hashtable-------------------------------------
 */

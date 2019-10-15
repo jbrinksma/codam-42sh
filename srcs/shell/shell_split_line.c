@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/23 20:05:50 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/24 14:43:27 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/08 17:35:50 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,17 @@ static void	update_quote_status(char c, char *quote)
 		*quote = '\0';
 }
 
-static int	shell_add_line(char *line, int i, char **lines)
+static int	shell_add_line(char *line, int i, char **lines, int reset)
 {
 	static int line_index;
 	static int line_count;
 
+	if (reset == true)
+	{
+		line_index = 0;
+		line_count = 0;
+		return (FUNCT_SUCCESS);
+	}
 	lines[line_count] = ft_strsub(line, line_index, i - line_index);
 	if (lines[line_count] == NULL)
 		return (FUNCT_ERROR);
@@ -35,6 +41,8 @@ static int	shell_add_line(char *line, int i, char **lines)
 
 /*
 **	shell_split_line copies substrings (a completed command) of line to lines
+**  The shell_add_line(NULL, 0, NULL, true); is just to clear the static vars
+**  It's a bit hacky but hey it works.
 */
 
 int			shell_split_line(char *line, char **lines)
@@ -44,6 +52,7 @@ int			shell_split_line(char *line, char **lines)
 
 	quote = '\0';
 	i = 0;
+	shell_add_line(NULL, 0, NULL, true);
 	while (line[i] != '\0')
 	{
 		if (line[i] == '\\' && quote != '\'' && line[i + 1] != '\0')
@@ -51,12 +60,12 @@ int			shell_split_line(char *line, char **lines)
 		else if (line[i] == '\'' || line[i] == '\"')
 			update_quote_status(line[i], &quote);
 		else if (line[i] == '\n' && quote == '\0' &&
-			shell_add_line(line, i, lines) == FUNCT_ERROR)
+			shell_add_line(line, i, lines, false) == FUNCT_ERROR)
 			return (FUNCT_ERROR);
 		i++;
 	}
 	if (i > 0 && line[i - 1] != '\n' &&
-		shell_add_line(line, i, lines) == FUNCT_ERROR)
+		shell_add_line(line, i, lines, false) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }

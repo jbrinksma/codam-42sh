@@ -76,7 +76,8 @@ auto_find_state auto_start auto_add_match_toline auto_find_matches \
 auto_handle_matchlst auto_small_lst auto_big_lst auto_lst_print \
 auto_lst_print_helpers auto_check_dups \
 builtin_fc builtin_fc_options builtin_fc_init builtin_fc_list \
-builtin_fc_print_helpers builint_fc_find_index \
+builtin_fc_print_helpers builint_fc_find_index builtin_fc_substitute \
+builtin_fc_edit \
 signal_handle_child_death
 TESTS = unit_test builtin_assign_test
 OBJECTS := $(SRCS:%=%.o)

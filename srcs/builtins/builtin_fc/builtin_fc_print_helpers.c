@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/11 13:03:14 by omulder        #+#    #+#                */
-/*   Updated: 2019/09/23 16:06:08 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/11 15:48:50 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,20 @@ int			fc_list_print_line(t_history *history, t_fcdata *fc)
 	int		ret;
 	char	*tmp;
 
-	ret = add_tabs_after_newlines(history->str, &tmp);
-	if (ret == FUNCT_ERROR)
-		return (FUNCT_FAILURE);
-	if (fc->options & FC_OPT_N)
-		ft_printf("\t%s\n", tmp);
+	if (fc->options & FC_OPT_L)
+	{
+		ret = add_tabs_after_newlines(history->str, &tmp);
+		if (ret == FUNCT_ERROR)
+			return (FUNCT_FAILURE);
+		if (fc->options & FC_OPT_N)
+			ft_printf("\t%s\n", tmp);
+		else
+			ft_printf("%d\t%s\n", history->number, tmp);
+		if (ret == true)
+			ft_strdel(&tmp);
+	}
 	else
-		ft_printf("%d\t%s\n", history->number, tmp);
-	if (ret == true)
-		ft_strdel(&tmp);
+		ft_dprintf(fc->fd, "%s\n", history->str);
 	return (FUNCT_SUCCESS);
 }
 

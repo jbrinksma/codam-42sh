@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/15 20:37:03 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/24 14:39:04 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/01 12:29:04 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,20 @@ static int	shell_search_env_paths(char *filename,
 	return (FUNCT_SUCCESS);
 }
 
-int			shell_get_path(t_vshdata *data, char **filepath)
+int			shell_get_path(t_vshdata *data, char *filepath, char **path)
 {
-	char	*new_filepath;
-
-	new_filepath = NULL;
-	if (*filepath[0] != '/' && ft_strnequ(*filepath, "./", 2) == 0 &&
-		ft_strnequ(*filepath, "../", 3) == 0)
+	if (filepath[0] != '/' && ft_strnequ(filepath, "./", 2) == 0 &&
+		ft_strnequ(filepath, "../", 3) == 0)
 	{
 		if (shell_add_cwd_to_env(data) == FUNCT_ERROR || shell_search_env_paths(
-			*filepath, data, &new_filepath) != FUNCT_SUCCESS)
+			filepath, data, path) != FUNCT_SUCCESS)
 			return (FUNCT_ERROR);
-		*filepath = new_filepath;
 		return (FUNCT_SUCCESS);
 	}
 	else
 	{
-		*filepath = ft_strdup(*filepath);
-		if (*filepath == NULL)
+		*path = ft_strdup(filepath);
+		if (*path == NULL)
 			return (err_ret_exit(E_ALLOC_STR, EXIT_FAILURE));
 	}
 	return (FUNCT_SUCCESS);

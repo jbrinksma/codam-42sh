@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/19 17:44:26 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/24 14:43:05 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/01 12:45:46 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,10 @@ static void	update_quote_status(char c, char *quote)
 		*quote = '\0';
 }
 
-static void	line_copy_increment(char *line, int *i)
+static void	line_copy_increment(char *line, int *i, int *new_index)
 {
-	static int new_index;
-
-	line[new_index] = line[*i];
-	new_index++;
+	line[*new_index] = line[*i];
+	(*new_index)++;
 	(*i)++;
 }
 
@@ -38,7 +36,9 @@ static void	shell_remove_escaped_newline(char *line, int *line_count)
 {
 	char	quote;
 	int		i;
+	int		new_index;
 
+	new_index = 0;
 	quote = '\0';
 	i = 0;
 	while (line[i] != '\0')
@@ -49,14 +49,14 @@ static void	shell_remove_escaped_newline(char *line, int *line_count)
 			continue ;
 		}
 		else if (line[i] == '\\' && quote != '\'' && line[i + 1] != '\0')
-			line_copy_increment(line, &i);
+			line_copy_increment(line, &i, &new_index);
 		else if (line[i] == '\'' || line[i] == '\"')
 			update_quote_status(line[i], &quote);
 		else if (line[i] == '\n' && quote == '\0')
 			(*line_count)++;
-		line_copy_increment(line, &i);
+		line_copy_increment(line, &i, &new_index);
 	}
-	line_copy_increment(line, &i);
+	line_copy_increment(line, &i, &new_index);
 	if (i > 0 && line[i - 1] != '\n')
 		(*line_count)++;
 }

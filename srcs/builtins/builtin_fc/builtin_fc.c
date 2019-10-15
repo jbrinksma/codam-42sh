@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/10 12:23:10 by omulder        #+#    #+#                */
-/*   Updated: 2019/09/23 16:55:20 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/11 11:51:22 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,13 @@
 ** -s [old=new][first]<-- re-execute without editor
 */
 
-void	builtin_fc(char **args, t_vshdata *data)
+static void	free_fcdata(t_fcdata **fc)
+{
+	ft_strdel(&(*fc)->tmpfile);
+	ft_memdel((void**)fc);
+}
+
+void		builtin_fc(char **args, t_vshdata *data)
 {
 	t_fcdata	*fc;
 
@@ -35,11 +41,15 @@ void	builtin_fc(char **args, t_vshdata *data)
 	fc_set_default_editor(data, fc);
 	if (fc_set_options(args, fc) == FUNCT_FAILURE)
 	{
-		free(fc);
+		free_fcdata(&fc);
 		g_state->exit_code = EXIT_FAILURE;
 		return ;
 	}
 	if (fc->options & FC_OPT_L)
 		fc_list(data->history, fc);
-	free(fc);
+	else if (fc->options & FC_OPT_S)
+		fc_substitute(data, data->history, fc);
+	else
+		fc_edit(data, data->history, fc);
+	free_fcdata(&fc);
 }
