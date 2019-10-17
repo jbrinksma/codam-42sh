@@ -6,26 +6,35 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/21 15:22:42 by omulder        #+#    #+#                */
-/*   Updated: 2019/10/11 12:38:22 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/17 14:58:20 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-static int	find_index(t_datahistory *history, t_fcdata *fc, int *index)
+/*
+** Finds the item, if there is no parameter it uses the last item in the list.
+*/
+
+static int	find_item(t_datahistory *history, t_fcdata *fc,
+t_historyitem **item)
 {
 	if (fc->first == NULL)
-		*index = history->hist_start;
+		*item = history->tail;
 	else
 	{
-		if (fc_find_index(history, fc, fc->first, index) == FUNCT_FAILURE)
+		if (fc_find_item(history, fc, fc->first, item) == FUNCT_FAILURE)
 			return (FUNCT_FAILURE);
+	}
+	if (*item == NULL)
+	{
+		ft_eprintf(E_FC_OUT_RANGE);
+		return (FUNCT_FAILURE);
 	}
 	return (FUNCT_SUCCESS);
 }
 
-static int	replace_cmd(t_datahistory *history, t_fcdata *fc, int index,
-char **cmd)
+static int	replace_cmd(t_fcdata *fc, t_historyitem *item, char **cmd)
 {
 	char	*find;
 	char	*replace;
@@ -33,7 +42,7 @@ char **cmd)
 
 	find = NULL;
 	replace = NULL;
-	*cmd = ft_strjoin(history->history[index]->str, "\n");
+	*cmd = ft_strjoin(item->str, "\n");
 	if (*cmd == NULL)
 		return (FUNCT_FAILURE);
 	if (fc->replace != NULL)
@@ -56,20 +65,23 @@ char **cmd)
 
 void		fc_substitute(t_vshdata *data, t_datahistory *history, t_fcdata *fc)
 {
-	int		index;
-	char	*cmd;
+	t_historyitem	*item;
+	char			*cmd;
 
-	index = 0;
 	cmd = NULL;
-	if (find_index(history, fc, &index) == FUNCT_FAILURE ||
-	replace_cmd(history, fc, index, &cmd) == FUNCT_ERROR)
+	g_state->exit_code = EXIT_SUCCESS;
+	if (g_state->shell_type == SHELL_INTERACT)
+		history_remove_tail(history);
+	if (find_item(history, fc, &item) == FUNCT_FAILURE ||
+	replace_cmd(fc, item, &cmd) == FUNCT_ERROR)
 	{
 		ft_strdel(&cmd);
+		g_state->exit_code = EXIT_FAILURE;
 		return ;
 	}
-	history_replace_last(history->history, &cmd);
 	ft_printf(cmd);
+	data->fc_flags |= FC_SET_HIST;
 	shell_one_line(data, cmd);
-	g_state->exit_code = EXIT_SUCCESS;
+	data->fc_flags = 0;
 	ft_strdel(&cmd);
 }

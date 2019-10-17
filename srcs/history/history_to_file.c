@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 15:25:10 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/21 23:07:29 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/17 15:53:43 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,58 +20,37 @@
 ** Write the history to file
 */
 
-static void	find_start(t_history **history, int *smallest, int *start)
+static void	history_print_to_fd(int fd, t_datahistory *history)
 {
-	int i;
+	t_historyitem *probe;
 
-	i = 0;
-	*smallest = INT_MAX;
-	while (i < HISTORY_MAX && history[i]->str != NULL)
+	probe = history->head;
+	while (probe != NULL)
 	{
-		if (history[i]->number < *smallest)
-		{
-			*start = i;
-			*smallest = history[i]->number;
-		}
-		i++;
+		ft_dprintf(fd, "%s%c", probe->str, HIST_SEPARATE);
+		probe = probe->next;
 	}
 }
 
-static void	history_print_to_fd(int fd, t_history **history)
-{
-	int		i;
-	int		smallest;
-	int		start;
-
-	find_start(history, &smallest, &start);
-	i = start;
-	while (i < HISTORY_MAX && history[i]->str != NULL)
-	{
-		ft_dprintf(fd, "%s%c", history[i]->str, HIST_SEPARATE);
-		i++;
-	}
-	i = 0;
-	while (start != 0 && i < start && history[i]->str != NULL)
-	{
-		ft_dprintf(fd, "%s%c", history[i]->str, HIST_SEPARATE);
-		i++;
-	}
-}
-
-int			history_to_file(t_vshdata *data)
+int			history_to_file(t_datahistory *history)
 {
 	int		fd;
+	char	*histfile;
 
-	if (data->history->history == NULL || data->history->history_file == NULL)
+	if (history->head == NULL)
 		return (FUNCT_ERROR);
-	fd = open(data->history->history_file,
-	O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+	histfile = history_get_filename();
+	if (histfile == NULL)
+		return (FUNCT_ERROR);
+	fd = open(histfile, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
 	if (fd == -1)
 	{
 		ft_eprintf(E_HIST_OPEN_STR);
+		ft_strdel(&histfile);
 		return (FUNCT_ERROR);
 	}
-	history_print_to_fd(fd, data->history->history);
+	history_print_to_fd(fd, history);
 	close(fd);
+	ft_strdel(&histfile);
 	return (FUNCT_SUCCESS);
 }

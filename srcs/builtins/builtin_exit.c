@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 20:15:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/24 16:10:57 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/17 15:45:37 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ static void	reset_exit(int exit_code, t_vshdataterm *term_p)
 void		builtin_exit(char **args, t_vshdata *data)
 {
 	ft_eprintf("exit\n");
-	history_to_file(data);
+	history_to_file(data->history);
+	while (data->history->head != NULL)
+		history_remove_head(data->history);
 	if (args == NULL)
 		reset_exit(g_state->exit_code, data->term);
 	if (args[1] != NULL && args[2] == NULL)

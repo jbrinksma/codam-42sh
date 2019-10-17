@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/11 13:03:14 by omulder        #+#    #+#                */
-/*   Updated: 2019/10/11 15:48:50 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/15 15:51:05 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,86 +57,56 @@ static int	add_tabs_after_newlines(char *str, char **new)
 	return (add_tabs(str, *new));
 }
 
-int			fc_list_print_line(t_history *history, t_fcdata *fc)
+int			fc_list_print_line(t_historyitem *item, t_fcdata *fc)
 {
 	int		ret;
 	char	*tmp;
 
 	if (fc->options & FC_OPT_L)
 	{
-		ret = add_tabs_after_newlines(history->str, &tmp);
+		ret = add_tabs_after_newlines(item->str, &tmp);
 		if (ret == FUNCT_ERROR)
 			return (FUNCT_FAILURE);
 		if (fc->options & FC_OPT_N)
 			ft_printf("\t%s\n", tmp);
 		else
-			ft_printf("%d\t%s\n", history->number, tmp);
+			ft_printf("%d\t%s\n", item->number, tmp);
 		if (ret == true)
 			ft_strdel(&tmp);
 	}
 	else
-		ft_dprintf(fc->fd, "%s\n", history->str);
+		ft_dprintf(fc->fd, "%s\n", item->str);
 	return (FUNCT_SUCCESS);
 }
 
-/*
-** Start and end have to be valid indexes on the history_array
-*/
-
-void		fc_print_regular(int start, int end, t_history **history,
-t_fcdata *fc)
+void		fc_print_regular(t_historyitem *start, int len, t_fcdata *fc)
 {
-	int i;
+	t_historyitem	*probe;
+	int				i;
 
+	probe = start;
 	i = 0;
-	while ((start + i) < HISTORY_MAX &&
-	((end >= start && (start + i) <= end) || end < start) &&
-	history[start + i]->str != NULL)
+	while (probe != NULL && i < len)
 	{
-		if (fc_list_print_line(history[(start + i)], fc) == FUNCT_FAILURE)
+		if (fc_list_print_line(probe, fc) == FUNCT_FAILURE)
 			return ;
+		probe = probe->next;
 		i++;
-	}
-	if ((start + i) >= HISTORY_MAX && end < start)
-	{
-		i = 0;
-		while (i <= end && history[i]->str != NULL)
-		{
-			if (fc_list_print_line(history[i], fc) == FUNCT_FAILURE)
-				return ;
-			i++;
-		}
 	}
 }
 
-/*
-** Start and end have to be valid indexes on the history_array.
-** The function will start printing at end and will decrement untill it reaches
-** start. This is counterintuitive but hey it says reverse so....
-*/
-
-void		fc_print_reverse(int start, int end, t_history **history,
-t_fcdata *fc)
+void		fc_print_reverse(t_historyitem *start, int len, t_fcdata *fc)
 {
-	int i;
+	t_historyitem	*probe;
+	int				i;
 
+	probe = start;
 	i = 0;
-	while ((end - i) >= 0 &&
-	((end - i) >= start || start > end) &&
-	history[end - i]->str != NULL)
+	while (probe != NULL && i < len)
 	{
-		if (fc_list_print_line(history[end - i], fc) == FUNCT_FAILURE)
+		if (fc_list_print_line(probe, fc) == FUNCT_FAILURE)
 			return ;
+		probe = probe->prev;
 		i++;
-	}
-	if ((end - i) <= 0 && start > end)
-	{
-		i = HISTORY_MAX - 1;
-		while (i >= start && history[i]->str != NULL)
-		{
-			if (fc_list_print_line(history[i], fc) == FUNCT_FAILURE)
-				return ;
-			i--;
-		}
 	}
 }

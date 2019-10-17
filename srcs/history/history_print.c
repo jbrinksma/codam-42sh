@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/30 20:47:41 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/23 16:15:58 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/15 11:21:06 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,56 +63,29 @@ static int	add_tabs_after_newlines(char *str, char **new)
 	return (add_tabs(str, *new));
 }
 
-static void	find_start(t_history **history, int *start)
-{
-	int		i;
-	int		smallest;
-
-	i = 0;
-	smallest = INT_MAX;
-	while (i < HISTORY_MAX && history[i]->str != NULL)
-	{
-		if (history[i]->number < smallest)
-		{
-			*start = i;
-			smallest = history[i]->number;
-		}
-		i++;
-	}
-}
-
-int			print_history_line(t_history *history)
+int			print_history_line(t_historyitem *item)
 {
 	int		ret;
 	char	*tmp;
 
-	ret = add_tabs_after_newlines(history->str, &tmp);
+	ret = add_tabs_after_newlines(item->str, &tmp);
 	if (ret == FUNCT_ERROR)
 		return (FUNCT_FAILURE);
-	ft_printf("%d\t%s\n", history->number, tmp);
+	ft_printf("%d\t%s\n", item->number, tmp);
 	if (ret == true)
 		ft_strdel(&tmp);
 	return (FUNCT_SUCCESS);
 }
 
-void		history_print(t_history **history)
+void		history_print(t_datahistory *history)
 {
-	int		i;
-	int		start;
+	t_historyitem *probe;
 
-	find_start(history, &start);
-	i = start;
-	while (i < HISTORY_MAX && history[i]->str != NULL)
+	probe = history->head;
+	while (probe != NULL)
 	{
-		if (print_history_line(history[i]) == FUNCT_ERROR)
+		if (print_history_line(probe) == FUNCT_ERROR)
 			return ;
-		i++;
-	}
-	i = 0;
-	while (start != 0 && i < start && history[i]->str != NULL)
-	{
-		if (print_history_line(history[i]) == FUNCT_ERROR)
-			return ;
-		i++;
+		probe = probe->next;
 	}
 }

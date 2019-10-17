@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/09/27 10:41:01 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/10/15 14:48:25 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void		shell_start(t_vshdata *data)
 		if (pre_lexer_reading(data) != FUNCT_SUCCESS)
 			continue ;
 		if (history_expansion(data) != FUNCT_SUCCESS ||
-			history_line_to_array(data->history->history, &data->line->line)
+			history_add_item(data->history, data->line->line)
 			== FUNCT_ERROR || lexer(&data->line->line, &token_lst) !=
 			FUNCT_SUCCESS || shell_dless_input(data, &token_lst) !=
 			FUNCT_SUCCESS || alias_expansion(data, &token_lst, NULL) !=

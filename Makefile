@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/10/11 16:32:33 by mavan-he      ########   odam.nl          #
+#    Updated: 2019/10/17 15:08:10 by omulder       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,16 +61,16 @@ parser_start parser_debug parser_utils parser_command parser_error \
 parser_astdel \
 alias_expansion alias_replace alias_read_file alias_add_expanded \
 alias_getvalue \
-history_to_file history_get_file_content history_line_to_array history_print \
+history_to_file history_get_file_content history_item_helpers history_print \
 history_change_line history_index_change history_expansion history_get_line \
-history_match_line history_insert_into_line \
+history_match_line history_insert_into_line history_helpers \
 exec_builtin exec_cmd exec_external exec_start exec_find_binary \
 exec_quote_remove expan_handle_variables expan_handle_dollar \
 exec_create_files exec_command exec_add_pid_to_pipeseqlist \
 expan_handle_bracketed_var expan_tilde_expansion exec_validate_binary \
 redir_pipe redir redir_tools redir_tools2 \
 hash_ht_insert hash_print hash_reset hash_init hash_check \
-print_errors \
+print_errors print_errors_extended \
 auto_get_cmdlst auto_match_builtins auto_get_filelst auto_get_varlst \
 auto_find_state auto_start auto_add_match_toline auto_find_matches \
 auto_handle_matchlst auto_small_lst auto_big_lst auto_lst_print \

@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/10 18:35:45 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/12 18:58:49 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/15 14:59:49 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,29 +18,46 @@
 **	It sets his_index to a valid index in history or it returns failure
 */
 
-int			history_get_index(int *his_index, int his_total, int i)
+static char	*tofind_negative(t_datahistory *history, int tofind)
 {
-	if (i < 0)
-		i = his_total + 1 + i;
-	if (i <= 0)
-		return (FUNCT_FAILURE);
-	if (i > his_total || i <= his_total - HISTORY_MAX)
-		return (FUNCT_FAILURE);
-	*his_index = (i - 1) % HISTORY_MAX;
-	return (FUNCT_SUCCESS);
+	t_historyitem	*probe;
+	int				i;
+
+	i = -1;
+	probe = history->tail;
+	while (probe != NULL && i > tofind)
+	{
+		probe = probe->prev;
+		i--;
+	}
+	if (i != tofind || probe == NULL)
+		return (NULL);
+	return (probe->str);
 }
 
-static char	*history_get_line_at_index(t_datahistory *history, int i)
+static char	*tofind_positive(t_datahistory *history, int tofind)
 {
-	int		his_index;
+	t_historyitem	*probe;
 
-	his_index = 0;
-	if (history_get_index(&his_index,
-		history->history[history->hist_start]->number, i) == FUNCT_FAILURE)
-		return (NULL);
-	if (history->history[his_index] == NULL)
-		return (NULL);
-	return (history->history[his_index]->str);
+	probe = history->tail;
+	while (probe != NULL)
+	{
+		if (probe->number == tofind)
+			return (probe->str);
+		if (probe->number < tofind)
+			return (NULL);
+		probe = probe->prev;
+	}
+	return (NULL);
+}
+
+static char	*history_get_line_at_index(t_datahistory *history, int tofind)
+{
+	if (tofind < 0)
+		return (tofind_negative(history, tofind));
+	if (tofind > 0)
+		return (tofind_positive(history, tofind));
+	return (FUNCT_FAILURE);
 }
 
 char		*history_get_line(t_datahistory *history, char *line, size_t i)

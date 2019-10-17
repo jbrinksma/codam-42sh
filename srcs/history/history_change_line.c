@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/02 14:28:54 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/30 17:06:18 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/15 14:00:39 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ static int	malloc_and_copy(t_vshdata *data, char **line, char *str)
 
 static int	set_line(t_vshdata *data, char **line)
 {
-	if (malloc_and_copy(data, line,
-		data->history->history[data->history->hist_index]->str) == FUNCT_ERROR)
+	if (malloc_and_copy(data, line, data->history->current->str) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
@@ -63,14 +62,14 @@ int			history_change_line(t_vshdata *data,
 	history_clear_line(data);
 	if (arrow == ARROW_UP)
 	{
-		if (history_index_change_up(data))
+		if (history_index_change_up(data->history) == FUNCT_SUCCESS)
 			set_line(data, &data->line->line);
 		else
 			ft_printf("\a");
 	}
 	else if (arrow == ARROW_DOWN)
 	{
-		if (history_index_change_down(data))
+		if (history_index_change_down(data->history) == FUNCT_SUCCESS)
 			set_line(data, &data->line->line);
 		else
 			ft_bzero(data->line->line, data->line->len_max);

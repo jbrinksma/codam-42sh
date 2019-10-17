@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/12 12:44:34 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/12 15:01:36 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/15 14:09:48 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,16 @@
 
 static char	*history_find_match(t_datahistory *history, char *match)
 {
-	int i;
-	int	match_len;
+	t_historyitem	*probe;
+	int				match_len;
 
 	match_len = ft_strlen(match);
-	i = history->hist_start;
-	while (i >= 0 && history->history[i]->str != NULL)
+	probe = history->head;
+	while (probe != NULL)
 	{
-		if (ft_strncmp(history->history[i]->str, match, match_len) == 0)
-			return (history->history[i]->str);
-		i--;
-	}
-	i = (HISTORY_MAX - 1);
-	while (i > history->hist_start && history->history[i]->str != NULL)
-	{
-		if (ft_strncmp(history->history[i]->str, match, match_len) == 0)
-			return (history->history[i]->str);
-		i--;
+		if (ft_strnequ(probe->str, match, match_len))
+			return (probe->str);
+		probe = probe->next;
 	}
 	return (NULL);
 }
