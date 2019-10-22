@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/31 15:58:58 by omulder        #+#    #+#                */
-/*   Updated: 2019/10/15 13:55:33 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/22 10:54:54 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ int			history_index_change_down(t_datahistory *history)
 	if (history->current == NULL)
 		return (FUNCT_FAILURE);
 	if (history->current->next == NULL)
+	{
+		history->current = NULL;
 		return (FUNCT_FAILURE);
+	}
 	history->current = history->current->next;
 	return (FUNCT_SUCCESS);
 }
