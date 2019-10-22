@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/17 17:23:10 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/22 11:46:46 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@
 # define E_STDIN_NOT_TTY	SHELL ": STDIN does not refer to a terminal\n"
 # define E_TERM_INIT		SHELL ": term init failed\n"
 # define E_BINARY_FILE		SHELL ": cannot execute binary file\n"
-# define E_HIST_NOT_FOUND   "\n" SHELL ": !%s: event not found\n"
-# define E_HIST_NUM_ERROR   "\n" SHELL ": %.*s: event not found\n"
+# define E_HIST_NOT_FOUND   SHELL ": !%s: event not found\n"
+# define E_HIST_NUM_ERROR   SHELL ": %.*s: event not found\n"
 # define E_ALLOC 42
 # define E_DUP 100
 # define E_OPEN 101

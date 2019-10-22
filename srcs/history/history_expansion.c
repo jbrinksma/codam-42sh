@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/10 12:37:29 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/12 18:58:20 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/22 11:46:36 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,6 @@ int		history_expansion(t_vshdata *data)
 		i++;
 	}
 	if (state & HIST_EXPANDED)
-		ft_printf("\n%s", data->line->line);
+		ft_printf("%s", data->line->line);
 	return (FUNCT_SUCCESS);
 }
