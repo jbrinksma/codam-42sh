@@ -6,38 +6,78 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/02 13:50:51 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/19 18:19:16 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/23 18:42:25 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
-**	~ or ~/ is being expanded to HOME or HOME/ respectively
-**	a ~ followed by anything other than / is not expanded
+**	A ~ or ~/ will be expanded to HOME or HOME/ respectively.
+**	Any characters after ~ not begin a slash are seen as an username
+**	(or in case of a an assign, paths can also be split by a colon)
+**	~ will now be replaced with the HOME of username
+**	expan_get_home_path will search for this user and return it's dir path
+**	when the user is not found, an error is returned and the cmd is not executed
 */
 
 #include "vsh.h"
+#include <sys/types.h>
+#include <pwd.h>
 
-static int	return_error(int ret, int error)
+static char	*expan_get_login(t_ast *node, int i)
 {
-	if (error == E_ALLOC)
-		ft_eprintf(E_ALLOC_STR);
-	return (ret);
+	int		login_len;
+	char	colon;
+
+	colon = '\0';
+	login_len = 0;
+	if (node->type == ASSIGN)
+		colon = ':';
+	i++;
+	while (node->value[i] != '\0' && node->value[i] != colon &&
+		node->value[i] != '/')
+	{
+		i++;
+		login_len++;
+	}
+	if (login_len == 0)
+		return (ft_strnew(0));
+	else
+		return (ft_strsub(node->value, i - login_len, login_len));
 }
 
-static int	add_home_to_value(t_ast *node, int *i, char *home)
+static int	expan_get_home_path(char *login, char **home_path)
+{
+	struct passwd *user_info;
+
+	if (login[0] == '\0')
+	{
+		*home_path = getenv("HOME");
+		if (home_path == NULL)
+			return (err_ret_prog_exit(E_N_FAIL_HOME, "tilde", EXIT_FAILURE));
+	}
+	else
+	{
+		user_info = getpwnam(login);
+		if (user_info == NULL)
+			return (err_ret_prog_exit(E_INVALID_USER, login, EXIT_FAILURE));
+		*home_path = user_info->pw_dir;
+	}
+	return (FUNCT_SUCCESS);
+}
+
+static int	expan_add_home_path(t_ast *node, int *i, char *home_path,
+			int login_len)
 {
 	char	*new_value;
 	int		len_home;
 
-	len_home = ft_strlen(home);
-	new_value = ft_strnew(len_home + ft_strlen(node->value));
+	len_home = ft_strlen(home_path);
+	new_value = ft_strnew(len_home - login_len + ft_strlen(node->value));
 	if (new_value == NULL)
-		return (return_error(FUNCT_ERROR, E_ALLOC));
-	if (node->type == ASSIGN)
-		ft_strncpy(new_value, node->value,
-		ft_strchr(node->value, '=') - node->value + 1);
-	ft_strcat(new_value, home);
-	ft_strcat(new_value, &node->value[*i + 1]);
+		return (err_ret_exit(E_ALLOC_STR, EXIT_FAILURE));
+	ft_strncpy(new_value, node->value, *i);
+	ft_strcat(&new_value[*i], home_path);
+	ft_strcat(new_value, &node->value[*i + login_len + 1]);
 	*i += len_home;
 	ft_strdel(&node->value);
 	node->value = new_value;
@@ -46,18 +86,27 @@ static int	add_home_to_value(t_ast *node, int *i, char *home)
 
 int			expan_tilde_expansion(t_ast *node, int *i)
 {
-	char	*home;
+	char	*login;
+	char	*home_path;
+	int		ret;
 
-	if (node->type == ASSIGN)
-		*i = (ft_strchr(node->value, '=') - node->value) + 1;
-	if (node->value[*i] != '~' || (node->value[*i + 1] != '/' &&
-		node->value[*i + 1] != '\0'))
-		return (FUNCT_FAILURE);
-	home = getenv("HOME");
-	if (home == NULL)
+	home_path = NULL;
+	if ((node->type == WORD && *i == 0) || (node->type == ASSIGN && (*i == 0 ||
+		(node->value[*i - 1] == ':' || node->value[*i - 1] == '='))))
 	{
-		ft_eprintf(E_N_FAIL_HOME, "tilde");
-		return (FUNCT_ERROR);
+		login = expan_get_login(node, *i);
+		if (login == NULL)
+			return (err_ret_exit(E_ALLOC_STR, EXIT_FAILURE));
+		if (expan_get_home_path(login, &home_path) == FUNCT_ERROR)
+		{
+			ft_strdel(&login);
+			return (FUNCT_ERROR);
+		}
+		ret = expan_add_home_path(node, i, home_path, ft_strlen(login));
+		ft_strdel(&login);
+		return (ret);
 	}
-	return (add_home_to_value(node, i, home));
+	else
+		*i += 1;
+	return (FUNCT_FAILURE);
 }

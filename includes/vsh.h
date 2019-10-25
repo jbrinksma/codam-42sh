@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/22 11:46:46 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/23 17:40:17 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@
 # define E_BINARY_FILE		SHELL ": cannot execute binary file\n"
 # define E_HIST_NOT_FOUND   SHELL ": !%s: event not found\n"
 # define E_HIST_NUM_ERROR   SHELL ": %.*s: event not found\n"
+# define E_INVALID_USER		SHELL ": could not get working directory of: %s\n"
 # define E_ALLOC 42
 # define E_DUP 100
 # define E_OPEN 101

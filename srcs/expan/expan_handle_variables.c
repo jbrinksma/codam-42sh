@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/07 20:54:47 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/06 12:20:34 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/23 18:40:25 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,23 @@ static int	scan_value(t_ast *node, t_envlst *envlst)
 {
 	char	quote;
 	int		i;
-	char	**value;
 
-	value = &node->value;
 	i = 0;
 	quote = '\0';
-	if (expan_tilde_expansion(node, &i) == FUNCT_ERROR)
-		return (FUNCT_ERROR);
-	while ((*value)[i] != '\0')
+	while (node->value[i] != '\0')
 	{
-		if ((*value)[i] == '\\' && quote != '\'')
+		if (node->value[i] == '\\' && quote != '\'')
 			i += 2;
-		else if ((*value)[i] == '\'' || (*value)[i] == '\"')
-			update_quote_status((*value)[i], &i, &quote);
-		else if ((*value)[i] == '$' && quote != '\'')
+		else if (node->value[i] == '\'' || node->value[i] == '\"')
+			update_quote_status(node->value[i], &i, &quote);
+		else if (node->value[i] == '$' && quote != '\'')
 		{
-			if (expan_handle_dollar(value, &i, envlst) == FUNCT_ERROR)
+			if (expan_handle_dollar(&node->value, &i, envlst) == FUNCT_ERROR)
+				return (FUNCT_ERROR);
+		}
+		else if (node->value[i] == '~')
+		{
+			if (expan_tilde_expansion(node, &i) == FUNCT_ERROR)
 				return (FUNCT_ERROR);
 		}
 		else
