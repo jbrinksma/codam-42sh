@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/10/22 16:01:08 by mavan-he      ########   odam.nl          #
+#    Updated: 2019/10/21 16:19:40 by mavan-he      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
 ./test/environment_handling ./srcs/lexer ./srcs/parser ./srcs/history \
 ./srcs/expan ./srcs/autocomplete ./srcs/hashtable ./srcs/signal \
 ./srcs/exec ./srcs/redir ./srcs/error_handling ./srcs/exec ./includes \
-./srcs/builtins/builtin_fc
+./srcs/builtins/builtin_fc ./srcs/globbing
 SRCS = shell_start shell_prompt shell_quote_checker shell_dless_input \
 shell_init_files shell_init_vshdata shell_getcurrentdir \
 shell_handle_escaped_newlines shell_init_input shell_init_features \
@@ -69,6 +69,7 @@ exec_builtin exec_cmd exec_external exec_start exec_find_binary \
 exec_quote_remove expan_handle_variables expan_handle_dollar \
 exec_create_files exec_command exec_add_pid_to_pipeseqlist \
 expan_handle_bracketed_var expan_tilde_expansion exec_validate_binary \
+expan_pathname \
 redir_pipe redir redir_tools redir_tools2 \
 hash_ht_insert hash_print hash_reset hash_init hash_check \
 print_errors print_errors_extended \
@@ -79,7 +80,10 @@ auto_lst_print_helpers auto_check_dups \
 builtin_fc builtin_fc_options builtin_fc_init builtin_fc_list \
 builtin_fc_print_helpers builint_fc_find_index builtin_fc_substitute \
 builtin_fc_edit \
-signal_handle_child_death
+signal_handle_child_death \
+glob_expand_word glob_lexer glob_matchlst_funcs glob_lexer_helpers \
+glob_lexer_states glob_matcher glob_helpers glob_dir_match_loop glob_ast_add \
+glob_tokenlst_funcs
 TESTS = unit_test builtin_assign_test
 OBJECTS := $(SRCS:%=$(OBJDIR)%.o)
 TESTOBJECTS := $(TESTS:%=%.o)

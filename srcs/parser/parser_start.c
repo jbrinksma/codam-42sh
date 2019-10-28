@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 19:58:40 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/06 13:48:08 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/22 14:00:02 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,11 @@ int			parser_start(t_tokenlst **token_lst, t_ast **ast)
 			ft_eprintf(E_N_ALLOC_STR, "parser");
 		}
 		else
+		{
 			ft_eprintf(E_SYNTAX_P,
 			parser_return_token_str((tmp)->type));
+			g_state->exit_code = EXIT_FAILURE;
+		}
 		return (ret);
 	}
 	return (FUNCT_SUCCESS);

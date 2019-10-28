@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/23 17:40:17 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/21 13:32:33 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,10 @@
 # define E_STDIN_NOT_TTY	SHELL ": STDIN does not refer to a terminal\n"
 # define E_TERM_INIT		SHELL ": term init failed\n"
 # define E_BINARY_FILE		SHELL ": cannot execute binary file\n"
-# define E_HIST_NOT_FOUND   SHELL ": !%s: event not found\n"
-# define E_HIST_NUM_ERROR   SHELL ": %.*s: event not found\n"
+# define E_HIST_NOT_FOUND   "\n" SHELL ": !%s: event not found\n"
+# define E_HIST_NUM_ERROR   "\n" SHELL ": %.*s: event not found\n"
+# define E_BAD_PATTERN		SHELL ": bad pattern: %s\n"
+# define E_OPEN_DIR			SHELL ": error opening directory: %s\n"
 # define E_INVALID_USER		SHELL ": could not get working directory of: %s\n"
 # define E_ALLOC 42
 # define E_DUP 100
@@ -927,6 +929,7 @@ int				expan_handle_bracketed_var(char **value, int *i,
 int				expan_handle_dollar(char **value, int *i, t_envlst *envlst);
 int				expan_tilde_expansion(t_ast *node, int *i);
 int				expan_var_error_print(char *str, int len);
+int				expan_pathname(t_ast *ast);
 
 /*
 **------------------------------------redir-------------------------------------
@@ -1034,6 +1037,84 @@ void			auto_swap_lstitem(t_list **flst, t_list *smal, t_list *prev);
 bool			auto_check_dups(t_list *matchlst, char *filename);
 
 /*
+**----------------------------------globbing------------------------------------
+*/
+
+#define	GLOB_CUR_CHAR (scanner->word[scanner->word_index])
+#define GLOB_F_NEG	(1 << 0)
+
+typedef enum	e_globtokens
+{
+	GLOB_ERROR,
+	GLOB_STR,
+	GLOB_SLASH,
+	GLOB_DOTSLASH,
+	GLOB_DOTDOTSLASH,
+	GLOB_WILD,
+	GLOB_QUEST,
+	GLOB_BRACENEG,
+	GLOB_BRACEPOS,
+}				t_globtokens;
+
+typedef struct	s_globtokenlst
+{
+	t_globtokens			tk_type;
+	char					*word_chunk;
+	int						word_len;
+	struct s_globtokenlst	*next;
+}				t_globtoken;
+
+typedef struct	s_globscanner
+{
+	t_globtokens			tk_type;
+	int						tk_len;
+	char					*word;
+	int						word_index;
+	int						flags;
+}				t_globscanner;
+
+typedef struct	s_globmatchlst
+{
+	char					*word;
+	int						index;
+	int						word_len;
+	struct s_globmatchlst	*next;
+}				t_globmatchlst;
+
+typedef struct	s_glob
+{
+	t_ast		*expanded;
+	int			cwd_len;
+}				t_glob;
+
+int				glob_lexer(t_globtoken **lst, char *word);
+void			glob_lexer_finish(t_globscanner *scanner, t_globtokens type);
+void			glob_lexer_state_start(t_globscanner *scanner);
+void			glob_lexer_state_bracket(t_globscanner *scanner);
+void			glob_lexer_addchar(t_globscanner *scanner);
+void			glob_lexer_changestate(t_globscanner *scanner,
+					void (*state)(t_globscanner *scanner));
+void			glob_tokenlstadd(t_globtoken **lst, t_globtoken *new);
+t_globtoken		*glob_tokenlstnew(char *word_chunk, int type);
+void			glob_del_tokenlst(t_globtoken **token);
+int				glob_add_scanned_token(t_globtoken **lst,
+				t_globscanner *scanner);
+int				glob_matcher(t_globtoken *tokenprobe,
+				t_globmatchlst match);
+int				glob_matchlstadd(t_globmatchlst **lst, char *word);
+int				glob_add_dotslash_to_path(t_globtoken **tokenlst, char **path);
+void			glob_delmatch(t_globmatchlst **match);
+int				glob_dir_match_loop(t_glob *glob_data, t_globtoken *tokenlst,
+				char *path);
+int				glob_ast_add_left(t_ast **ast, char *value,
+				t_tokens type, char flags);
+int				glob_keep_dirs(t_globmatchlst **matchlst, char *path);
+void			glob_del_matchlst(t_globmatchlst **matchlst);
+bool			glob_check_hidden_file(t_globtoken *tokenlst);
+int				glob_delmatchlst_ret_err(t_globmatchlst **matchlst);
+int				glob_expand_word(t_glob *glob_data, char *word);
+
+/*
 **----------------------------------debugging-----------------------------------
 */
 
@@ -1042,5 +1123,8 @@ void			print_tree(t_ast *root);
 void			print_token(t_scanner *scanner);
 void			print_tree(t_ast *root);
 void			print_token_list(t_tokenlst *node);
+void			glob_print_tokenlist(t_globtoken *lst);
+void			glob_print_matches(t_globmatchlst *lst);
+void			glob_print_matchlist(t_globmatchlst *lst);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/04 10:16:26 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/05 09:59:56 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/18 12:56:34 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ int				exec_command(t_ast *ast, t_vshdata *data, t_pipes pipes)
 	char	**command;
 
 	if (expan_handle_variables(ast, data->envlst) == FUNCT_ERROR)
+		return (FUNCT_ERROR);
+	if (ast->type == WORD && expan_pathname(ast) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	exec_quote_remove(ast);
 	if (redir_handle_pipe(pipes) == FUNCT_ERROR)
