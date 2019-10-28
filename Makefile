@@ -93,7 +93,8 @@ TESTS := $(TESTS:%=%.c)
 all: $(LIBFT) $(NAME)
 
 $(NAME): $(OBJDIR) $(OBJECTS) $(OBJDIR)main.o
-	@$(CC) $(FLAGS) $(OBJECTS) $(OBJDIR)main.o $(COVERAGE) $(INCLUDES) $(LIB) -o $(NAME)
+	@$(CC) $(FLAGS) $(OBJECTS) $(OBJDIR)main.o $(COVERAGE) $(INCLUDES) $(LIB) \
+		-o $(NAME)
 	@echo "[ + ] vsh has been compiled"
 
 $(OBJDIR)%.o: %.c vsh.h
