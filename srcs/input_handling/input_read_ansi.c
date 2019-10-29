@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/30 10:45:52 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/26 15:50:54 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/29 12:23:49 by tde-jong      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,14 @@ static int	input_parse_ansi_arrows(t_vshdata *data,
 	return (FUNCT_SUCCESS);
 }
 
+static int	input_ctrlr_esc(t_vshdata *data)
+{
+	if (input_parse_esc(data) == FUNCT_ERROR)
+		return (FUNCT_ERROR);
+	input_empty_buffer(data, 0);
+	return (FUNCT_SUCCESS);
+}
+
 /*
 **	Is called after reading '\e'. The complete sequence is dumped into a buf.
 **	If we support the escape sequence, it is handled by any of the functions
@@ -55,6 +63,8 @@ int			input_read_ansi(t_vshdata *data)
 	ft_bzero(termcapbuf, TERMCAPBUFFSIZE);
 	if (data->input->c == '\e')
 	{
+		if (data->input->searchhistory.active)
+			return (input_ctrlr_esc(data));
 		termcapbuf[0] = '\e';
 		if (read(STDIN_FILENO, &termcapbuf[1], TERMCAPBUFFSIZE - 1) == -1)
 			return (FUNCT_ERROR);

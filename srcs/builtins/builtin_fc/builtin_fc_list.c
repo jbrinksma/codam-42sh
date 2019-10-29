@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/11 12:54:36 by omulder        #+#    #+#                */
-/*   Updated: 2019/10/17 14:58:04 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/27 21:22:37 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,7 @@ t_historyitem **start, int *len)
 		}
 	}
 	if (*len < 1)
-	{
-		ft_eprintf(E_FC_OUT_RANGE);
-		return (FUNCT_FAILURE);
-	}
+		return (err_ret_exit(E_FC_OUT_RANGE, EXIT_FAILURE));
 	return (FUNCT_SUCCESS);
 }
 
@@ -110,7 +107,7 @@ t_historyitem **start, int *len)
 		fc_find_start_len_no_param(history, fc, start, len);
 	else
 	{
-		if (fc_find_start_len(history, fc, start, len) == FUNCT_FAILURE)
+		if (fc_find_start_len(history, fc, start, len) != FUNCT_SUCCESS)
 			return (FUNCT_FAILURE);
 	}
 	return (FUNCT_SUCCESS);

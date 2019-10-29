@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/30 11:34:28 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/03 17:36:22 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/28 15:54:21 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void	move_left_to_colmax(t_vshdata *data, int colmax, size_t *n)
 
 void		curs_move_n_left_hasnewlines(t_vshdata *data, size_t n)
 {
-	while (n > 0)
+	while (n > 0 && data->line->index > 0)
 	{
 		if (data->line->line[data->line->index - 1] == '\n')
 		{

@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/10/21 16:19:40 by mavan-he      ########   odam.nl          #
+#    Updated: 2019/10/28 16:11:58 by omulder       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ input_parse_ctrl_up input_parse_ctrl_down input_print_str \
 input_parse_ctrl_u input_parse_ctrl_y input_resize_window_check \
 input_clear_char_at input_read_ansi input_parse_special input_add_chunk \
 input_parse_tab input_reset_cursor_pos input_get_curs_row \
+input_parse_ctrl_r input_parse_esc input_parse_char_og \
 curs_move_n_left_hasnewlines curs_move_n_right_hasnewlines \
 term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct \
@@ -64,7 +65,7 @@ alias_expansion alias_replace alias_read_file alias_add_expanded \
 alias_getvalue \
 history_to_file history_get_file_content history_item_helpers history_print \
 history_change_line history_index_change history_expansion history_get_line \
-history_match_line history_insert_into_line history_helpers \
+history_match_line history_insert_into_line history_helpers history_ctrl_r \
 exec_builtin exec_cmd exec_external exec_start exec_find_binary \
 exec_quote_remove expan_handle_variables expan_handle_dollar \
 exec_create_files exec_command exec_add_pid_to_pipeseqlist \

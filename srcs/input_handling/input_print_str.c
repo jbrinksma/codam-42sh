@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/23 11:54:27 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/26 15:46:44 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/27 21:26:00 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 static void	scroll_down_terminal(t_vshdata *data)
 {
-	ft_printf("\e[%iD", data->curs->coords.x - 1);	
+	ft_printf("\e[%iD", data->curs->coords.x - 1);
 	tputs(data->termcaps->tc_scroll_down_str, 1, &ft_tputchar);
 	ft_printf("\e[%iC", data->curs->coords.x - 1);
 }
