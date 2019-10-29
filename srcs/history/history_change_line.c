@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/02 14:28:54 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/15 14:00:39 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/26 15:40:11 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,25 +54,38 @@ static int	set_line(t_vshdata *data, char **line)
 	return (FUNCT_SUCCESS);
 }
 
-int			history_change_line(t_vshdata *data,
-		char arrow)
+static int	handle_arrow_keys(t_vshdata *data, char arrow)
 {
-	size_t	linelen;
+	int ret;
 
-	history_clear_line(data);
+	ret = FUNCT_FAILURE;
 	if (arrow == ARROW_UP)
 	{
 		if (history_index_change_up(data->history) == FUNCT_SUCCESS)
-			set_line(data, &data->line->line);
+			ret = set_line(data, &data->line->line);
 		else
 			ft_printf("\a");
 	}
 	else if (arrow == ARROW_DOWN)
 	{
 		if (history_index_change_down(data->history) == FUNCT_SUCCESS)
-			set_line(data, &data->line->line);
+			ret = set_line(data, &data->line->line);
 		else
 			ft_bzero(data->line->line, data->line->len_max);
+	}
+	return (ret);
+}
+
+int			history_change_line(t_vshdata *data,
+		char arrow)
+{
+	size_t	linelen;
+
+	history_clear_line(data);
+	if (handle_arrow_keys(data, arrow) == FUNCT_ERROR)
+	{
+		ft_eprintf(E_N_ALLOC_STR, "history");
+		return (FUNCT_ERROR);
 	}
 	input_print_str(data, data->line->line);
 	linelen = ft_strlen(data->line->line);
