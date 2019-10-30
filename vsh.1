@@ -1,0 +1,1452 @@
+.\"**************************************************************************"\.
+.\"                                                                          "\.
+.\"                                                       ::::::::           "\.
+.\"  vsh.1                                              :+:    :+:           "\.
+.\"                                                    +:+                   "\.
+.\"  By:  jbrinksm <jbrinksm@student.codam.nl>        +#+                    "\.
+.\"                                                  +#+                     "\.
+.\"  Created: 2019/04/03 12:05:00 by  jbrinksm      #+#    #+#               "\.
+.\"  Updated: 2019/10/08 13:40:42 by omulder       ########   odam.nl        "\.
+.\"                                                                          "\.
+.\"**************************************************************************"\.
+
+.TH man 1 "03 April 2019" "1.0" "vsh man page"
+.SH NAME
+vsh
+.SH SYNOPSIS
+.B vsh
+[file]
+.SH DESCRIPTION
+\fBVsh\fP is a beautiful command language interpreter that executes
+commands read from the standard input or from a file.
+.SH OPTIONS
+\fBVsh\fP does not take any options.
+.PD
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   ARGUMENTS
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH ARGUMENTS
+The first argument is assumed to be the name of a file containing shell
+commands.
+.\" /*
+.\" **   THIS FOLLOWING PART IS SOMETHING WE MIGHT WANT TO ADD
+.\" **
+.\" **   If \fBvsh\fP
+.\" **   is invoked in this fashion, $0 is set to the name of the file, and the
+.\" **   positional parameters  are  set  to  the  remaining arguments.
+.\" */
+\fBVsh\fP reads and executes commands from this file and then exits.
+If no commands are executed, the exit status is 0.
+An attempt is made to open the file in the current directory,
+and, if no file is found or if any of the files exist but cannot be read,
+\fBvsh\fP reports an error.
+.PD
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   INVOCATION
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH INVOCATION
+An \fIinteractive\fP shell is one started without non-option arguments whose
+standard input and error are both connected to terminals (as determined by
+.IR isatty (3)).
+.PD
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   INTRODUCTION
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH INTRODUCTION
+.PP
+\fBVelashell (vsh) is a bash-styled shell school project completely written from
+scratch in C with very limited access to libraries and tools.\fP
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   GENERAL OVERVIEW OF OPERATIONS
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH "GENERAL OVERVIEW OF OPERATIONS"
+.PP
+The shell operates according to the following general overview of operations
+below. You can find more detailed information in the other sections of this
+document.
+.TP
+.B "1. Initialize shell"
+Check terminal settings and shell settings, fetch history and alias files,
+prepare the environment.
+.TP
+.B "2. Read input"
+Start the main reading loop which reads on a byte-by-byte basis. Reading is
+stopped when either a specific signal is \fIread\fP (see section \fBSIGNALS\fP
+below for more info), a \fBnewline\fP character is read, or an error occurs.
+.sp 1
+\fBThe following two points apply to interactive mode only:\fP
+.br
+\- While inside the readloop you can move the cursor, perform line edition and
+access the history through specific key combinations.
+.sp 1
+\- If a single quote or a double quote is not closed, or a \fBnewline\fP character
+was read right after an \fBescape character\fP ('\'), we will keep reading more
+input in these seperate prompts
+(\fBquote>\fP, or \fBdquote>\fP, \fBlinecont>\fP) respectively, until
+the command line is complete.
+.TP
+.B "3. History expansion"
+If a valid \fIhistory expansion character\fP is found, the proper history event
+is expanded into the command line.
+.TP
+.B "4. Lexing"
+The characters of the command line are lexed into tokens.
+.TP
+.B "5. Heredoc handling"
+(\fB>\fP) prompts will ask you to submit input for any heredocs if there are
+any.
+.TP
+.B "6. Alias substitution"
+Any aliases will be substituted for their value.
+.TP
+.B "7. Parsing"
+The token list will be parsed through our grammar, and will be structured into
+an \fIabstract syntax tree\fP. If any illegal sequence of tokens is found,
+the shell's parser will return an error and a new prompt will be printed.
+.TP
+.B "8. Parameter expansion"
+Any parameters that are found inside \fBWORD\fP and \fBASSIGN\fP tokens will
+be expanded.
+.TP
+.B "9. Quote removal"
+Any unescaped quotes that still exist will be removed, as they are no longer
+useful.
+.TP
+.B "10. Redirections and assignments"
+Assignments will be handled, the redirections will be performed and
+the pipeline will be connected properly.
+.TP
+.B "11. Execution"
+The command will be executed.
+.TP
+.B "12. New prompt"
+A new prompt will appear.
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   DEFINITIONS
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH DEFINITIONS
+The following definitions are used throughout the rest of this document.
+.TP
+.PD 0
+.B blank
+A space or tab.
+.TP
+.B word
+A sequence of characters considered as a single unit by the shell (also known
+as a \fBtoken\fP) that does not contain unquoted \fBmetacharacters\fP or
+unquoted control operators (see section on \fBQUOTING\fP).
+.TP
+.B identifier
+A \fIword\fP consisting of only alphanumeric characters and underscores.
+.\" /*
+.\" **	ACTUALLY IT WILL BE THE FOLLOWING SOON:
+.\" **
+.\" **	, and beginning with an alphabetical character or an underscore.
+.\" */
+.TP
+.B metacharacter
+A character that, when unquoted, separates words. One of the following:
+.br
+\fB| & ; < > space newline\fP
+.TP
+.B control operator
+A \fItoken\fP that performs a control function. One of the following:
+.br
+\fB| || & && ; <newline>\fP
+.TP
+.B tilde expansion character
+A character that, when unquoted, and the first char of a \fIword\fP, will expand
+into the \fIenvironment variable\fP \fBHOME\fP. The following:
+.br
+\fB~\fP
+.TP
+.B variable expansion character
+A character that, when unquoted, and the first char of a \fIword\fP, will expand
+into the \fIenvironment variable\fP that is given right after it. The following:
+.br
+\fB$\fP
+.TP
+.B history expansion character
+A character that, when unquoted, and used according to \fBHISTORY EXPANSION\fP,
+will expand into a valid history item if there is one. The following:
+.br
+\fB!\fP
+.PD
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   RESERVED WORDS
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH "RESERVED WORDS"
+\fIReserved words\fP are words that have a special meaning to the shell.
+We currently do not have any reserved words, but if we did they would be
+recognized as reserved when unquoted and the first word
+of a simple command (see \fBSHELL GRAMMAR\fP below).
+.PD
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   SHELL GRAMMAR
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH "SHELL GRAMMAR"
+.SS Simple Commands
+.PP
+A \fIsimple command\fP is a sequence of optional variable assignments
+followed by \fBblank\fP-separated words and redirections, and
+terminated by a \fIcontrol operator\fP.  The first word
+specifies the command to be executed, and is passed as argument zero.
+The remaining words are passed as arguments to the invoked command.
+.PP
+The return value of a \fIsimple command\fP is its exit status, or
+128+\fIn\^\fP if the command is terminated by signal \fIn\fP.
+.SS Pipelines
+.PP
+A \fIpipeline\fP is a sequence of one or more commands separated by
+the \fIcontrol operator\fP \fB|\fP.
+.br
+The format for a pipeline is:
+.RS
+.PP
+\fIcommand1\fP [ \fB|\fP \fIcommand2\fP ... ]
+.RE
+.PP
+The standard output of \fIcommand\fP is connected via a pipe to the standard
+input of \fIcommand2\fP. This connection is performed before any redirections
+specified by the command (see \fBREDIRECTION\fP below).
+.PP
+The return status of a pipeline is the exit status of the last command. The
+shell waits for all commands in the pipeline to terminate before returning a
+value.
+.PP
+Each command in a pipeline is executed as a separate process. 
+.SS Lists
+.PP
+A \fIlist\fP is a sequence of one or more pipelines separated by one of the
+following \fIcontrol operators\fP:
+.br
+\fB; & && ||\fP
+.PP
+It is optionally terminated by one of the following \fIcontrol operators\fP:
+.br
+\fB; & <newline>\fP
+.PP
+Of these list operators, \fB;\fP and \fB&\fP equally have the highest
+precedence, followed by \fB&&\fP and \fB||\fP which also have equal precedence.
+.PP
+A sequence of one or more \fB<newline>\fP tokens may appear in a \fIlist\fP
+instead of a semicolon to delimit commands.
+.PP
+.\" /*
+.\" **   THE FOLLOWING STILL HAS TO BE IMPLEMENTED BY JOBS
+.\" **   
+.\" **   If a command is terminated by the control operator &, the shell
+.\" **   executes the command in  the  background  in a subshell.  The shell
+.\" **   does not wait for the command to finish, and the return status is 
+.\" **   0.  These are referred to as \fIasynchronous\fP commands.
+.\" */
+Commands separated by a \fB;\fP are executed sequentially; the shell waits
+for each command to terminate in turn. The return status is the exit
+status of the last command executed.
+.PP
+AND and OR lists are sequences of one or more pipelines separated by the
+\fB&&\fP and \fB||\fP \fIcontrol operator\fP respectively. AND and OR lists are
+executed with left associativity.
+.PP
+The format for an AND list is:
+.RS
+.PP
+\fIcommand1 \fP[ \fB&& \fP \fIcommand2 \fP... ]
+.RE
+.PP
+\fIcommand2\fP is executed only if \fIcommand1\fP returns an exit status of zero
+(success).
+.PP
+The format for an OR list is:
+.PP
+.RS
+\fIcommand1 \fP[ \fB|| \fP \fIcommand2 \fP... ]
+.RE
+.PP
+\fIcommand2\fP is executed only if \fIcommand1\fP returns a non-zero exit status.
+The return status of AND and OR lists is the exit status of the last command
+executed in the list.
+.PD
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   QUOTING
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH QUOTING
+.PP
+\fIQuoting\fP is used to remove the special meaning of certain characters or
+words to the shell. Quoting can be used to disable special treatment for special
+characters, and to prevent parameter expansion. (If we had reserved words they
+could also be prevented from being recognized as such.)
+.PP
+Each of the \fImetacharacters\fP listed above under \fBDEFINITIONS\fP has a
+special meaning to the shell and must be quoted if the literal value is to be
+used.
+.PP
+The \fIhistory expansion\fP character \fB!\fP must be quoted to prevent
+history expansion.
+.PP
+There are three quoting mechanisms: the \fIescape character\fP, single quotes,
+and double quotes.
+.PP
+A non-quoted backslash \fB\\\fP is the \fBescape character\fP. It
+preserves the literal value of the next character that follows, with the
+exception of \fB<newline>\fP. If a \fB\\<newline>\fP pair appears, and the
+backslash is not itself quoted, the \fB\\<newline>\fP pair is treated as a
+line continuation (that is, it is removed from the input stream and effectively
+ignored).
+.PP
+Enclosing characters in single quotes preserves the literal value
+of each character within the quotes. A single quote may not occur
+between single quotes, even when preceded by a backslash.
+.PP
+Enclosing characters in double quotes preserves the literal value of all
+characters within the quotes, with the exception of the following characters:
+.br
+\fB$ \\ !\fP
+.PP
+The \fIescape character\fP retains its special meaning only when followed by one
+of the following characters:
+.br
+\fB$ " \\ <newline>\fP
+.PP
+A double quote may be quoted within double quotes by preceding it with the
+\fIescape character\fP. History expansion through the
+\fIhistory expansion character\fP will be performed unless the
+\fIhistory expansion character\fP
+appearing in double quotes is escaped using an \fIescape character\fP. The
+\fIescape character\fP preceding the \fIhistory expansion character\fP is not
+removed.
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   PARAMETERS
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH PARAMETERS
+.PP
+A \fIparameter\fP is an entity that stores a value. It can be an
+\fIidentifier\fP, or one of the special characters listed below under
+\fBSpecial Parameters\fP. We support the following parameters:
+.br
+.TP
+.B variable
+A parameter denoted by an \fIidentifier\fP. A variable has a \fIvalue\fP and
+belongs to a certain category: \fBLocal, External, or Temporary\fP.
+.br
+\fBLocal\fP variables are parameters that can only be accessed in the shell
+instance that created it; it \fBwill not\fP be inherited by child-processes.
+This variable can be created by assigning them in a \fIcommand\fP with only
+a \fIcmd_prefix\fP.
+.br
+\fBExternal\fP
+variables are parameters that can be accessed within the shell process that
+created it. It \fBwill\fP also be inherited by child-processes.
+This variable can be created by using the \fBexport\fP builtin.
+.br
+\fBTemporary\fP
+variables are parameters that will only exist during the execution of a
+\fIcomplete_command\fP (see the \fBGRAMMAR\fP file).
+This variable can be created in a \fIcmd_prefix\fP of a \fIcommand\fP
+when the command contains atleast a \fIcmd_word\fP.
+.PP
+A parameter is set (and exists) only if it has been assigned a
+value. The NULL string is a valid value. Once a variable is set, it may be unset
+(and deleted) only by using the builtin \fBunset\fP command
+(see \fBSHELL BUILTIN COMMANDS\fP below).
+.PP
+A \fIvariable\fP may be assigned to by a statement of the form:
+.PP
+.RS
+\fIidentifier\fP=[\fIvalue\fP]
+.RE
+.PP
+If \fIvalue\fP is not given, the variable is assigned the null string. All
+\fIvalues\fP undergo tilde expansion, parameter expansion, and quote removal.
+Assignment statements may also appear as arguments to \fBalias\fP, and
+\fBexport\fP builtin commands.
+.SS "Special Parameters"
+.PP
+There are a few special parameters, these parameters may only be referenced;
+assignment to them is not allowed. The following:
+.TP
+.B ?
+Expands to the status fo the most recently executed foreground pipeline. A
+pipeline may contain only one command and thus no actual pipes.
+.SS "Shell Variables"
+.PP
+The following variables are set by the shell:
+.TP
+.B PWD
+The current working directory as set by the \fBcd\fP builtin command.
+.TP
+.B OLDPWD
+The previous working directory as set by the \fBcd\fP builtin command.
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   EXPANSION
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH EXPANSION
+.PP
+Expansion is performed on the command line after it has been split into tokens.
+There are 2 kinds of expansion performed: tilde expansion and parameter
+expansion. After these expansions, all unquoted occurrences of the characters
+\fB\\\fP, \fB'\fP, and \fB"\fP that did not result from one of the above
+expansions are removed.
+.PP
+The order of expansions is: tilde expansion, and parameter expansion.
+.SS "Tilde Expansion"
+.PP
+If the first character of a word is an unescaped tilde character ('~') and that
+is in fact the complete content of word, or it is directly followed by a slash
+('/'), the ~ is expanded into parameter \fBHOME\fP. Otherwise, the ~ is ignored.
+the tilde is ignored.
+.SS "Parameter Expansion"
+.PP
+The \fB$\fP character introduces parameter expansion. The parameter name or
+symbol to be expanded may be enclosed in braces, which are optional and serve to
+protect the variable to be expanded from characters immediately following it
+which could be interpreted as part of the name.
+.PP
+When braces are used, the matching ending brace is the first `}' not escaped by
+a backslash or within a quoted string, and not within a parameter expansion. The
+form for a parameter expansion is:
+.TP
+\fB${\fP\fIparameter\fP\fB}\fP
+The value of \fIparameter\fP is substituted. The braces are required when
+\fIparameter\fP is followed by a character which is not to be interpreted as
+part of its name.
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   REDIRECTION
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH REDIRECTION
+.PP
+Before a command is executed, its input and output may be redirected using a
+special notation interpreted by the shell. Redirection may also be used to open
+and close files for the current shell  execution  environment. The following
+redirection operators may appear anywhere within a
+\fIsimple command\fP. Redirections are processed in the
+order they appear, from left to right.
+.PP
+In the following descriptions, if the file descriptor number is omitted, and
+the first character of the redirection  operator  is  <, the redirection refers
+to the standard input (file descriptor 0). If the first character of the
+redirection operator is >, the redirection refers to the standard output
+(file descriptor 1).
+.PP
+The  word following the redirection operator in the following descriptions,
+unless otherwise noted, is subjected to tilde expansion, parameter expansion,
+and quote removal. If it expands to more than one word, \fBvsh\fP reports an
+error.
+.PP
+Note that the order of redirections is significant. For example, the command:
+.PP
+.RS
+ls > dirlist \fB2>&1\fP
+.RE
+.PP
+directs both standard output and standard error to the file dirlist, while the
+command:
+.PP
+.RS
+ls \fB2>&1\fP > dirlist
+.RE
+.PP
+directs only the standard output to file dirlist, because the standard error was
+duplicated as standard output before the standard output was redirected to
+dirlist.
+A failure to open or create a file causes the redirection to fail.
+.\"	/*
+.\"	**	POTENTIAL PROBLEM:
+.\"	**	
+.\" **	Currently we start using FD's internally from 3 onwards, we might want to
+.\" **	change it to start at 10, just like bash, to avoid conflict. 
+.\"	*/
+.SS "Redirecting Input"
+.PP
+Redirection of input causes the file whose name results from
+the expansion of \fIword\fP to be opened for reading on file descriptor
+\fIn\fP, or the standard input (file descriptor 0) if \fIn\fP is not specified.
+.PP
+The general format for redirecting input is:
+.RS
+.PP
+[\fIn\fP]\fB<\fP\fIword\fP
+.RE
+.SS "Redirecting Output"
+.PP
+Redirection of output causes the file whose name results from the expansion of
+\fIword\fP to be opened for writing on file descriptor \fIn\fP, or the standard
+output (file descriptor 1) if \fIn\fP is not specified. If the file does not
+exist it is created; if it does exist it is truncated to zero size.
+.PP
+The general format for redirecting output is:
+.RS
+.PP
+[\fIn\fP]\fB>\fP\fIword\fP
+.RE
+.PP
+.\"	/*
+.\"	**	IMPROVEMENT:
+.\"	**	
+.\" **	If the redirection operator is \fB>\fP, and the \fBnoclobber\fP option
+.\" **	to the \fBset\fP builtin has been enabled, the redirection will fail if
+.\" **	the file whose name results from the expansion of \fIword\fP exists and
+.\" **	is a regular file. If the redirection operator is \fB>\fP and the
+.\" **	\fBnoclobber\fP option to the \fBset\fP builtin command is not enabled,
+.\" **	the redirection is attempted even if the file named by \fIword\fP
+.\" **	exists.
+.\" */
+.SS "Appending Redirected Output"
+.PP
+Redirection of output in this fashion causes the file whose name results from
+the expansion of word to be opened for appending on file descriptor n, or the
+standard output (file descriptor 1) if n is not specified. If the file does
+not exist it is created.
+.PP
+The general format for appending output is:
+.PP
+.RS
+[\fIn\fP]\fB>>\fP\fIword\fP
+.RE
+.SS Here-document
+.PP
+The redirection operator \fB<<\fP allows redirection of lines contained in a shell
+input file, known as a \fIhere-document\fP, to the standard input of a command.
+.PP
+The \fIhere-document\fP is treated as a single word that begins after the next newline
+character (if there are unescaped quotes) and continues until there is a line
+containing only the delimiter, with no trailing blank characters. Then the next
+\fIhere-document\fP starts, if there is one.
+.PP
+.RS
+.PP
+\fIcommand<<word
+.br
+ 	here-document
+.br
+delimiter\fP
+.RE
+.PP
+If any character in word is quoted, the delimiter is formed by performing quote
+removal on word, and the \fIhere-document\fP lines will not be expanded.
+Otherwise, the delimiter is the word itself.
+.PP
+If no characters in word are quoted, all lines of the \fIhere-document\fP will
+be expanded for parameter expansion. In this case, the backslash in the input
+will behave as the backslash inside double-quotes. However, the double-quote
+character (") will not be treated specially within a \fIhere-document\fP. 
+.SS "Duplicating File Descriptors"
+.PP
+The redirection operator:
+.RS
+.PP
+[\fIn\fP]\fB<&\fP\fIword\fP
+.RE
+.PP
+is used to duplicate input file descriptors. If \fIword\fP expands to one or
+more digits, the file descriptor denoted by \fIn\fP is made to be a copy of that
+file descriptor. If the digits in \fIword\fP do not specify a file descriptor
+open for input, a redirection error occurs. If \fIword\fP evaluates to \fB-\fP,
+file descriptor \fIn\fP is closed. If \fIn\fP is not specified, the standard
+input (file descriptor 0) is used.
+.PP
+The operator:
+.RS
+.PP
+[\fIn\fP]\fB>&\fP\fIword\fP
+.RE
+.PP
+is used similarly to duplicate output file descriptors. If \fIn\fP is not
+specified, the standard output (file descriptor 1) is used. If the digits in
+\fIword\fP do not specify a file descriptor open for output, a redirection error
+occurs. As a special case, if \fIn\fP is omitted, and \fIword\fP does not expand
+to one or more digits, the standard output and standard error are redirected as
+described previously.
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   ALIAS
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH ALIAS
+.PP
+\fIAliases\fP allow a string to be substituted for a word when it is used as the
+first word of a simple command. The shell maintains a list of aliases that may
+be set and unset with the \fBalias\fP and \fBunalias\fP builtin commands (see
+\fBSHELL BUILTIN COMMANDS\fP below). The first word of each simple command, if
+unquoted, is checked to see if it has an  alias. If so, that word is replaced by
+the text of the alias. The characters \fB/\fP, \fB$\fP, and \fB=\fP and any of
+the shell \fImetacharacters\fP or quoting characters listed above may not appear
+in an alias name. The replacement text may contain any valid shell input,
+including shell metacharacters. The first word of the replacement text is tested
+for aliases, but a word that is identical to an alias being expanded is not
+expanded a second time. This means that one may alias \fBls\fP to \fBls -F\fP,
+for instance, and \fBvsh\fP does not try to recursively expand the replacement
+text. If the last character of the alias value is a \fIblank\fP, then the next
+command word following the alias is also checked for alias substitution.
+.PP
+Aliases are created and listed with the \fBalias\fP command, and removed with
+the \fBunalias\fP command.
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   SIMPLE COMMAND EXPANSION
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH "SIMPLE COMMAND EXPANSION"
+.PP
+When a simple command is executed, the shell performs the following
+expansions, assignments, and redirections, from left to right.
+.IP 1.
+Words (including those marked as assignments) undergo tilde expansion and
+parameter expansion.
+.IP 2.
+Words undergo quote removal.
+.IP 3.
+Redirections are performed as described above under \fBREDIRECTION\fP.
+.PP
+If there is no command name, the variable assignments affect the current
+shell environment. Otherwise, the variables are added to the environment
+of the executed command and do not affect the current shell environment.
+.PP
+If there is no command name, redirections are performed but have no effect. A
+redirection error causes the command to exit with a non-zero status.
+.PP
+If there is a command name, execution proceeds as described below. Otherwise,
+the command exits with a zero.
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   COMMAND EXECUTION
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH "COMMAND EXECUTION"
+.PP
+After a command has been split into words, if it results in a
+simple command and an optional list of arguments, the following
+actions are taken.
+.PP
+If the \fIcommand word\fP contains no slashes, the shell will try to match
+the command word in the list of builtins, if it finds a match, the builtin is
+invoked. If there is no match, it attempts to locate it through the \fBPATH\fP
+parameter for a directory which contains an executable name the command word.
+However, before it does that, it will check if the specific full pathname of
+an executable is already stored in the hash table (see \fBhash\fP in
+\fBSHELL BUILTIN COMMANDS\fP below). A full search of the directories in
+\fBPATH\fP is only performed if the command is not found in the hash table.
+.PP
+If we \fBfailed\fP to find the executable, the shell prints an error message and
+returns an exit status of 127.
+.PP
+If we \fBsucceeded\fP to find the executable, or if the command name contains
+one or more slashes, the shell attempts to execute the named program in a
+seperate execution environment.
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   SHELL EXECUTION ENVIRONMENT
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH "SHELL EXECUTION ENVIRONMENT"
+.PP
+The shell has an \fIexecution environment\fP, which consists of the following:
+.TP
+.B \(bu
+The current working directory as set by \fBcd\fP, or inherited by the shell at
+invocation.
+.TP
+.B \(bu
+Shell parameters that are set by assignment or inherited by the shell at
+invocation.
+.TP
+.B \(bu
+Shell aliases defined with \fBalias\fP.
+.TP
+.B \(bu
+The list of processes running in the background through \fBjobs\fP.
+.PP
+When a simple command other than a builtin is to be executed, it is invoked in
+a seperate execution environment that consists of the following:
+.TP
+.B \(bu
+The current working directory.
+.TP
+.B \(bu
+Shell variables marked for export.
+.PP
+A command invoked in this seperate environment cannot affect the parent's
+(so the shell that forked the new process') execution environment.
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   ENVIRONMENT
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH "ENVIRONMENT"
+When a program is invoked it is given an array of strings called the
+\fIenvironment\fP. This is a list of \fIname\fP\-\fIvalue\fP pairs, of the form
+"\fIname\fP=\fIvalue\fP".
+.PP
+The shell provides several ways to manipulate the environment. On invocation,
+the shell scans its own environment and creates a parameter for each name found,
+automatically marking it for export to child processes. Executed commands
+inherit the environment. The \fBexport\fP command allows parameters to be added
+to and deleted from the environment. If the value of a parameter in the
+environment is modified, the new value becomes part of the environment,
+replacing the old. The environment inherited by any executed command consists of
+the shell's initial environment, whose values may be modified in the shell,
+minus any pairs removed by the \fBunset\fP command, and plus any additions
+via the \fBexport\fP command.
+.PP
+The environment for any \fIsimple command\fP may be a temporarily altered by
+prefixing it with parameter assignments, as described above in \fBPARAMETERS\fP.
+These assignments only affect the environment for that specific
+\fIsimple command\fP.
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   EXIT STATUS
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH "EXIT STATUS"
+.PP
+A command which exists with a zero exit status has succeeded. A non-zero exit
+status indicates failure. When a command terminates on a fatal signal \fIN\fP,
+\fBvsh\fP uses the value of 128+\fIN\fP as the exit status.
+.PP
+If a command is not found, the exit code of the shell will be set to 127. If a
+command is found but is not executable the exit code will be set to 126.
+.PP
+If a command fails because of an error during expansion or redirection, the
+exit status is greater than zero.
+.PP
+Shell builtin commands set the exit code to zero if succesful, and non-zero if
+an error occurs while they execute. No distinction is made between usage
+and non-usage errors in terms of exit code.
+.PP
+\fBvsh\fP returns the exit status of the last command executed, unless a syntax
+error occurs, in which case it exits with a value of -2 (see the \fBexit\fP
+builtin command below).
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   SIGNALS
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH SIGNALS
+.PP
+\fBVsh\fP does not ignore \fBSIGTERM\fP. It does ignore \fBSIGINT\fP, but
+responds to a '\fB\4\fP' character (\fBctrl+D\fP) as if it were a SIGINT. No
+other signals are ignored.
+.PP
+Non-builtin commands run by \fBvsh\fP will not inherit the \fBSIGINT\fP ignore.
+.PP
+Job control does not come with any special signal handling; \fBSIGTTIN\fP,
+\fBSIGTTOU\fP, and \fBSIGTSTP\fP are \fBnot\fP ignored. \fBSIGQUIT\fP is also
+\fBnot\fP ignored by \fBvsh\fP.
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   JOB CONTROL
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH "JOB CONTROL"
+.PP
+\fB<more content will be added by tde-jong>\fP
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   HISTORY
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH HISTORY
+\fB<more content will be added by omulder>\fP
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   HISTORY EXPANSION
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH "HISTORY EXPANSION"
+.PP
+History expansions introduce words from the history list into the input stream,
+making it easy to repeat commands, insert the arguments to a previous command
+into the current input line. History expansion is performed immediately after a
+complete line is read, before the shell breaks it into words. It takes place in
+two parts. The first is to determine which line from the history list to use
+during substitution. The second is to insert it into the line.
+.\" /*
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **   SHELL BUILTIN COMMANDS
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" **
+.\" */
+.SH SHELL BUILTIN COMMANDS
+.TP
+.B alias
+.br
+\fB<more content will be added>\fP
+.\" ============================================================================
+.TP
+.B cd \fP[\fIdir\fP]
+.br
+Change the current directory to \fIdir\fP. If not \fIdir\fP is given, \fBcd\fP
+will attemt to change the current directory to the variable \fBHOME\fP.
+.\" ============================================================================
+.TP
+.B echo \fP[\fB\-neE\fP] [\fIarg\fP ...]
+.br
+Output each \fIarg\fP, separated by spaces, followed by a newline. If -n is
+specified, the trailing newline is not printed. The -e option will enable
+interpretation of these escape characters, and option -E disables interpretation
+of the escape characters. \fBecho\fP interprets the following escape characters:
+.RS
+.PD 0
+.TP
+.B \ea
+alert (bell)
+.TP
+.B \eb
+backspace
+.TP
+.B \ee \fIor\fP \eE
+escape character
+.TP
+.B \ef
+form feed
+.TP
+.B \en
+new line
+.TP
+.B \er
+carriage return
+.TP
+.B \et
+horizontal tab
+.TP
+.B \ev
+vertical tab
+.TP
+.B \e\e
+backslash
+.PD
+.RE
+.\" ============================================================================
+.TP
+.B env
+.br
+Display the current environment.
+.\" ============================================================================
+.TP
+.B exit \fP[\fIexit_code\fP]
+.br
+Exits the current running shell (same as ctrl+d input). If the \fIexit_code\fP
+is given, the exit code of \fBvsh\fP will be that of \fIexit_code\fP.
+.br
+\fB<more content will be added>\fP
+.\" ============================================================================
+.TP
+.B export
+.br
+\fB<more content will be added>\fP
+.\" ============================================================================
+.TP
+.B hash
+.br
+\fB<more content will be added>\fP
+.\" ============================================================================
+.TP
+.B history
+Displays all current history entries.
+.br
+\fB<more content will be added>\fP
+.\" ============================================================================
+.TP
+.B fc -l\fP[\fBnr\fP] [\fIfirst\fP] [\fIlast\fP]
+.br
+Fix Command. In the first form, a range of commands from first to \fIlast\fP is
+selected from the history list. \fIFirst\fP and \fIlast\fP may be specified as a
+string (to locate the last command beginning with that string) or as a number
+(an index into the history list, where a negative number is used as an offset
+from the current command number). If \fIlast\fP is not specified it is set to
+the current command for listing (so that \fBfc \-l \-10\fP prints the last 10
+commands) and to \fIfirst\fP otherwise. If \fIfirst\fP is not specified it is
+set to \-16.
+.sp 1
+The \fB\-n\fP option suppresses the command numbers when listing. The \fB\-r\fP
+option reverses the order of the commands. If the \fB\-l\fP option is given, the
+commands are listed on standard output.
+.sp 1
+The return value is 0 unless an invalid option is encountered or \fIfirst\fP or
+\fIlast\fP specify history lines out of range.
+.\" ============================================================================
+.TP
+.B set
+.br
+Display all shell variables.
+.\" ============================================================================
+.TP
+.B type
+.br
+\fB<more content will be added>\fP
+.\" ============================================================================
+.TP
+.B unalias
+.br
+\fB<more content will be added>\fP
+.\" ============================================================================
+.TP
+.B unset \fP[\fIname\fP]
+.br
+Unset environment variable \fIname\fP.
+.br
+\fB<more content will be added>\fP
+.\" ============================================================================
+.\" /*
+.\" **   THE FOLLOWING STILL HAS TO BE IMPLEMENTED
+.\" **   .TP
+.\" **   .B vela
+.\" **   Display our mighty vela logo in ascii art, and continue with business
+.\" **   as usual.
+.\" */
+.PD
+
+.po 0
+.SH KNOWN BUGS
+None.
+.SH AUTHOR
+Jorn Brinksma, Marijn van Heesewijk, Oscar Mulder, Rob Kuijper, Thijs de Jong
