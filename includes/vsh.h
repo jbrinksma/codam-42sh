@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/31 09:40:17 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/10/31 12:08:45 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@
 # define E_FG_USAGE			E_FG_INV_OPT "fg: usage: fg [job_spec ...]\n"
 # define E_FG_NO_CUR		"fg: no current job\n"
 # define E_JOBS_INV_OPT		SHELL ": jobs: bad option: %c\n"
-# define E_JOBS_USAGE		E_JOBS_INV_OPT "jobs: usage: jobs [-lp] [job_spec ...]\n"
+# define E_JOBS_USAGE E_JOBS_INV_OPT "jobs: usage: jobs [-lp] [job_spec ...]\n"
 # define E_JOBS_NO_JOB		"jobs: %s: no such job\n"
 # define E_BIN_PROC_LAUNCH	"Error executing %s\n"
 # define E_JOB_MARK_SIG		"%d: Terminated by signal %d\n"
@@ -217,6 +217,18 @@
 # define E_FC_INV_OPT		SHELL ": fc: -%c: invalid option\n"
 # define E_FC_OUT_RANGE		SHELL ": fc: history specification out of range\n"
 # define E_FC_F_OPEN		SHELL ": fc: failed to open temporary file\n"
+
+/*
+**===============================personal headers===============================
+*/
+
+# include "libft.h"
+
+/*
+**==================================headers=====================================
+*/
+
+# include <stdbool.h>
 
 typedef struct	s_fcdata
 {
@@ -345,20 +357,6 @@ typedef struct	s_fcdata
 # define HISTFILENAME	".vsh_history"
 # define HIST_SEPARATE	-1
 # define HIST_EXPANDED	(1 << 2)
-
-
-
-/*
-**===============================personal headers===============================
-*/
-
-# include "libft.h"
-
-/*
-**==================================headers=====================================
-*/
-
-# include <stdbool.h>
 
 /*
 **----------------------------------lexer--------------------------------------
@@ -1195,8 +1193,8 @@ bool			auto_check_dups(t_list *matchlst, char *filename);
 **----------------------------------globbing------------------------------------
 */
 
-#define	GLOB_CUR_CHAR (scanner->word[scanner->word_index])
-#define GLOB_F_NEG	(1 << 0)
+# define GLOB_CUR_CHAR (scanner->word[scanner->word_index])
+# define GLOB_F_NEG	(1 << 0)
 
 typedef enum	e_globtokens
 {

@@ -6,18 +6,18 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/27 21:10:44 by omulder        #+#    #+#                */
-/*   Updated: 2019/10/28 15:16:31 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/31 12:00:00 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-#include "term.h"
+#include <term.h>
 
 /*
-**  This function makes sure that when you are inserting a char
-**  inbetween other chars on the line, that the chars on the right
-**  side are moved over by 1, which creates a gap for the char
-**  that needs to be inserted.
+**	This function makes sure that when you are inserting a char
+**	inbetween other chars on the line, that the chars on the right
+**	side are moved over by 1, which creates a gap for the char
+**	that needs to be inserted.
 */
 
 static void	create_char_gap(char *line, int len, int gap_index)
@@ -33,9 +33,9 @@ static void	create_char_gap(char *line, int len, int gap_index)
 }
 
 /*
-**  Inserts a char `c` at `index` on `*line`.
-**  When there is not enough space on `*line`, the amount
-**  of memory allocated for `*line` is doubled first.
+**	Inserts a char `c` at `index` on `*line`.
+**	When there is not enough space on `*line`, the amount
+**	of memory allocated for `*line` is doubled first.
 */
 
 static int	add_char_at(t_vshdata *data, int i, char c, char **line)
@@ -65,10 +65,10 @@ static int	add_char_at(t_vshdata *data, int i, char c, char **line)
 }
 
 /*
-**  Makes sure that when a `\n` char is caught, it is put
-**  at the end of `*line`. When there is not enough space
-**  on line, the amount of memory for `*line` is increased
-**  by 1 byte first.
+**	Makes sure that when a `\n` char is caught, it is put
+**	at the end of `*line`. When there is not enough space
+**	on line, the amount of memory for `*line` is increased
+**	by 1 byte first.
 */
 
 static int	add_newline(t_vshdata *data, char **line)

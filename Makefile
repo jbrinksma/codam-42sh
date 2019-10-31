@@ -6,21 +6,18 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/10/31 11:00:00 by rkuijper      ########   odam.nl          #
+#    Updated: 2019/10/31 12:09:27 by omulder       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = vsh
+NAME = 42sh
 CC = gcc
-FLAGS = -Wall -Werror -Wextra -Wunreachable-code -g
-COVERAGE =
+FLAGS = -Wall -Werror -Wextra -Wunreachable-code
 INCLUDES = -I./libft/ -I./includes
 LIBFT = ./libft/libft.a
 LIB = -L./libft/ -lft -ltermcap
 OBJDIR = objects/
-CRITERIONINCLUDES = -I$(HOME)/.brew/include
-CRITERION = $(CRITERIONINCLUDES) -L$(HOME)/.brew/lib -lcriterion
-VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
+VPATH = ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
 ./srcs/term_settings ./srcs/environment_handling ./srcs/shell \
 ./srcs/tools ./srcs/alias ./test/parser ./test/tools ./test/builtins \
 ./test/environment_handling ./srcs/lexer ./srcs/parser ./srcs/history \
@@ -57,9 +54,9 @@ builtin_alias builtin_alias_set builtin_alias_lstdel builtin_unalias \
 builtin_cd builtin_cd_error builtin_cd_pathparsing \
 builtin_cd_pathparsing_tools builtin_cd_changedir \
 builtin_type builtin_hash builtin_jobs builtin_fg builtin_bg \
-lexer lexer_utils lexer_debug lexer_scanner \
+lexer lexer_utils lexer_scanner \
 lexer_state_if_else lexer_state_single lexer_state_start lexer_state_strings \
-parser_start parser_debug parser_utils parser_command parser_error \
+parser_start parser_utils parser_command parser_error \
 parser_astdel \
 alias_expansion alias_replace alias_read_file alias_add_expanded \
 alias_getvalue \
@@ -89,21 +86,18 @@ builtin_fc_edit \
 glob_expand_word glob_lexer glob_matchlst_funcs glob_lexer_helpers \
 glob_lexer_states glob_matcher glob_helpers glob_dir_match_loop glob_ast_add \
 glob_tokenlst_funcs
-TESTS = unit_test builtin_assign_test
 OBJECTS := $(SRCS:%=$(OBJDIR)%.o)
-TESTOBJECTS := $(TESTS:%=%.o)
 SRCS := $(SRCS:%=%.c)
-TESTS := $(TESTS:%=%.c)
 
 all: $(LIBFT) $(NAME)
 
 $(NAME): $(OBJDIR) $(OBJECTS) $(OBJDIR)main.o
-	@$(CC) $(FLAGS) $(OBJECTS) $(OBJDIR)main.o $(COVERAGE) $(INCLUDES) $(LIB) \
+	@$(CC) $(FLAGS) $(OBJECTS) $(OBJDIR)main.o $(INCLUDES) $(LIB) \
 		-o $(NAME)
 	@echo "[ + ] vsh has been compiled"
 
 $(OBJDIR)%.o: %.c vsh.h
-	@$(CC) -o $@ $(FLAGS) $< $(COVERAGE) $(INCLUDES) -c
+	@$(CC) -o $@ $(FLAGS) $< $(INCLUDES) -c
 
 $(LIBFT):
 	@$(MAKE) -C libft
@@ -115,43 +109,11 @@ clean:
 	@rm -f $(OBJECTS) $(TESTOBJECTS) $(OBJDIR)main.o
 	@$(MAKE) -C libft fclean
 	@echo "[ - ] removed object files"
-	@rm -f *.gcno
-	@rm -f *.gcda
 
 fclean: clean
-	@rm -f $(NAME) test_coverage vsh_tests
+	@rm -f $(NAME)
 	@echo "[ - ] removed binaries"
-	@rm -f *.gcov
 
 re: fclean all
 
-run_valgrind_vsh: all
-	@valgrind --tool=memcheck --leak-check=full ./vsh
-
-test_norm: fclean
-	@echo "[ + ] cloning norminette+"
-	@git clone \
-	https://github.com/thijsdejong/codam-norminette-plus ${HOME}/norminette+
-	@echo "[...] running norminette+"
-	@sh ${GITHUB_WORKSPACE}/test/norminette.sh
-
-$(TESTOBJECTS): $(TESTS)
-	@$(CC) $(FLAGS) $^ $(INCLUDES) $(CRITERIONINCLUDES) -c
-
-build_test: $(TESTOBJECTS) $(OBJECTS)
-	@make re COVERAGE=$(COVERAGE)
-	@make $(TESTOBJECTS) COVERAGE=$(COVERAGE)
-	@$(CC) $(FLAGS) $^ $(COVERAGE) $(INCLUDES) $(CRITERION) $(LIB) -o vsh_tests
-
-test: $(OBJDIR) build_test
-	@./vsh_tests
-
-test_valgrind: build_test
-	@valgrind --tool=memcheck --leak-check=full ./vsh_tests
-
-
-test_coverage: COVERAGE = -coverage
-test_coverage: test
-	@gcov $(SRCS)
-
-.PHONY: test_norm test_coverage all clean fclean re test $(TESTOBJECTS)
+.PHONY: all clean fclean re
