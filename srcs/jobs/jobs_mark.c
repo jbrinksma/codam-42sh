@@ -6,27 +6,12 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/21 11:51:41 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/31 13:40:48 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/31 13:50:03 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <signal.h>
-
-int			change_status(int status, t_proc *proc)
-{
-	proc->exit_status = status;
-	if (WIFSTOPPED(status))
-		proc->state = PROC_STOPPED;
-	else
-	{
-		proc->state = PROC_COMPLETED;
-		if (WIFSIGNALED(status))
-			ft_eprintf("%d: Terminated by signal %d\n", proc->pid,
-				WTERMSIG(status));
-	}
-	return (0);
-}
 
 int			jobs_mark_proc(t_proc *proc, int status)
 {
