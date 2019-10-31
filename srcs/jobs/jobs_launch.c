@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/28 16:25:10 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/31 11:06:00 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/31 13:41:16 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ void		jobs_launch_job(t_job *job)
 	}
 	if (launch_forked_job(job, fds, pipes) == FUNCT_FAILURE)
 		return ;
+	jobs_add_job(g_data, job);
 	if (job->bg == true)
 		jobs_bg_job(job, false);
 	else

@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/18 17:12:11 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/31 09:40:33 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/10/31 13:41:22 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static t_proc	*last_proc(t_job *job)
 
 static int		job_stop(t_job *job)
 {
-	jobs_add_job(g_data, job);
 	if (g_state->shell_type == SHELL_INTERACT)
 		ft_printf("\r\x1b[0K^Z\n");
 	job->bg = true;
