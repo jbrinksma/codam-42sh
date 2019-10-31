@@ -6,11 +6,25 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:17:48 by omulder        #+#    #+#                */
-/*   Updated: 2019/10/31 09:37:28 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/10/31 13:26:03 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+
+int			backup_stdfds(void)
+{
+	g_data->stdfds[0] = dup(STDIN_FILENO);
+	if (g_data->stdfds[0] == -1)
+		return (FUNCT_ERROR);
+	g_data->stdfds[1] = dup(STDOUT_FILENO);
+	if (g_data->stdfds[1] == -1)
+		return (FUNCT_ERROR);
+	g_data->stdfds[2] = dup(STDERR_FILENO);
+	if (g_data->stdfds[2] == -1)
+		return (FUNCT_ERROR);
+	return (FUNCT_SUCCESS);
+}
 
 void		exec_cmd(char **args, t_vshdata *data)
 {

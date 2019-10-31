@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/31 12:55:20 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/31 13:31:27 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1279,4 +1279,5 @@ void			glob_print_tokenlist(t_globtoken *lst);
 void			glob_print_matches(t_globmatchlst *lst);
 void			glob_print_matchlist(t_globmatchlst *lst);
 
+int				backup_stdfds(void);
 #endif
