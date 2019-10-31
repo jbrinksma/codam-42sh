@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/10/29 14:12:14 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/31 13:33:35 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void		shell_start(t_vshdata *data)
 
 	token_lst = NULL;
 	ast = NULL;
+	backup_stdfds();
 	while (true)
 	{
 		jobs_handle_finished_jobs();
