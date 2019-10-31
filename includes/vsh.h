@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/31 13:36:24 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/31 13:41:31 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -796,7 +796,6 @@ int				input_parse_char_og(t_vshdata *data);
 **----------------------------------jobs----------------------------------------
 */
 
-int				jobs_get_job_state(t_job *job);
 t_job			*jobs_remove_job(t_job **joblist, pid_t pid);
 void			print_job_info(t_job *job, int options, t_job *joblist);
 t_job			*jobs_add_job(t_vshdata *data, t_job *job);
@@ -831,8 +830,6 @@ void			jobs_notify_pool(void);
 void			jobs_handle_finished_jobs(void);
 
 int				jobs_update_job_command(t_job *job, char **av);
-
-int				jobs_mark_process_status(pid_t pid, int status);
 void			jobs_flush_process(t_proc *proc);
 void			jobs_launch_job(t_job *job);
 void			jobs_launch_proc(t_job *job, t_proc *proc,
@@ -1043,7 +1040,6 @@ bool			tool_check_for_special(char *str);
 bool			tool_check_for_whitespace(char *str);
 int				tool_get_paths(t_envlst *envlst, char ***paths);
 void			tools_remove_quotes_etc(char *str, bool is_heredoc);
-int				tools_get_pid_state(pid_t pid);
 bool			tools_contains_quoted_chars(char *str);
 bool			tools_is_cmd_seperator(t_tokens type);
 
