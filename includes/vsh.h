@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/31 12:08:45 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/31 12:22:39 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1143,7 +1143,6 @@ int				hash_ht_insert(t_vshdata *data, char *key, char *path,
 				int count);
 void			hash_print(t_ht **ht);
 void			hash_reset(t_vshdata *data);
-void			hash_init(t_vshdata *data);
 unsigned int	hash_create_hash(char *key);
 int				hash_check(t_vshdata *data, char *key, char **binary);
 

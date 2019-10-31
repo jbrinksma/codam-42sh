@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/10/31 12:09:27 by omulder       ########   odam.nl          #
+#    Updated: 2019/10/31 12:22:31 by omulder       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,7 @@ exec_create_files exec_command \
 expan_handle_bracketed_var expan_tilde_expansion exec_validate_binary \
 expan_pathname \
 redir redir_tools \
-hash_ht_insert hash_print hash_reset hash_init hash_check \
+hash_ht_insert hash_print hash_reset hash_check \
 print_errors print_errors_extended \
 auto_get_cmdlst auto_match_builtins auto_get_filelst auto_get_varlst \
 auto_find_state auto_start auto_add_match_toline auto_find_matches \
