@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/30 16:22:05 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/30 17:16:25 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/10/31 11:45:51 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ void			builtin_bg(char **av, t_vshdata *data)
 		jobs_continue_job(job, false);
 	else
 	{
-		ft_eprintf(E_BG_JOB_RUN, av[1] == NULL ? "1" : av[1]);
+		if (av[1] == NULL)
+			ft_eprintf(E_BG_JOB_RUN, "1");
+		else
+			ft_eprintf(E_BG_JOB_RUN, av[1]);
 		return ;
 	}
 	g_state->exit_code = EXIT_SUCCESS;

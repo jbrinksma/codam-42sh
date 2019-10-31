@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/17 14:03:16 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/30 21:43:09 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/31 11:51:27 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,19 +87,23 @@ static void		jobs_log_all(t_datajobs *jobs, int options)
 	}
 }
 
-int				builtin_jobs(char **args, t_vshdata *data)
+void			builtin_jobs(char **args, t_vshdata *data)
 {
 	int	arg;
 	int options;
 
 	arg = 1;
 	options = JOB_OPT_NONE;
+	g_state->exit_code = EXIT_FAILURE;
 	if (read_options(args, &arg, &options) != FUNCT_SUCCESS)
-		return (FUNCT_ERROR);
+		return ;
 	jobs_handle_finished_jobs();
 	if (args[arg] != NULL)
-		jobs_log_args(data->jobs, options, args + arg);
+	{
+		if (jobs_log_args(data->jobs, options, args + arg) == FUNCT_ERROR)
+			return ;
+	}
 	else
 		jobs_log_all(data->jobs, options);
-	return (FUNCT_SUCCESS);
+	g_state->exit_code = EXIT_SUCCESS;
 }
