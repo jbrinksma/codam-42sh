@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/30 16:42:54 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/31 11:06:36 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/31 13:27:13 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,9 @@ static int	cleanup_non_forked_redirs(void)
 {
 	if (dup2(g_data->stdfds[0], STDIN_FILENO) == -1)
 		return (FUNCT_ERROR);
-	close(g_data->stdfds[0]);
 	if (dup2(g_data->stdfds[1], STDOUT_FILENO) == -1)
 		return (FUNCT_ERROR);
-	close(g_data->stdfds[1]);
 	if (dup2(g_data->stdfds[2], STDERR_FILENO) == -1)
-		return (FUNCT_ERROR);
-	close(g_data->stdfds[2]);
-	return (FUNCT_SUCCESS);
-}
-
-static int	backup_stdfds(void)
-{
-	g_data->stdfds[0] = dup(STDIN_FILENO);
-	if (g_data->stdfds[0] == -1)
-		return (FUNCT_ERROR);
-	g_data->stdfds[1] = dup(STDOUT_FILENO);
-	if (g_data->stdfds[1] == -1)
-		return (FUNCT_ERROR);
-	g_data->stdfds[2] = dup(STDERR_FILENO);
-	if (g_data->stdfds[2] == -1)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
@@ -78,11 +61,6 @@ void		jobs_exec_builtin(t_proc *proc)
 	if (exec_create_files(proc->redir_and_assign) == FUNCT_ERROR ||
 		exec_assigns(proc->redir_and_assign, g_data, ENV_TEMP) == FUNCT_ERROR)
 		return ;
-	if (backup_stdfds() == FUNCT_ERROR)
-	{
-		g_state->exit_code = EXIT_FAILURE;
-		ft_eprintf(E_FAIL_DUP_FD);
-	}
 	if (redir(proc->redir_and_assign) == FUNCT_ERROR)
 	{
 		g_state->exit_code = EXIT_FAILURE;
