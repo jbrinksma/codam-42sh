@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/21 11:51:41 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/31 13:50:03 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/31 13:56:03 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,18 @@ int			jobs_mark_job(t_job *job, pid_t pid, int status)
 	return (FUNCT_SUCCESS);
 }
 
+static void	force_job_state(t_job *job, t_proc_state state)
+{
+	t_proc *proc;
+
+	proc = job->processes;
+	while (proc != NULL)
+	{
+		proc->state = state;
+		proc = proc->next;
+	}
+}
+
 int			jobs_mark_pool(pid_t pid, int status)
 {
 	t_job	*job;
@@ -75,6 +87,7 @@ int			jobs_mark_pool(pid_t pid, int status)
 					jobs_mark_proc(proc, status);
 					if (job->bg == false && proc->state == PROC_STOPPED)
 						job->bg = true;
+					force_job_state(job, proc->state);
 				}
 				proc = proc->next;
 			}

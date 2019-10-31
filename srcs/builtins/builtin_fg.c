@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 14:27:21 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/30 18:11:26 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/10/31 13:41:35 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static void	fg(t_job *job)
 {
 	t_proc *proc;
 
-	jobs_remove_job(&g_data->jobs->joblist, job->pgid);
 	if (jobs_stopped_job(job))
 		jobs_continue_job(job, true);
 	else
