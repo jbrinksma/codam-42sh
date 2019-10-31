@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/11 16:31:09 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/11 16:31:44 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/30 11:30:02 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static void	remove_single_quote(char *str, int *i, int *i_new)
 **	taken.
 */
 
-void	tools_remove_quotes_etc(char *str, bool is_heredoc)
+void		tools_remove_quotes_etc(char *str, bool is_heredoc)
 {
 	int		i;
 	int		i_new;

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/28 16:12:09 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/31 09:40:17 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 # define E_BAD_FD			SHELL ": %i: bad file descriptor\n"
 # define E_FAIL_DUP_FD		SHELL ": failed to duplicate file descriptor\n"
 # define E_FD_CLOSE			SHELL ": failed to close file descriptor\n"
+# define E_FD_RESET_STD	   SHELL ": failed to reset standard file descriptors\n"
 # define E_NO_PERM_NO_SUCH	SHELL ": no perm / no such file or directory\n"
 # define E_NO_SUCH_P		SHELL ": no such file or directory: %s\n"
 # define E_P_IS_DIR			SHELL ": %s: is a directory\n"
@@ -52,6 +53,7 @@
 # define E_P_CMD_NOT_FOUND	SHELL ": %s: command not found.\n"
 # define E_FAIL_OPEN_P		SHELL ": failed to open/create %s\n"
 # define E_FAIL_OPEN		SHELL ": failed to open file\n"
+# define E_ISDIR			SHELL ": %s: is a directory\n"
 # define E_FAIL_EXEC_P		SHELL ": failed to execute %s\n"
 # define E_NO_PIPE			SHELL ": unable to create pipe"
 # define E_P_BAD_REDIR		SHELL ": %s: bad redirect\n"
@@ -97,6 +99,18 @@
 # define E_BAD_PATTERN		SHELL ": bad pattern: %s\n"
 # define E_OPEN_DIR			SHELL ": error opening directory: %s\n"
 # define E_INVALID_USER		SHELL ": could not get working directory of: %s\n"
+# define E_BG_INV_OPT		SHELL ": bg: %c: invalid option\n"
+# define E_BG_USAGE			E_BG_INV_OPT "bg: usage: bg [job_spec ...]\n"
+# define E_BG_NO_CUR		"bg: no current job\n"
+# define E_BG_JOB_RUN		SHELL ": bg: job %s already running\n"
+# define E_FG_INV_OPT		SHELL ": fg: %c: invalid option\n"
+# define E_FG_USAGE			E_FG_INV_OPT "fg: usage: fg [job_spec ...]\n"
+# define E_FG_NO_CUR		"fg: no current job\n"
+# define E_JOBS_INV_OPT		SHELL ": jobs: bad option: %c\n"
+# define E_JOBS_USAGE		E_JOBS_INV_OPT "jobs: usage: jobs [-lp] [job_spec ...]\n"
+# define E_JOBS_NO_JOB		"jobs: %s: no such job\n"
+# define E_BIN_PROC_LAUNCH	"Error executing %s\n"
+# define E_JOB_MARK_SIG		"%d: Terminated by signal %d\n"
 # define E_ALLOC 42
 # define E_DUP 100
 # define E_OPEN 101
@@ -246,6 +260,7 @@ typedef struct	s_fcdata
 # define EXEC_AND_IF (1 << 2)
 # define EXEC_OR_IF (1 << 3)
 # define EXEC_SEMICOL (1 << 4)
+# define EXEC_WAIT (1 << 5)
 
 /*
 **--------------------------------redirections----------------------------------
@@ -306,7 +321,7 @@ typedef struct	s_fcdata
 # define INPUT_CTRL_U 21
 # define INPUT_CTRL_Y 25
 # define INPUT_ESC 27
-# define TC_MAXRESPONSESIZE 16
+# define TC_MAXRESPONSESIZE 42
 # define INPUT_BUF_READ_SIZE 100
 
 /*
@@ -346,11 +361,88 @@ typedef struct	s_fcdata
 # include <stdbool.h>
 
 /*
+**----------------------------------lexer--------------------------------------
+*/
+/*
+**	START,
+**	WORD, // bascially any string
+**	ASSIGN, WORD=[WORD]
+**	IO_NUMBER, // NUM followed by > or <
+**	AND_IF, // &&
+**	OR_IF, // ||
+**	DLESS, // <<
+**	DGREAT, // >>
+**	SLESS, // <
+**	SGREAT, // >
+**	LESSAND, // <&
+**	GREATAND, // >&
+**	BG // & in background
+**	PIPE, // |
+**	SEMICOL // ;
+**	NEWLINE,
+**	END,
+**	ERROR // malloc fail
+*/
+
+typedef enum	e_tokens
+{
+	ERROR,
+	START,
+	WORD,
+	ASSIGN,
+	IO_NUMBER,
+	AND_IF,
+	OR_IF,
+	DLESS,
+	DGREAT,
+	SLESS,
+	SGREAT,
+	LESSAND,
+	GREATAND,
+	BG,
+	PIPE,
+	SEMICOL,
+	NEWLINE,
+	END
+}				t_tokens;
+
+typedef struct	s_tokenlst
+{
+	t_tokens			type;
+	int					flags;
+	char				*value;
+	struct s_tokenlst	*next;
+}				t_tokenlst;
+
+typedef struct	s_scanner
+{
+	t_tokens	tk_type;
+	int			tk_len;
+	char		*str;
+	int			str_index;
+	char		flags;
+}				t_scanner;
+
+/*
+**----------------------------------parser--------------------------------------
+*/
+
+typedef struct	s_ast
+{
+	t_tokens		type;
+	char			flags;
+	char			*value;
+	struct s_ast	*left;
+	struct s_ast	*right;
+}				t_ast;
+
+/*
 **=================================typedefs====================================
 */
 
 typedef struct	s_state
 {
+	pid_t		pid;
 	int			exit_code;
 	int			shell_type;
 }				t_state;
@@ -407,6 +499,64 @@ typedef struct	s_ht
 */
 
 typedef struct termios	t_termios;
+
+/*
+**-----------------------------------jobs---------------------------------------
+*/
+
+# define JOB_EXIT		0
+# define JOB_RUNNING	1
+# define JOB_SUSPEND	2
+
+# define JOB_OPT_NONE	0
+# define JOB_OPT_P		1
+# define JOB_OPT_L		2
+
+typedef enum			e_proc_state
+{
+	PROC_COMPLETED,
+	PROC_STOPPED,
+	PROC_CONTINUED,
+	PROC_RUNNING
+}						t_proc_state;
+
+typedef enum			e_andor
+{
+	ANDOR_NONE,
+	ANDOR_AND,
+	ANDOR_OR
+}						t_andor;
+
+typedef struct	s_proc
+{
+	pid_t			pid;
+	struct s_proc	*next;
+	t_proc_state	state;
+	int				exit_status;
+
+	char			**env;
+	char			**argv;
+	char			*binary;
+
+	bool			is_builtin;
+	bool			no_cmd;
+	t_ast			*redir_and_assign;
+}				t_proc;
+
+typedef struct	s_job
+{
+	bool			bg;
+	pid_t			pgid;
+	int				state;
+	struct s_job	*next;
+	t_andor			andor;
+	struct s_job	*child;
+	int				job_id;
+	int				current;
+	char			*command;
+	t_proc			*processes;
+	t_proc			*last_proc;
+}				t_job;
 
 /*
 **-----------------------------------vsh_data-----------------------------------
@@ -494,14 +644,14 @@ typedef	struct	s_dataalias
 	char		*alias_file;
 }				t_dataalias;
 
-typedef struct	s_pipeseqlist
+typedef struct	s_vshdatajobs
 {
-	pid_t					pid;
-	struct s_pipeseqlist	*next;
-}				t_pipeseqlist;
+	t_job		*joblist;
+	int			current_job;
+	t_job		*active_job;
+}				t_datajobs;
 
-# define EXEC_ISPIPED (1 << 0)
-# define EXEC_WAIT (1 << 1)
+# define EXEC_ISPIPED	(1 << 0)
 # define PID_STATE_EXIT		0
 # define PID_STATE_RUNNING	1
 # define PID_STATE_SUSPEND	2
@@ -519,7 +669,8 @@ typedef struct	s_vshdata
 	t_datahashtable	*hashtable;
 	t_dataalias		*alias;
 	t_datatermcaps	*termcaps;
-	t_pipeseqlist	*pipeseq;
+	t_datajobs		*jobs;
+	t_ast			*current_redir_and_assign;
 	int				fc_flags;
 	int				exec_flags;
 }				t_vshdata;
@@ -535,82 +686,6 @@ typedef enum	e_prompt_type
 	DLESS_PROMPT,
 	HISTSEARCH_PROMPT
 }				t_prompt_type;
-
-/*
-**----------------------------------lexer--------------------------------------
-*/
-/*
-**	START,
-**	WORD, // bascially any string
-**	ASSIGN, WORD=[WORD]
-**	IO_NUMBER, // NUM followed by > or <
-**	AND_IF, // &&
-**	OR_IF, // ||
-**	DLESS, // <<
-**	DGREAT, // >>
-**	SLESS, // <
-**	SGREAT, // >
-**	LESSAND, // <&
-**	GREATAND, // >&
-**	BG // & in background
-**	PIPE, // |
-**	SEMICOL // ;
-**	NEWLINE,
-**	END,
-**	ERROR // malloc fail
-*/
-
-typedef enum	e_tokens
-{
-	ERROR,
-	START,
-	WORD,
-	ASSIGN,
-	IO_NUMBER,
-	AND_IF,
-	OR_IF,
-	DLESS,
-	DGREAT,
-	SLESS,
-	SGREAT,
-	LESSAND,
-	GREATAND,
-	BG,
-	PIPE,
-	SEMICOL,
-	NEWLINE,
-	END
-}				t_tokens;
-
-typedef struct	s_tokenlst
-{
-	t_tokens			type;
-	int					flags;
-	char				*value;
-	struct s_tokenlst	*next;
-}				t_tokenlst;
-
-typedef struct	s_scanner
-{
-	t_tokens	tk_type;
-	int			tk_len;
-	char		*str;
-	int			str_index;
-	char		flags;
-}				t_scanner;
-
-/*
-**----------------------------------parser--------------------------------------
-*/
-
-typedef struct	s_ast
-{
-	t_tokens		type;
-	char			flags;
-	char			*value;
-	struct s_ast	*left;
-	struct s_ast	*right;
-}				t_ast;
 
 /*
 **----------------------------------autocomplete--------------------------------
@@ -720,6 +795,55 @@ void			input_print_ctrl_r(t_vshdata *data, char *first, char *second,
 int				input_parse_char_og(t_vshdata *data);
 
 /*
+**----------------------------------jobs----------------------------------------
+*/
+
+int				jobs_get_job_state(t_job *job);
+t_job			*jobs_remove_job(t_job **joblist, pid_t pid);
+void			print_job_info(t_job *job, int options, t_job *joblist);
+t_job			*jobs_add_job(t_vshdata *data, t_job *job);
+t_job			*jobs_new_job(void);
+t_job			*jobs_last_child(t_job *job);
+void			jobs_flush_job(t_job *job);
+
+void			jobs_continue_job(t_job *job, bool fg);
+void			jobs_bg_job(t_job *job, bool job_continued);
+int				jobs_fg_job(t_job *job, bool job_continued);
+
+void			jobs_print_job_info(t_job *job, int options, t_job *joblist);
+
+t_job			*jobs_find_n(char *n, t_job *joblist);
+t_job			*jobs_find_current_job(t_job *joblist);
+t_job			*jobs_find_previous_job(t_job *joblist);
+t_job			*jobs_find_job(char *job_id, t_job *joblist);
+t_job			*jobs_find_contains_str(char *str, t_job *joblist);
+t_job			*jobs_find_startswith_str(char *str, t_job *joblist);
+
+int				jobs_add_process(t_job *job);
+
+void			jobs_wait_job(t_job *job);
+int				jobs_stopped_job(t_job *job);
+int				jobs_completed_job(t_job *job);
+
+int				jobs_mark_pool(pid_t pid, int status);
+int				jobs_mark_proc(t_proc *proc, int status);
+int				jobs_mark_job(t_job *job, pid_t pid, int status);
+
+void			jobs_notify_pool(void);
+void			jobs_handle_finished_jobs(void);
+
+int				jobs_update_job_command(t_job *job, char **av);
+
+int				jobs_mark_process_status(pid_t pid, int status);
+void			jobs_flush_process(t_proc *proc);
+void			jobs_launch_job(t_job *job);
+void			jobs_launch_proc(t_job *job, t_proc *proc,
+	int fds[3], int pipes[2]);
+void			jobs_exec_builtin(t_proc *proc);
+int				jobs_exec_is_single_builtin_proc(t_proc *proc);
+void			jobs_finished_job(t_job *job, bool check);
+
+/*
 **----------------------------------shell---------------------------------------
 */
 
@@ -738,7 +862,7 @@ int				shell_close_quote_and_esc(t_vshdata *data);
 char			shell_quote_checker_find_quote(char *line);
 int				shell_handle_escaped_newlines(t_vshdata *data);
 void			shell_get_valid_prompt(t_vshdata *data, int prompt_type);
-int 			shell_init_term(t_vshdata *data);
+int				shell_init_term(t_vshdata *data);
 void			shell_args(t_vshdata *data, char *filepath);
 int				shell_get_path(t_vshdata *data, char *filepath, char **path);
 int				shell_init_line(t_vshdata *data, char *filepath);
@@ -758,6 +882,7 @@ t_datainput		*shell_init_vshdatainput(void);
 t_dataprompt	*shell_init_vshdataprompt(void);
 t_dataline		*shell_init_vshdataline(void);
 t_datacurs		*shell_init_vshdatacurs(void);
+t_datajobs		*shell_init_vshdatajobs(void);
 
 /*
 **----------------------------------lexer---------------------------------------
@@ -857,6 +982,14 @@ void			builtin_alias_lstdel(t_aliaslst **lst);
 void			builtin_unalias(char **args, t_aliaslst **aliaslst);
 void			builtin_type(char **args, t_envlst *envlst,
 				t_aliaslst *aliaslst);
+
+int				builtin_jobs(char **args, t_vshdata *data);
+t_job			*builtin_jobs_find_job(char *job_id, t_job *joblist);
+int				builtin_jobs_new_current_val(t_job *joblist);
+
+void			builtin_fg(char **args, t_vshdata *data);
+void			builtin_bg(char **av, t_vshdata *data);
+
 void			builtin_cd(char **args, t_vshdata *data);
 void			builtin_cd_create_newpath(char **newpath, char *argpath);
 int				builtin_cd_change_dir(char *argpath, t_vshdata *data,
@@ -923,9 +1056,9 @@ bool			tools_is_cmd_seperator(t_tokens type);
 int				exec_complete_command(t_ast *ast, t_vshdata *data);
 int				exec_list(t_ast *ast, t_vshdata *data);
 int				exec_and_or(t_ast *ast, t_vshdata *data);
-int				exec_pipe_sequence(t_ast *ast, t_vshdata *data, t_pipes pipes);
-int				exec_command(t_ast *ast, t_vshdata *data, t_pipes pipes);
-void			exec_cmd(char **args, t_vshdata *data, t_pipes pipes);
+int				exec_pipe_sequence(t_ast *ast, t_vshdata *data);
+int				exec_command(t_ast *ast, t_vshdata *g_data);
+void			exec_cmd(char **args, t_vshdata *data);
 bool			exec_builtin(char **args, t_vshdata *data);
 void			exec_external(char **args, t_vshdata *data);
 int				exec_find_binary(char *filename, t_vshdata *data,
@@ -935,11 +1068,14 @@ void			exec_quote_remove(t_ast *node);
 int				exec_validate_binary(char *binary);
 int				exec_create_files(t_ast *ast);
 void			exec_add_pid_to_pipeseqlist(t_vshdata *data, pid_t pid);
+int				exec_redirs(t_ast *redirs);
+int				exec_assigns(t_ast *ast, t_vshdata *data, int env_type);
 
 /*
 **-----------------------------------signals------------------------------------
 */
 
+void			signal_reset(void);
 void			signal_handle_child_death(int signum);
 
 /*
@@ -972,11 +1108,6 @@ int				redir_pipe(t_ast *pipe_node);
 int				redir_run_pipesequence(t_ast *pipenode, t_vshdata *data,
 					t_pipes pipes);
 int				redir_handle_pipe(t_pipes pipes);
-
-int				redir_save_stdfds(t_vshdata *data);
-int				return_and_reset_fds(int retval, t_vshdata *data);
-int				redir_reset_stdfds(t_vshdata *data);
-int				redir_close_saved_stdfds(t_vshdata *data);
 
 /*
 **------------------------------------history-----------------------------------

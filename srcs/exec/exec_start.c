@@ -6,76 +6,48 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/10/05 14:41:06 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/30 17:48:22 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-static int		exec_post_pipe_sequence(t_ast *ast, t_vshdata *data,
-				t_pipes pipes)
+int				exec_pipe_sequence(t_ast *ast, t_vshdata *data)
 {
-	close(pipes.currentpipe[PIPE_WRITE]);
-	pipes.pipeside = PIPE_EXTEND;
-	if (exec_command(ast->right, data, pipes) == FUNCT_ERROR)
-		return (FUNCT_ERROR);
-	close(pipes.currentpipe[PIPE_READ]);
-	return (FUNCT_SUCCESS);
-}
-
-/*
-**	Runs the pipeline from left to right. The first `PIPE` node in the AST is
-**	the farmost right `simple_command` in the `pipe sequence`(see GRAMMAR).
-**
-**	Because of this, we will create all the pipes recursively starting at the
-**	top node and working our way down the AST towards the first `simple_command`
-**	in the pipe sequence. When we reach this first simple_command, the whole
-**	pipeline will have been laid down. Consequently, when we work our way back
-**	up in the AST (returning the recursion), we can properly manage the I/O of
-**	each simple command in the pipeline before execution (because the pipe fds
-**	will already be available in each `t_pipes pipes` struct).
-*/
-
-int				exec_pipe_sequence(t_ast *ast, t_vshdata *data, t_pipes pipes)
-{
-	t_pipes	childpipes;
-
 	if (ast->type != PIPE)
-		return (exec_command(ast, data, pipes));
-	if (pipe(pipes.currentpipe) == -1)
-		return (err_ret(E_NO_PIPE));
-	if (exec_create_files(ast) == FUNCT_ERROR)
-		return (FUNCT_ERROR);
+		return (exec_command(ast, data));
 	if (ast->left->type == PIPE)
 	{
-		childpipes = pipes;
-		childpipes.parentpipe[PIPE_READ] = pipes.currentpipe[PIPE_READ];
-		childpipes.parentpipe[PIPE_WRITE] = pipes.currentpipe[PIPE_WRITE];
-		if (exec_pipe_sequence(ast->left, data, childpipes) == FUNCT_ERROR)
+		if (exec_pipe_sequence(ast->left, data) == FUNCT_ERROR)
 			return (FUNCT_ERROR);
 	}
-	else
-	{
-		pipes.pipeside = PIPE_START;
-		if (exec_command(ast->left, data, pipes) == FUNCT_ERROR)
-			return (FUNCT_ERROR);
-	}
-	return (exec_post_pipe_sequence(ast, data, pipes));
+	else if (exec_command(ast->left, data) == FUNCT_ERROR)
+		return (FUNCT_ERROR);
+	return (exec_command(ast->right, data));
 }
 
 int				exec_and_or(t_ast *ast, t_vshdata *data)
 {
-	t_pipes pipes;
+	int		bg;
 
-	pipes = redir_init_pipestruct();
+	bg = 0;
 	if (ast->type != AND_IF && ast->type != OR_IF)
-		return (exec_pipe_sequence(ast, data, pipes));
+	{
+		if (data->jobs->active_job != NULL)
+			jobs_last_child(data->jobs->active_job)->child = jobs_new_job();
+		else
+			data->jobs->active_job = jobs_new_job();
+		return (exec_pipe_sequence(ast, data));
+	}
+	if (data->exec_flags & EXEC_BG)
+		bg = 1;
+	data->exec_flags &= ~EXEC_BG;
 	if (exec_and_or(ast->left, data) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
-	if (ast->type == AND_IF && g_state->exit_code != EXIT_SUCCESS)
-		return (FUNCT_ERROR);
-	else if (ast->type == OR_IF && g_state->exit_code == EXIT_SUCCESS)
-		return (FUNCT_FAILURE);
+	if (ast->type == AND_IF || ast->type == OR_IF)
+		jobs_last_child(data->jobs->active_job)->andor = ast->type - 4;
+	if (bg == 1)
+		data->exec_flags |= EXEC_BG;
 	if (exec_and_or(ast->right, data) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
@@ -85,6 +57,8 @@ int				exec_list(t_ast *ast, t_vshdata *data)
 {
 	if (ast->type != BG && ast->type != SEMICOL)
 		return (exec_and_or(ast, data));
+	if (ast->type == BG)
+		data->exec_flags |= EXEC_BG;
 	if (exec_and_or(ast->left, data) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	if (ast->right != NULL)
@@ -97,9 +71,11 @@ int				exec_list(t_ast *ast, t_vshdata *data)
 
 int				exec_complete_command(t_ast *ast, t_vshdata *data)
 {
-	if (ast == NULL)
+	data->exec_flags = 0;
+	data->jobs->active_job = NULL;
+	if (ast == NULL || exec_list(ast, data) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
-	if (exec_list(ast, data) == FUNCT_ERROR)
-		return (FUNCT_ERROR);
+	if (data->jobs->active_job != NULL)
+		jobs_launch_job(data->jobs->active_job);
 	return (FUNCT_SUCCESS);
 }

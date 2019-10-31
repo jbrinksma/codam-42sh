@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:37:32 by omulder        #+#    #+#                */
-/*   Updated: 2019/10/17 16:20:02 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/29 12:37:30 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
-#define INIT_VSHDATA data = ft_memalloc(sizeof(t_vshdata)); data->envlst = env_getlst(); data->curs = shell_init_vshdatacurs();	data->history = shell_init_vshdatahistory(); data->line = shell_init_vshdataline();	data->prompt = shell_init_vshdataprompt(); data->input = shell_init_vshdatainput();	data->hashtable = shell_init_vshdatahashtable(); data->alias = shell_init_vshdataalias(); data->term = term_init_struct(); data->termcaps = shell_init_vshdatatermcaps(); g_state = (t_state*)ft_memalloc(sizeof(t_state));
+#define INIT_VSHDATA data = ft_memalloc(sizeof(t_vshdata)); data->envlst = env_getlst(); data->curs = shell_init_vshdatacurs();	data->history = shell_init_vshdatahistory(); data->line = shell_init_vshdataline();	data->prompt = shell_init_vshdataprompt(); data->input = shell_init_vshdatainput();	data->hashtable = shell_init_vshdatahashtable(); data->alias = shell_init_vshdataalias(); data->term = term_init_struct(); data->termcaps = shell_init_vshdatatermcaps(); g_state = (t_state*)ft_memalloc(sizeof(t_state)); data->jobs = shell_init_vshdatajobs();
 
 void redirect_all_stdout(void)
 {
@@ -626,13 +626,19 @@ Test(exec_find_bin, execnonexistent, .init=redirect_all_stdout)
 	t_vshdata	*data;
 
 	
+	printf("Yeeeeyn-1\n");
 	INIT_VSHDATA
 	g_state->exit_code = 0;
+	printf("Yeeeeyn0\n");
 	data->envlst = env_getlst();
+	printf("Yeeeeyn1\n");
 	hash_init(data);
+	printf("Yeeeeyn2\n");
 	str = ft_strdup("idontexist\n");
+	printf("Yeeeeyn3\n");
 	lst = NULL;
 	ast = NULL;
+	printf("Yeeeeyn4\n");
 	cr_expect(lexer(&(str), &lst) == FUNCT_SUCCESS);
 	cr_expect(parser_start(&lst, &ast) == FUNCT_SUCCESS);
 	exec_complete_command(ast, data);
@@ -848,7 +854,6 @@ Test(alias, basic_test)
 	INIT_VSHDATA
 	g_state->exit_code = 0;
 	data->envlst = env_getlst();
-	redir_save_stdfds(data);
 	cr_assert(data->envlst != NULL);
 	token_lst = NULL;
 	ast = NULL;
@@ -947,7 +952,6 @@ Test(replace_var, basic_test, .init=redirect_all_stdout)
 	line = ft_strdup("dit=dat ; hier=daar\n");
 	data->alias->aliaslst = NULL;
 	data->envlst = env_getlst();
-	redir_save_stdfds(data);
 	cr_assert(data->envlst != NULL);
 	token_lst = NULL;
 	ast = NULL;

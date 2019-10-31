@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/29 12:42:44 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/15 14:49:03 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/29 11:58:52 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@ static int	shell_init_data(t_vshdata *data)
 	data->input = shell_init_vshdatainput();
 	data->hashtable = shell_init_vshdatahashtable();
 	data->alias = shell_init_vshdataalias();
+	data->jobs = shell_init_vshdatajobs();
 	data->term = term_init_struct();
 	if (data->curs == NULL || data->history == NULL || data->line == NULL ||
 		data->prompt == NULL || data->input == NULL || data->hashtable == NULL
-		|| data->alias == NULL || data->term == NULL)
+		|| data->alias == NULL || data->term == NULL || data->jobs == NULL)
 		return (FUNCT_FAILURE);
 	return (FUNCT_SUCCESS);
 }
@@ -49,6 +50,7 @@ t_vshdata	*shell_init_vshdata(void)
 	t_vshdata *data;
 
 	data = ft_memalloc(sizeof(t_vshdata));
+	g_data = data;
 	if (data == NULL)
 	{
 		ft_eprintf(E_ALLOC_STR);

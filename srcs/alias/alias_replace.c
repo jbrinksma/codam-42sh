@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/26 20:29:50 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/23 18:05:16 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/30 11:30:57 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ static void	alias_remove_newlines(t_tokenlst *new_tokenlst)
 **	and replace it with nothing
 */
 
-static void	alias_remove_tk_from_lst(t_tokenlst *probe, t_tokenlst *new_tokenlst)
+static void	alias_remove_tk_from_lst(t_tokenlst *probe,
+			t_tokenlst *new_tokenlst)
 {
 	t_tokenlst *next_after_alias;
 
@@ -68,7 +69,7 @@ static void	alias_combine_tokenlsts(t_tokenlst *probe, t_tokenlst *new_tokenlst)
 	t_tokenlst *start_end;
 
 	if (new_tokenlst->next->type == END)
-		return alias_remove_tk_from_lst(probe, new_tokenlst);
+		return (alias_remove_tk_from_lst(probe, new_tokenlst));
 	alias_remove_newlines(new_tokenlst);
 	start_end = new_tokenlst;
 	new_tokenlst = new_tokenlst->next;

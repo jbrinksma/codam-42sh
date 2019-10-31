@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/10/28 16:11:58 by omulder       ########   odam.nl          #
+#    Updated: 2019/10/31 11:00:00 by rkuijper      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ VPATH = ./test ./libft ./srcs ./srcs/builtins ./srcs/input_handling \
 ./test/environment_handling ./srcs/lexer ./srcs/parser ./srcs/history \
 ./srcs/expan ./srcs/autocomplete ./srcs/hashtable ./srcs/signal \
 ./srcs/exec ./srcs/redir ./srcs/error_handling ./srcs/exec ./includes \
-./srcs/builtins/builtin_fc ./srcs/globbing
+./srcs/builtins/builtin_fc ./srcs/jobs ./srcs/globbing
 SRCS = shell_start shell_prompt shell_quote_checker shell_dless_input \
 shell_init_files shell_init_vshdata shell_getcurrentdir \
 shell_handle_escaped_newlines shell_init_input shell_init_features \
@@ -56,7 +56,7 @@ builtin_export builtin_export_print builtin_set builtin_unset \
 builtin_alias builtin_alias_set builtin_alias_lstdel builtin_unalias \
 builtin_cd builtin_cd_error builtin_cd_pathparsing \
 builtin_cd_pathparsing_tools builtin_cd_changedir \
-builtin_type builtin_hash \
+builtin_type builtin_hash builtin_jobs builtin_fg builtin_bg \
 lexer lexer_utils lexer_debug lexer_scanner \
 lexer_state_if_else lexer_state_single lexer_state_start lexer_state_strings \
 parser_start parser_debug parser_utils parser_command parser_error \
@@ -68,20 +68,24 @@ history_change_line history_index_change history_expansion history_get_line \
 history_match_line history_insert_into_line history_helpers history_ctrl_r \
 exec_builtin exec_cmd exec_external exec_start exec_find_binary \
 exec_quote_remove expan_handle_variables expan_handle_dollar \
-exec_create_files exec_command exec_add_pid_to_pipeseqlist \
+exec_create_files exec_command \
 expan_handle_bracketed_var expan_tilde_expansion exec_validate_binary \
 expan_pathname \
-redir_pipe redir redir_tools redir_tools2 \
+redir redir_tools \
 hash_ht_insert hash_print hash_reset hash_init hash_check \
 print_errors print_errors_extended \
 auto_get_cmdlst auto_match_builtins auto_get_filelst auto_get_varlst \
 auto_find_state auto_start auto_add_match_toline auto_find_matches \
 auto_handle_matchlst auto_small_lst auto_big_lst auto_lst_print \
 auto_lst_print_helpers auto_check_dups \
+jobs_list_handling jobs_job_utils jobs_find jobs_cont jobs_bg \
+jobs_fg jobs_info jobs_mark jobs_processes jobs_status jobs_wait \
+jobs_notify jobs_command jobs_launch jobs_launch_proc jobs_exec_builtin \
+jobs_finished_job jobs_flush_job \
 builtin_fc builtin_fc_options builtin_fc_init builtin_fc_list \
 builtin_fc_print_helpers builint_fc_find_index builtin_fc_substitute \
+signal_handle_child_death signal_reset \
 builtin_fc_edit \
-signal_handle_child_death \
 glob_expand_word glob_lexer glob_matchlst_funcs glob_lexer_helpers \
 glob_lexer_states glob_matcher glob_helpers glob_dir_match_loop glob_ast_add \
 glob_tokenlst_funcs

@@ -6,11 +6,12 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 20:15:24 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/17 15:45:37 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/30 11:31:52 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+#include <signal.h>
 
 static void	reset_exit(int exit_code, t_vshdataterm *term_p)
 {
@@ -18,6 +19,18 @@ static void	reset_exit(int exit_code, t_vshdataterm *term_p)
 		term_reset(term_p) == FUNCT_FAILURE)
 		ft_eprintf(E_NOT_RESET);
 	exit(exit_code);
+}
+
+static void	close_jobs(t_datajobs *jobs)
+{
+	t_job *job;
+
+	job = jobs->joblist;
+	while (job != NULL)
+	{
+		kill(job->pgid, SIGABRT);
+		job = job->next;
+	}
 }
 
 void		builtin_exit(char **args, t_vshdata *data)
@@ -28,6 +41,7 @@ void		builtin_exit(char **args, t_vshdata *data)
 		history_remove_head(data->history);
 	if (args == NULL)
 		reset_exit(g_state->exit_code, data->term);
+	close_jobs(data->jobs);
 	if (args[1] != NULL && args[2] == NULL)
 	{
 		if (ft_aisint(args[1]) == true)

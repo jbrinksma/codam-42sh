@@ -6,43 +6,30 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:17:48 by omulder        #+#    #+#                */
-/*   Updated: 2019/10/05 09:51:17 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/31 09:37:28 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-/*
-**	The `pipes` struct contains the file descriptors of the pipe leading up to
-**	the simple_command (see GRAMMAR), and the file descriptors of the pipe which
-**	the simple_command will output into.
-**
-**	If the `cmd` is not part of a pipeline, or the `cmd` is the last command
-**	in the pipeline, we run it in the foreground. Otherwise, it gets
-**	executed in the background.
-*/
-
-void		exec_cmd(char **args, t_vshdata *data, t_pipes pipes)
+void		exec_cmd(char **args, t_vshdata *data)
 {
-	if (args[0][0] != '\0' && exec_builtin(args, data) == false)
-	{
-		if (pipes.currentpipe[0] == PIPE_UNINIT
-		&& pipes.currentpipe[1] == PIPE_UNINIT
-		&& pipes.parentpipe[0] == PIPE_UNINIT
-		&& pipes.parentpipe[1] == PIPE_UNINIT)
-			data->exec_flags &= ~EXEC_ISPIPED;
-		else
-			data->exec_flags |= EXEC_ISPIPED;
-		if (pipes.pipeside == PIPE_UNINIT || (pipes.pipeside == PIPE_EXTEND
-		&& pipes.currentpipe[0] != PIPE_UNINIT
-		&& pipes.currentpipe[1] != PIPE_UNINIT
-		&& pipes.parentpipe[0] == PIPE_UNINIT
-		&& pipes.parentpipe[1] == PIPE_UNINIT))
-			data->exec_flags |= EXEC_WAIT;
-		else
-			data->exec_flags &= ~EXEC_WAIT;
+	t_job *job;
+
+	job = jobs_last_child(data->jobs->active_job);
+	if (job == NULL)
+		return ;
+	jobs_update_job_command(job, args);
+	jobs_add_process(job);
+	if (job->last_proc == NULL)
+		exit(1);
+	job->last_proc->argv = args;
+	if (g_data->exec_flags & EXEC_BG)
+		job->bg = true;
+	else
+		job->bg = false;
+	if (ft_strequ(job->last_proc->argv[0], "") == true)
+		job->last_proc->no_cmd = true;
+	if (exec_builtin(args, data) == false)
 		exec_external(args, data);
-	}
-	ft_strarrdel(&args);
-	env_remove_tmp(data->envlst);
 }

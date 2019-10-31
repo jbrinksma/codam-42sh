@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/16 13:39:59 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/05 17:35:39 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/30 14:23:37 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,16 @@ void		curs_move_prev_word(t_vshdata *data)
 **	newlines.
 */
 
+static void	move_curs(int y, int x)
+{
+	if (y > 0)
+		ft_printf("\e[%iA", y);
+	if (x > 0)
+		ft_printf("\e[%iC", x);
+	else if (x < 0)
+		ft_printf("\e[%iD", x * -1);
+}
+
 void		curs_move_n_left(t_vshdata *data, size_t n)
 {
 	int		up;
@@ -69,12 +79,7 @@ void		curs_move_n_left(t_vshdata *data, size_t n)
 		curs_row_pos = data->curs->cur_ws_col - data->curs->coords.x;
 		up = (curs_row_pos + n) / data->curs->cur_ws_col;
 		x_offset = curs_row_pos - ((curs_row_pos + n) % data->curs->cur_ws_col);
-		if (up > 0)
-			ft_printf("\e[%iA", up);
-		if (x_offset > 0)
-			ft_printf("\e[%iC", x_offset);
-		else if (x_offset < 0)
-			ft_printf("\e[%iD", x_offset * -1);
+		move_curs(up, x_offset);
 		data->line->index -= n;
 		data->curs->coords.y -= up;
 		data->curs->cur_relative_y -= up;
@@ -82,9 +87,6 @@ void		curs_move_n_left(t_vshdata *data, size_t n)
 	}
 	else
 		curs_move_n_left_hasnewlines(data, n);
-	#ifdef DEBUG
-	ft_eprintf("New cursor coordinates: [%d:%d]\n", data->curs->coords.x, data->curs->coords.y);
-	#endif
 }
 
 void		curs_move_left(t_vshdata *data)

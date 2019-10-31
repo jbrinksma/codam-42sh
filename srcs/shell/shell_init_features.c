@@ -42,3 +42,13 @@ t_dataalias		*shell_init_vshdataalias(void)
 	alias->alias_file = ALIASFILENAME;
 	return (alias);
 }
+
+t_datajobs		*shell_init_vshdatajobs(void)
+{
+	t_datajobs	*jobs;
+
+	jobs = ft_memalloc(sizeof(t_datajobs));
+	if (jobs == NULL)
+		return (NULL);
+	return (jobs);
+}

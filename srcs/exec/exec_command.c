@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/04 10:16:26 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/18 12:56:34 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/31 09:54:44 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static size_t	count_args(t_ast *ast)
 
 	i = 0;
 	probe = ast;
-	while (probe != NULL)
+	while (probe != NULL && (probe->type == WORD || probe->type == ASSIGN))
 	{
 		i++;
 		probe = probe->left;
@@ -38,6 +38,8 @@ static char		**create_args(t_ast *ast)
 	args = (char**)ft_memalloc(sizeof(char*) * (total_args + 1));
 	if (args == NULL)
 		return (NULL);
+	if (total_args == 0)
+		*args = ft_strnew(0);
 	i = 0;
 	probe = ast;
 	while (i < total_args)
@@ -59,64 +61,54 @@ static char		**create_args(t_ast *ast)
 **	complete_command
 */
 
-static int		exec_redirs_or_assigns(t_ast *ast, t_vshdata *data,
+int				exec_assigns(t_ast *ast, t_vshdata *data,
 	int env_type)
 {
 	if (ast == NULL)
 		return (FUNCT_FAILURE);
-	if (tool_is_redirect_tk(ast->type) == true)
-	{
-		if (redir(ast) == FUNCT_ERROR)
-			return (FUNCT_ERROR);
-	}
-	else if (ast->type == ASSIGN)
+	if (ast->type == ASSIGN)
 	{
 		if (builtin_assign(ast->value, data, env_type)
 		== FUNCT_ERROR)
 			return (FUNCT_ERROR);
 	}
-	if (exec_redirs_or_assigns(ast->left, data, env_type) == FUNCT_ERROR)
+	if (exec_assigns(ast->left, data, env_type) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
 
-/*
-**	Exec_command gets executed in this order:
-**
-**	parameter expansion
-**	quote removal
-**	set input and output to proper pipes if applicable
-**	handle redirects and assignments
-**	(if command word):
-**		create arguments
-**		run command
-*/
-
-int				exec_command(t_ast *ast, t_vshdata *data, t_pipes pipes)
+int				exec_redirs(t_ast *redirs)
 {
-	char	**command;
+	if (redirs == NULL)
+		return (FUNCT_FAILURE);
+	if (tool_is_redirect_tk(redirs->type))
+	{
+		if (redir(redirs) == FUNCT_ERROR)
+			return (FUNCT_ERROR);
+	}
+	if (exec_redirs(redirs->left) == FUNCT_ERROR)
+		return (FUNCT_ERROR);
+	return (FUNCT_SUCCESS);
+}
+
+int				exec_command(t_ast *ast, t_vshdata *data)
+{
+	char	**argv;
 
 	if (expan_handle_variables(ast, data->envlst) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	if (ast->type == WORD && expan_pathname(ast) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	exec_quote_remove(ast);
-	if (redir_handle_pipe(pipes) == FUNCT_ERROR)
-		return (return_and_reset_fds(FUNCT_ERROR, data));
 	if (ast->type == WORD)
 	{
-		if (ast->right &&
-		exec_redirs_or_assigns(ast->right, data, ENV_TEMP) == FUNCT_ERROR)
-			return (return_and_reset_fds(FUNCT_ERROR, data));
-		command = create_args(ast);
-		if (command == NULL)
-			return (return_and_reset_fds(FUNCT_ERROR, data));
-		exec_cmd(command, data, pipes);
+		data->current_redir_and_assign = ast->right;
+		argv = create_args(ast);
+		if (argv == NULL)
+			return (FUNCT_ERROR);
+		exec_cmd(argv, data);
 	}
-	else if (ast->type == ASSIGN || tool_is_redirect_tk(ast->type) == true)
-	{
-		if (exec_redirs_or_assigns(ast, data, ENV_LOCAL) == FUNCT_ERROR)
-			return (return_and_reset_fds(FUNCT_ERROR, data));
-	}
-	return (return_and_reset_fds(FUNCT_SUCCESS, data));
+	else if (exec_assigns(ast, data, ENV_LOCAL) == FUNCT_ERROR)
+		return (FUNCT_ERROR);
+	return (FUNCT_SUCCESS);
 }

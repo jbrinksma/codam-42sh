@@ -6,17 +6,17 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/02 13:23:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/23 15:49:31 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/30 11:51:36 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <unistd.h>
 
-static int	return_heredoc_error(void)
+static void	shell_reset_line(char **line, char *line_tmp)
 {
-	ft_eprintf(E_N_ALLOC_STR, "heredoc");
-	return (FUNCT_ERROR);
+	ft_strdel(line);
+	*line = line_tmp;
 }
 
 int			shell_dless_read_till_stop(char **heredoc, char *heredoc_delim,
@@ -43,10 +43,9 @@ int			shell_dless_read_till_stop(char **heredoc, char *heredoc_delim,
 			*heredoc = ft_strjoinfree_s1(*heredoc, data->line->line);
 		ft_strdel(&data->line->line);
 		if (*heredoc == NULL)
-			return (return_heredoc_error());
+			return (err_ret_prog_exit(E_N_ALLOC_STR, "heredoc", EXIT_FAILURE));
 	}
-	ft_strdel(&data->line->line);
-	data->line->line = line_tmp;
+	shell_reset_line(&data->line->line, line_tmp);
 	return (ret);
 }
 
@@ -120,7 +119,7 @@ int			shell_dless_input(t_vshdata *data, t_tokenlst **token_lst)
 				return (FUNCT_ERROR);
 			heredoc_delim = ft_strjoin(probe->value, "\n");
 			if (heredoc_delim == NULL)
-				return (return_heredoc_error());
+				return (err_ret_exit(E_ALLOC_STR, EXIT_FAILURE));
 			ret = shell_dless_set_tk_val(probe, &heredoc, heredoc_delim, data);
 			if (ret == FUNCT_ERROR || ret == NEW_PROMPT)
 				return (ret);

@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/30 10:45:52 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/29 12:23:49 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/10/30 14:28:03 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,27 +61,25 @@ int			input_read_ansi(t_vshdata *data)
 	int		ret;
 
 	ft_bzero(termcapbuf, TERMCAPBUFFSIZE);
-	if (data->input->c == '\e')
+	if (data->input->c != '\e')
+		return (FUNCT_FAILURE);
+	if (data->input->searchhistory.active)
+		return (input_ctrlr_esc(data));
+	termcapbuf[0] = '\e';
+	if (read(STDIN_FILENO, &termcapbuf[1], TERMCAPBUFFSIZE - 1) == -1)
+		return (FUNCT_ERROR);
+	ret = input_parse_ansi_arrows(data, termcapbuf);
+	if (ret == FUNCT_FAILURE)
 	{
-		if (data->input->searchhistory.active)
-			return (input_ctrlr_esc(data));
-		termcapbuf[0] = '\e';
-		if (read(STDIN_FILENO, &termcapbuf[1], TERMCAPBUFFSIZE - 1) == -1)
-			return (FUNCT_ERROR);
-		ret = input_parse_ansi_arrows(data, termcapbuf);
-		if (ret == FUNCT_FAILURE)
-		{
-			if (ft_strequ(termcapbuf, TC_HOME) == true)
-				curs_go_home(data);
-			else if (ft_strequ(termcapbuf, TC_END) == true)
-				curs_go_end(data);
-			else if (ft_strequ(termcapbuf, TC_DELETE) == true)
-				input_handle_delete(data);
-			else
-				return (FUNCT_FAILURE);
-			return (FUNCT_SUCCESS);
-		}
-		return (ret);
+		if (ft_strequ(termcapbuf, TC_HOME) == true)
+			curs_go_home(data);
+		else if (ft_strequ(termcapbuf, TC_END) == true)
+			curs_go_end(data);
+		else if (ft_strequ(termcapbuf, TC_DELETE) == true)
+			input_handle_delete(data);
+		else
+			return (FUNCT_FAILURE);
+		return (FUNCT_SUCCESS);
 	}
-	return (FUNCT_FAILURE);
+	return (ret);
 }

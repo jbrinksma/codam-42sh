@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 19:58:40 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/22 14:00:02 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/30 11:39:18 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 */
 
 /*
-**	After parser_command, we can have a PIPE token 
+**	After parser_command, we can have a PIPE token
 **	In that case the PIPE token is added to the ast
 **	We then add a parser command to the left of this node
 **	in case of another PIPE we add the previous ast to the left
@@ -42,7 +42,7 @@ static bool	parser_pipe_sequence(t_tokenlst **token_lst, t_ast **ast)
 }
 
 /*
-**	After parser_pipe_sequence, we can have an AND_IF or OR_IF token 
+**	After parser_pipe_sequence, we can have an AND_IF or OR_IF token
 **	In that case the current token is added to the ast
 **	We then expect another pipe sequence or another and_or
 **	which is added to the right of the AND_IF or OR_IF node
@@ -67,7 +67,7 @@ static bool	parser_and_or(t_tokenlst **token_lst, t_ast **ast)
 }
 
 /*
-**	After parser_and_or is done, we expect an END, NEWLINE, SEMICOL or BG token 
+**	After parser_and_or is done, we expect an END, NEWLINE, SEMICOL or BG token
 **	In a case of a SEMICOL or BG token the token is added to the ast
 **	We then continue with another parser_list if there is no END or NEWLINE
 **	If the current token is an END or NEWLINE token we return

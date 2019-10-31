@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/11 20:16:38 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/27 17:17:09 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/30 11:46:48 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void	shell_display_regular_pompt(t_vshdata *data, int prompt_type)
 	ft_strdel(&cwd);
 }
 
-void	shell_display_prompt(t_vshdata *data, int prompt_type)
+void		shell_display_prompt(t_vshdata *data, int prompt_type)
 {
 	data->prompt->cur_prompt_type = prompt_type;
 	input_reset_cursor_pos();
