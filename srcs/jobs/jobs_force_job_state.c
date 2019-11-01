@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   jobs_wait.c                                        :+:    :+:            */
+/*   jobs_force_job_state.c                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/10/21 11:22:46 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/11/01 14:03:28 by omulder       ########   odam.nl         */
+/*   Created: 2019/10/31 16:03:38 by rkuijper       #+#    #+#                */
+/*   Updated: 2019/10/31 16:05:01 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-#include <errno.h>
-#include <sys/wait.h>
-#include <signal.h>
 
-int		jobs_wait_job(t_job *job, int wait_opt)
+void	jobs_force_job_state(t_job *job, t_proc_state state)
 {
-	pid_t	pid;
-	int		status;
+	t_proc *proc;
 
-	if (job == NULL)
-		return (0);
-	pid = waitpid(WAIT_ANY, &status, wait_opt);
-	while (jobs_mark_process_status(pid, status) == FUNCT_FAILURE &&
-		jobs_stopped_job(job) == FUNCT_FAILURE &&
-		jobs_completed_job(job) == FUNCT_FAILURE)
-		pid = waitpid(WAIT_ANY, &status, wait_opt);
-	return (status);
+	proc = job->processes;
+	while (proc != NULL)
+	{
+		proc->state = state;
+		proc = proc->next;
+	}
 }

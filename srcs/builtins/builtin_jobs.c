@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/17 14:03:16 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/31 11:51:27 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/01 10:48:23 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void			builtin_jobs(char **args, t_vshdata *data)
 	g_state->exit_code = EXIT_FAILURE;
 	if (read_options(args, &arg, &options) != FUNCT_SUCCESS)
 		return ;
-	jobs_handle_finished_jobs();
+	jobs_notify_pool();
 	if (args[arg] != NULL)
 	{
 		if (jobs_log_args(data->jobs, options, args + arg) == FUNCT_ERROR)

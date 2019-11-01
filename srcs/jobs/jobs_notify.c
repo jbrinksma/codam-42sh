@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/21 14:30:58 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/31 09:17:41 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/10/31 16:29:46 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void		jobs_handle_finished_jobs(void)
 	job = g_data->jobs->joblist;
 	while (job != NULL)
 	{
-		if (job->bg == true && jobs_completed_job(job))
+		if (jobs_completed_job(job))
 		{
 			jobs_print_job_info(job, JOB_OPT_L, g_data->jobs->joblist);
 			jobs_flush_job(jobs_remove_job(&g_data->jobs->joblist, job->pgid));
@@ -35,19 +35,6 @@ void		jobs_handle_finished_jobs(void)
 
 void		jobs_notify_pool(void)
 {
-	pid_t	pid;
-	int		status;
-
-	while (42)
-	{
-		pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
-		while (pid < 0)
-		{
-			if (errno != EINTR)
-				break ;
-			pid = waitpid(WAIT_ANY, &status, WUNTRACED | WNOHANG);
-		}
-		if (jobs_mark_pool(pid, status))
-			break ;
-	}
+	jobs_update_pool_status();
+	jobs_handle_finished_jobs();
 }

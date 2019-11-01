@@ -6,44 +6,11 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 16:44:50 by omulder        #+#    #+#                */
-/*   Updated: 2019/10/31 13:33:35 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/31 20:01:19 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-
-void		lexer_tokenlstiter(t_tokenlst *lst, void (*f)(t_tokenlst *elem))
-{
-	if (lst == NULL || f == NULL)
-		return ;
-	f(lst);
-	lexer_tokenlstiter(lst->next, f);
-}
-
-int			shell_close_quote_and_esc(t_vshdata *data)
-{
-	int		ret;
-	bool	ctrl_d;
-
-	ret = FUNCT_SUCCESS;
-	ctrl_d = false;
-	while (ret == FUNCT_SUCCESS)
-	{
-		ret = shell_close_unclosed_quotes(data);
-		if (ret == FUNCT_ERROR || ret == NEW_PROMPT)
-			return (ret);
-		else if (ret == IR_EOF)
-			ctrl_d = true;
-		ret = shell_handle_escaped_newlines(data);
-		if (ret == FUNCT_ERROR || ret == NEW_PROMPT)
-			return (ret);
-		else if (ret == IR_EOF)
-			ctrl_d = true;
-	}
-	if (ctrl_d == true)
-		return (IR_EOF);
-	return (FUNCT_SUCCESS);
-}
 
 void		shell_clear_input_data(char **line, t_ast **ast,
 				t_tokenlst **token_lst)
@@ -80,6 +47,19 @@ static int	pre_lexer_reading(t_vshdata *data)
 	return (ret);
 }
 
+static void	shell_start_new_prompt(t_vshdata **data, t_ast **ast,
+				t_tokenlst **token_lst)
+{
+	shell_clear_input_data(&(*data)->line->line, ast, token_lst);
+	shell_display_prompt(*data, REGULAR_PROMPT);
+}
+
+static void	shell_start_failed(void)
+{
+	g_state->exit_code = EXIT_FATAL;
+	ft_eprintf(E_FAIL_DUP_FD);
+}
+
 void		shell_start(t_vshdata *data)
 {
 	t_tokenlst	*token_lst;
@@ -87,12 +67,11 @@ void		shell_start(t_vshdata *data)
 
 	token_lst = NULL;
 	ast = NULL;
-	backup_stdfds();
+	if (backup_stdfds() == FUNCT_ERROR)
+		return (shell_start_failed());
 	while (true)
 	{
-		jobs_handle_finished_jobs();
-		shell_clear_input_data(&data->line->line, &ast, &token_lst);
-		shell_display_prompt(data, REGULAR_PROMPT);
+		shell_start_new_prompt(&data, &ast, &token_lst);
 		if (pre_lexer_reading(data) != FUNCT_SUCCESS)
 			continue ;
 		if (history_expansion(data) != FUNCT_SUCCESS ||
@@ -106,5 +85,6 @@ void		shell_start(t_vshdata *data)
 			|| parser_start(&token_lst, &ast) != FUNCT_SUCCESS)
 			continue ;
 		exec_complete_command(ast, data);
+		jobs_notify_pool();
 	}
 }

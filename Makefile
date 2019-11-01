@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/10/31 13:41:16 by omulder       ########   odam.nl          #
+#    Updated: 2019/11/01 13:59:55 by omulder       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ shell_init_files shell_init_vshdata shell_getcurrentdir \
 shell_handle_escaped_newlines shell_init_input shell_init_features \
 shell_args shell_get_path shell_init_line shell_one_line shell_stdin \
 shell_line_splitter shell_lines_exec shell_split_line \
+shell_close_quote_and_esc \
 input_read input_parse_char input_parse_home \
 input_parse_end input_parse_prev input_parse_next input_parse_backspace \
 input_parse_delete input_parse_ctrl_c input_parse_ctrl_d input_parse_ctrl_k \
@@ -42,7 +43,8 @@ term_prepare term_is_valid term_init_struct term_get_attributes \
 term_set_attributes term_reset_attributes term_free_struct \
 term_disable_isig term_enable_isig \
 env_getvalue env_getlst env_lsttoarr env_lstnew env_lstaddback env_lstdel \
-env_remove_tmp env_sort env_lstadd_to_sortlst env_addvalue \
+env_remove_tmp env_sort env_lstadd_to_sortlst env_addvalue exec_redirs \
+exec_assigns \
 tools_is_char_escaped tool_is_redirect_tk tools_is_valid_identifier \
 tools_is_builtin tool_is_special tool_check_for_special tools_is_fdnumstr \
 tools_isidentifierchar tool_check_for_whitespace tool_get_paths \
@@ -56,6 +58,7 @@ builtin_cd_pathparsing_tools builtin_cd_changedir \
 builtin_type builtin_hash builtin_jobs builtin_fg builtin_bg \
 lexer lexer_utils lexer_scanner \
 lexer_state_if_else lexer_state_single lexer_state_start lexer_state_strings \
+lexer_tokenlstiter \
 parser_start parser_utils parser_command parser_error \
 parser_astdel \
 alias_expansion alias_replace alias_read_file alias_add_expanded \
@@ -78,10 +81,10 @@ auto_lst_print_helpers auto_check_dups \
 jobs_list_handling jobs_job_utils jobs_find jobs_cont jobs_bg \
 jobs_fg jobs_info jobs_mark jobs_processes jobs_status jobs_wait \
 jobs_notify jobs_command jobs_launch jobs_launch_proc jobs_exec_builtin \
-jobs_finished_job jobs_flush_job \
+jobs_finished_job jobs_flush_job jobs_force_job_state \
 builtin_fc builtin_fc_options builtin_fc_init builtin_fc_list \
 builtin_fc_print_helpers builint_fc_find_index builtin_fc_substitute \
-signal_handle_child_death signal_reset \
+signal_reset \
 builtin_fc_edit \
 glob_expand_word glob_lexer glob_matchlst_funcs glob_lexer_helpers \
 glob_lexer_states glob_matcher glob_helpers glob_dir_match_loop glob_ast_add \
