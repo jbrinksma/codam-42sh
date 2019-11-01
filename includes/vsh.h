@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/31 13:25:05 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/31 17:16:49 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -659,7 +659,7 @@ typedef struct	s_vshdatajobs
 typedef struct	s_vshdata
 {
 	t_envlst		*envlst;
-	int				stdfds[3];
+	int				term_fd;
 	t_vshdataterm	*term;
 	t_datacurs		*curs;
 	t_datahistory	*history;
@@ -1283,4 +1283,6 @@ void			glob_print_matches(t_globmatchlst *lst);
 void			glob_print_matchlist(t_globmatchlst *lst);
 
 int				backup_stdfds(void);
+int				reset_stdfds(void);
+
 #endif

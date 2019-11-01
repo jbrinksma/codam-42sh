@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/30 16:42:54 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/31 16:11:54 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/31 17:17:09 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ int			jobs_exec_is_single_builtin_proc(t_proc *proc)
 	return (proc != NULL && proc->is_builtin == true && proc->next == NULL);
 }
 
-static int	cleanup_non_forked_redirs(void)
+int			reset_stdfds(void)
 {
-	if (dup2(g_data->stdfds[0], STDIN_FILENO) == -1)
+	if (dup2(g_data->term_fd, STDIN_FILENO) == -1)
 		return (FUNCT_ERROR);
-	if (dup2(g_data->stdfds[1], STDOUT_FILENO) == -1)
+	if (dup2(g_data->term_fd, STDOUT_FILENO) == -1)
 		return (FUNCT_ERROR);
-	if (dup2(g_data->stdfds[2], STDERR_FILENO) == -1)
+	if (dup2(g_data->term_fd, STDERR_FILENO) == -1)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
@@ -74,6 +74,6 @@ void		jobs_exec_builtin(t_proc *proc)
 		builtin_cd(proc->argv, g_data);
 	else
 		jobs_exec_builtin_continued(proc);
-	if (cleanup_non_forked_redirs() == FUNCT_ERROR)
+	if (reset_stdfds() == FUNCT_ERROR)
 		err_void_exit(E_FD_RESET_STD, EXIT_FAILURE);
 }

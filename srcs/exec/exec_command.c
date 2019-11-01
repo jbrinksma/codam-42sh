@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/04 10:16:26 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/31 09:54:44 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/10/31 21:16:07 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,24 @@ static size_t	count_args(t_ast *ast)
 	return (i);
 }
 
+static char		**malloc_args(int total_args)
+{
+	char	**args;
+
+	if (total_args > 0)
+		args = (char**)ft_memalloc(sizeof(char*) * (total_args + 1));
+	else
+	{
+		args = (char**)ft_memalloc(sizeof(char*) * 2);
+		if (args == NULL)
+			return (NULL);
+		*args = ft_strnew(0);
+		if (*args == NULL)
+			ft_strarrdel(&args);
+	}
+	return (args);
+}
+
 static char		**create_args(t_ast *ast)
 {
 	char	**args;
@@ -35,11 +53,9 @@ static char		**create_args(t_ast *ast)
 	size_t	i;
 
 	total_args = count_args(ast);
-	args = (char**)ft_memalloc(sizeof(char*) * (total_args + 1));
+	args = malloc_args(total_args);
 	if (args == NULL)
 		return (NULL);
-	if (total_args == 0)
-		*args = ft_strnew(0);
 	i = 0;
 	probe = ast;
 	while (i < total_args)
@@ -56,39 +72,20 @@ static char		**create_args(t_ast *ast)
 	return (args);
 }
 
-/*
-**	This is used to handle all the redirects and/or assignments in a
-**	complete_command
-*/
-
-int				exec_assigns(t_ast *ast, t_vshdata *data,
-	int env_type)
+static bool		exec_command_contains_only_assign(t_ast *ast)
 {
-	if (ast == NULL)
-		return (FUNCT_FAILURE);
-	if (ast->type == ASSIGN)
-	{
-		if (builtin_assign(ast->value, data, env_type)
-		== FUNCT_ERROR)
-			return (FUNCT_ERROR);
-	}
-	if (exec_assigns(ast->left, data, env_type) == FUNCT_ERROR)
-		return (FUNCT_ERROR);
-	return (FUNCT_SUCCESS);
-}
+	t_ast	*probe;
 
-int				exec_redirs(t_ast *redirs)
-{
-	if (redirs == NULL)
-		return (FUNCT_FAILURE);
-	if (tool_is_redirect_tk(redirs->type))
+	if (ast->type == WORD)
+		return (false);
+	probe = ast;
+	while (probe != NULL)
 	{
-		if (redir(redirs) == FUNCT_ERROR)
-			return (FUNCT_ERROR);
+		if (tool_is_redirect_tk(probe->type) == true)
+			return (false);
+		probe = probe->left;
 	}
-	if (exec_redirs(redirs->left) == FUNCT_ERROR)
-		return (FUNCT_ERROR);
-	return (FUNCT_SUCCESS);
+	return (true);
 }
 
 int				exec_command(t_ast *ast, t_vshdata *data)
@@ -100,15 +97,18 @@ int				exec_command(t_ast *ast, t_vshdata *data)
 	if (ast->type == WORD && expan_pathname(ast) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	exec_quote_remove(ast);
-	if (ast->type == WORD)
+	if (exec_command_contains_only_assign(ast) == false)
 	{
-		data->current_redir_and_assign = ast->right;
+		if (ast->type == WORD)
+			data->current_redir_and_assign = ast->right;
+		else
+			data->current_redir_and_assign = ast;
 		argv = create_args(ast);
 		if (argv == NULL)
 			return (FUNCT_ERROR);
 		exec_cmd(argv, data);
 	}
-	else if (exec_assigns(ast, data, ENV_LOCAL) == FUNCT_ERROR)
+	if (ast->type != WORD && exec_assigns(ast, data, ENV_LOCAL) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
 	return (FUNCT_SUCCESS);
 }
