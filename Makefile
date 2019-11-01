@@ -84,10 +84,10 @@ auto_lst_print_helpers auto_check_dups \
 jobs_list_handling jobs_job_utils jobs_find jobs_cont jobs_bg \
 jobs_fg jobs_info jobs_mark jobs_processes jobs_status jobs_wait \
 jobs_notify jobs_command jobs_launch jobs_launch_proc jobs_exec_builtin \
-jobs_finished_job jobs_flush_job \
+jobs_finished_job jobs_flush_job jobs_force_job_state \
 builtin_fc builtin_fc_options builtin_fc_init builtin_fc_list \
 builtin_fc_print_helpers builint_fc_find_index builtin_fc_substitute \
-signal_handle_child_death signal_reset \
+signal_reset \
 builtin_fc_edit \
 glob_expand_word glob_lexer glob_matchlst_funcs glob_lexer_helpers \
 glob_lexer_states glob_matcher glob_helpers glob_dir_match_loop glob_ast_add \

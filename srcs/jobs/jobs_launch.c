@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/28 16:25:10 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/31 11:06:00 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/01 12:05:28 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,13 +100,17 @@ void		jobs_launch_job(t_job *job)
 	{
 		jobs_exec_builtin(job->processes);
 		env_remove_tmp(g_data->envlst);
-		jobs_finished_job(job, true);
+		jobs_finished_job(job);
 		return ;
 	}
 	if (launch_forked_job(job, fds, pipes) == FUNCT_FAILURE)
 		return ;
+	jobs_add_job(g_data, job);
 	if (job->bg == true)
 		jobs_bg_job(job, false);
 	else
 		g_state->exit_code = jobs_fg_job(job, false);
+	if (WIFSIGNALED(g_state->exit_code) &&
+		WTERMSIG(g_state->exit_code) && job != NULL)
+		g_state->exit_code = job->last_proc->exit_status;
 }

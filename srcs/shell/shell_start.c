@@ -50,7 +50,6 @@ static int	pre_lexer_reading(t_vshdata *data)
 static void	shell_start_new_prompt(t_vshdata **data, t_ast **ast,
 				t_tokenlst **token_lst)
 {
-	jobs_handle_finished_jobs();
 	shell_clear_input_data(&(*data)->line->line, ast, token_lst);
 	shell_display_prompt(*data, REGULAR_PROMPT);
 }
@@ -86,5 +85,6 @@ void		shell_start(t_vshdata *data)
 			|| parser_start(&token_lst, &ast) != FUNCT_SUCCESS)
 			continue ;
 		exec_complete_command(ast, data);
+		jobs_notify_pool();
 	}
 }
