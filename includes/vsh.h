@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/01 14:01:15 by omulder       ########   odam.nl         */
+/*   Updated: 2019/11/01 14:05:59 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -836,7 +836,7 @@ int				jobs_exec_is_single_builtin_proc(t_proc *proc);
 void			jobs_finished_job(t_job *job);
 
 void			jobs_force_job_state(t_job *job, t_proc_state state);
-
+int				jobs_mark_process_status(pid_t pid, int status);
 void			jobs_update_pool_status(void);
 
 /*
