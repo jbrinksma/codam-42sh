@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/14 01:05:00 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/22 11:33:21 by omulder       ########   odam.nl         */
+/*   Updated: 2019/10/31 16:11:53 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,12 @@ static int	expan_questionmark(char **value, int *i)
 		return (return_error(FUNCT_ERROR, E_ALLOC));
 	if (repl_regular_var(value, exit_str, i_dollar, *i - i_dollar)
 		== FUNCT_ERROR)
+	{
+		ft_strdel(&exit_str);
 		return (FUNCT_ERROR);
+	}
 	*i = i_dollar + ft_strlen(exit_str);
+	ft_strdel(&exit_str);
 	return (FUNCT_SUCCESS);
 }
 
