@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/30 16:42:54 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/31 13:27:13 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/10/31 16:11:54 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void		jobs_exec_builtin(t_proc *proc)
 	if (exec_create_files(proc->redir_and_assign) == FUNCT_ERROR ||
 		exec_assigns(proc->redir_and_assign, g_data, ENV_TEMP) == FUNCT_ERROR)
 		return ;
-	if (redir(proc->redir_and_assign) == FUNCT_ERROR)
+	if (exec_redirs(proc->redir_and_assign) == FUNCT_ERROR)
 	{
 		g_state->exit_code = EXIT_FAILURE;
 		return ;
