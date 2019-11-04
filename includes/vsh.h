@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/04 13:22:16 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/04 13:36:46 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@
 # define E_N_P_NUM_REQ		SHELL ": %s: %s: numeric argument required\n"
 # define E_N_TOO_MANY		SHELL ": %s: too many arguments\n"
 # define E_N_P_NOT_VAL_ID	SHELL ": %s: '%s': not a valid identifier\n"
+# define E_N_FAIL_HOME		SHELL ": %s: failed to get home directory\n"
+# define E_FAIL_HOME		SHELL ": failed to get home directory\n"
 # define E_NOT_CUR_DIR		SHELL ": cannot get current working directory\n"
 # define E_NOT_RESET		SHELL ": could not reset terminal settings\n"
 # define E_STAT_STR			SHELL ": could not get stat info of file\n"
@@ -730,6 +732,7 @@ void			env_remove_tmp(t_envlst *env);
 void			env_sort(t_envlst *head);
 void			env_lstadd_to_sortlst(t_envlst *envlst, t_envlst *new);
 int				env_add_extern_value(t_vshdata *data, char *name, char *value);
+int				env_init_envlst(t_vshdata *vshdata);
 
 /*
 **----------------------------------terminal------------------------------------
