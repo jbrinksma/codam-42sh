@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/11 12:28:38 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/05 15:18:11 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/04 10:32:49 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ static int	auto_tilde_expan(char **path)
 {
 	char *home;
 
-	home = getenv("HOME");
+	home = env_getvalue("HOME", g_data->envlst);
 	if (home == NULL)
-		return (err_ret(E_N_FAIL_HOME));
+		return (err_ret("\n" E_HOME_NOTSET_STR));
 	home = ft_strjoin(home, *path + 1);
 	if (home == NULL)
-		return (err_ret(E_ALLOC_STR));
+		return (err_ret("\n" E_ALLOC_STR));
 	ft_strdel(path);
 	*path = home;
 	return (FUNCT_SUCCESS);
