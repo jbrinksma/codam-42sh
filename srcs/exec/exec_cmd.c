@@ -19,12 +19,13 @@ int			backup_stdfds(void)
 	int				fd_num;
 	int				fd_max;
 	struct rlimit	rlp;
+	struct stat		tmp;
 
 	fd_num = 10;
 	if (getrlimit(RLIMIT_NOFILE, &rlp) == -1 || rlp.rlim_cur < 10)
 		return (FUNCT_ERROR);
 	fd_max = rlp.rlim_cur;
-	while (fstat(fd_num, NULL) == -1 && errno != EBADF && fd_num <= fd_max)
+	while (fstat(fd_num, &tmp) == -1 && errno != EBADF && fd_num <= fd_max)
 		fd_num++;
 	g_data->term_fd = fd_num;
 	if (dup2(STDIN_FILENO, g_data->term_fd) == -1)
