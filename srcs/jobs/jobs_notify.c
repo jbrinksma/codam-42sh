@@ -6,27 +6,28 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/21 14:30:58 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/31 16:29:46 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/04 12:54:04 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-#include <errno.h>
 #include <sys/wait.h>
 #include <signal.h>
 
 void		jobs_handle_finished_jobs(void)
 {
 	t_job	*job;
+	t_job	*tmp;
 
 	job = g_data->jobs->joblist;
 	while (job != NULL)
 	{
 		if (jobs_completed_job(job))
 		{
+			tmp = job->next;
 			jobs_print_job_info(job, JOB_OPT_L, g_data->jobs->joblist);
 			jobs_flush_job(jobs_remove_job(&g_data->jobs->joblist, job->pgid));
-			job = g_data->jobs->joblist;
+			job = tmp;
 		}
 		else
 			job = job->next;

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/10/30 17:48:22 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/11/04 16:14:08 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int				exec_complete_command(t_ast *ast, t_vshdata *data)
 	data->jobs->active_job = NULL;
 	if (ast == NULL || exec_list(ast, data) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
-	if (data->jobs->active_job != NULL)
-		jobs_launch_job(data->jobs->active_job);
+	jobs_launch_job(data->jobs->active_job);
 	return (FUNCT_SUCCESS);
 }

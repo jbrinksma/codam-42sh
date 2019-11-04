@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 14:27:21 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/31 13:41:35 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/04 12:43:14 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,11 @@ static int	read_options(char **av)
 
 static void	fg(t_job *job)
 {
-	t_proc *proc;
-
 	if (jobs_stopped_job(job))
 		jobs_continue_job(job, true);
 	else
 	{
-		proc = job->processes;
-		while (proc != NULL)
-		{
-			proc->state = PROC_RUNNING;
-			proc = proc->next;
-		}
+		jobs_force_job_state(job, PROC_RUNNING);
 		jobs_print_job_info(job, JOB_OPT_L, g_data->jobs->joblist);
 		jobs_fg_job(job, 0);
 	}

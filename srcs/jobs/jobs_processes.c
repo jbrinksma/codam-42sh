@@ -6,11 +6,26 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/21 11:41:03 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/30 15:33:14 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/04 12:34:01 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
+
+int			jobs_exit_status(t_job *job)
+{
+	t_proc	*proc;
+	int		status;
+
+	status = 0;
+	proc = job->processes;
+	while (proc != NULL)
+	{
+		status = proc->exit_status;
+		proc = proc->next;
+	}
+	return (status);
+}
 
 t_proc		*jobs_new_proc(void)
 {

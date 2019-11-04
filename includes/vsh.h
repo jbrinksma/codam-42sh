@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/04 10:20:40 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/04 13:22:16 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -798,15 +798,14 @@ int				input_parse_char_og(t_vshdata *data);
 **----------------------------------jobs----------------------------------------
 */
 
-int				jobs_get_job_state(t_job *job);
 t_job			*jobs_remove_job(t_job **joblist, pid_t pid);
-void			print_job_info(t_job *job, int options, t_job *joblist);
 t_job			*jobs_add_job(t_vshdata *data, t_job *job);
 t_job			*jobs_new_job(void);
 t_job			*jobs_last_child(t_job *job);
 void			jobs_flush_job(t_job *job);
 
 void			jobs_continue_job(t_job *job, bool fg);
+int				jobs_wait_job(t_job *job, int wait_opt);
 void			jobs_bg_job(t_job *job, bool job_continued);
 int				jobs_fg_job(t_job *job, bool job_continued);
 
@@ -820,12 +819,14 @@ t_job			*jobs_find_contains_str(char *str, t_job *joblist);
 t_job			*jobs_find_startswith_str(char *str, t_job *joblist);
 
 int				jobs_add_process(t_job *job);
+int				jobs_exit_status(t_job *job);
 
-int				jobs_wait_job(t_job *job, int wait_opt);
 int				jobs_stopped_job(t_job *job);
 int				jobs_completed_job(t_job *job);
+void			jobs_finished_job(t_job *job, bool flush);
 
 void			jobs_notify_pool(void);
+void			jobs_update_pool_status(void);
 void			jobs_handle_finished_jobs(void);
 
 int				jobs_update_job_command(t_job *job, char **av);
@@ -837,11 +838,8 @@ void			jobs_launch_proc(t_job *job, t_proc *proc,
 	int fds[3], int pipes[2]);
 void			jobs_exec_builtin(t_proc *proc);
 int				jobs_exec_is_single_builtin_proc(t_proc *proc);
-void			jobs_finished_job(t_job *job);
 
 void			jobs_force_job_state(t_job *job, t_proc_state state);
-
-void			jobs_update_pool_status(void);
 
 /*
 **----------------------------------shell---------------------------------------
