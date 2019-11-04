@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/02 14:55:09 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/02 15:19:37 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1050,6 +1050,7 @@ int				tools_get_pid_state(pid_t pid);
 bool			tools_contains_quoted_chars(char *str);
 bool			tools_is_cmd_seperator(t_tokens type);
 bool			tools_is_valid_name(char *str);
+bool			tools_is_valid_name_char(char c);
 
 /*
 **----------------------------------execution-----------------------------------
