@@ -982,6 +982,7 @@ Test(tilde_expansion, basic_test)
 
 	
 	INIT_VSHDATA
+	g_data = data;
 	g_state->exit_code = 0;
 	data->alias->aliaslst = NULL;
 	data->envlst = env_getlst();
