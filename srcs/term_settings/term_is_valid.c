@@ -25,11 +25,9 @@ int		term_is_valid(t_envlst *envlst)
 
 	term_type = env_getvalue("TERM", envlst);
 	if (term_type == NULL)
-	{
-		ft_eprintf(E_TERM_NOT_SET);
-		return (FUNCT_FAILURE);
-	}
-	ret = tgetent(NULL, term_type);
+		ret = tgetent(NULL, "dumb");
+	else
+		ret = tgetent(NULL, term_type);
 	if (ret == -1)
 		ft_eprintf(E_TERM_DB_NOT_F);
 	if (ret == 0)

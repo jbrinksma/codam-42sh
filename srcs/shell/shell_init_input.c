@@ -75,17 +75,6 @@ t_datatermcaps	*shell_init_vshdatatermcaps(void)
 	if (termcaps == NULL)
 		return (NULL);
 	termcaps->tc_clear_lines_str = tgetstr("cd", NULL);
-	if (termcaps->tc_clear_lines_str == NULL)
-	{
-		ft_memdel((void**)&termcaps);
-		return (NULL);
-	}
 	termcaps->tc_scroll_down_str = tgetstr("sf", NULL);
-	if (termcaps->tc_scroll_down_str == NULL)
-	{
-		ft_strdel(&termcaps->tc_clear_lines_str);
-		ft_memdel((void**)&termcaps);
-		return (NULL);
-	}
 	return (termcaps);
 }
