@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/06 16:16:21 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/30 17:49:15 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/11/05 15:30:46 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,10 @@ static int	check_if_valid_file(char *file)
 {
 	int		fd;
 
-	fd = open(file, O_RDONLY | O_CREAT, REG_PERM);
+	fd = open(file, O_RDONLY | O_CREAT | O_NONBLOCK, REG_PERM);
 	if (fd == -1)
 	{
-		if (fd == -1)
-			ft_eprintf(E_FAIL_OPEN_P, file);
+		ft_eprintf(E_FAIL_OPEN_P, file);
 		g_state->exit_code = EXIT_FAILURE;
 		return (FUNCT_ERROR);
 	}
