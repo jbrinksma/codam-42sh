@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/12 20:20:16 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/11/02 16:09:59 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/05 15:44:50 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,7 @@ int			auto_find_filelst(char **match, t_list **matchlst)
 	i = match_len - 1;
 	while (i >= 0)
 	{
-		if (tools_is_valid_name_char((*match)[i]) == false || (*match)[i]
-			== '/')
+		if (tools_is_valid_name_char((*match)[i]) == false)
 			break ;
 		i--;
 	}

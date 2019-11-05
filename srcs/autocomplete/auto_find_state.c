@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/12 17:12:17 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/11/02 16:12:31 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/05 15:45:03 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ int			auto_find_state(char *line, ssize_t i)
 	i--;
 	while (i >= 0)
 	{
-		if (tools_is_valid_name_char(line[i]) == false || line[i] == '$' ||
-			line[i] == '/')
+		if (tools_is_valid_name_char(line[i]) == false || line[i] == '$')
 			break ;
 		i--;
 	}
