@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/29 11:20:31 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/11/06 10:51:56 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/06 17:07:09 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ static void	execute_proc(t_proc *proc)
 	if (proc->is_builtin == false)
 	{
 		execve(proc->binary, proc->argv, proc->env);
+		if (g_state->exit_code != 0)
+			exit(g_state->exit_code);
 		exit(1);
 	}
 	jobs_exec_fork_builtin(proc, true);
