@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/29 11:20:31 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/11/06 17:07:09 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/11/06 17:46:30 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,14 @@ static int	handle_filedescriptors(int fds[3], int pipes[2])
 static void	execute_proc(t_proc *proc)
 {
 	if (proc->no_cmd == true)
-		exit(0);
+		exit(EXIT_SUCCESS);
 	if (proc->is_builtin == false)
 	{
-		execve(proc->binary, proc->argv, proc->env);
-		if (g_state->exit_code != 0)
+		if (proc->binary != NULL)
+			execve(proc->binary, proc->argv, proc->env);
+		if (g_state->exit_code != EXIT_SUCCESS)
 			exit(g_state->exit_code);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	jobs_exec_fork_builtin(proc, true);
 }
