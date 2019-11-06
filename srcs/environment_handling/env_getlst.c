@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/04 08:06:54 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/04 13:46:32 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 11:42:54 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_envlst	*env_getlst(void)
 	return (envlst);
 }
 
-int		env_init_envlst(t_vshdata *vshdata)
+int			env_init_envlst(t_vshdata *vshdata)
 {
 	vshdata->envlst = env_getlst();
 	if (vshdata->envlst == NULL)

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/04 13:36:46 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/05 13:32:10 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@
 # define E_FAIL_OPEN		SHELL ": failed to open file\n"
 # define E_ISDIR			SHELL ": %s: is a directory\n"
 # define E_FAIL_EXEC_P		SHELL ": failed to execute %s\n"
-# define E_NO_PIPE			SHELL ": unable to create pipe"
+# define E_NO_PIPE			SHELL ": unable to create pipe\n"
 # define E_P_BAD_REDIR		SHELL ": %s: bad redirect\n"
 # define E_N_P_INV_OPT		SHELL ": %s: -%c: invalid option\n"
 # define E_ALLOC_STR		SHELL ": failed to allocate enough memory\n"
@@ -348,8 +348,6 @@ typedef struct	s_fcdata
 # define HIST_SEPARATE	-1
 # define HIST_EXPANDED	(1 << 2)
 
-
-
 /*
 **===============================personal headers===============================
 */
@@ -543,6 +541,7 @@ typedef struct	s_proc
 	bool			is_builtin;
 	bool			no_cmd;
 	t_ast			*redir_and_assign;
+	t_ast			*node;
 }				t_proc;
 
 typedef struct	s_job
@@ -672,7 +671,7 @@ typedef struct	s_vshdata
 	t_dataalias		*alias;
 	t_datatermcaps	*termcaps;
 	t_datajobs		*jobs;
-	t_ast			*current_redir_and_assign;
+	t_ast			*cur_node;
 	int				fc_flags;
 	int				exec_flags;
 }				t_vshdata;
@@ -838,11 +837,15 @@ int				jobs_mark_process_status(pid_t pid, int status);
 void			jobs_flush_process(t_proc *proc);
 void			jobs_launch_job(t_job *job);
 void			jobs_launch_proc(t_job *job, t_proc *proc,
-	int fds[3], int pipes[2]);
+					int fds[3], int pipes[2]);
 void			jobs_exec_builtin(t_proc *proc);
 int				jobs_exec_is_single_builtin_proc(t_proc *proc);
 
 void			jobs_force_job_state(t_job *job, t_proc_state state);
+void			jobs_launch_cleanup_after_proc(t_proc *proc, int fds[3],
+					int pipes[2]);
+void			jobs_launch_setup_stds(t_proc *proc, int fds[3], int pipes[2]);
+int				jobs_launch_forked_job(t_job *job, int fds[3], int pipes[2]);
 
 /*
 **----------------------------------shell---------------------------------------
@@ -1061,9 +1064,9 @@ int				exec_list(t_ast *ast, t_vshdata *data);
 int				exec_and_or(t_ast *ast, t_vshdata *data);
 int				exec_pipe_sequence(t_ast *ast, t_vshdata *data);
 int				exec_command(t_ast *ast, t_vshdata *g_data);
-void			exec_cmd(char **args, t_vshdata *data);
-bool			exec_builtin(char **args, t_vshdata *data);
-void			exec_external(char **args, t_vshdata *data);
+void			exec_cmd(t_vshdata *data);
+bool			exec_builtin(char **args, t_proc *proc);
+void			exec_external(char **args, t_vshdata *data, t_proc *proc);
 int				exec_find_binary(char *filename, t_vshdata *data,
 				char **binary);
 int				find_binary(char *filename, t_envlst *envlst, char **binary);
@@ -1073,6 +1076,8 @@ int				exec_create_files(t_ast *ast);
 void			exec_add_pid_to_pipeseqlist(t_vshdata *data, pid_t pid);
 int				exec_redirs(t_ast *redirs);
 int				exec_assigns(t_ast *ast, t_vshdata *data, int env_type);
+char			**exec_create_process_args(t_ast *ast);
+bool			exec_command_contains_only_assign(t_ast *ast);
 
 /*
 **-----------------------------------signals------------------------------------

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/11/04 16:12:48 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/04 17:01:37 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,15 @@
 **	Set termios structure back to our special values.
 */
 
-static void		exec_bin(t_job *job, char **binary, t_vshdata *data)
+static void		exec_bin(char **binary, t_proc *proc)
 {
-	if (job->last_proc->no_cmd == false
+	if (proc->no_cmd == false
 		&& exec_validate_binary(*binary) == FUNCT_ERROR)
 	{
 		ft_strdel(binary);
 		return ;
 	}
-	job->last_proc->binary = *binary;
-	job->last_proc->redir_and_assign = data->current_redir_and_assign;
+	proc->binary = *binary;
 }
 
 /*
@@ -43,9 +42,8 @@ static void		exec_bin(t_job *job, char **binary, t_vshdata *data)
 **	Then: call `exec_bin`.
 */
 
-void			exec_external(char **args, t_vshdata *data)
+void			exec_external(char **args, t_vshdata *data, t_proc *proc)
 {
-	t_job	*job;
 	char	*binary;
 
 	binary = ft_strdup(args[0]);
@@ -55,17 +53,16 @@ void			exec_external(char **args, t_vshdata *data)
 		g_state->exit_code = EXIT_FAILURE;
 		return ;
 	}
-	job = jobs_last_child(data->jobs->active_job);
-	if (job->last_proc != NULL && job->last_proc->no_cmd == true)
-		exec_bin(job, &binary, data);
+	if (proc->no_cmd == true)
+		exec_bin(&binary, proc);
 	else if (ft_strchr(args[0], '/') == NULL)
 	{
 		ft_strdel(&binary);
 		if (exec_find_binary(args[0], data, &binary) == FUNCT_SUCCESS)
-			exec_bin(job, &binary, data);
+			exec_bin(&binary, proc);
 		else
 			ft_strdel(&binary);
 	}
 	else
-		exec_bin(job, &binary, data);
+		exec_bin(&binary, proc);
 }

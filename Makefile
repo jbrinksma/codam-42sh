@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/11/02 14:55:31 by mavan-he      ########   odam.nl          #
+#    Updated: 2019/11/05 13:00:40 by jbrinksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,7 +71,7 @@ history_change_line history_index_change history_expansion history_get_line \
 history_match_line history_insert_into_line history_helpers history_ctrl_r \
 exec_builtin exec_cmd exec_external exec_start exec_find_binary \
 exec_quote_remove expan_handle_variables expan_handle_dollar \
-exec_create_files exec_command \
+exec_create_files exec_command exec_create_process_args \
 expan_handle_bracketed_var expan_tilde_expansion exec_validate_binary \
 expan_pathname \
 redir redir_tools \
@@ -83,8 +83,9 @@ auto_handle_matchlst auto_small_lst auto_big_lst auto_lst_print \
 auto_lst_print_helpers auto_check_dups \
 jobs_list_handling jobs_job_utils jobs_find jobs_cont jobs_bg \
 jobs_fg jobs_info jobs_mark jobs_processes jobs_status jobs_wait \
-jobs_notify jobs_command jobs_launch jobs_launch_proc jobs_exec_builtin \
-jobs_finished_job jobs_flush_job jobs_force_job_state \
+jobs_notify jobs_command jobs_launch_forked_job jobs_launch_proc \
+jobs_exec_builtin jobs_launch_job \
+jobs_finished_job jobs_flush_job jobs_force_job_state jobs_launch_tools \
 builtin_fc builtin_fc_options builtin_fc_init builtin_fc_list \
 builtin_fc_print_helpers builint_fc_find_index builtin_fc_substitute \
 signal_reset \
