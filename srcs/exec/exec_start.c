@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:52:22 by omulder        #+#    #+#                */
-/*   Updated: 2019/11/04 16:58:13 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/11/07 15:03:37 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int				exec_and_or(t_ast *ast, t_vshdata *data)
 			jobs_last_child(data->jobs->active_job)->child = jobs_new_job();
 		else
 			data->jobs->active_job = jobs_new_job();
+		if (jobs_last_child(data->jobs->active_job) == NULL)
+			return (FUNCT_ERROR);
 		return (exec_pipe_sequence(ast, data));
 	}
 	if (data->exec_flags & EXEC_BG)
@@ -55,6 +57,7 @@ int				exec_and_or(t_ast *ast, t_vshdata *data)
 
 int				exec_list(t_ast *ast, t_vshdata *data)
 {
+	data->exec_flags &= ~EXEC_BG;
 	if (ast->type != BG && ast->type != SEMICOL)
 		return (exec_and_or(ast, data));
 	if (ast->type == BG)

@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/31 10:47:19 by tde-jong       #+#    #+#                */
-/*   Updated: 2019/11/04 16:52:41 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/11/07 15:02:15 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ t_job			*jobs_new_job(void)
 	t_job *new;
 
 	new = (t_job*)ft_memalloc(sizeof(t_job));
+	if (new == NULL)
+		return (NULL);
 	new->bg = false;
 	new->command = ft_strnew(1);
 	return (new);
