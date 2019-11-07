@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/18 12:06:36 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/11/01 11:16:14 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/07 14:11:35 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@ static void	copy_first_expan_to_ast(t_ast *ast, t_ast **expanded)
 
 	ast->flags = 0;
 	ft_strdel(&ast->value);
+	if (ft_strequ(ast->value, (*expanded)->value))
+		ast->is_expanded = false;
+	else
+		ast->is_expanded = (*expanded)->is_expanded;
 	ast->value = (*expanded)->value;
 	ast->left = (*expanded)->left;
 	to_free = *expanded;

@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/18 14:38:28 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/21 16:58:58 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/07 14:13:43 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int				glob_ast_add_left(t_ast **ast, char *value,
 	new_node = ast_new_node(value, type, flags);
 	if (new_node == NULL)
 		return (FUNCT_ERROR);
+	new_node->is_expanded = true;
 	if (*ast == NULL)
 		*ast = new_node;
 	else

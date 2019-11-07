@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/06 14:08:16 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/07 14:17:16 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,6 +416,7 @@ typedef struct	s_scanner
 
 typedef struct	s_ast
 {
+	bool			is_expanded;
 	t_tokens		type;
 	char			flags;
 	char			*value;
@@ -1210,6 +1211,7 @@ typedef struct	s_globscanner
 	char					*word;
 	int						word_index;
 	int						flags;
+	char					quote;
 }				t_globscanner;
 
 typedef struct	s_globmatchlst
