@@ -6,22 +6,17 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 15:25:46 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/22 15:47:50 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/07 15:12:35 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int			jobs_update_job_command(t_job *job, char **av)
+int			jobs_update_job_command(t_job *job, t_proc *proc, char **av)
 {
 	int i;
 
 	i = 0;
-	if (g_data->exec_flags & EXEC_ISPIPED)
-	{
-		if (job->command[0] != '\0')
-			job->command = ft_strjoinfree_s1(job->command, " | ");
-	}
 	while (av[i] != NULL)
 	{
 		if (i != 0)
@@ -29,5 +24,7 @@ int			jobs_update_job_command(t_job *job, char **av)
 		job->command = ft_strjoinfree_s1(job->command, av[i]);
 		i++;
 	}
+	if (proc->next != NULL)
+			job->command = ft_strjoinfree_s1(job->command, " | ");
 	return (FUNCT_SUCCESS);
 }

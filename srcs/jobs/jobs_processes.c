@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/21 11:41:03 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/11/06 13:37:03 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/07 15:04:06 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,13 @@ int				jobs_exit_status(t_job *job)
 
 static t_proc	*jobs_new_proc(void)
 {
-	t_proc *proc;
+	t_proc *new;
 
-	proc = (t_proc*)ft_memalloc(sizeof(t_proc));
-	proc->state = PROC_RUNNING;
-	return (proc);
+	new = (t_proc*)ft_memalloc(sizeof(t_proc));
+	if (new == NULL)
+		return (NULL);
+	new->state = PROC_RUNNING;
+	return (new);
 }
 
 void			jobs_flush_process(t_proc *proc)

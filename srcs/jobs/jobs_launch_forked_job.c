@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/28 16:25:10 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/11/06 11:09:19 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/07 15:11:50 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	prepare_settings_proc(t_job *job, t_proc *proc, char **argv)
 	if (proc->no_cmd == true && exec_assigns(proc->redir_and_assign,
 		g_data, ENV_LOCAL) == FUNCT_ERROR)
 		return (FUNCT_ERROR);
-	jobs_update_job_command(job, argv);
+	jobs_update_job_command(job, proc, argv);
 	if (exec_builtin(argv, proc) == false)
 		exec_external(argv, g_data, proc);
 	return (FUNCT_SUCCESS);

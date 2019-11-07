@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/07 14:26:10 by omulder       ########   odam.nl         */
+/*   Updated: 2019/11/07 15:56:12 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -827,7 +827,9 @@ void			jobs_finished_job(t_job *job, bool flush);
 void			jobs_notify_pool(void);
 void			jobs_update_pool_status(void);
 
-int				jobs_update_job_command(t_job *job, char **av);
+int				jobs_update_job_command(t_job *job, t_proc *proc, char **av);
+
+int				jobs_mark_process_status(pid_t pid, int status);
 void			jobs_flush_process(t_proc *proc);
 void			jobs_launch_job(t_job *job);
 void			jobs_launch_proc(t_job *job, t_proc *proc,

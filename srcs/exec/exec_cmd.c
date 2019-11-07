@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/29 17:17:48 by omulder        #+#    #+#                */
-/*   Updated: 2019/11/07 13:53:16 by omulder       ########   odam.nl         */
+/*   Updated: 2019/11/07 15:56:28 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ void		exec_cmd(t_vshdata *data)
 	job = jobs_last_child(data->jobs->active_job);
 	if (job == NULL)
 		return ;
-	jobs_add_process(job);
+	if (jobs_add_process(job) == FUNCT_ERROR)
+		exit(1);
 	if (job->last_proc == NULL)
 		exit(1);
 	job->last_proc->node = data->cur_node;
