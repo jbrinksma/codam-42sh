@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/17 14:03:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/30 14:29:06 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/07 12:05:58 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static int	reset_input_read_return(t_vshdata *data, int ret)
 	signal(SIGWINCH, SIG_DFL);
 	if (ret == 0)
 		resize_window_check(SIGWINCH);
+	input_empty_buffer(data, 0);
 	return (ret);
 }
 
