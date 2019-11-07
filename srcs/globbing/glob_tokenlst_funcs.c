@@ -6,13 +6,13 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/21 11:27:35 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/22 11:31:35 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:34:40 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-void		glob_deltoken(t_globtoken **token)
+static void	glob_del_token(t_globtoken **token)
 {
 	ft_strdel(&(*token)->word_chunk);
 	ft_memdel((void**)token);
@@ -23,7 +23,7 @@ void		glob_del_tokenlst(t_globtoken **token)
 	if (*token == NULL)
 		return ;
 	glob_del_tokenlst(&(*token)->next);
-	glob_deltoken(token);
+	glob_del_token(token);
 }
 
 t_globtoken	*glob_tokenlstnew(char *word_chunk, int type)

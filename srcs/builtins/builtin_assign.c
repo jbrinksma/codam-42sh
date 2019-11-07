@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 09:09:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/01 16:34:58 by tde-jong      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:39:51 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int			builtin_assign(char *arg, t_vshdata *data, int env_type)
 	var = ft_strdup(arg);
 	if (var == NULL)
 		return (err_ret_exit(E_ALLOC_STR, EXIT_FAILURE));
-	if (tool_check_for_special(arg) == true)
+	if (tools_check_for_special(arg) == true)
 		env_type |= ENV_SPECIAL;
 	else
 		env_type &= ~ENV_SPECIAL;

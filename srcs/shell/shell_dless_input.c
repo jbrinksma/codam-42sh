@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/02 13:23:16 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/30 11:51:36 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:39:51 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int			shell_dless_set_tk_val(t_tokenlst *probe, char **heredoc,
 		return (ret);
 	}
 	probe->flags |= T_FLAG_ISHEREDOC;
-	if (tool_check_for_special(probe->value) == true)
+	if (tools_check_for_special(probe->value) == true)
 		probe->flags |= T_FLAG_HASSPECIAL;
 	return (FUNCT_SUCCESS);
 }

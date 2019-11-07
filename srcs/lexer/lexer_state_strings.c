@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 12:12:00 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/05 14:44:26 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:41:27 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	lexer_state_word_esc(t_scanner *scanner)
 
 void	lexer_state_word(t_scanner *scanner)
 {
-	if (tool_is_special(CURRENT_CHAR) == true)
+	if (tools_is_special(CURRENT_CHAR) == true)
 		scanner->flags |= T_FLAG_HASSPECIAL;
 	if (CURRENT_CHAR == '=' && scanner->str[0] != '='
 		&& (scanner->flags & T_FLAG_HASSPECIAL) == false)

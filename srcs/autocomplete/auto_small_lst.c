@@ -6,13 +6,13 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/13 17:40:10 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/07 11:42:18 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:20:50 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int		auto_compare(char *str1, char *str2)
+static int	auto_compare(char *str1, char *str2)
 {
 	int i;
 
@@ -22,7 +22,7 @@ int		auto_compare(char *str1, char *str2)
 	return (i);
 }
 
-int		auto_anything_to_add(int i, t_list *matchlst, char **to_add)
+static int	auto_anything_to_add(int i, t_list *matchlst, char **to_add)
 {
 	char	*match;
 	int		match_len;
@@ -57,7 +57,7 @@ int		auto_anything_to_add(int i, t_list *matchlst, char **to_add)
 **	else it will print the whole matchlst
 */
 
-int		auto_small_lst(char *match, t_list **matchlst, t_vshdata *data)
+int			auto_small_lst(char *match, t_list **matchlst, t_vshdata *data)
 {
 	char	*to_add;
 	int		ret;
@@ -68,7 +68,7 @@ int		auto_small_lst(char *match, t_list **matchlst, t_vshdata *data)
 		return (FUNCT_ERROR);
 	if (to_add != NULL)
 	{
-		ret = auto_add_match_toline(match, to_add, data);
+		ret = auto_add_match_to_line(match, to_add, data);
 		ft_strdel(&to_add);
 		return (ret);
 	}

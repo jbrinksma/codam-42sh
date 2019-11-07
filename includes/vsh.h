@@ -6,18 +6,17 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/05 13:32:10 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/11/06 14:08:16 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VSH_H
 # define VSH_H
-# include <sys/stat.h>
-# include <fcntl.h>
 
-/*
-**==================================defines=====================================
-*/
+# include "libft.h"
+# include <fcntl.h>
+# include <stdbool.h>
+# include <sys/stat.h>
 
 # define SHELL				"vsh"
 # define SEPERATOR			">"
@@ -107,8 +106,8 @@
 # define E_FG_INV_OPT		SHELL ": fg: %c: invalid option\n"
 # define E_FG_USAGE			E_FG_INV_OPT "fg: usage: fg [job_spec ...]\n"
 # define E_FG_NO_CUR		"fg: no current job\n"
-# define E_JOBS_INV_OPT		SHELL ": jobs: bad option: %c\n"
-# define E_JOBS_USAGE		E_JOBS_INV_OPT "jobs: usage: jobs [-lp] [job_spec ...]\n"
+# define E_J_I_OPT			SHELL ": jobs: bad option: %c\n"
+# define E_JOBS_USAGE		E_J_I_OPT "jobs: usage: jobs [-lp] [job_spec ...]\n"
 # define E_JOBS_NO_JOB		"jobs: %s: no such job\n"
 # define E_BIN_PROC_LAUNCH	"Error executing %s\n"
 # define E_JOB_MARK_SIG		"%d: Terminated by signal %d\n"
@@ -347,18 +346,6 @@ typedef struct	s_fcdata
 # define HISTFILENAME	".vsh_history"
 # define HIST_SEPARATE	-1
 # define HIST_EXPANDED	(1 << 2)
-
-/*
-**===============================personal headers===============================
-*/
-
-# include "libft.h"
-
-/*
-**==================================headers=====================================
-*/
-
-# include <stdbool.h>
 
 /*
 **----------------------------------lexer--------------------------------------
@@ -813,12 +800,9 @@ int				jobs_fg_job(t_job *job, bool job_continued);
 
 void			jobs_print_job_info(t_job *job, int options, t_job *joblist);
 
-t_job			*jobs_find_n(char *n, t_job *joblist);
 t_job			*jobs_find_current_job(t_job *joblist);
 t_job			*jobs_find_previous_job(t_job *joblist);
 t_job			*jobs_find_job(char *job_id, t_job *joblist);
-t_job			*jobs_find_contains_str(char *str, t_job *joblist);
-t_job			*jobs_find_startswith_str(char *str, t_job *joblist);
 
 int				jobs_add_process(t_job *job);
 int				jobs_exit_status(t_job *job);
@@ -829,7 +813,6 @@ void			jobs_finished_job(t_job *job, bool flush);
 
 void			jobs_notify_pool(void);
 void			jobs_update_pool_status(void);
-void			jobs_handle_finished_jobs(void);
 
 int				jobs_update_job_command(t_job *job, char **av);
 
@@ -988,7 +971,6 @@ void			builtin_type(char **args, t_envlst *envlst,
 				t_aliaslst *aliaslst);
 
 void			builtin_jobs(char **args, t_vshdata *data);
-t_job			*builtin_jobs_find_job(char *job_id, t_job *joblist);
 int				builtin_jobs_new_current_val(t_job *joblist);
 
 void			builtin_fg(char **args, t_vshdata *data);
@@ -1035,21 +1017,17 @@ void			fc_edit(t_vshdata *data, t_datahistory *history, t_fcdata *fc);
 **---------------------------------tools----------------------------------------
 */
 
-bool			tool_is_redirect_tk(t_tokens type);
+bool			tools_is_redirect_tk(t_tokens type);
 bool			tools_is_char_escaped(char *line, int i);
-int				tools_update_quote_status(char *line, int cur_index,
-					char *quote);
-bool			tool_is_redirect_tk(t_tokens type);
-bool			tools_isidentifierchar(char c);
+bool			tools_is_identifier_char(char c);
 bool			tools_is_valid_identifier(char *str);
 bool			tools_is_builtin(char *exec_name);
 bool			tools_is_fdnumstr(char *str);
-bool			tool_is_special(char c);
-bool			tool_check_for_special(char *str);
-bool			tool_check_for_whitespace(char *str);
-int				tool_get_paths(t_envlst *envlst, char ***paths);
+bool			tools_is_special(char c);
+bool			tools_check_for_special(char *str);
+bool			tools_check_for_whitespace(char *str);
+int				tools_get_paths(t_envlst *envlst, char ***paths);
 void			tools_remove_quotes_etc(char *str, bool is_heredoc);
-int				tools_get_pid_state(pid_t pid);
 bool			tools_contains_quoted_chars(char *str);
 bool			tools_is_cmd_seperator(t_tokens type);
 bool			tools_is_valid_name(char *str);
@@ -1073,7 +1051,6 @@ int				find_binary(char *filename, t_envlst *envlst, char **binary);
 void			exec_quote_remove(t_ast *node);
 int				exec_validate_binary(char *binary);
 int				exec_create_files(t_ast *ast);
-void			exec_add_pid_to_pipeseqlist(t_vshdata *data, pid_t pid);
 int				exec_redirs(t_ast *redirs);
 int				exec_assigns(t_ast *ast, t_vshdata *data, int env_type);
 char			**exec_create_process_args(t_ast *ast);
@@ -1181,7 +1158,7 @@ int				auto_get_varlst(char *match, int match_len, t_envlst *envlst,
 				t_list **matchlst);
 int				auto_find_state(char *line, ssize_t i);
 void			auto_start(t_vshdata *data);
-int				auto_add_match_toline(char *match, char *to_add,
+int				auto_add_match_to_line(char *match, char *to_add,
 				t_vshdata *data);
 int				auto_find_matches(t_vshdata *data, char **match,
 				t_list **matchlst, int state);
@@ -1202,8 +1179,8 @@ bool			auto_check_dups(t_list *matchlst, char *filename);
 **----------------------------------globbing------------------------------------
 */
 
-#define	GLOB_CUR_CHAR (scanner->word[scanner->word_index])
-#define GLOB_F_NEG	(1 << 0)
+# define GLOB_CUR_CHAR	(scanner->word[scanner->word_index])
+# define GLOB_F_NEG		(1 << 0)
 
 typedef enum	e_globtokens
 {
@@ -1263,7 +1240,7 @@ int				glob_add_scanned_token(t_globtoken **lst,
 				t_globscanner *scanner);
 int				glob_matcher(t_globtoken *tokenprobe,
 				t_globmatchlst match);
-int				glob_matchlstadd(t_globmatchlst **lst, char *word);
+int				glob_match_lst_add(t_globmatchlst **lst, char *word);
 int				glob_add_dotslash_to_path(t_globtoken **tokenlst, char **path);
 void			glob_delmatch(t_globmatchlst **match);
 int				glob_dir_match_loop(t_glob *glob_data, t_globtoken *tokenlst,

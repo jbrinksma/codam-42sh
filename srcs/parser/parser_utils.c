@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/21 19:54:55 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/06 17:17:11 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:41:04 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	parser_io_redirect(t_tokenlst **token_lst, t_ast **ast)
 	redir = NULL;
 	if (TK_TYPE == IO_NUMBER && parser_add_astnode(token_lst, ast) == false)
 		return (false);
-	if (tool_is_redirect_tk(TK_TYPE) == false ||
+	if (tools_is_redirect_tk(TK_TYPE) == false ||
 		parser_add_astnode(token_lst, ast) == false)
 		return (parser_return_del(ast));
 	if ((TK_TYPE != WORD && TK_TYPE != ASSIGN) ||

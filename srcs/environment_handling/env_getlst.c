@@ -6,19 +6,19 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/04 08:06:54 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/06 11:42:54 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:39:51 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 #include <pwd.h>
 
-static int	env_add_to_list(char *str, t_envlst **new)
+static int		env_add_to_list(char *str, t_envlst **new)
 {
 	int type;
 
 	type = ENV_EXTERN;
-	if (tool_check_for_special(str) == true)
+	if (tools_check_for_special(str) == true)
 		type |= ENV_SPECIAL;
 	*new = env_lstnew(str, type);
 	if (*new == NULL)
@@ -26,7 +26,7 @@ static int	env_add_to_list(char *str, t_envlst **new)
 	return (FUNCT_SUCCESS);
 }
 
-static int	env_set_home(t_vshdata *data)
+static int		env_set_home(t_vshdata *data)
 {
 	char			*homedir;
 	struct passwd	*pw;
@@ -47,7 +47,7 @@ static int	env_set_home(t_vshdata *data)
 	return (FUNCT_SUCCESS);
 }
 
-t_envlst	*env_getlst(void)
+t_envlst		*env_getlst(void)
 {
 	t_envlst	*envlst;
 	t_envlst	*new;
@@ -72,7 +72,7 @@ t_envlst	*env_getlst(void)
 	return (envlst);
 }
 
-int			env_init_envlst(t_vshdata *vshdata)
+int				env_init_envlst(t_vshdata *vshdata)
 {
 	vshdata->envlst = env_getlst();
 	if (vshdata->envlst == NULL)

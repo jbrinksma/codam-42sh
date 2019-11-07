@@ -6,13 +6,13 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 11:47:38 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/21 14:43:36 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:32:12 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int		glob_delmatchlst_ret_err(t_globmatchlst **matchlst)
+int			glob_delmatchlst_ret_err(t_globmatchlst **matchlst)
 {
 	glob_del_matchlst(matchlst);
 	return (FUNCT_ERROR);
@@ -22,7 +22,7 @@ int		glob_delmatchlst_ret_err(t_globmatchlst **matchlst)
 **	As long as there are tokens with / ./ or ../ they are string joined to path
 */
 
-int		glob_add_dotslash_to_path(t_globtoken **tokenlst, char **path)
+int			glob_add_dotslash_to_path(t_globtoken **tokenlst, char **path)
 {
 	if (*path == NULL)
 	{
@@ -42,7 +42,7 @@ int		glob_add_dotslash_to_path(t_globtoken **tokenlst, char **path)
 	return (FUNCT_SUCCESS);
 }
 
-int		glob_is_dir(char *match, char *path)
+static int	glob_is_dir(char *match, char *path)
 {
 	char	*filepath;
 	int		ret;
@@ -57,7 +57,7 @@ int		glob_is_dir(char *match, char *path)
 	return (FUNCT_FAILURE);
 }
 
-bool	glob_check_hidden_file(t_globtoken *tokenlst)
+bool		glob_check_hidden_file(t_globtoken *tokenlst)
 {
 	if (tokenlst == NULL)
 		return (false);
@@ -70,7 +70,7 @@ bool	glob_check_hidden_file(t_globtoken *tokenlst)
 **	glob_keep_dirs removes all non directory files from the matchlst
 */
 
-int		glob_keep_dirs(t_globmatchlst **matchlst, char *path)
+int			glob_keep_dirs(t_globmatchlst **matchlst, char *path)
 {
 	t_globmatchlst *matchprobe;
 	t_globmatchlst *next;

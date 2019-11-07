@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/30 20:47:41 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/15 11:21:06 by omulder       ########   odam.nl         */
+/*   Updated: 2019/11/06 13:35:53 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	add_tabs_after_newlines(char *str, char **new)
 	return (add_tabs(str, *new));
 }
 
-int			print_history_line(t_historyitem *item)
+static int	print_history_line(t_historyitem *item)
 {
 	int		ret;
 	char	*tmp;

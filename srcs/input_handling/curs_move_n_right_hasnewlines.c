@@ -6,13 +6,13 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/30 11:32:49 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/01 13:44:24 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:36:28 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-static void	move_right_parse_newline(t_vshdata *data)
+static void	curs_move_right_parse_newline(t_vshdata *data)
 {
 	ft_putstr("\e[1E");
 	data->curs->coords.x = 1;
@@ -20,7 +20,7 @@ static void	move_right_parse_newline(t_vshdata *data)
 	data->curs->cur_relative_y++;
 }
 
-void		curs_move_right_check_colmax(t_vshdata *data, int colmax)
+static void	curs_move_right_check_colmax(t_vshdata *data, int colmax)
 {
 	data->curs->coords.x++;
 	if (data->curs->coords.x > colmax)
@@ -40,7 +40,7 @@ void		curs_move_n_right_hasnewlines(t_vshdata *data, size_t n)
 	{
 		if (data->line->line[data->line->index] == '\n'
 			&& data->line->index != data->line->len_cur - 1)
-			move_right_parse_newline(data);
+			curs_move_right_parse_newline(data);
 		else
 			curs_move_right_check_colmax(data, data->curs->cur_ws_col);
 		n--;

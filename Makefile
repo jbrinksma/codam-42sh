@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/11/05 13:00:40 by jbrinksm      ########   odam.nl          #
+#    Updated: 2019/11/06 13:49:22 by rkuijper      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,10 +48,10 @@ term_disable_isig term_enable_isig \
 env_getvalue env_getlst env_lsttoarr env_lstnew env_lstaddback env_lstdel \
 env_remove_tmp env_sort env_lstadd_to_sortlst env_addvalue exec_redirs \
 exec_assigns \
-tools_is_char_escaped tool_is_redirect_tk tools_is_valid_identifier \
-tools_is_builtin tool_is_special tool_check_for_special tools_is_fdnumstr \
-tools_isidentifierchar tool_check_for_whitespace tool_get_paths \
-tools_isprintnotblank tools_get_pid_state tools_contains_quoted_chars \
+tools_is_char_escaped tools_is_redirect_tk tools_is_valid_identifier \
+tools_is_builtin tools_is_special tools_check_for_special tools_is_fdnumstr \
+tools_is_identifier_char tools_check_for_whitespace tools_get_paths \
+tools_isprintnotblank tools_contains_quoted_chars \
 tools_is_cmd_seperator tools_remove_quotes_etc tools_is_valid_name \
 builtin_echo builtin_echo_set_flags builtin_exit builtin_assign \
 builtin_export builtin_export_print builtin_set builtin_unset \
@@ -78,7 +78,7 @@ redir redir_tools \
 hash_ht_insert hash_print hash_reset hash_init hash_check \
 print_errors print_errors_extended \
 auto_get_cmdlst auto_match_builtins auto_get_filelst auto_get_varlst \
-auto_find_state auto_start auto_add_match_toline auto_find_matches \
+auto_find_state auto_start auto_add_match_to_line auto_find_matches \
 auto_handle_matchlst auto_small_lst auto_big_lst auto_lst_print \
 auto_lst_print_helpers auto_check_dups \
 jobs_list_handling jobs_job_utils jobs_find jobs_cont jobs_bg \

@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/18 16:31:00 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/07/31 12:27:07 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:49:22 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool	tools_is_valid_identifier(char *str)
 	i = 0;
 	while (str[i] != '\0' && str[i] != '=')
 	{
-		if (tools_isidentifierchar(str[i]) == false)
+		if (tools_is_identifier_char(str[i]) == false)
 			return (false);
 		i++;
 	}

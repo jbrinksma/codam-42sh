@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/19 18:18:19 by omulder        #+#    #+#                */
-/*   Updated: 2019/08/19 18:18:52 by omulder       ########   odam.nl         */
+/*   Updated: 2019/11/06 13:49:22 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int			expan_handle_bracketed_var(char **value, int *i, t_envlst *envlst)
 
 	i_dollar = *i;
 	*i += 2;
-	while (tools_isidentifierchar((*value)[*i]) == true)
+	while (tools_is_identifier_char((*value)[*i]) == true)
 		(*i)++;
 	if ((*value)[*i] != '}' || *i == i_dollar + 2)
 		return (expan_var_error_print(&(*value)[i_dollar], *i - i_dollar + 1));

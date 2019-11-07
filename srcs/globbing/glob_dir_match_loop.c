@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/17 18:19:03 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/21 14:39:34 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:33:53 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	glob_getmatchlist(t_globmatchlst **matchlst, char *path,
 		if ((ft_strequ(rdir->d_name, ".") || ft_strequ(rdir->d_name, ".."))
 		== false && (rdir->d_name[0] == '.' && hidden_file == false) == false)
 		{
-			if (glob_matchlstadd(matchlst, rdir->d_name) == FUNCT_ERROR)
+			if (glob_match_lst_add(matchlst, rdir->d_name) == FUNCT_ERROR)
 			{
 				closedir(dir);
 				return (FUNCT_ERROR);
@@ -51,7 +51,7 @@ static int	glob_getmatchlist(t_globmatchlst **matchlst, char *path,
 **	If there is a match we keep it in the lst, otherwise it is deleted
 */
 
-void		glob_start_matching(t_globtoken *tokenlst,
+static void	glob_start_matching(t_globtoken *tokenlst,
 			t_globmatchlst **matchlst)
 {
 	t_globmatchlst *matchprobe;

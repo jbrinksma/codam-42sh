@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/21 14:30:58 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/11/04 16:58:09 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/11/06 14:08:23 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-void		jobs_handle_finished_jobs(void)
+static void	jobs_handle_finished_jobs(void)
 {
 	t_job	*job;
 	t_job	*tmp;

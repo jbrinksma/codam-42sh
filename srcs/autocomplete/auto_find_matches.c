@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/12 20:20:16 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/11/05 15:44:50 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:21:14 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	cut_path_from_match(char **match, int i)
 **	or path is set to cwd.
 */
 
-int			auto_find_filelst(char **match, t_list **matchlst)
+static int	auto_find_filelst(char **match, t_list **matchlst)
 {
 	int		match_len;
 	char	*path;

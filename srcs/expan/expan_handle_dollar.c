@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/14 01:05:00 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/31 16:11:53 by omulder       ########   odam.nl         */
+/*   Updated: 2019/11/06 13:49:22 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	expan_handle_var(char **value, int *i, t_envlst *envlst)
 
 	i_dollar = *i;
 	(*i)++;
-	while (tools_isidentifierchar((*value)[*i]) == true)
+	while (tools_is_identifier_char((*value)[*i]) == true)
 		(*i)++;
 	if (*i == i_dollar + 1)
 		return (FUNCT_FAILURE);

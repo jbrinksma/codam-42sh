@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/06/05 10:33:08 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/08/22 11:08:34 by omulder       ########   odam.nl         */
+/*   Updated: 2019/11/06 13:31:06 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	builtin_export_arg(char *arg, t_vshdata *data, int type)
 		builtin_assign(arg, data, type);
 }
 
-int			builtin_export_readflags(char *arg, int *flags)
+static int	builtin_export_readflags(char *arg, int *flags)
 {
 	int i;
 
@@ -75,7 +75,7 @@ int			builtin_export_readflags(char *arg, int *flags)
 	return (FUNCT_SUCCESS);
 }
 
-int			builtin_export_getflags(char **args, int *flags, int *argc)
+static int	builtin_export_getflags(char **args, int *flags, int *argc)
 {
 	int	i;
 
