@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/22 15:25:46 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/11/07 15:12:35 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/07 16:03:05 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,6 @@ int			jobs_update_job_command(t_job *job, t_proc *proc, char **av)
 		i++;
 	}
 	if (proc->next != NULL)
-			job->command = ft_strjoinfree_s1(job->command, " | ");
+		job->command = ft_strjoinfree_s1(job->command, " | ");
 	return (FUNCT_SUCCESS);
 }
