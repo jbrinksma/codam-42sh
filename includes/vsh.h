@@ -6,7 +6,7 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/07 15:56:12 by omulder       ########   odam.nl         */
+/*   Updated: 2019/11/07 16:40:10 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -842,7 +842,6 @@ void			jobs_launch_cleanup_after_proc(t_proc *proc, int fds[3],
 					int pipes[2]);
 void			jobs_launch_setup_stds(t_proc *proc, int fds[3], int pipes[2]);
 int				jobs_launch_forked_job(t_job *job, int fds[3], int pipes[2]);
-int				jobs_mark_process_status(pid_t pid, int status);
 
 /*
 **----------------------------------shell---------------------------------------
