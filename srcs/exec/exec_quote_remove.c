@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/13 11:20:18 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/11 16:31:02 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/07 13:47:02 by jbrinksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ void		exec_quote_remove(t_ast *node)
 	if (node->right != NULL)
 		exec_quote_remove(node->right);
 	if ((node->type == WORD || node->type == ASSIGN)
-	&& (node->flags & T_FLAG_HEREDOC_NOEXP) == false)
+	&& (node->flags & T_FLAG_HEREDOC_NOEXP) == false
+	&& node->is_expanded == false)
 	{
 		is_heredoc = false;
 		if (node->flags & T_FLAG_ISHEREDOC)

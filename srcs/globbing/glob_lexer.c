@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/13 17:38:55 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/22 11:29:57 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/07 12:34:33 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,11 @@ int				glob_lexer(t_globtoken **lst, char *word)
 			glob_del_tokenlst(lst);
 			free(scanner);
 			return (FUNCT_ERROR);
+		}
+		if (scanner->quote != 0)
+		{
+			scanner->word_index++;
+			scanner->quote = 0;
 		}
 		reset_glob_scanner(scanner);
 	}

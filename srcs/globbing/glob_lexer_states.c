@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/13 21:10:48 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/11/01 14:25:06 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/07 12:58:04 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,31 @@ static void		glob_lexer_state_str(t_globscanner *scanner)
 	|| GLOB_CUR_CHAR == '['
 	|| GLOB_CUR_CHAR == '*'
 	|| GLOB_CUR_CHAR == '\\'
-	|| GLOB_CUR_CHAR == '/')
+	|| GLOB_CUR_CHAR == '/'
+	|| GLOB_CUR_CHAR == '\''
+	|| GLOB_CUR_CHAR == '"')
 		return ;
 	else
 		glob_lexer_changestate(scanner, &glob_lexer_state_str);
+}
+
+static void		glob_lexer_state_quote(t_globscanner *scanner)
+{
+	scanner->tk_type = GLOB_STR;
+	if (GLOB_CUR_CHAR == '\0')
+		return ;
+	else if (GLOB_CUR_CHAR == '\'' && scanner->quote == '"')
+	{
+		scanner->tk_len++;
+		scanner->word_index++;
+		if (GLOB_CUR_CHAR == '\0')
+			return ;
+		glob_lexer_changestate(scanner, &glob_lexer_state_quote);
+	}
+	else if (GLOB_CUR_CHAR == scanner->quote)
+		return ;
+	else
+		glob_lexer_changestate(scanner, &glob_lexer_state_quote);
 }
 
 static void		glob_lexer_str_start(t_globscanner *scanner)
@@ -50,6 +71,12 @@ static void		glob_lexer_str_start(t_globscanner *scanner)
 	{
 		scanner->word_index++;
 		glob_lexer_changestate(scanner, &glob_lexer_state_str);
+	}
+	else if (GLOB_CUR_CHAR == '\'' || GLOB_CUR_CHAR == '"')
+	{
+		scanner->quote = GLOB_CUR_CHAR;
+		scanner->word_index++;
+		glob_lexer_changestate(scanner, &glob_lexer_state_quote);
 	}
 	else if (GLOB_CUR_CHAR == '[')
 		glob_lexer_changestate(scanner, &glob_lexer_state_braced);
