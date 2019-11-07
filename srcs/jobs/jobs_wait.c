@@ -6,12 +6,11 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/21 11:22:46 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/11/01 14:03:28 by omulder       ########   odam.nl         */
+/*   Updated: 2019/11/07 13:57:33 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-#include <errno.h>
 #include <sys/wait.h>
 #include <signal.h>
 

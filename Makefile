@@ -6,7 +6,7 @@
 #    By: omulder <omulder@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2019/04/10 20:30:07 by jbrinksm       #+#    #+#                 #
-#    Updated: 2019/11/01 13:59:55 by omulder       ########   odam.nl          #
+#    Updated: 2019/11/07 13:59:26 by omulder       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,11 +45,11 @@ term_disable_isig term_enable_isig \
 env_getvalue env_getlst env_lsttoarr env_lstnew env_lstaddback env_lstdel \
 env_remove_tmp env_sort env_lstadd_to_sortlst env_addvalue exec_redirs \
 exec_assigns \
-tools_is_char_escaped tool_is_redirect_tk tools_is_valid_identifier \
-tools_is_builtin tool_is_special tool_check_for_special tools_is_fdnumstr \
-tools_isidentifierchar tool_check_for_whitespace tool_get_paths \
+tools_is_char_escaped tools_is_redirect_tk tools_is_valid_identifier \
+tools_is_builtin tools_is_special tools_check_for_special tools_is_fdnumstr \
+tools_is_identifier_char tools_check_for_whitespace tools_get_paths \
 tools_isprintnotblank tools_contains_quoted_chars \
-tools_is_cmd_seperator tools_remove_quotes_etc \
+tools_is_cmd_seperator tools_remove_quotes_etc tools_is_valid_name \
 builtin_echo builtin_echo_set_flags builtin_exit builtin_assign \
 builtin_export builtin_export_print builtin_set builtin_unset \
 builtin_alias builtin_alias_set builtin_alias_lstdel builtin_unalias \
@@ -68,20 +68,21 @@ history_change_line history_index_change history_expansion history_get_line \
 history_match_line history_insert_into_line history_helpers history_ctrl_r \
 exec_builtin exec_cmd exec_external exec_start exec_find_binary \
 exec_quote_remove expan_handle_variables expan_handle_dollar \
-exec_create_files exec_command \
+exec_create_files exec_command exec_create_process_args \
 expan_handle_bracketed_var expan_tilde_expansion exec_validate_binary \
 expan_pathname \
 redir redir_tools \
 hash_ht_insert hash_print hash_reset hash_check \
 print_errors print_errors_extended \
 auto_get_cmdlst auto_match_builtins auto_get_filelst auto_get_varlst \
-auto_find_state auto_start auto_add_match_toline auto_find_matches \
+auto_find_state auto_start auto_add_match_to_line auto_find_matches \
 auto_handle_matchlst auto_small_lst auto_big_lst auto_lst_print \
 auto_lst_print_helpers auto_check_dups \
 jobs_list_handling jobs_job_utils jobs_find jobs_cont jobs_bg \
 jobs_fg jobs_info jobs_mark jobs_processes jobs_status jobs_wait \
-jobs_notify jobs_command jobs_launch jobs_launch_proc jobs_exec_builtin \
-jobs_finished_job jobs_flush_job jobs_force_job_state \
+jobs_notify jobs_command jobs_launch_forked_job jobs_launch_proc \
+jobs_exec_builtin jobs_launch_job \
+jobs_finished_job jobs_flush_job jobs_force_job_state jobs_launch_tools \
 builtin_fc builtin_fc_options builtin_fc_init builtin_fc_list \
 builtin_fc_print_helpers builint_fc_find_index builtin_fc_substitute \
 signal_reset \

@@ -6,19 +6,19 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/12 14:09:10 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/07 11:43:09 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 14:10:44 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-void	auto_lstdel(void *str, size_t size)
+void		auto_lstdel(void *str, size_t size)
 {
 	(void)size;
 	ft_strdel((char**)&str);
 }
 
-char	*auto_get_file_str(char *line, ssize_t i)
+char		*auto_get_file_str(char *line, ssize_t i)
 {
 	ssize_t	i_cursor;
 	char	*match;
@@ -27,8 +27,7 @@ char	*auto_get_file_str(char *line, ssize_t i)
 	i--;
 	while (i >= 0)
 	{
-		if (tools_isidentifierchar(line[i]) == false &&
-			line[i] != '/' && line[i] != '.' && line[i] != '~')
+		if (tools_is_valid_name_char(line[i]) == false && line[i] != '/')
 			break ;
 		i--;
 	}
@@ -43,7 +42,7 @@ char	*auto_get_file_str(char *line, ssize_t i)
 	return (match);
 }
 
-char	*auto_get_match_str(char *line, ssize_t i)
+char		*auto_get_match_str(char *line, ssize_t i)
 {
 	int		i_cursor;
 	char	*match;
@@ -52,7 +51,7 @@ char	*auto_get_match_str(char *line, ssize_t i)
 	i--;
 	while (i >= 0)
 	{
-		if (tools_isidentifierchar(line[i]) == false)
+		if (tools_is_valid_name_char(line[i]) == false || line[i] == '$')
 			break ;
 		i--;
 	}
@@ -67,7 +66,7 @@ char	*auto_get_match_str(char *line, ssize_t i)
 	return (match);
 }
 
-void	auto_print_line(t_vshdata *data)
+static void	auto_print_line(t_vshdata *data)
 {
 	int		old_index;
 
@@ -89,7 +88,7 @@ void	auto_print_line(t_vshdata *data)
 **	This list gets handled in auto_handle_matchlst
 */
 
-void	auto_start(t_vshdata *data)
+void		auto_start(t_vshdata *data)
 {
 	int		state;
 	char	*match;

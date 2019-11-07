@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/02 13:50:51 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/23 18:42:25 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/04 10:34:57 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ static int	expan_get_home_path(char *login, char **home_path)
 
 	if (login[0] == '\0')
 	{
-		*home_path = getenv("HOME");
-		if (home_path == NULL)
-			return (err_ret_prog_exit(E_N_FAIL_HOME, "tilde", EXIT_FAILURE));
+		*home_path = env_getvalue("HOME", g_data->envlst);
+		if (*home_path == NULL)
+			return (err_ret_exit(E_HOME_NOTSET_STR, EXIT_FAILURE));
 	}
 	else
 	{

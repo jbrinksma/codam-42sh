@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   exec_assigns.c                                     :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
+/*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/10/31 21:15:47 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/31 21:16:15 by jbrinksm      ########   odam.nl         */
+/*   Created: 2019/11/07 13:52:32 by omulder        #+#    #+#                */
+/*   Updated: 2019/11/07 13:52:58 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

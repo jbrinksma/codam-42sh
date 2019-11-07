@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/21 15:14:08 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/06 11:28:35 by jbrinksm      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:41:04 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int			redir(t_ast *node)
 	int		ret;
 
 	ret = FUNCT_SUCCESS;
-	if (node == NULL || tool_is_redirect_tk(node->type) == false)
+	if (node == NULL || tools_is_redirect_tk(node->type) == false)
 		return (FUNCT_FAILURE);
 	if (node->type == SLESS || node->type == DLESS || node->type == LESSAND)
 		ret = redir_input(node);

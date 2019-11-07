@@ -6,19 +6,19 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/13 19:53:46 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/22 11:31:30 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:33:53 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-void			glob_delmatch(t_globmatchlst **match)
+void					glob_delmatch(t_globmatchlst **match)
 {
 	ft_strdel(&(*match)->word);
 	ft_memdel((void**)match);
 }
 
-void			glob_del_matchlst(t_globmatchlst **matchlst)
+void					glob_del_matchlst(t_globmatchlst **matchlst)
 {
 	if (*matchlst == NULL)
 		return ;
@@ -26,7 +26,7 @@ void			glob_del_matchlst(t_globmatchlst **matchlst)
 	glob_delmatch(matchlst);
 }
 
-t_globmatchlst	*glob_matchlstnew(char *item)
+static t_globmatchlst	*glob_match_lst_new(char *item)
 {
 	t_globmatchlst *new;
 
@@ -40,13 +40,13 @@ t_globmatchlst	*glob_matchlstnew(char *item)
 	return (new);
 }
 
-int				glob_matchlstadd(t_globmatchlst **lst, char *word)
+int						glob_match_lst_add(t_globmatchlst **lst, char *word)
 {
 	t_globmatchlst	*new;
 
 	if (lst == NULL || word == NULL)
 		return (FUNCT_ERROR);
-	new = glob_matchlstnew(word);
+	new = glob_match_lst_new(word);
 	if (new == NULL)
 		return (err_ret_exit(E_ALLOC_STR, EXIT_FAILURE));
 	if (*lst == NULL)

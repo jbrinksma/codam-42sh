@@ -55,6 +55,7 @@ int				glob_lexer(t_globtoken **lst, char *word)
 		glob_lexer_state_start(scanner);
 		if (glob_add_scanned_token(lst, scanner) == FUNCT_ERROR)
 		{
+			glob_del_tokenlst(lst);
 			free(scanner);
 			return (FUNCT_ERROR);
 		}

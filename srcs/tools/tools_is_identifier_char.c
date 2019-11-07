@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   tool_has_special.c                                 :+:    :+:            */
+/*   tools_is_identifier_char.c                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
+/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/07/22 11:31:54 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/29 11:35:33 by mavan-he      ########   odam.nl         */
+/*   Created: 2019/07/13 19:50:31 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/11/06 13:49:41 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-bool	tool_is_special(char c)
+bool	tools_is_identifier_char(char c)
 {
-	return (c == '*' || c == '\'' || c == '"' || c == '\\'
-		|| c == '$' || c == '~' || c == '#');
+	return (ft_isalnum(c) == true || c == '_' || c == '-');
 }

@@ -6,13 +6,13 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/14 15:23:48 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/21 15:02:08 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:33:12 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int			glob_matching_wild(t_globtoken *tokenprobe, t_globmatchlst match)
+static int	glob_matching_wild(t_globtoken *tokenprobe, t_globmatchlst match)
 {
 	while (match.index <= match.word_len)
 	{
@@ -23,7 +23,7 @@ int			glob_matching_wild(t_globtoken *tokenprobe, t_globmatchlst match)
 	return (FUNCT_FAILURE);
 }
 
-int			glob_matching_braceneg(t_globtoken *tokenprobe,
+static int	glob_matching_braceneg(t_globtoken *tokenprobe,
 			t_globmatchlst match)
 {
 	int i;
@@ -39,7 +39,7 @@ int			glob_matching_braceneg(t_globtoken *tokenprobe,
 	return (glob_matcher(tokenprobe->next, match));
 }
 
-int			glob_matching_bracepos(t_globtoken *tokenprobe,
+static int	glob_matching_bracepos(t_globtoken *tokenprobe,
 			t_globmatchlst match)
 {
 	int i;
@@ -57,7 +57,7 @@ int			glob_matching_bracepos(t_globtoken *tokenprobe,
 	return (FUNCT_FAILURE);
 }
 
-int			glob_quest_or_str(t_globtoken *tokenprobe, t_globmatchlst match)
+static int	glob_quest_or_str(t_globtoken *tokenprobe, t_globmatchlst match)
 {
 	if (tokenprobe->tk_type == GLOB_STR)
 	{

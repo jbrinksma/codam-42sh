@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/25 19:13:12 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/07 11:43:45 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:41:04 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ bool		parser_cmd_suffix(t_tokenlst **token_lst, t_ast **cmd,
 	t_ast *new_ast;
 
 	new_ast = NULL;
-	if (TK_TYPE == IO_NUMBER || tool_is_redirect_tk(TK_TYPE) == true)
+	if (TK_TYPE == IO_NUMBER || tools_is_redirect_tk(TK_TYPE) == true)
 	{
 		if (parser_io_redirect(token_lst, &new_ast) == false)
 			return (false);
@@ -66,7 +66,7 @@ static bool	parser_cmd_prefix(t_tokenlst **token_lst, t_ast **prefix,
 
 	new_prefix = NULL;
 	if (TK_TYPE == ASSIGN || TK_TYPE == IO_NUMBER ||
-		tool_is_redirect_tk(TK_TYPE) == true)
+		tools_is_redirect_tk(TK_TYPE) == true)
 	{
 		if (TK_TYPE == ASSIGN)
 		{
@@ -124,7 +124,7 @@ bool		parser_command(t_tokenlst **token_lst, t_ast **cmd)
 	last_prefix = NULL;
 	last_cmd_arg = NULL;
 	if (TK_TYPE == WORD || TK_TYPE == ASSIGN || TK_TYPE == IO_NUMBER ||
-		tool_is_redirect_tk(TK_TYPE) == true)
+		tools_is_redirect_tk(TK_TYPE) == true)
 	{
 		if (parser_cmd_prefix(token_lst, &prefix, &last_prefix) == false)
 			return (false);

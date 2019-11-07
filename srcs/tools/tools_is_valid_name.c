@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exec_redirs.c                                      :+:    :+:            */
+/*   tools_is_valid_name.c                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/10/31 21:14:32 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/07 13:54:30 by omulder       ########   odam.nl         */
+/*   Created: 2019/06/18 16:31:00 by jbrinksm       #+#    #+#                */
+/*   Updated: 2019/11/07 14:00:20 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-int		exec_redirs(t_ast *redirs)
+bool		tools_is_valid_name_char(char c)
 {
-	if (redirs == NULL)
-		return (FUNCT_FAILURE);
-	if (tools_is_redirect_tk(redirs->type))
+	return (ft_isalnum(c) == true || ft_strchr("*-_~!@#$%^.,[]+?", c) != NULL);
+}
+
+bool		tools_is_valid_name(char *str)
+{
+	int i;
+
+	if (str == NULL || *str == '\0' || *str == '=')
+		return (false);
+	i = 0;
+	while (str[i] != '\0' && str[i] != '=')
 	{
-		if (redir(redirs) == FUNCT_ERROR)
-			return (FUNCT_ERROR);
+		if (tools_is_valid_name_char(str[i]) == false)
+			return (false);
+		i++;
 	}
-	if (exec_redirs(redirs->left) == FUNCT_ERROR)
-		return (FUNCT_ERROR);
-	return (FUNCT_SUCCESS);
+	return (true);
 }

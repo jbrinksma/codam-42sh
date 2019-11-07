@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/24 13:36:44 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/08/22 11:06:56 by omulder       ########   odam.nl         */
+/*   Updated: 2019/11/02 14:55:46 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	builtin_alias_args(char **args, int i, t_aliaslst **aliaslst)
 		str_equal = ft_strchr(args[i], '=');
 		if (str_equal != NULL)
 		{
-			if (tools_is_valid_identifier(args[i]) == false ||
+			if (tools_is_valid_name(args[i]) == false ||
 			(ft_strnequ(args[i], "alias", 5) && args[i][5] == '=') ||
 			(ft_strnequ(args[i], "unalias", 7) && args[i][7] == '='))
 			{

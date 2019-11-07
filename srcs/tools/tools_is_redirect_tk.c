@@ -1,30 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   jobs_flush.c                                       :+:    :+:            */
+/*   tools_is_redirect_tk.c                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
+/*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/10/22 13:22:46 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/22 13:24:44 by rkuijper      ########   odam.nl         */
+/*   Created: 2019/05/27 17:17:11 by mavan-he       #+#    #+#                */
+/*   Updated: 2019/11/06 13:41:55 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
-#include <signal.h>
 
-void		jobs_flush_all(void)
+bool	tools_is_redirect_tk(t_tokens type)
 {
-	t_job *tmp;
-	t_job *job;
-
-	job = g_data->jobs->joblist;
-	while (job != NULL)
-	{
-		kill(-job->pgid, SIGKILL);
-		tmp = job;
-		job = job->next;
-		ft_strdel(tmp->command);
-		ft_memdel(&tmp);
-	}
+	return (type == SLESS || type == SGREAT || type == DLESS ||
+			type == DGREAT || type == LESSAND || type == GREATAND);
 }

@@ -6,30 +6,30 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/05/19 12:10:51 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/10 16:20:13 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:41:27 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-void	lexer_state_semicol(t_scanner *scanner)
+void		lexer_state_semicol(t_scanner *scanner)
 {
 	scanner->tk_type = SEMICOL;
 }
 
-void	lexer_state_andif(t_scanner *scanner)
+void		lexer_state_andif(t_scanner *scanner)
 {
 	scanner->tk_type = AND_IF;
 }
 
-void	lexer_state_orif(t_scanner *scanner)
+void		lexer_state_orif(t_scanner *scanner)
 {
 	scanner->tk_type = OR_IF;
 }
 
-void	lexer_set_flags(t_scanner *scanner, char c)
+static void	lexer_set_flags(t_scanner *scanner, char c)
 {
-	if (tool_is_special(c) == true)
+	if (tools_is_special(c) == true)
 		scanner->flags |= T_FLAG_HASSPECIAL;
 	if (c == '"')
 		scanner->flags ^= T_STATE_DQUOTE;
@@ -37,7 +37,7 @@ void	lexer_set_flags(t_scanner *scanner, char c)
 		scanner->flags ^= T_STATE_SQUOTE;
 }
 
-void	lexer_state_start(t_scanner *scanner)
+void		lexer_state_start(t_scanner *scanner)
 {
 	lexer_set_flags(scanner, CURRENT_CHAR);
 	if (CURRENT_CHAR == '|')

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   auto_add_match_toline.c                            :+:    :+:            */
+/*   auto_add_match_to_line.c                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/12 20:55:01 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/07 11:38:49 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:18:58 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 **	New line = everything before the cursor + to_add + anything after the cursor
 */
 
-int		auto_add_match_toline(char *match, char *to_add, t_vshdata *data)
+int		auto_add_match_to_line(char *match, char *to_add, t_vshdata *data)
 {
 	int		old_index;
 	int		match_len;
@@ -34,7 +34,7 @@ int		auto_add_match_toline(char *match, char *to_add, t_vshdata *data)
 	ft_strncpy(new_line, data->line->line, data->line->index - match_len);
 	ft_strcat(new_line, to_add);
 	ft_strcat(new_line, &(data->line->line)[data->line->index]);
-	ft_strdel(&(data->line->line));
+	ft_strdel(&data->line->line);
 	data->line->line = new_line;
 	data->line->len_cur = ft_strlen(data->line->line);
 	old_index = data->line->index;

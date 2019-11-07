@@ -6,18 +6,17 @@
 /*   By: omulder <omulder@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/10 20:29:42 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/11/01 14:05:59 by omulder       ########   odam.nl         */
+/*   Updated: 2019/11/07 14:01:20 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VSH_H
 # define VSH_H
-# include <sys/stat.h>
-# include <fcntl.h>
 
-/*
-**==================================defines=====================================
-*/
+# include "libft.h"
+# include <fcntl.h>
+# include <stdbool.h>
+# include <sys/stat.h>
 
 # define SHELL				"vsh"
 # define SEPERATOR			">"
@@ -55,7 +54,7 @@
 # define E_FAIL_OPEN		SHELL ": failed to open file\n"
 # define E_ISDIR			SHELL ": %s: is a directory\n"
 # define E_FAIL_EXEC_P		SHELL ": failed to execute %s\n"
-# define E_NO_PIPE			SHELL ": unable to create pipe"
+# define E_NO_PIPE			SHELL ": unable to create pipe\n"
 # define E_P_BAD_REDIR		SHELL ": %s: bad redirect\n"
 # define E_N_P_INV_OPT		SHELL ": %s: -%c: invalid option\n"
 # define E_ALLOC_STR		SHELL ": failed to allocate enough memory\n"
@@ -67,6 +66,7 @@
 # define E_N_TOO_MANY		SHELL ": %s: too many arguments\n"
 # define E_N_P_NOT_VAL_ID	SHELL ": %s: '%s': not a valid identifier\n"
 # define E_N_FAIL_HOME		SHELL ": %s: failed to get home directory\n"
+# define E_FAIL_HOME		SHELL ": failed to get home directory\n"
 # define E_NOT_CUR_DIR		SHELL ": cannot get current working directory\n"
 # define E_NOT_RESET		SHELL ": could not reset terminal settings\n"
 # define E_STAT_STR			SHELL ": could not get stat info of file\n"
@@ -106,8 +106,8 @@
 # define E_FG_INV_OPT		SHELL ": fg: %c: invalid option\n"
 # define E_FG_USAGE			E_FG_INV_OPT "fg: usage: fg [job_spec ...]\n"
 # define E_FG_NO_CUR		"fg: no current job\n"
-# define E_JOBS_INV_OPT		SHELL ": jobs: bad option: %c\n"
-# define E_JOBS_USAGE E_JOBS_INV_OPT "jobs: usage: jobs [-lp] [job_spec ...]\n"
+# define E_J_I_OPT			SHELL ": jobs: bad option: %c\n"
+# define E_JOBS_USAGE		E_J_I_OPT "jobs: usage: jobs [-lp] [job_spec ...]\n"
 # define E_JOBS_NO_JOB		"jobs: %s: no such job\n"
 # define E_BIN_PROC_LAUNCH	"Error executing %s\n"
 # define E_JOB_MARK_SIG		"%d: Terminated by signal %d\n"
@@ -540,6 +540,7 @@ typedef struct	s_proc
 	bool			is_builtin;
 	bool			no_cmd;
 	t_ast			*redir_and_assign;
+	t_ast			*node;
 }				t_proc;
 
 typedef struct	s_job
@@ -669,7 +670,7 @@ typedef struct	s_vshdata
 	t_dataalias		*alias;
 	t_datatermcaps	*termcaps;
 	t_datajobs		*jobs;
-	t_ast			*current_redir_and_assign;
+	t_ast			*cur_node;
 	int				fc_flags;
 	int				exec_flags;
 }				t_vshdata;
@@ -729,6 +730,7 @@ void			env_remove_tmp(t_envlst *env);
 void			env_sort(t_envlst *head);
 void			env_lstadd_to_sortlst(t_envlst *envlst, t_envlst *new);
 int				env_add_extern_value(t_vshdata *data, char *name, char *value);
+int				env_init_envlst(t_vshdata *vshdata);
 
 /*
 **----------------------------------terminal------------------------------------
@@ -798,46 +800,46 @@ int				input_parse_char_og(t_vshdata *data);
 */
 
 t_job			*jobs_remove_job(t_job **joblist, pid_t pid);
-void			print_job_info(t_job *job, int options, t_job *joblist);
 t_job			*jobs_add_job(t_vshdata *data, t_job *job);
 t_job			*jobs_new_job(void);
 t_job			*jobs_last_child(t_job *job);
 void			jobs_flush_job(t_job *job);
 
 void			jobs_continue_job(t_job *job, bool fg);
+int				jobs_wait_job(t_job *job, int wait_opt);
 void			jobs_bg_job(t_job *job, bool job_continued);
 int				jobs_fg_job(t_job *job, bool job_continued);
 
 void			jobs_print_job_info(t_job *job, int options, t_job *joblist);
 
-t_job			*jobs_find_n(char *n, t_job *joblist);
 t_job			*jobs_find_current_job(t_job *joblist);
 t_job			*jobs_find_previous_job(t_job *joblist);
 t_job			*jobs_find_job(char *job_id, t_job *joblist);
-t_job			*jobs_find_contains_str(char *str, t_job *joblist);
-t_job			*jobs_find_startswith_str(char *str, t_job *joblist);
 
 int				jobs_add_process(t_job *job);
+int				jobs_exit_status(t_job *job);
 
-int				jobs_wait_job(t_job *job, int wait_opt);
 int				jobs_stopped_job(t_job *job);
 int				jobs_completed_job(t_job *job);
+void			jobs_finished_job(t_job *job, bool flush);
 
 void			jobs_notify_pool(void);
-void			jobs_handle_finished_jobs(void);
+void			jobs_update_pool_status(void);
 
 int				jobs_update_job_command(t_job *job, char **av);
 void			jobs_flush_process(t_proc *proc);
 void			jobs_launch_job(t_job *job);
 void			jobs_launch_proc(t_job *job, t_proc *proc,
-	int fds[3], int pipes[2]);
+					int fds[3], int pipes[2]);
 void			jobs_exec_builtin(t_proc *proc);
 int				jobs_exec_is_single_builtin_proc(t_proc *proc);
-void			jobs_finished_job(t_job *job);
 
 void			jobs_force_job_state(t_job *job, t_proc_state state);
+void			jobs_launch_cleanup_after_proc(t_proc *proc, int fds[3],
+					int pipes[2]);
+void			jobs_launch_setup_stds(t_proc *proc, int fds[3], int pipes[2]);
+int				jobs_launch_forked_job(t_job *job, int fds[3], int pipes[2]);
 int				jobs_mark_process_status(pid_t pid, int status);
-void			jobs_update_pool_status(void);
 
 /*
 **----------------------------------shell---------------------------------------
@@ -980,7 +982,6 @@ void			builtin_type(char **args, t_envlst *envlst,
 				t_aliaslst *aliaslst);
 
 void			builtin_jobs(char **args, t_vshdata *data);
-t_job			*builtin_jobs_find_job(char *job_id, t_job *joblist);
 int				builtin_jobs_new_current_val(t_job *joblist);
 
 void			builtin_fg(char **args, t_vshdata *data);
@@ -1027,22 +1028,21 @@ void			fc_edit(t_vshdata *data, t_datahistory *history, t_fcdata *fc);
 **---------------------------------tools----------------------------------------
 */
 
-bool			tool_is_redirect_tk(t_tokens type);
+bool			tools_is_redirect_tk(t_tokens type);
 bool			tools_is_char_escaped(char *line, int i);
-int				tools_update_quote_status(char *line, int cur_index,
-					char *quote);
-bool			tool_is_redirect_tk(t_tokens type);
-bool			tools_isidentifierchar(char c);
+bool			tools_is_identifier_char(char c);
 bool			tools_is_valid_identifier(char *str);
 bool			tools_is_builtin(char *exec_name);
 bool			tools_is_fdnumstr(char *str);
-bool			tool_is_special(char c);
-bool			tool_check_for_special(char *str);
-bool			tool_check_for_whitespace(char *str);
-int				tool_get_paths(t_envlst *envlst, char ***paths);
+bool			tools_is_special(char c);
+bool			tools_check_for_special(char *str);
+bool			tools_check_for_whitespace(char *str);
+int				tools_get_paths(t_envlst *envlst, char ***paths);
 void			tools_remove_quotes_etc(char *str, bool is_heredoc);
 bool			tools_contains_quoted_chars(char *str);
 bool			tools_is_cmd_seperator(t_tokens type);
+bool			tools_is_valid_name(char *str);
+bool			tools_is_valid_name_char(char c);
 
 /*
 **----------------------------------execution-----------------------------------
@@ -1053,18 +1053,19 @@ int				exec_list(t_ast *ast, t_vshdata *data);
 int				exec_and_or(t_ast *ast, t_vshdata *data);
 int				exec_pipe_sequence(t_ast *ast, t_vshdata *data);
 int				exec_command(t_ast *ast, t_vshdata *g_data);
-void			exec_cmd(char **args, t_vshdata *data);
-bool			exec_builtin(char **args, t_vshdata *data);
-void			exec_external(char **args, t_vshdata *data);
+void			exec_cmd(t_vshdata *data);
+bool			exec_builtin(char **args, t_proc *proc);
+void			exec_external(char **args, t_vshdata *data, t_proc *proc);
 int				exec_find_binary(char *filename, t_vshdata *data,
 				char **binary);
 int				find_binary(char *filename, t_envlst *envlst, char **binary);
 void			exec_quote_remove(t_ast *node);
 int				exec_validate_binary(char *binary);
 int				exec_create_files(t_ast *ast);
-void			exec_add_pid_to_pipeseqlist(t_vshdata *data, pid_t pid);
 int				exec_redirs(t_ast *redirs);
 int				exec_assigns(t_ast *ast, t_vshdata *data, int env_type);
+char			**exec_create_process_args(t_ast *ast);
+bool			exec_command_contains_only_assign(t_ast *ast);
 
 /*
 **-----------------------------------signals------------------------------------
@@ -1167,7 +1168,7 @@ int				auto_get_varlst(char *match, int match_len, t_envlst *envlst,
 				t_list **matchlst);
 int				auto_find_state(char *line, ssize_t i);
 void			auto_start(t_vshdata *data);
-int				auto_add_match_toline(char *match, char *to_add,
+int				auto_add_match_to_line(char *match, char *to_add,
 				t_vshdata *data);
 int				auto_find_matches(t_vshdata *data, char **match,
 				t_list **matchlst, int state);
@@ -1188,8 +1189,8 @@ bool			auto_check_dups(t_list *matchlst, char *filename);
 **----------------------------------globbing------------------------------------
 */
 
-# define GLOB_CUR_CHAR (scanner->word[scanner->word_index])
-# define GLOB_F_NEG	(1 << 0)
+# define GLOB_CUR_CHAR	(scanner->word[scanner->word_index])
+# define GLOB_F_NEG		(1 << 0)
 
 typedef enum	e_globtokens
 {
@@ -1249,7 +1250,7 @@ int				glob_add_scanned_token(t_globtoken **lst,
 				t_globscanner *scanner);
 int				glob_matcher(t_globtoken *tokenprobe,
 				t_globmatchlst match);
-int				glob_matchlstadd(t_globmatchlst **lst, char *word);
+int				glob_match_lst_add(t_globmatchlst **lst, char *word);
 int				glob_add_dotslash_to_path(t_globtoken **tokenlst, char **path);
 void			glob_delmatch(t_globmatchlst **match);
 int				glob_dir_match_loop(t_glob *glob_data, t_globtoken *tokenlst,

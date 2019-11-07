@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/25 17:24:39 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/09/23 17:50:18 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:21:43 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int			alias_error(char **line, t_tokenlst **tokenlst, char ***expanded)
 	return (FUNCT_ERROR);
 }
 
-int			alias_expansion_checker(t_vshdata *data, t_tokenlst *probe,
+static int	alias_expansion_checker(t_vshdata *data, t_tokenlst *probe,
 			char **expan)
 {
 	t_tokenlst	*new_probe;

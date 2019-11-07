@@ -6,7 +6,7 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/21 11:51:41 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/11/01 14:03:12 by omulder       ########   odam.nl         */
+/*   Updated: 2019/11/07 13:56:39 by omulder       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static int	change_status(t_proc *proc, int status)
 {
-	proc->exit_status = status;
+	proc->exit_status = WEXITSTATUS(status);
 	if (WIFCONTINUED(status))
 		proc->state = PROC_CONTINUED;
 	else if (WIFSTOPPED(status))

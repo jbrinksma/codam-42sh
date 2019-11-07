@@ -6,13 +6,28 @@
 /*   By: rkuijper <rkuijper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/21 11:41:03 by rkuijper       #+#    #+#                */
-/*   Updated: 2019/10/30 15:33:14 by rkuijper      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:37:03 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-t_proc		*jobs_new_proc(void)
+int				jobs_exit_status(t_job *job)
+{
+	t_proc	*proc;
+	int		status;
+
+	status = 0;
+	proc = job->processes;
+	while (proc != NULL)
+	{
+		status = proc->exit_status;
+		proc = proc->next;
+	}
+	return (status);
+}
+
+static t_proc	*jobs_new_proc(void)
 {
 	t_proc *proc;
 
@@ -21,7 +36,7 @@ t_proc		*jobs_new_proc(void)
 	return (proc);
 }
 
-void		jobs_flush_process(t_proc *proc)
+void			jobs_flush_process(t_proc *proc)
 {
 	t_proc *tmp;
 
@@ -37,7 +52,7 @@ void		jobs_flush_process(t_proc *proc)
 	}
 }
 
-int			jobs_add_process(t_job *job)
+int				jobs_add_process(t_job *job)
 {
 	t_proc *proc;
 	t_proc *probe;

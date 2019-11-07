@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/09/10 12:37:29 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/22 11:46:36 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:35:22 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 #include "vsh.h"
 
-int		history_expand(t_datahistory *history, char **line, size_t *i)
+static int		history_expand(t_datahistory *history, char **line, size_t *i)
 {
 	char *history_line;
 
@@ -34,7 +34,7 @@ int		history_expand(t_datahistory *history, char **line, size_t *i)
 	return (FUNCT_SUCCESS);
 }
 
-int		history_expansion(t_vshdata *data)
+int				history_expansion(t_vshdata *data)
 {
 	size_t	i;
 	int		state;

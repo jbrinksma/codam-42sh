@@ -6,7 +6,7 @@
 /*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/08/30 11:34:28 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/10/28 15:54:21 by omulder       ########   odam.nl         */
+/*   Updated: 2019/11/01 14:01:30 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ static void	move_left_parse_newline(t_vshdata *data)
 	if (pos != NULL)
 		len = data->line->index - (pos - data->line->line);
 	else
-		len = (data->line->index + data->prompt->prompt_len + 1) %
-			data->curs->cur_ws_col;
+		len = data->line->index + data->prompt->prompt_len + 1;
+	len %= data->curs->cur_ws_col;
 	ft_putstr("\e[A");
 	if (len > 1)
 		ft_printf("\e[%iC", len - 1);

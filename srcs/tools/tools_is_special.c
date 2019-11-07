@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   tools_isidentifierchar.c                           :+:    :+:            */
+/*   tools_is_special.c                                 :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: jbrinksm <jbrinksm@student.codam.nl>         +#+                     */
+/*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/07/13 19:50:31 by jbrinksm       #+#    #+#                */
-/*   Updated: 2019/09/03 12:39:35 by mavan-he      ########   odam.nl         */
+/*   Created: 2019/07/22 11:31:54 by mavan-he       #+#    #+#                */
+/*   Updated: 2019/11/07 11:00:20 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vsh.h"
 
-bool	tools_isidentifierchar(char c)
+bool	tools_is_special(char c)
 {
-	return (ft_isalnum(c) == true || c == '_' || c == '-');
+	return (ft_strchr("/*-~!@#$%^.,[]+?\\'\"", c) != NULL);
 }

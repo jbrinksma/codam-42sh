@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/07/20 18:18:07 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/07/21 15:25:33 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/06 13:31:25 by rkuijper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static t_envlst	*merge_lst(t_envlst *env, t_envlst *half,
 	return (result);
 }
 
-void			env_lstsort(t_envlst **env, int (*sort)(t_envlst *, t_envlst *))
+static void		env_lstsort(t_envlst **env, int (*sort)(t_envlst *, t_envlst *))
 {
 	t_envlst *half;
 

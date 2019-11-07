@@ -6,7 +6,7 @@
 /*   By: mavan-he <mavan-he@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/10/13 21:10:48 by mavan-he       #+#    #+#                */
-/*   Updated: 2019/10/21 16:11:51 by mavan-he      ########   odam.nl         */
+/*   Updated: 2019/11/01 14:25:06 by mavan-he      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,23 @@ static void		glob_lexer_state_str(t_globscanner *scanner)
 	|| GLOB_CUR_CHAR == '?'
 	|| GLOB_CUR_CHAR == '['
 	|| GLOB_CUR_CHAR == '*'
+	|| GLOB_CUR_CHAR == '\\'
 	|| GLOB_CUR_CHAR == '/')
 		return ;
 	else
+		glob_lexer_changestate(scanner, &glob_lexer_state_str);
+}
+
+static void		glob_lexer_str_start(t_globscanner *scanner)
+{
+	if (GLOB_CUR_CHAR == '\\')
+	{
+		scanner->word_index++;
+		glob_lexer_changestate(scanner, &glob_lexer_state_str);
+	}
+	else if (GLOB_CUR_CHAR == '[')
+		glob_lexer_changestate(scanner, &glob_lexer_state_braced);
+	else if (GLOB_CUR_CHAR != '\0')
 		glob_lexer_changestate(scanner, &glob_lexer_state_str);
 }
 
@@ -63,8 +77,6 @@ void			glob_lexer_state_start(t_globscanner *scanner)
 		scanner->word_index += 2;
 		glob_lexer_finish(scanner, GLOB_DOTDOTSLASH);
 	}
-	else if (GLOB_CUR_CHAR == '[')
-		glob_lexer_changestate(scanner, &glob_lexer_state_braced);
-	else if (GLOB_CUR_CHAR != '\0')
-		glob_lexer_changestate(scanner, &glob_lexer_state_str);
+	else
+		glob_lexer_str_start(scanner);
 }
